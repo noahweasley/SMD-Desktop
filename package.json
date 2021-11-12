@@ -4,6 +4,7 @@
   "description": "The best desktop app to download Spotity songs for free and legally !!",
   "main": "app.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
