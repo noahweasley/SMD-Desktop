@@ -1,0 +1,24 @@
+{
+  "name": "smd-desktop",
+  "version": "1.0.0",
+  "description": "The best desktop app to download Spotity songs for free and legally !!",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/noahweasley/SMD-desktop"
+  },
+  "keywords": [
+    "electron",
+    "music",
+    "spotify",
+    "spotify-downloader"
+  ],
+  "author": "NoahWeasley",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^15.3.1"
+  }
+}
