@@ -28,14 +28,18 @@ app.on('window-all-closed', () => {
 function createWindow() {
     smd_window = new BrowserWindow({
         show: false,
-        width: 800,
+        frame: false,
+        width: 1000,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            webPreferences: {}
         }
     })
 
     Menu.setApplicationMenu(menu)
     smd_window.loadFile('index.html')
+
+    smd_window.webContents.openDevTools()
     smd_window.once('ready-to-show', smd_window.show)
 }

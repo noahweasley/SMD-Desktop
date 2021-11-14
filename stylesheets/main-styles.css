@@ -1,0 +1,76 @@
+:root {
+    --white-solid: rgb(175, 175, 175);
+    --grey-solid: #828282;
+    --primary-color: #1ed760;
+    --primary-color-dark: #1db954;
+    --solid-green: #84bd00;
+    --solid-dark: #0c0b0b;
+    --solid-darker: #000;
+    --sand-solid: #ecebe8;
+    color: var(--grey-solid);
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.toolbar {
+    line-height: 40px;
+    height: 40px;
+}
+
+.toolbar>h1 {
+    line-height: 40px;
+}
+
+.window-action-group {
+    position: absolute;
+    display: flex;
+    top: 0;
+    right: 0;
+    width: 138px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.non-draggable {
+    -webkit-app-region: no-drag;
+}
+.window-action-group>* {
+    z-index: 2;
+    cursor: pointer;
+    /* z-index: 3000; */
+    width: calc(138px / 3);
+    height: 100%;
+}
+
+.window-action-minimize:hover,
+.window-action-maximize:hover {
+    background-color: rgba(255, 255, 255, 0.048);
+}
+
+.window-action-close:hover {
+    background-color: rgb(155, 14, 14);
+}
+
+body,
+.window-content,
+.pane-group,
+.pane-sm,
+.toolbar {
+    background-color: var(--solid-darker);
+}
+
+* {
+    border: none;
+}
+
+.nav-group-item [class="active"] {
+    color: var(--white-solid);
+}
+
+.pane {
+    background-color: var(--solid-dark);
+}
