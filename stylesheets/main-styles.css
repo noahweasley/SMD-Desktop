@@ -1,12 +1,14 @@
 :root {
-    --white-solid: rgb(175, 175, 175);
+    --white-solid: #eeeeee;
     --grey-solid: #828282;
+    --grey-solid_5: rgba(160, 159, 159, 0.144);
     --primary-color: #1ed760;
     --primary-color-dark: #1db954;
     --solid-green: #84bd00;
     --solid-dark: #0c0b0b;
     --solid-darker: #000;
     --sand-solid: #ecebe8;
+    --window-actions-elevation: 2;
     color: var(--grey-solid);
 }
 
@@ -16,6 +18,10 @@ body {
     height: 100%;
 }
 
+.icon-x2 {
+    font-size: 2em;
+}
+
 .toolbar {
     line-height: 40px;
     height: 40px;
@@ -23,6 +29,23 @@ body {
 
 .toolbar>h1 {
     line-height: 40px;
+}
+
+.nav-group-item {
+    cursor: pointer;
+    padding: 8px 16px;
+    margin: 8px 8px;
+    border-radius: 4px;
+    transition: all 0.1s ease-in 0.1s;
+}
+
+.nav-group-item.active {
+    color: var(--white-solid);
+    background-color: var(--grey-solid_5);
+}
+
+.nav-group-item:hover {
+    color: var(--white-solid)
 }
 
 .window-action-group {
@@ -38,17 +61,28 @@ body {
 .non-draggable {
     -webkit-app-region: no-drag;
 }
-.window-action-group>* {
-    z-index: 2;
+
+.window-action-group>*,
+.window-action-group>*>* {
+    z-index: var(--window-actions-elevation);
     cursor: pointer;
-    /* z-index: 3000; */
+}
+
+.window-action-group>* {
     width: calc(138px / 3);
     height: 100%;
 }
 
+.window-action>img {
+    width: 100%;
+    height: 100%;
+    /* padding: 5px; */
+    transform: scale(.5, .5);
+}
+
 .window-action-minimize:hover,
 .window-action-maximize:hover {
-    background-color: rgba(255, 255, 255, 0.048);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .window-action-close:hover {

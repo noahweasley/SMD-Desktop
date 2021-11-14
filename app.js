@@ -3,7 +3,8 @@
 const {
     app,
     BrowserWindow,
-    Menu
+    Menu,
+    ipcMain
 } = require('electron')
 
 const path = require('path')
@@ -25,6 +26,10 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
+ipcMain.on('action-click-event', () => {
+    console.log('message received')
+})
+
 function createWindow() {
     smd_window = new BrowserWindow({
         show: false,
@@ -32,14 +37,13 @@ function createWindow() {
         width: 1000,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            webPreferences: {}
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         }
     })
 
     Menu.setApplicationMenu(menu)
     smd_window.loadFile('index.html')
-
     smd_window.webContents.openDevTools()
     smd_window.once('ready-to-show', smd_window.show)
 }

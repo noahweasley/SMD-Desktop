@@ -4,24 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMD Desktop</title>
     <link rel="stylesheet" type="text/css" href="stylesheets/photon.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/main-styles.css">
+    <script src="renderer.js"></script>
 </head>
 
 <body>
 
     <div class="window">
         <header class="toolbar toolbar-header toolbar-borderless">
-            <div class="window-action-group non-draggable">
-                <div class="window-action window-action-minimize"></div>
-                <div class="window-action window-action-maximize"></div>
-                <div class="window-action window-action-close"></div>
-            </div>
             <h1 class="title draggable">SMD Desktop</h1>
         </header>
-        
+
         <div class="window-content">
 
             <div class="pane-group">
@@ -29,29 +29,25 @@
                 <div class="pane-sm sidebar">
 
                     <nav class="nav-group">
+
                         <a class="nav-group-item active">
                             <span class="icon icon-home"></span>
-                            Noah
+                            Home
                         </a>
+
                         <span class="nav-group-item">
                             <span class="icon icon-download"></span>
                             Downloads
                         </span>
-                        <span class="nav-group-item">
-                            <span class="icon icon-folder"></span>
-                            Documents
-                        </span>
-                        <span class="nav-group-item">
-                            <span class="icon icon-signal"></span>
-                            AirPlay
-                        </span>
-                        <span class="nav-group-item">
-                            <span class="icon icon-print"></span>
-                            Applications
-                        </span>
+
                         <span class="nav-group-item">
                             <span class="icon icon-cloud"></span>
                             Desktop
+                        </span>
+
+                        <span class="nav-group-item">
+                            <span class="icon icon-cog icon-x2"></span>
+                            Settings
                         </span>
 
                     </nav>
@@ -65,6 +61,20 @@
 
         </div>
 
+        <div class="window-action-group non-draggable">
+
+            <div class="window-action window-action-minimize" id="window-action-minimize">
+                <img src="graphics/minimize.svg" alt="minimize icon">
+            </div>
+
+            <div class="window-action window-action-maximize" id="window-action-maximize">
+                <img src="graphics/restore.svg" alt="resize icon">
+            </div>
+
+            <div class="window-action window-action-close" id="window-action-close">
+                <img src="graphics/close.svg" alt="close icon">
+            </div>
+        </div>
 </body>
 
 </html>
