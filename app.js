@@ -61,6 +61,6 @@ function createWindow() {
     })
     Menu.setApplicationMenu(menu)
     smd_window.loadFile('index.html')
-    smd_window.webContents.openDevTools()
+    // smd_window.webContents.openDevTools()
     smd_window.once('ready-to-show', smd_window.show)
 }
