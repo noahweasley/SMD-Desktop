@@ -11,12 +11,16 @@ const path = require('path')
 const menu = require('./menu')
 
 let smd_window
+let WINDOW_STATE
+
+const State = Object.freeze({
+    MAXIMIZED: 'window-maximized',
+    MINIMIZED: 'window-minimized'
+})
 
 app.whenReady().then(() => {
     createWindow()
-
     app.on('activate', function () {
-
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 })
@@ -26,8 +30,22 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.on('action-click-event', () => {
-    console.log('message received')
+ipcMain.on('action-click-event',  (event, id) => {
+    if (id === 'window-action-close') {
+        smd_window.close()
+    } else if (id === 'window-action-minimize') {
+        smd_window.minimize()
+    } else {
+        if (!!!WINDOW_STATE || WINDOW_STATE === State.MINIMIZED) {
+            smd_window.maximize()
+            WINDOW_STATE = State.MAXIMIZED
+        } else {
+            console.log(WINDOW_STATE)
+            smd_window.restore()
+            WINDOW_STATE = State.MINIMIZED
+        }
+    }
+    
 })
 
 function createWindow() {
@@ -41,7 +59,6 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js')
         }
     })
-
     Menu.setApplicationMenu(menu)
     smd_window.loadFile('index.html')
     smd_window.webContents.openDevTools()

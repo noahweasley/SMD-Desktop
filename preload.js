@@ -10,15 +10,9 @@ const {
 window.addEventListener('DOMContentLoaded', () => {
     contextBridge.exposeInMainWorld(
         "bridgeApis", {
-            send: (channel, data) => ipcRenderer.send(channel, data),
-            on: (channel, callback) => ipcRenderer.on(channel, callback),
+            invoke: (channel, data) => ipcRenderer.invoke(channel, data),
+            send: (channel, data) => ipcRenderer.send(channel, data)
         }
     );
 
-    document.querySelectorAll('.window-action').forEach(action, () => {
-        action.addEventListener('click', event => {
-            ipcRenderer.send('action-click-event', event.target.id)
-        })
-
-    })
 });
