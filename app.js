@@ -3,12 +3,11 @@
 const {
     app,
     BrowserWindow,
-    Menu,
-    ipcMain
+    ipcMain,
+    shell
 } = require('electron')
 
 const path = require('path')
-const menu = require('./menu')
 
 let smd_window
 let WINDOW_STATE
@@ -30,7 +29,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.on('action-click-event',  (event, id) => {
+ipcMain.on('action-click-event', (_event, id) => {
     if (id === 'window-action-close') {
         smd_window.close()
     } else if (id === 'window-action-minimize') {
@@ -40,12 +39,16 @@ ipcMain.on('action-click-event',  (event, id) => {
             smd_window.maximize()
             WINDOW_STATE = State.MAXIMIZED
         } else {
-            console.log(WINDOW_STATE)
             smd_window.restore()
             WINDOW_STATE = State.MINIMIZED
         }
     }
-    
+
+})
+
+ipcMain.on('donate', (_event) => {
+    // donations
+    shell.openExternal('https://www.buymeacoffee.com/noahweasley')
 })
 
 function createWindow() {
@@ -59,7 +62,7 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js')
         }
     })
-    Menu.setApplicationMenu(menu)
+    // Menu.setApplicationMenu(menu)
     smd_window.loadFile('index.html')
     // smd_window.webContents.openDevTools()
     smd_window.once('ready-to-show', smd_window.show)

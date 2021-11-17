@@ -2,9 +2,10 @@
     --white-solid: #eeeeee;
     --grey-solid: #828282;
     --grey-solid_5: rgba(160, 159, 159, 0.144);
+    --grey-solid_10: rgba(160, 159, 159, 0.247);
     --primary-color: #1ed760;
     --primary-color-dark: #1db954;
-    --solid-green: #84bd00;
+    --solid-green: #22cc5db2;
     --solid-dark: #0c0b0b;
     --solid-darker: #000;
     --sand-solid: #ecebe8;
@@ -19,7 +20,13 @@ body {
 }
 
 .icon-x2 {
-    font-size: 2em;
+    font-size: 1.8em;
+}
+
+.abs-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 50px;
 }
 
 .toolbar {
@@ -30,6 +37,7 @@ body {
 .toolbar>h1 {
     line-height: 40px;
 }
+
 
 .nav-group-item {
     cursor: pointer;
@@ -107,4 +115,126 @@ body,
 
 .pane {
     background-color: var(--solid-dark);
+    position: relative;
+}
+
+.downloads-operation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    width: 100%;
+    height: 50px;
+    background-color: var(--solid-darker);
+}
+
+.tab-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--grey-solid_5);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    bottom: 60px;
+    width: 100%;
+    height: 60px;
+    background-color: var(--solid-darker);
+}
+
+.__tab-item {
+    border-radius: 50px;
+    height: 60%;
+    width: 130px;
+    background-color: var(--grey-solid_5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.__tab-item.active,
+.__tab-item:hover {
+    background-color: var(--grey-solid_10);
+}
+
+.downloads-operation>* {
+    transition: 0.5s;
+}
+
+.paste {
+    border-radius: 4px;
+    background-color: var(--grey-solid_5);
+    position: absolute;
+    top: 10%;
+    left: 2px;
+    width: 110px;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.paste:hover {
+    background-color: var(--grey-solid_10);
+}
+
+.paste:active {
+    border: 1px solid var(--primary-color-dark);
+}
+
+.refresh {
+    left: 120px;
+}
+
+.pause {
+    left: 172px;
+}
+
+.delete {
+    left: 224px;
+}
+
+.downloads-operation>*+* {
+    border-radius: 4px;
+    background-color: var(--grey-solid_5);
+    height: 80%;
+    width: 45px;
+    padding: 0 8px;
+    position: absolute;
+    top: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.downloads-operation>*+*,
+.downloads-operation>*+*>* {
+    cursor: pointer;
+}
+
+.downloads-operation>*+*:hover {
+    background-color: var(--grey-solid_10);
+}
+
+.downloads-operation>*+*:active {
+    border: 1px solid var(--primary-color-dark);
+}
+
+.donate {
+    background-color: var(--solid-green);
+    color: var(--sand-solid);
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+.donate:hover {
+    opacity: 0.9;
+    color: var(--white-solid);
 }
