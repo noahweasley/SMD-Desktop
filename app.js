@@ -29,6 +29,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
+// ...window acton click
 ipcMain.on('action-click-event', (_event, id) => {
     if (id === 'window-action-close') {
         smd_window.close()
@@ -46,6 +47,7 @@ ipcMain.on('action-click-event', (_event, id) => {
 
 })
 
+// ... support button click
 ipcMain.on('donate', (_event) => {
     // donations
     shell.openExternal('https://www.buymeacoffee.com/noahweasley')

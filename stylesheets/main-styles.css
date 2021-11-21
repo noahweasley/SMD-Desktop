@@ -29,6 +29,11 @@ body {
     left: 50px;
 }
 
+.invisible {
+    opacity: 0;
+    /* display: none; */
+}
+
 .toolbar {
     line-height: 40px;
     height: 40px;
@@ -162,8 +167,56 @@ body,
     background-color: var(--grey-solid_10);
 }
 
+.tab-content {
+    /* background-color: red; */
+    position: absolute;
+    top: 120px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.tab-content>* {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transition: 0.3s;
+}
+
+.list-group {
+    /* background-color: red; */
+    height: 100%;
+    width: 100%;
+}
+
+.list-group-item>:first-child {
+    /* background-color: red; */
+    width: 100px;
+    height: 90%;
+    border-radius: 4px;
+}
+
+.media-body {
+    height: 100%;
+    padding: 10px;
+    /* background-color: red; */
+}
+
+.message {
+    margin-top: 8px;
+}
+
+.list-group>* {
+    /* background-color: blue; */
+    height: 100px;
+    width: 100%;
+}
+
 .downloads-operation>* {
     transition: 0.5s;
+    cursor: pointer;
 }
 
 .paste {
@@ -177,7 +230,6 @@ body,
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
 }
 
 .paste:hover {

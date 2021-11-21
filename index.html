@@ -60,31 +60,71 @@
                 <div class="pane">
                     <div class="downloads-operation">
 
-                        <div class="paste">Paste URL</div>
+                        <div class="paste not-draggable">Paste URL</div>
 
-                        <div class="refresh">
+                        <div class="refresh not-draggable">
                             <span class="icon icon-ccw icon-x2"></span>
                         </div>
 
-                        <div class="pause">
+                        <div class="pause not-draggable">
                             <span class="icon icon-pause icon-x2"></span>
                         </div>
 
-                        <div class="delete">
+                        <div class="delete not-draggable">
                             <span class="icon icon-trash icon-x2"></span>
                         </div>
                     </div>
 
                     <div class="tab-group">
-                        
-                        <div class="__tab-item">
+
+                        <div class="__tab-item" id="__tab-item__downloading">
                             Downloading
                         </div>
-                        
-                        <div class="__tab-item active">
+
+                        <div class="__tab-item active" id="__tab-item__download">
                             Downloaded
                         </div>
                     </div>
+
+                    //.. tab contents
+                    
+                    <div class="tab-content">
+
+                        <div class="tab-content__downloading invisible">
+
+                            <ul class="list-group">
+
+                                <li class="list-group-item">
+
+                                    <img class="media-object pull-left" src="sample-images/Arduino kit.jpg">
+
+                                    <div class="media-body">
+                                        <strong>1. Why do I?</strong>
+                                        <p class="message">Failed to download, please try again</p>
+                                    </div>
+                                </li>
+
+                        </div>
+
+                        <div class="tab-content__downloaded">
+
+                            <ul class="list-group">
+
+                                <li class="list-group-item">
+
+                                    <img class="media-object pull-left"
+                                        src="sample-images/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg">
+
+                                    <div class="media-body">
+                                        <strong>8. Middle Finger/strong>
+                                            <p class="message">Failed to download, please try again</p>
+                                    </div>
+                                </li>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
@@ -107,7 +147,7 @@
         </div>
 
         <!-- Scripts -->
-        <script src="renderer.js"></script>
+        <script src="./ui/renderer.js"></script>
 </body>
 
 </html>
