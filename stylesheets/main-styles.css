@@ -41,7 +41,7 @@ body {
 }
 
 .bounce {
-    animation: 10s bounce 0.5s ease-in-out infinite forwards;
+    animation: 10s scale-bounce 0.5s ease-in-out infinite forwards;
 }
 
 .bounce:hover {
@@ -336,7 +336,7 @@ body,
     background-color: var(--solid-green);
 }
 
-@keyframes bounce {
+@keyframes scale-bounce {
 
     0%,
     10% {
