@@ -29,7 +29,7 @@ body {
 .abs-bottom {
     position: absolute;
     bottom: 10px;
-    left: 50px;
+    left: 15%;
 }
 
 .invisible {
@@ -38,6 +38,15 @@ body {
 
 .gone {
     display: none;
+}
+
+.bounce {
+    animation: 10s bounce 0.5s ease-in-out infinite forwards;
+    animation-fill-mode: backwards;
+}
+
+.bounce:hover {
+    animation: none;
 }
 
 .toolbar {
@@ -125,6 +134,10 @@ body,
 
 .pane {
     background-color: var(--solid-dark);
+    position: relative;
+}
+
+.sidebar {
     position: relative;
 }
 
@@ -308,14 +321,59 @@ body,
 }
 
 .donate {
-    background-color: var(--solid-green);
     color: var(--sand-solid);
+    background-color: transparent;
+    border: 1px solid var(--solid-green);
     border-radius: 20px;
     padding: 8px 20px;
     cursor: pointer;
+    transition: 0.3s;
+    letter-spacing: 0.2em;
 }
 
 .donate:hover {
     opacity: 0.9;
     color: var(--white-solid);
+    background-color: var(--solid-green);
+}
+
+@keyframes bounce {
+
+    0%,
+    10% {
+        transform: scale(1.0);
+    }
+
+    20% {
+        transform: scale(1.1);
+    }
+
+    30% {
+        transform: scale(1.0);
+    }
+
+    32% {
+        transform: scale(1.1);
+    }
+
+    34% {
+        transform: scale(1.0);
+    }
+
+    36% {
+        transform: scale(1.0);
+    }
+
+    38% {
+        transform: scale(1.1);
+    }
+
+    40% {
+        transform: scale(1.0);
+    }
+
+    90%,
+    100% {
+        transform: scale(1.0);
+    }
 }
