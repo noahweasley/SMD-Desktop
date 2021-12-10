@@ -12,6 +12,7 @@
     "url": "www.github.com/noahweasley/SMD-desktop"
   },
   "keywords": [
+    "javascript",
     "electron",
     "music",
     "spotify",
@@ -23,7 +24,6 @@
     "electron": "^15.3.1"
   },
   "dependencies": {
-    "electron-reload": "^2.0.0-alpha.1",
     "spotify-web-api-node": "^5.0.2"
   }
 }
