@@ -172,21 +172,23 @@ body,
     background-color: var(--grey-solid_10);
 }
 
-::-webkit-scrollbar {
+.tab-content::-webkit-scrollbar {
     width: 15px;
-    margin-block: 8px;
+    border-left: 1px solid var(--normal-scrolbar-clr);
 }
 
-::-webkit-scrollbar-thumb {
+.tab-content::-webkit-scrollbar-thumb {
     background-color: var(--normal-scrolbar-clr);
+    border-radius: 100vw;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.tab-content::-webkit-scrollbar-thumb:hover {
     background-color: var(--active-scrolbar-clr);
 }
 
-::-webkit-scrollbar-track {
+.tab-content::-webkit-scrollbar-track {
     background-color: transparent;
+    margin-block: 8px;
 }
 
 .tab-content {
