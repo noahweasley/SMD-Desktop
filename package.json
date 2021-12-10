@@ -5,8 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "electron .",
+    "build": "electron-packager . build SMD Desktop --no-prune",
+    "build-all": "electron-packager . build SMD Desktop --all --no-prune",
+    "package": "npm start && npm build",
+    "package-all": "npm start && npm build-all",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  }, 
   "repository": {
     "type": "git",
     "url": "www.github.com/noahweasley/SMD-desktop"
@@ -21,7 +25,8 @@
   "author": "NoahWeasley",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^15.3.1"
+    "electron": "^15.3.1",
+    "electron-packager": "^15.4.0"
   },
   "dependencies": {
     "spotify-web-api-node": "^5.0.2"
