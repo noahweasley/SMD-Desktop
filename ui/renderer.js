@@ -1,4 +1,3 @@
-
 window.addEventListener('DOMContentLoaded', () => {
     // window action button clicked
     document.querySelectorAll('.window-action').forEach((action) => {
@@ -29,9 +28,8 @@ window.addEventListener('DOMContentLoaded', () => {
     let tabItems = document.querySelectorAll('.__tab-item')
 
     // ...
-    let tabContent = document.querySelector('.tab-content')
-    let tabContent_Downloading = document.querySelector('.tab-content__downloading')
-    let tabContent_Downloaded = document.querySelector('.tab-content__downloaded')
+    let tabContent_Downloading = document.getElementById('tab-content__downloading')
+    let tabContent_Downloaded = document.getElementById('tab-content__downloaded')
 
     tabItems.forEach((tabItem) => {
 
@@ -43,11 +41,19 @@ window.addEventListener('DOMContentLoaded', () => {
             tabItem.classList.add('active')
 
             if (tabItem.id == '__tab-item__downloading') {
-                tabContent_Downloading.classList.remove('invsible')
-                tabContent_Downloaded.classList.add('invisible')
+                if (!tabContent_Downloaded.classList.contains('invisible')) {
+                    tabContent_Downloaded.classList.add('invisible')
+                }
+
+                tabContent_Downloading.classList.remove('invisible')
+                
             } else {
-                tabContent_Downloading.classList.add('invsible')
+                if (!tabContent_Downloading.classList.contains('invisible')) {
+                    tabContent_Downloading.classList.add('invisible')
+                }
+
                 tabContent_Downloaded.classList.remove('invisible')
+                
             }
 
         })

@@ -31,7 +31,10 @@ body {
 
 .invisible {
     opacity: 0;
-    /* display: none; */
+}
+
+.gone {
+    display: none;
 }
 
 .toolbar {

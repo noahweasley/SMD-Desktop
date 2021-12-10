@@ -29,7 +29,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-// ...window acton click
+// ... window acton click
 ipcMain.on('action-click-event', (_event, id) => {
     if (id === 'window-action-close') {
         smd_window.close()
@@ -57,6 +57,8 @@ function createWindow() {
     smd_window = new BrowserWindow({
         show: false,
         frame: false,
+        minWidth: 800,
+        minHeight: 400,
         width: 1000,
         height: 600,
         webPreferences: {
