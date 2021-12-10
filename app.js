@@ -4,7 +4,8 @@ const {
     app,
     BrowserWindow,
     ipcMain,
-    shell
+    shell,
+    clipboard
 } = require('electron')
 
 const path = require('path')
@@ -51,6 +52,11 @@ ipcMain.on('action-click-event', (_event, id) => {
 ipcMain.on('donate', (_event) => {
     // donations
     shell.openExternal('https://www.buymeacoffee.com/noahweasley')
+})
+
+// ... clipboard content request
+ipcMain.handle('clipboard-request', () => {
+    return clipboard.readText()
 })
 
 function createWindow() {

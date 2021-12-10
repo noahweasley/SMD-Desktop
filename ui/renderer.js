@@ -11,6 +11,14 @@ window.addEventListener('DOMContentLoaded', () => {
         window.bridgeApis.send('donate')
     })
 
+    // ...
+    document.querySelector('.paste').addEventListener('click', () => {
+        window.bridgeApis.invoke('clipboard-request')
+            .then(content => {
+                console.log(content)
+            })
+    })
+
     //...
     let navItems = document.querySelectorAll('.nav-group-item')
     navItems.forEach((navItem) => {
@@ -47,14 +55,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
 
                 tabContent_Downloading.classList.remove('invisible')
-                
+
             } else {
                 if (!tabContent_Downloading.classList.contains('invisible')) {
                     tabContent_Downloading.classList.add('invisible')
                 }
 
                 tabContent_Downloaded.classList.remove('invisible')
-                
+
             }
 
         })

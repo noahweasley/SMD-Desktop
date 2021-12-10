@@ -336,6 +336,8 @@ body,
     background-color: var(--solid-green);
 }
 
+/* ------------------ Animation Key Frames ----------------- */
+
 @keyframes scale-bounce {
 
     0%,
