@@ -30,7 +30,7 @@ body {
 }
 
 .invisible {
-    opacity: 0;
+    display: none;
 }
 
 .gone {
@@ -45,7 +45,6 @@ body {
 .toolbar>h1 {
     line-height: 40px;
 }
-
 
 .nav-group-item {
     cursor: pointer;
@@ -177,6 +176,7 @@ body,
     bottom: 0;
     right: 0;
     left: 0;
+    /* overflow-y: scroll; */
 }
 
 .tab-content>* {
@@ -186,6 +186,10 @@ body,
     right: 0;
     left: 0;
     transition: 0.3s;
+}
+
+.list-group-item {
+    border-top: 1px solid var(--grey-solid_5);
 }
 
 .list-group {

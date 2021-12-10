@@ -40,6 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             tabItem.classList.add('active')
 
+            // toggle tab content visibility
             if (tabItem.id == '__tab-item__downloading') {
                 if (!tabContent_Downloaded.classList.contains('invisible')) {
                     tabContent_Downloaded.classList.add('invisible')

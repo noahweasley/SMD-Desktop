@@ -732,7 +732,6 @@ img {
 .list-group-item {
   padding: 10px;
   font-size: 12px;
-  border-top: 1px solid #ddd;
 }
 
 .list-group-item:first-child {
