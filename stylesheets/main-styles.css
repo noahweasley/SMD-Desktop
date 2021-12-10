@@ -42,7 +42,6 @@ body {
 
 .bounce {
     animation: 10s bounce 0.5s ease-in-out infinite forwards;
-    animation-fill-mode: backwards;
 }
 
 .bounce:hover {
@@ -92,7 +91,7 @@ body {
 .window-action-group>*,
 .window-action-group>*>* {
     z-index: var(--window-actions-elevation);
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .window-action-group>* {
@@ -258,7 +257,7 @@ body,
 
 .downloads-operation>* {
     transition: 0.5s;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .paste {
