@@ -261,10 +261,10 @@ body,
 }
 
 .media-body>.op-icon {
+    --pos: calc(88% + 2vw);
     position: absolute;
     top: 30%;
     width: 40px;
-    left: calc(88% + 2vw);
     background-color: var(--grey-solid_5);
     border-radius: 8px;
     padding: 0 8px;
@@ -272,6 +272,14 @@ body,
     justify-content: center;
     align-items: center;
     transition: 0.5s;
+}
+
+.media-body>.op-icon:first-of-type {
+    left: var(--pos)
+}
+
+.media-body>.op-icon:last-of-type {
+    left: calc(var(--pos) - 70px);
 }
 
 .media-body>.op-icon:hover {
@@ -289,7 +297,7 @@ body,
 .media-body>.horizontal-progress {
     --progress-width: 0%;
     --progress-anim: 2s move linear infinite forwards;
-    
+
     width: 80%;
     height: 10px;
     background-color: var(--normal-scrolbar-clr);
