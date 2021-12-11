@@ -55,6 +55,18 @@ body {
 
 .toolbar>h1 {
     line-height: 40px;
+    text-align: start;
+    margin-left: 60px;
+}
+
+.toolbar {
+    position: relative;
+}
+
+.toolbar>img {
+    position: absolute;
+    top: 10px;
+    left: 20px;
 }
 
 .nav-group-item {
@@ -240,13 +252,58 @@ body,
 }
 
 .media-body {
+    position: relative;
     height: 100%;
     padding: 10px;
     /* background-color: red; */
 }
 
+.media-body>.op-icon {
+    position: absolute;
+    top: 30%;
+    width: 40px;
+    left: calc(88% + 2vw);
+    background-color: var(--grey-solid_5);
+    border-radius: 8px;
+    padding: 0 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+.media-body>.op-icon:hover {
+    background-color: var(--grey-solid_10);
+}
+
+.media-body>.op-icon:active {
+    border: 1px solid var(--primary-color-dark);
+}
+
 .message {
     margin-top: 8px;
+}
+
+.media-body>.horizontal-progress {
+    --progress-width: 0%;
+    --progress-anim: 2s move linear infinite forwards;
+    
+    width: 80%;
+    height: 10px;
+    background-color: var(--normal-scrolbar-clr);
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.media-body>.horizontal-progress::before {
+    display: block;
+    content: '';
+    background-color: var(--primary-color-dark);
+    width: var(--progress-width);
+    height: 100%;
+    background-color: var(--primary-color-dark);
+    border-radius: 8px;
+    /* animation: var(--progress-anim); */
 }
 
 .list-group>* {
@@ -295,9 +352,9 @@ body,
 
 .downloads-operation>*+* {
     border-radius: 4px;
-    background-color: var(--grey-solid_5);
     height: 80%;
     width: 45px;
+    background-color: var(--grey-solid_5);
     padding: 0 8px;
     position: absolute;
     top: 10%;
@@ -377,4 +434,21 @@ body,
     100% {
         transform: scale(1.0);
     }
+}
+
+@keyframes move {
+
+    0% {
+        transform: translateX(-100%) scaleX(1.0);
+
+    }
+
+    50% {
+        transform: translateX(1025%) scaleX(1.5);
+    }
+
+    100% {
+        transform: translateX(2050%) scaleX(1.0);
+    }
+
 }

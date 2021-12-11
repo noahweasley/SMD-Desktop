@@ -5,11 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . build SMD Desktop --no-prune",
-    "build-all": "electron-packager . build SMD Desktop --all --no-prune",
-    "package": "npm start && npm build",
-    "package-all": "npm start && npm build-all",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "codesign": "",
+    "pack:osx": "electron-packager . SMD Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=assets/build/osx/app_icon.icns && npm run codesign",
+    "pack:win32": "electron-packager . SMD Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=assets/build/win/app_icon.ico",
+    "pack:win64": "electron-packager . SMD Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=assets/build/win/app_icon.ico",
+    "build": "npm run pack:osx && npm run pack:win32 && npm run pack:win64",
+    "package": "npm start && npm build"
   }, 
   "repository": {
     "type": "git",
