@@ -179,6 +179,7 @@ body,
 }
 
 .__tab-item {
+    letter-spacing: 0.1em;
     border-radius: 50px;
     height: 60%;
     width: 130px;
@@ -193,6 +194,7 @@ body,
 
 .__tab-item.active,
 .__tab-item:hover {
+    color: var(--white-solid);
     background-color: var(--grey-solid_10);
 }
 
@@ -235,7 +237,7 @@ body,
 }
 
 .list-group-item {
-    border-top: 1px solid var(--grey-solid_5);
+    border-bottom: 1px solid var(--grey-solid_5);
 }
 
 .list-group {

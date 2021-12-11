@@ -1,14 +1,14 @@
-function setDownloadProgress(elementId, prog) {
+function setProgress(elementId, prog) {
     const progress = document.getElementById(elementId)
     progress.style.setProperty('--progress-width', prog)
 }
 
-function manage() {
+function setDownloadProgress(listPos) {
     let progress = 0
 
     setInterval(() => {
 
-        setDownloadProgress('download-progress', `${progress = progress === 100 ? progress = 0: progress+=2}%`)
+        setProgress(`download-progress-${listPos}`, `${progress = progress === 100 ? progress = 0: progress+=2}%`)
 
     }, 1000)
 
@@ -16,7 +16,7 @@ function manage() {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    manage()
+    setDownloadProgress(0)
 
     // window action button clicked
     document.querySelectorAll('.window-action').forEach((action) => {
