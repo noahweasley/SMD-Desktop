@@ -275,7 +275,7 @@ body,
 }
 
 .media-body>.op-icon:first-of-type {
-    left: var(--pos)
+    left: var(--pos);
 }
 
 .media-body>.op-icon:last-of-type {
