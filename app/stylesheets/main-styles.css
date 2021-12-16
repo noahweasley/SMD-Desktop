@@ -38,6 +38,9 @@ body {
 
 .gone {
     display: none;
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 .bounce {
@@ -51,6 +54,12 @@ body {
 .toolbar {
     line-height: 40px;
     height: 40px;
+}
+
+.toolbar-footer {
+    height: 30px;
+    max-height: 22px;
+    border: 1px solid var(--grey-solid_5);
 }
 
 .toolbar>h1 {
@@ -295,9 +304,10 @@ body,
 }
 
 .media-body>.horizontal-progress {
-    --progress-width: 0%;
+    --progress-width: 20px;
     --progress-anim: 2s move linear infinite forwards;
 
+    position: relative;
     width: 80%;
     height: 10px;
     background-color: var(--normal-scrolbar-clr);
@@ -308,12 +318,16 @@ body,
 .media-body>.horizontal-progress::before {
     display: block;
     content: '';
-    background-color: var(--primary-color-dark);
+    background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
     width: var(--progress-width);
     height: 100%;
-    background-color: var(--primary-color-dark);
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
     border-radius: 8px;
-    /* animation: var(--progress-anim); */
+    animation: var(--progress-anim);
+    transition: 0.2s;
 }
 
 .list-group>* {
@@ -449,16 +463,18 @@ body,
 @keyframes move {
 
     0% {
-        transform: translateX(-100%) scaleX(1.0);
+        transform: scaleX(1.0);
+        left: -10%;
 
     }
 
     50% {
-        transform: translateX(1025%) scaleX(1.5);
+        transform: scaleX(1.5);
     }
 
     100% {
-        transform: translateX(2050%) scaleX(1.0);
+        transform:  scaleX(1.0);
+        left: 100%;
     }
 
 }

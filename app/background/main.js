@@ -5,10 +5,13 @@ const {
     BrowserWindow,
     ipcMain,
     shell,
-    clipboard
+    clipboard,
+    dialog
 } = require('electron')
 
 const path = require('path')
+
+const SpotifyWebApi = require('spotify-web-api-node')
 
 let smd_window
 let WINDOW_STATE
@@ -56,24 +59,36 @@ ipcMain.on('donate', (_event) => {
 
 // ... clipboard content request
 ipcMain.handle('clipboard-request', () => {
-    return clipboard.readText()
+    const clipboardContent = clipboard.readText()
+    const spotifyLinkRegex = new RegExp('https://open.spotify.com')
+    if (spotifyLinkRegex.test(clipboardContent)) {
+        // then ...
+
+    } else {
+        dialog.showErrorBox("Clipboard content not a Spotify link", "Go to Spotify and copy playlist or song link, then click 'Paste URL'")
+    }
 })
 
+/**
+ * Spawns up a new SMD window with a limitations of 2 winodws
+ */
 function createWindow() {
+    // only 2 window is allowed to be spawned
+    if (BrowserWindow.getAllWindows().length == 2) return
+
     smd_window = new BrowserWindow({
         show: false,
         frame: false,
         minWidth: 800,
         minHeight: 400,
         width: 1000,
-        height: 600,
+        height: 620,
         webPreferences: {
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, '../preload.js')
         }
     })
     // Menu.setApplicationMenu(menu)
-    smd_window.loadFile('index.html')
-    // smd_window.webContents.openDevTools()
+    smd_window.loadFile(path.join('app', 'pages', 'index.html'))
     smd_window.once('ready-to-show', smd_window.show)
 }

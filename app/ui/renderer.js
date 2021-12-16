@@ -1,29 +1,40 @@
+'use-strict'
+
 function setProgress(elementId, prog) {
     const progress = document.getElementById(elementId)
     progress.style.setProperty('--progress-width', prog)
+    progress.style.setProperty('--progress-anim', 'none')
 }
 
-function setDownloadProgress(listPos) {
+function setDownloadProgress(listPos, progress) {
+
+}
+
+function dummyAnimate(listPos) {
     let progress = 0
-
-    setInterval(() => {
-
-        setProgress(`download-progress-${listPos}`, `${progress = progress === 100 ? progress = 0: progress+=2}%`)
-
-    }, 1000)
-
+    setTimeout(() => {
+        setInterval(() => {
+            setProgress(`download-progress-${listPos}`, `${progress = progress === 100 ? progress = 0: progress+=2}%`)
+        }, 1000)
+    }, 10000)
 }
+
+// ... user interactions on window
 
 window.addEventListener('DOMContentLoaded', () => {
-
-    setDownloadProgress(0)
-
+    dummyAnimate(0)
     // window action button clicked
     document.querySelectorAll('.window-action').forEach((action) => {
         action.addEventListener('click', (_event) => {
             window.bridgeApis.send('action-click-event', action.id)
         })
     })
+
+    // 3 seconds time delay before displaying contents to user ...
+    const windowContent = document.querySelector('.window')
+    setTimeout(() => {
+        windowContent.classList.remove('gone')
+    }, 3000)
 
     //...
     document.querySelector('.donate').addEventListener('click', (_event) => {
@@ -88,4 +99,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     })
 
+    // ---      download inter-process communication   ---
+
+    window.bridgeApis.on('download-progress-update', event => {
+
+    })
 })
