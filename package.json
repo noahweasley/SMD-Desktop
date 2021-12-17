@@ -11,7 +11,7 @@
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/assets/build/win/app_icon.ico",
     "build": "npm run pack:osx && npm run pack:win32 && npm run pack:win64",
     "package": "npm start && npm build"
-  }, 
+  },
   "repository": {
     "type": "git",
     "url": "www.github.com/noahweasley/SMD-desktop"
@@ -30,6 +30,7 @@
     "electron-packager": "^15.4.0"
   },
   "dependencies": {
+    "express": "^4.17.2",
     "spotify-web-api-node": "^5.0.2"
   }
 }
