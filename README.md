@@ -4,7 +4,7 @@
 
 ### Application package usages
 
-**N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-desktop/tree/master/app/src/main/java/com/noah/smd-desktop)_
+**N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-Desktop/tree/master/app)_
 
 
 |   Package  | Details                                                                                         |
@@ -33,7 +33,7 @@
 
 There are many ways in which you can participate in this project, for example:
 
-* [Submit bugs and feature requests](https://github.com/noahweasley/SMD-desktop/issues), and help us verify as they are checked in
+* [Submit bugs and feature requests](https://github.com/noahweasley/SMD-Desktop/issues), and help us verify as they are checked in
 * Review [source code changes](https://github.com/noahweasley/SMD-desktop/pulls)
 * Review the project and make pull requests for anything from typos to additional and new content
 
