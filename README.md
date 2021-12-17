@@ -2,6 +2,8 @@
 
 ## The best desktop app to download Spotity songs for free and legally !!
 
+<a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
+
 ### Application package usages
 
 **N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-Desktop/tree/master/app)_
