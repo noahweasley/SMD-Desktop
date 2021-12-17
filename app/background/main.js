@@ -22,11 +22,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const fs = require('fs');
 
 // credentials are optional
-const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://localhost:8888/callback',
-    clientId: '2209fc75807e46049a7961b6a64163b8',
-    clientSecret: 'ffdb7e9493374b0e927cb9f456b218ab'
-});
+const spotifyApi = new SpotifyWebApi();
 
 // ---------------------------------------------------------------------------------
 
