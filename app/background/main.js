@@ -16,76 +16,17 @@ const {
     getSpotifyURLType
 } = require('../background/util')
 
-const express = require('../../node_modules/express');
+const Settings = require('../background/settings/settings')
+
 const SpotifyWebApi = require('spotify-web-api-node');
+const fs = require('fs');
 
 // credentials are optional
 const spotifyApi = new SpotifyWebApi({
-
+    redirectUri: 'http://localhost:8888/callback',
+    clientId: '2209fc75807e46049a7961b6a64163b8',
+    clientSecret: 'ffdb7e9493374b0e927cb9f456b218ab'
 });
-
-const scopes = [
-    'ugc-image-upload',
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'user-read-currently-playing',
-    'streaming',
-    'app-remote-control',
-    'user-read-email',
-    'user-read-private',
-    'playlist-read-collaborative',
-    'playlist-modify-public',
-    'playlist-read-private',
-    'playlist-modify-private',
-    'user-library-modify',
-    'user-library-read',
-    'user-top-read',
-    'user-read-playback-position',
-    'user-read-recently-played',
-    'user-follow-read',
-    'user-follow-modify'
-];
-
-const server = express();
-
-server.get('/login', (req, res) => {
-    res.redirect(spotifyApi.createAuthorizeURL(scopes));
-});
-
-server.get('/callback', (req, res) => {
-    const error = req.query.error;
-    const code = req.query.code;
-    const state = req.query.state;
-
-    if (error) {
-        console.error('Callback Error:', error);
-        res.send(`Callback Error: ${error}`);
-        return;
-    }
-
-    spotifyApi
-        .authorizationCodeGrant(code)
-        .then(data => {
-            const access_token = data.body['access_token'];
-            const refresh_token = data.body['refresh_token'];
-            const expires_in = data.body['expires_in'];
-
-            spotifyApi.setAccessToken(access_token);
-            spotifyApi.setRefreshToken(refresh_token);
-
-            res.send('Success! You can now close the window.');
-
-            setInterval(async () => {
-                const data = await spotifyApi.refreshAccessToken();
-                const access_token = data.body['access_token'];
-                spotifyApi.setAccessToken(access_token);
-            }, expires_in / 2 * 1000);
-        })
-});
-
-server.listen(8888, () =>
-    shell.openExternal("http://localhost:8888/login")
-);
 
 // ---------------------------------------------------------------------------------
 
@@ -98,6 +39,7 @@ const State = Object.freeze({
 })
 
 app.whenReady().then(() => {
+    createPreferenceFile()
     createWindow()
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -133,6 +75,16 @@ ipcMain.on('donate', (_event) => {
     shell.openExternal('https://www.buymeacoffee.com/noahweasley')
 })
 
+// ... settings requests
+ipcMain.handle('get-states', (_event, args) => {
+    return Settings.getState(args[0], args[1])
+})
+
+// ... settings requests
+ipcMain.handle('set-states', (_event, args) => {
+    return Settings.setState(args[0], args[1])
+})
+
 // ... clipboard content request
 ipcMain.handle('clipboard-request', () => {
     const clipboardContent = clipboard.readText()
@@ -142,29 +94,53 @@ ipcMain.handle('clipboard-request', () => {
         let spotifyURLType = getSpotifyURLType(clipboardContent)
         switch (spotifyURLType) {
             case SpotifyURLType.TRACK:
-                let track = clipboardContent.substring("https://open.spotify.com/track/".length, clipboardContent.length)
-
-                spotifyApi.getTrack(track)
-                    .then(data => {
-                        const body = data.body
-                        let name = body['name']
-                        let artists = body.artists
-                        let artistNames = []
-
-                        artists.forEach(artist => {
-                            artistNames.push(artist['name'])
-                        })
-
-                        console.log(`Track name: ${name}, artist: ${artistNames}`)
-
-                    })
-                    .catch(err => console.log('Error occurred'))
-
+                performTrackDownloadAction(clipboardContent)
+                break
+            case SpotifyURLType.ALBUM:
+                performAlbumDownloadAction(clipboardContent)
+                break
+            case SpotifyURLType.ARTIST:
+                performArtistDownloadAction(clipboardContent)
+                break
+            default:
+                throw new Error(`${spotifyURLType} is not supported yet`)
         }
     } else {
+        // ... display modal dialog with details of error
         dialog.showErrorBox("Clipboard content not a Spotify link", "Go to Spotify and copy playlist or song link, then click 'Paste URL'")
     }
 })
+
+/**
+ * starts album downlaod
+ * @param {*} album the album identifier to be used in download
+ */
+function performAlbumDownloadAction(albumUrl) {}
+
+/**
+ * starts artist download
+ * @param {*} the artist identifier to be used in download
+ */
+function performArtistDownloadAction(artistUrl) {}
+
+/**
+ * 
+ */
+function performTrackDownloadAction(trackUrl) {
+    let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length)
+
+    spotifyApi.getTrack(track).then(data => {
+        const body = data.body
+        let name = body['name']
+        let artists = body.artists
+        let artistNames = []
+
+        artistNames = artists.map(artist => artist['name'])
+
+        console.log(`Track name: ${name}, artist: ${artistNames}`)
+
+    }).catch(_err => console.log('Error occurred'))
+}
 
 /**
  * Spawns up a new SMD window with a limitations of 2 winodws
@@ -188,4 +164,29 @@ function createWindow() {
     // Menu.setApplicationMenu(menu)
     smd_window.loadFile(path.join('app', 'pages', 'index.html'))
     smd_window.once('ready-to-show', smd_window.show)
+}
+
+/**
+ * create the settings data in app's path
+ */
+function createPreferenceFile() {
+    const prefDir = path.join(app.getPath('userData'), 'preference')
+    const preferenceFilePath = path.join(prefDir, 'preference.json')
+
+    fs.open(preferenceFilePath, 'wx', (err, fd) => {
+        if (err) {
+            if (err.code === 'EEXIST') return
+            console.log('An error occurred while opening file')
+        } else {
+            fs.mkdir(prefDir, {
+                recursive: true
+            }, function (err) {
+                if (err) console.log('An error occurred while creating directory')
+            })
+
+            fs.writeFile(preferenceFilePath, "{}", err => {
+                if (err) console.log('An error occurred while creating file')
+            })
+        }
+    })
 }

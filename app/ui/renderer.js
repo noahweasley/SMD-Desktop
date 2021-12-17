@@ -1,5 +1,7 @@
 'use-strict'
 
+let api
+
 function setProgress(elementId, prog) {
     const progress = document.getElementById(elementId)
     progress.style.setProperty('--progress-width', prog)
@@ -19,9 +21,69 @@ function dummyAnimate(listPos) {
     }, 10000)
 }
 
+function createLoginScreen() {
+//     <div class="modal">
+//     <div class="modal__login">
+//         <div class="split-pane split-pane__left">
+//             <h5>Just a few more steps</h5>
+//             <ol class="steps">
+//                 <li class="step"></li>
+//                 <li class="step"></li>
+//                 <li class="step"></li>
+//                 <li class="step"></li>
+//                 <li class="step"></li>
+//             </ol>
+//         </div>
+//         <div class="split-pane split-pane__right"></div>
+//     </div>
+// </div>
+    const loginScreen = document.createElement('div')
+    loginScreen.classList.add("modal")
+    
+    
+    const modalLogin = document.createElement('div')
+    const splitPaneLeft = document.createElement('div')
+    const splitPaneRight = document.createElement('div')
+    const text = document.createElement('h5')
+    const ol = document.createElement('ol')
+    const li = document.createElement('li')
+    const li2 = document.createElement('li')
+    const li3 = document.createElement('li')
+    const li4 = document.createElement('li')
+    const li5 = document.createElement('li')
+    
+    
+    
+
+    return loginScreen
+}
+
+function dataReveal() {
+    const windowContent = document.querySelector('.window')
+    const titileBar = document.querySelector('.toolbar-header')
+    titileBar.classList.remove('gone')
+    windowContent.classList.remove('gone')
+
+    window.bridgeApis.invoke('get-states', ['secrets-received', 'false'])
+        .then(value => {
+            if (value === "true") windowContent.classList.remove('gone')
+            else {
+                // document.body.appendChild(createLoginScreen())
+            }
+        })
+
+    // window.bridgeApis.invoke('set-states', ['data3', `Created at: ${Date.now()}`])
+    //     .then(result => {
+    //         console.log(result)
+    //     })
+
+}
+
 // ... user interactions on window
 
 window.addEventListener('DOMContentLoaded', () => {
+    api = window.bridgeApis
+
     dummyAnimate(0)
     // window action button clicked
     document.querySelectorAll('.window-action').forEach((action) => {
@@ -31,10 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
     })
 
     // 3 seconds time delay before displaying contents to user ...
-    const windowContent = document.querySelector('.window')
-    setTimeout(() => {
-        windowContent.classList.remove('gone')
-    }, 3000)
+    setTimeout(dataReveal, 3000)
 
     //...
     document.querySelector('.donate').addEventListener('click', (_event) => {

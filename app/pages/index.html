@@ -17,11 +17,29 @@
 
 <body>
 
+    <header class="toolbar toolbar-header toolbar-borderless gone">
+        <h1 class="title draggable">SMD Desktop</h1>
+        <img src="../assets/graphics/app_icon.png" alt="Spotity mucsic downloader icon" width="23px" height="20px">
+
+        <!-- window action buttons -->
+        <div class="window-action-group non-draggable">
+
+            <div class="window-action window-action-minimize" id="window-action-minimize">
+                <img src="../assets/graphics/minimize.svg" alt="minimize icon">
+            </div>
+
+            <div class="window-action window-action-maximize" id="window-action-maximize">
+                <img src="../assets/graphics/restore.svg" alt="resize icon">
+            </div>
+
+            <div class="window-action window-action-close" id="window-action-close">
+                <img src="../assets/graphics/close.svg" alt="close icon">
+            </div>
+        </div>
+
+    </header>
+
     <div class="window gone">
-        <header class="toolbar toolbar-header toolbar-borderless">
-            <h1 class="title draggable">SMD Desktop</h1>
-            <img src="../assets/graphics/app_icon.png" alt="Spotity mucsic downloader icon" width="23px" height="20px">
-        </header>
 
         <div class="window-content">
 
@@ -250,28 +268,31 @@
             </div>
 
         </div>
-        
+
         <footer class="toolbar toolbar-footer">
         </footer>
-        
-        <!-- window action buttons -->
-        <div class="window-action-group non-draggable">
 
-            <div class="window-action window-action-minimize" id="window-action-minimize">
-                <img src="../assets/graphics/minimize.svg" alt="minimize icon">
-            </div>
+    </div>
 
-            <div class="window-action window-action-maximize" id="window-action-maximize">
-                <img src="../assets/graphics/restore.svg" alt="resize icon">
-            </div>
+    <!-- Scripts -->
+    <script src="../ui/renderer.js"></script>
 
-            <div class="window-action window-action-close" id="window-action-close">
-                <img src="../assets/graphics/close.svg" alt="close icon">
+    <!-- <div class="modal">
+        <div class="modal__login">
+            <div class="split-pane split-pane__left">
+                <h5>Just a few more steps</h5>
+                <ol class="steps">
+                    <li class="step"></li>
+                    <li class="step"></li>
+                    <li class="step"></li>
+                    <li class="step"></li>
+                    <li class="step"></li>
+                </ol>
             </div>
+            <div class="split-pane split-pane__right"></div>
         </div>
+    </div> -->
 
-        <!-- Scripts -->
-        <script src="../ui/renderer.js"></script>
 </body>
 
 </html>
