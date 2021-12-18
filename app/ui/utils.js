@@ -1,3 +1,5 @@
+'use-strict'
+
 // the next siblings
 export function getNextSiblings(elem) {
     var sibs = [];

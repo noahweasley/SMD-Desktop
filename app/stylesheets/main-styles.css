@@ -8,7 +8,7 @@
     --active-scrolbar-clr: #1ed75f38;
     --grey-solid_10: rgba(160, 159, 159, 0.247);
     --primary-color: #1ed760;
-    --primary-color-dark: hsl(141, 78%, 16%);
+    --primary-color-dark: #1dbb54;
     --primary-color-dark-alt-2: hsl(144, 82%, 38%);
     --primary-color-dark-alt: hsl(143, 63%, 10%);
     --solid-green: #22cc5db2;
@@ -46,6 +46,10 @@ body {
     display: none;
 }
 
+.border-less {
+    border: none;
+}
+
 .bounce {
     animation: 10s scale-bounce 0.5s ease-in-out infinite forwards;
 }
@@ -64,6 +68,12 @@ a:hover {
 
 a:active {
     color: var(--primary-color-dark);
+}
+
+.eleme-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bounce:hover {
@@ -199,7 +209,6 @@ body,
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--grey-solid_5);
     position: absolute;
     left: 0;
     right: 0;
@@ -210,9 +219,12 @@ body,
     background-color: var(--solid-darker);
 }
 
+.tab-group__border {
+    border: 1px solid var(--grey-solid_5);
+}
+
 .__tab-item {
     letter-spacing: 0.1em;
-    border-radius: 50px;
     height: 60%;
     width: 130px;
     background-color: var(--grey-solid_5);
@@ -222,6 +234,10 @@ body,
     margin: 20px;
     cursor: pointer;
     transition: 0.5s;
+}
+
+.__tab-item__rounded {
+    border-radius: 50px;
 }
 
 .__tab-item.active,
@@ -465,9 +481,9 @@ body,
 }
 
 .modal__login>.split-pane {
-    z-index: 10;
     width: 60%;
     height: 100%;
+    position: relative;
 }
 
 .split-pane.split-pane__left {
@@ -478,9 +494,10 @@ body,
 
 .split-pane.split-pane__right {
     background-color: black;
+    padding: 16px;
 }
 
-.modal__login>.split-pane>h5 {
+.modal__login>.split-pane.split-pane>h5 {
     position: relative;
     font-size: 1.5em;
     letter-spacing: 0.1em;
@@ -488,7 +505,7 @@ body,
     margin-bottom: 8px;
 }
 
-.modal__login>.split-pane>h5::after {
+.modal__login>.split-pane.split-pane__left>h5::after {
     border-radius: 10px;
     content: '';
     display: block;
@@ -500,7 +517,7 @@ body,
     background-color: var(--solid-green);
 }
 
-.modal__login>.split-pane>h5::before {
+.modal__login>.split-pane.split-pane__left>h5::before {
     border-radius: 10px;
     content: '';
     display: block;
@@ -537,6 +554,50 @@ body,
 
 .modal__login>.split-pane>.info {
     margin: 100px 24px;
+}
+
+form {
+    border-color: var(--solid-green);
+}
+
+.form-control {
+    background-color: white;
+    padding: 8px;
+    color: black;
+}
+
+.form-control:focus {
+    border-color: var(--solid-green);
+    box-shadow:
+        3px 3px 0 var(--solid-green),
+        -3px -3px 0 var(--solid-green),
+        -3px 3px 0 var(--solid-green),
+        3px -3px 0 var(--solid-green);
+}
+
+.btn-form {
+    background-color: var(--solid-green);
+    margin-top: 16px;
+    padding: 8px 24px;
+    font-size: 1.1em;
+}
+
+.tab-group__form {
+    position: initial;
+    width: 100%;
+    margin-bottom: 24px;
+    border: none;
+}
+
+.tab-item__form {
+    background-color: initial;
+    background: initial;
+}
+
+.__tab-item__form.active,
+.__tab-item__form:hover {
+    color: var(--white-solid);
+    background-color: transparent;
 }
 
 /* ------------------ Animation Key Frames ----------------- */
