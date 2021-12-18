@@ -37,7 +37,7 @@ const State = Object.freeze({
 app.whenReady().then(() => {
     createPreferenceFile()
     createWindow()
-    app.on('activate', function () {
+    app.on('activate', function() {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 })
@@ -65,10 +65,10 @@ ipcMain.on('action-click-event', (_event, id) => {
 
 })
 
-// ... support button click
-ipcMain.on('donate', (_event) => {
-    // donations
-    shell.openExternal('https://www.buymeacoffee.com/noahweasley')
+// ... link navigate
+ipcMain.on('navigate-link', (_event, arg) => {
+    // console.log(arg)
+    shell.openExternal(`${arg}`)
 })
 
 // ... settings requests
@@ -146,18 +146,19 @@ function createWindow() {
     if (BrowserWindow.getAllWindows().length == 2) return
 
     smd_window = new BrowserWindow({
-        show: false,
-        frame: false,
-        minWidth: 800,
-        minHeight: 400,
-        width: 1000,
-        height: 620,
-        webPreferences: {
-            contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
-        }
-    })
-    // Menu.setApplicationMenu(menu)
+            show: false,
+            backgroundColor: "#0c0b0b",
+            frame: false,
+            minWidth: 900,
+            minHeight: 400,
+            width: 1000,
+            height: 620,
+            webPreferences: {
+                contextIsolation: true,
+                preload: path.join(__dirname, '../preload.js')
+            }
+        })
+        // Menu.setApplicationMenu(menu)
     smd_window.loadFile(path.join('app', 'pages', 'index.html'))
     smd_window.once('ready-to-show', smd_window.show)
 }
@@ -176,7 +177,7 @@ function createPreferenceFile() {
         } else {
             fs.mkdir(prefDir, {
                 recursive: true
-            }, function (err) {
+            }, function(err) {
                 if (err) console.log('An error occurred while creating directory')
             })
 

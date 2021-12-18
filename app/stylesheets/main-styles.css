@@ -44,13 +44,26 @@ body {
 
 .gone {
     display: none;
-    border: none;
-    padding: 0;
-    margin: 0;
 }
 
 .bounce {
     animation: 10s scale-bounce 0.5s ease-in-out infinite forwards;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    pointer-events: stroke;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+a:active {
+    color: var(--primary-color-dark);
 }
 
 .bounce:hover {
@@ -316,7 +329,6 @@ body,
 .media-body>.horizontal-progress {
     --progress-width: 20px;
     --progress-anim: 2s move linear infinite forwards;
-
     position: relative;
     width: 80%;
     height: 10px;
@@ -431,48 +443,28 @@ body,
     position: relative;
     width: 100vw;
     height: 100vh;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
-    background: url(../../sample-images/saso-tusar-QtgGYlug6Cw-unsplash.jpg) no-repeat;
+    background: url(../../sample-images/background.jpg) no-repeat;
     background-position: center;
-}
-
-.modal__login::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    z-index: 4;
-    background-color: rgba(0, 0, 0, 0.39);
+    object-fit: cover;
 }
 
 .modal__login {
-    z-index: 5;
-    box-shadow: 0 0 16px 16px rgba(0, 0, 0, 0.219);
-    width: 50vw;
+    color: white;
+    letter-spacing: 0.1em;
+    box-shadow: 0 0 16px 16px rgba(0, 0, 0, 0.288);
+    width: 800px;
     height: 70vh;
-    max-width: 500px;
-    min-width: 800px;
-    max-height: 800px;
-    min-height: 200px;
     display: flex;
-    flex: 1;
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--solid-dark-alt);
-    /* position: absolute; */
     top: calc(10% + 5vh);
-    animation: 3s op ease-in-out forwards;
 }
 
 .modal__login>.split-pane {
-    color: wheat;
     z-index: 10;
     width: 60%;
     height: 100%;
@@ -480,11 +472,12 @@ body,
 
 .split-pane.split-pane__left {
     width: 40%;
-    background: var(--primary-color-dark-alt);
+    background-color: black;
+    border-right: 5px solid var(--solid-green);
 }
 
 .split-pane.split-pane__right {
-    background: rgb(38, 41, 44);
+    background-color: black;
 }
 
 .modal__login>.split-pane>h5 {
@@ -492,6 +485,7 @@ body,
     font-size: 1.5em;
     letter-spacing: 0.1em;
     text-align: center;
+    margin-bottom: 8px;
 }
 
 .modal__login>.split-pane>h5::after {
@@ -503,7 +497,7 @@ body,
     position: absolute;
     left: 90%;
     top: 40%;
-    background-color: skyblue;
+    background-color: var(--solid-green);
 }
 
 .modal__login>.split-pane>h5::before {
@@ -515,11 +509,34 @@ body,
     position: absolute;
     left: -90%;
     top: 40%;
-    background-color: skyblue
+    background-color: var(--solid-green);
 }
 
-.modal__login>.split-pane>ol>*+* {
+.modal__login>.split-pane>ol {
+    list-style: none;
+    margin: 8px;
+    margin-bottom: 24px;
+}
+
+.modal__login>.split-pane>ol>* {
     margin-top: 20px;
+    position: relative;
+}
+
+.modal__login>.split-pane>ol>*::before {
+    content: '';
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    background-color: var(--solid-green);
+    position: absolute;
+    right: 105%;
+    top: 10%;
+}
+
+.modal__login>.split-pane>.info {
+    margin: 100px 24px;
 }
 
 /* ------------------ Animation Key Frames ----------------- */
@@ -566,11 +583,9 @@ body,
 }
 
 @keyframes move {
-
     0% {
         transform: scaleX(1.0);
         left: -10%;
-
     }
 
     50% {
@@ -581,15 +596,4 @@ body,
         transform: scaleX(1.0);
         left: 100%;
     }
-
-}
-
-@keyframes op {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-    
 }

@@ -21,54 +21,18 @@ function dummyAnimate(listPos) {
     }, 10000)
 }
 
-function createLoginScreen() {
-//     <div class="modal">
-//     <div class="modal__login">
-//         <div class="split-pane split-pane__left">
-//             <h5>Just a few more steps</h5>
-//             <ol class="steps">
-//                 <li class="step"></li>
-//                 <li class="step"></li>
-//                 <li class="step"></li>
-//                 <li class="step"></li>
-//                 <li class="step"></li>
-//             </ol>
-//         </div>
-//         <div class="split-pane split-pane__right"></div>
-//     </div>
-// </div>
-    const loginScreen = document.createElement('div')
-    loginScreen.classList.add("modal")
-    
-    
-    const modalLogin = document.createElement('div')
-    const splitPaneLeft = document.createElement('div')
-    const splitPaneRight = document.createElement('div')
-    const text = document.createElement('h5')
-    const ol = document.createElement('ol')
-    const li = document.createElement('li')
-    const li2 = document.createElement('li')
-    const li3 = document.createElement('li')
-    const li4 = document.createElement('li')
-    const li5 = document.createElement('li')
-    
-    
-    
-
-    return loginScreen
-}
-
 function dataReveal() {
     const windowContent = document.querySelector('.window')
+    const modal = document.querySelector('.modal')
     const titileBar = document.querySelector('.toolbar-header')
     titileBar.classList.remove('gone')
-    windowContent.classList.remove('gone')
-
+    modal.style.setProperty('display', 'flex')
+    
     window.bridgeApis.invoke('get-states', ['secrets-received', 'false'])
-        .then(value => {
+    .then(value => {
             if (value === "true") windowContent.classList.remove('gone')
             else {
-                // document.body.appendChild(createLoginScreen())
+                modal.style.setProperty('display', 'flex')
             }
         })
 
@@ -85,7 +49,15 @@ window.addEventListener('DOMContentLoaded', () => {
     api = window.bridgeApis
 
     dummyAnimate(0)
-    // window action button clicked
+
+    // deactive link default actions 
+    document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault()
+                window.bridgeApis.send('navigate-link', link.getAttribute('href'))
+            })
+        })
+        // window action button clicked
     document.querySelectorAll('.window-action').forEach((action) => {
         action.addEventListener('click', (_event) => {
             window.bridgeApis.send('action-click-event', action.id)
@@ -97,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //...
     document.querySelector('.donate').addEventListener('click', (_event) => {
-        window.bridgeApis.send('donate')
+        window.bridgeApis.send('navigate-link', 'https://www.buymeacoffee.com/noahweasley')
     })
 
     // ...
