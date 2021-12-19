@@ -28,4 +28,32 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(content)
             })
     })
+
+    // ..
+    const s = document.getElementById('spcid')
+    const s1 = document.getElementById('spcs')
+    const s2 = document.getElementById('socid')
+    const s3 = document.getElementById('socs')
+
+    document.querySelectorAll('.btn-form').forEach(auth => {
+        auth.addEventListener('click', () => {
+            let data
+
+            switch (auth.id) {
+                case 'auth-spotify':
+                    data = [s.value, s1.value]
+                    break
+                case 'auth-soundcloud':
+                    data = [s2.value, s3.value]
+                    break
+            }
+
+            data.push(auth.id)
+            window.bridgeApis.invoke('authorize-app', data)
+
+            // disable button and enable it only when the server timeout has reached
+            auth.setAttribute('disabled', "true")
+            setTimeout(() => auth.removeAttribute("disabled"), 11000)
+        })
+    })
 })

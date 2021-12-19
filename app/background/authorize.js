@@ -1,12 +1,14 @@
+const { shell } = require('electron')
 const express = require('express');
 const server = express();
+const path = require('path')
+const SpotifyWebApi = require('spotify-web-api-node');
+const Settings = require('../background/settings/settings')
 
 const scopes = [
-    'ugc-image-upload',
     'user-read-playback-state',
     'user-modify-playback-state',
     'user-read-currently-playing',
-    'streaming',
     'app-remote-control',
     'user-read-email',
     'user-read-private',
@@ -14,32 +16,36 @@ const scopes = [
     'playlist-modify-public',
     'playlist-read-private',
     'playlist-modify-private',
-    'user-library-modify',
     'user-library-read',
     'user-top-read',
     'user-read-playback-position',
     'user-read-recently-played',
-    'user-follow-read',
-    'user-follow-modify'
 ];
 
+const TIMEOUT = 10000
+let timeout
+let connection
 
-server.get('/login', (_req, res) => {
+const spotifyApi = new SpotifyWebApi({
+    redirectUri: 'http://localhost:8888/callback'
+})
+
+server.get('/authorize', (_req, res) => {
     res.redirect(spotifyApi.createAuthorizeURL(scopes));
+    timeout = setTimeout(() => connection.close(), TIMEOUT)
 });
 
 server.get('/callback', (req, res) => {
     const error = req.query.error;
     const code = req.query.code;
-    // const state = req.query.state;
 
     if (error) {
         res.send(`Callback Error: ${error}`);
+        connection.close()
         return;
     }
 
-    spotifyApi
-        .authorizationCodeGrant(code)
+    spotifyApi.authorizationCodeGrant(code)
         .then(data => {
             const access_token = data.body['access_token'];
             const refresh_token = data.body['refresh_token'];
@@ -48,9 +54,16 @@ server.get('/callback', (req, res) => {
             spotifyApi.setAccessToken(access_token);
             spotifyApi.setRefreshToken(refresh_token);
 
-            res.send('Success! You can now close the window.');
+            res.sendFile(path.join(__dirname, '../pages/success.html'));
 
-            setInterval(async () => {
+            Settings.setState('spotify-access-token', access_token)
+            Settings.setState('spotify-refresh-token', refresh_token)
+            Settings.setState('spotify-token-expiration', expires_in)
+            Settings.setState('secrets-received', true)
+
+            connection.close()
+
+            setInterval(async() => {
                 const data = await spotifyApi.refreshAccessToken();
                 const access_token = data.body['access_token'];
                 spotifyApi.setAccessToken(access_token);
@@ -58,6 +71,14 @@ server.get('/callback', (req, res) => {
         })
 });
 
-server.listen(8888, () =>
-    shell.openExternal("http://localhost:8888/login")
-);
+module.exports.authorize = function(args) {
+    spotifyApi.setClientId(args[0])
+    spotifyApi.setClientSecret(args[1])
+    Settings.setState('spotify-user-client-id', args[0])
+    Settings.setState('spotify-user-client-secret', args[1])
+
+    connection = server.listen(8888, () =>
+        shell.openExternal("http://localhost:8888/authorize")
+    )
+
+}

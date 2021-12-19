@@ -12,6 +12,7 @@
     --primary-color-dark-alt-2: hsl(144, 82%, 38%);
     --primary-color-dark-alt: hsl(143, 63%, 10%);
     --solid-green: #22cc5db2;
+    --btn-disabled: #6fc48db2;
     --solid-blue: hsl(225, 76%, 10%);
     --solid-blue-alt: hsl(223, 78%, 12%);
     --solid-dark: #0c0b0b;
@@ -568,6 +569,7 @@ form {
     background-color: white;
     padding: 8px;
     color: black;
+    transition: 0.2s;
 }
 
 .form-control:focus {
@@ -584,6 +586,11 @@ form {
     margin-top: 16px;
     padding: 8px 24px;
     font-size: 1.1em;
+}
+
+.btn-form:disabled {
+    background-color: var(--btn-disabled);
+    cursor: no-drop;
 }
 
 .tab-group__form {

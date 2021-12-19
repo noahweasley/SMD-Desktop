@@ -1,5 +1,8 @@
 'use-strict'
 
+const { authorize } = require('../background/authorize')
+const Settings = require('../background/settings/settings')
+
 const {
     app,
     BrowserWindow,
@@ -9,20 +12,17 @@ const {
     dialog
 } = require('electron')
 
-const path = require('path')
-
 const {
     SpotifyURLType,
     getSpotifyURLType
 } = require('../background/util')
 
-const Settings = require('../background/settings/settings')
 
-const SpotifyWebApi = require('spotify-web-api-node');
 const fs = require('fs');
+const path = require('path')
+const SpotifyWebApi = require('spotify-web-api-node');
 
-// credentials are optional
-const spotifyApi = new SpotifyWebApi();
+const spotifyApi = new SpotifyWebApi()
 
 // ---------------------------------------------------------------------------------
 
@@ -81,23 +81,47 @@ ipcMain.handle('set-states', (_event, args) => {
     return Settings.setState(args[0], args[1])
 })
 
+// ... application authorization 
+ipcMain.handle('authorize-app', (_event, args) => {
+    // console.log(args)
+    authorize(args)
+})
+
 // ... clipboard content request
 ipcMain.handle('clipboard-request', () => {
+
+    async function getRefreshedAccessToken() {
+        const response =  await getRefeshResponse()
+        return response.access_token
+        
+        async function getRefeshResponse() {
+            const response = await spotifyApi.refreshAccessToken()
+            const responseBody = response.body
+            return responseBody
+        }
+    }
+
     const clipboardContent = clipboard.readText()
     const spotifyLinkRegex = new RegExp('https://open.spotify.com')
+
+    spotifyApi.setClientId(Settings.getState('spotify-user-client-id'))
+    spotifyApi.setClientSecret(Settings.getState('spotify-user-client-secret'))
+    spotifyApi.setRefreshToken(Settings.getState('spotify-refresh-token'))
+
+    spotifyApi.setAccessToken(getRefreshedAccessToken())
+
     if (spotifyLinkRegex.test(clipboardContent)) {
         // then ...
         let spotifyURLType = getSpotifyURLType(clipboardContent)
         switch (spotifyURLType) {
             case SpotifyURLType.TRACK:
-                performTrackDownloadAction(clipboardContent)
-                break
+                return performTrackDownloadAction(clipboardContent)
             case SpotifyURLType.ALBUM:
-                performAlbumDownloadAction(clipboardContent)
-                break
+                return performAlbumDownloadAction(clipboardContent)
             case SpotifyURLType.ARTIST:
-                performArtistDownloadAction(clipboardContent)
-                break
+                return performArtistDownloadAction(clipboardContent)
+            case SpotifyURLType.PLAYLIST:
+                return performPlaylistDownloadAction(clipboardContent)
             default:
                 throw new Error(`${spotifyURLType} is not supported yet`)
         }
@@ -111,31 +135,72 @@ ipcMain.handle('clipboard-request', () => {
  * starts album downlaod
  * @param {*} album the album identifier to be used in download
  */
-function performAlbumDownloadAction(albumUrl) {}
+async function performAlbumDownloadAction(albumUrl) {}
 
 /**
  * starts artist download
  * @param {*} the artist identifier to be used in download
  */
-function performArtistDownloadAction(artistUrl) {}
+async function performArtistDownloadAction(artistUrl) {
+    let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length)
+
+    spotifyApi.getArtist(artist).then(data => {
+        console.log(data.body)
+    })
+
+}
+
+/**
+ * starts artist download
+ * @param {*} the artist identifier to be used in download
+ */
+async function performPlaylistDownloadAction(playlistUrl) {
+    let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length)
+
+    const data = await spotifyApi.getPlaylist(playlist)
+    const body = data.body
+    const playListName = body['name']
+    const tracks = body['tracks']
+
+    // tracks['items'].map(i => i.track).forEach(tr => {
+    //     let artists = tr["artists"]
+    //     let songTitle = tr['name']
+    //     let artistNames = artists.map(artist => artist['name'])
+    //     trackCollection.push({ songTitle, artistNames })
+    // })
+
+    // track-item => track => { song-title, artist-names } 
+    let trackCollection = tracks['items'].map(i => i.track).map(tr => {
+        tr['name'], tr['artists'].map(artist => artist.name)
+    })
+
+    console.log(trackCollection)
+
+    return {
+        "type": SpotifyURLType.PLAYLIST,
+        "description": { playListName, trackCollection }
+    }
+}
 
 /**
  * 
  */
-function performTrackDownloadAction(trackUrl) {
+async function performTrackDownloadAction(trackUrl) {
     let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length)
 
-    spotifyApi.getTrack(track).then(data => {
-        const body = data.body
-        let name = body['name']
-        let artists = body.artists
-        let artistNames = []
+    const data = await spotifyApi.getTrack(track)
+    const body = data.body
+    let songTitle = body['name']
+    let artists = body['artists']
+    let artistNames = []
 
-        artistNames = artists.map(artist => artist['name'])
+    artistNames = artists.map(artist => artist['name'])
 
-        console.log(`Track name: ${name}, artist: ${artistNames}`)
+    return {
+        "type": SpotifyURLType.TRACK,
+        "description": [{ songTitle, artistNames }]
+    }
 
-    }).catch(_err => console.log('Error occurred'))
 }
 
 /**
@@ -171,16 +236,21 @@ function createPreferenceFile() {
     const preferenceFilePath = path.join(prefDir, 'preference.json')
 
     fs.open(preferenceFilePath, 'wx', (err, fd) => {
-        if (err) {
-            if (err.code === 'EEXIST') return
-            console.log('An error occurred while opening file')
-        } else {
+
+        function createPrefDirectory() {
             fs.mkdir(prefDir, {
                 recursive: true
             }, function(err) {
                 if (err) console.log('An error occurred while creating directory')
             })
+        }
 
+        if (err) {
+            if (err.code === 'EEXIST') return
+            else if (err.code === 'ENOENT') createPrefDirectory()
+            else console.log(err.code)
+        } else {
+            createPrefDirectory()
             fs.writeFile(preferenceFilePath, "{}", err => {
                 if (err) console.log('An error occurred while creating file')
             })

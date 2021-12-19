@@ -1,5 +1,5 @@
 {
-  "name": "smd-desktop",
+  "name": "md-desktop",
   "version": "1.0.0",
   "description": "The best desktop app to download Spotity songs for free and legally !!",
   "main": "app/background/main.js",

@@ -1,7 +1,7 @@
 'use-strict'
 
 // the next siblings
-export function getNextSiblings(elem) {
+module.exports.getNextSiblings = function(elem) {
     var sibs = [];
     while (elem = elem.nextSibling) {
         sibs.push(elem);
@@ -11,7 +11,7 @@ export function getNextSiblings(elem) {
 
 // this will start from the current element and get all the
 // previous siblings
-export function getPreviousSiblings(elem) {
+module.exports.getPreviousSiblings = function(elem) {
     var sibs = [];
     while (elem = elem.previousSibling) {
         sibs.push(elem);
@@ -21,7 +21,7 @@ export function getPreviousSiblings(elem) {
 
 // this will start from the first child of the current element's
 // parent and get all the siblings
-export function getAllSiblings(elem) {
+module.exports.getAllSiblings = function(elem) {
     var sibs = [];
     elem = elem.parentNode.firstChild;
     while (elem = elem.nextSibling) {
