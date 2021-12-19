@@ -274,13 +274,6 @@
 
     </div>
 
-    <!-- Scripts -->
-    <script src="../ui/renderer.js"></script>
-    <script src="../ui/tabs.js"></script>
-    <script src="../ui/ipc.js"></script>
-    <script src="../ui/lists.js"></script>
-    <script src="../ui/downloads.js"></script>
-
     <div class="modal">
         <div class="modal__login">
             <div class="split-pane split-pane__left">
@@ -314,7 +307,7 @@
 
                 <div class="tab-content__form">
 
-                    <form>
+                    <form id="tab-content__form__spotify">
                         <div class="form-group">
                             <label>Spotify Client ID</label>
                             <input type="text" class="form-control" placeholder="Client ID">
@@ -328,13 +321,13 @@
                         </div>
                     </form>
 
-                    <form class="invisible">
+                    <form id="tab-content__form__soundcloud" class="invisible">
                         <div class="form-group">
-                            <label>Spotify Client ID</label>
+                            <label>SoundCloud Client ID</label>
                             <input type="text" class="form-control" placeholder="Client ID">
                         </div>
                         <div class="form-group">
-                            <label>Spotify Client Secret</label>
+                            <label>SoundCloud Client Secret</label>
                             <input type="text" class="form-control" placeholder="Client Secret">
                         </div>
                         <div class="form-actions eleme-centered">
@@ -349,6 +342,13 @@
         </div>
 
     </div>
+
+    <!-- Scripts -->
+    <script src="../ui/setup.js"></script>
+    <script src="../ui/tabs.js"></script>
+    <script src="../ui/ipc.js"></script>
+    <script src="../ui/lists.js"></script>
+    <script src="../ui/downloads.js"></script>
 
 </body>
 

@@ -16,9 +16,6 @@ window.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    // 3 seconds time delay before displaying contents to user ...
-    setTimeout(dataReveal, 3000)
-
     //...
     document.querySelector('.donate').addEventListener('click', (_event) => {
         window.bridgeApis.send('navigate-link', 'https://www.buymeacoffee.com/noahweasley')

@@ -28,6 +28,10 @@ body {
     height: 100%;
 }
 
+* {
+    outline: none;
+}
+
 .icon-x2 {
     font-size: 1.8em;
 }

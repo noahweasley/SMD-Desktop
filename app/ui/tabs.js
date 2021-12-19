@@ -1,12 +1,16 @@
 'use-strict'
 
-window.addEventListener('DOMContentLoaded', () => {
+function getElementIndex(element) {
+    return Array.from(element.parentNode.children).indexOf(element);
+}
+
+function registerTabEvents(tabItem, ...tabContent) {
     //...
-    let tabItems = document.querySelectorAll('.__tab-item')
+    let tabItems = document.querySelectorAll(tabItem)
 
     // ...
-    let tabContent_Downloading = document.getElementById('tab-content__downloading')
-    let tabContent_Downloaded = document.getElementById('tab-content__downloaded')
+    let tabContent_Downloading = document.getElementById(tabContent[0])
+    let tabContent_Downloaded = document.getElementById(tabContent[1])
 
     tabItems.forEach((tabItem) => {
 
@@ -18,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
             tabItem.classList.add('active')
 
             // toggle tab content visibility
-            if (tabItem.id == '__tab-item__downloading') {
+            if (getElementIndex(tabItem) === 0) {
                 if (!tabContent_Downloaded.classList.contains('invisible')) {
                     tabContent_Downloaded.classList.add('invisible')
                 }
@@ -37,5 +41,10 @@ window.addEventListener('DOMContentLoaded', () => {
         })
 
     })
-    
+
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    registerTabEvents('.__tab-item', 'tab-content__downloading', 'tab-content__downloaded')
+    registerTabEvents('.tab-item__form', 'tab-content__form__spotify', 'tab-content__form__soundcloud')
 })

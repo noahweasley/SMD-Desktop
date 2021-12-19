@@ -19,31 +19,7 @@ function dummyAnimate(listPos) {
     }, 10000)
 }
 
-function dataReveal() {
-    const windowContent = document.querySelector('.window')
-    const modal = document.querySelector('.modal')
-    const titileBar = document.querySelector('.toolbar-header')
-    titileBar.classList.remove('gone')
-    windowContent.classList.remove('gone')
-    modal.style.setProperty('display', 'none')
-
-    window.bridgeApis.invoke('get-states', ['secrets-received', 'false'])
-        .then(value => {
-            if (value === "true") windowContent.classList.remove('gone')
-            else {
-                // modal.style.setProperty('display', 'flex')
-            }
-        })
-
-    // window.bridgeApis.invoke('set-states', ['data3', `Created at: ${Date.now()}`])
-    //     .then(result => {
-    //         console.log(result)
-    //     })
-
-}
-
 // ... user interactions on window
-
 window.addEventListener('DOMContentLoaded', () => {
     dummyAnimate(0)
     // ---      download inter-process communication   ---
