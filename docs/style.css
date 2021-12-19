@@ -1,0 +1,79 @@
+:root {
+    --white-solid: #eeeeee;
+    --grey-solid: #828282;
+    --grey-solid_5: rgba(160, 159, 159, 0.144);
+    --black_transparent: rgba(0, 0, 0, 0.726);
+    --normal-scrolbar-clr: #1ed75f18;
+    --active-scrolbar-clr: #1ed75f38;
+    --grey-solid_10: rgba(160, 159, 159, 0.247);
+    --primary-color: #1ed760;
+    --primary-color-dark: #1dbb54;
+    --primary-color-dark-alt-2: hsl(144, 82%, 38%);
+    --primary-color-dark-alt: hsl(143, 63%, 10%);
+    --solid-green: #22cc5db2;
+    --solid-blue: hsl(225, 76%, 10%);
+    --solid-blue-alt: hsl(223, 78%, 12%);
+    --solid-dark: #0c0b0b;
+    --solid-dark-alt: #161313;
+    --solid-darker: #000;
+    --sand-solid: #ecebe8;
+    --window-actions-elevation: 2;
+    color: var(--grey-solid);
+}
+
+body {
+    margin: 0;
+}
+
+nav {
+    /* Safari */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--solid-dark);
+    padding: 8px 8px 8px 16px;
+}
+
+ul.topnav li {
+    float: right;
+}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {
+    background-color: #111;
+}
+
+ul.topnav li a.active {
+    color: var(--primary-color);
+}
+
+ul.topnav li.right {
+    float: right;
+}
+
+section.product-display {
+    width: 100%;
+    height: 600px;
+    background-color: var(--solid-green);
+}
+
+@media screen and (max-width: 600px) {
+
+    ul.topnav li.right,
+    ul.topnav li {
+        float: none;
+    }
+}
