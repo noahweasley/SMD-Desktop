@@ -117,7 +117,6 @@ a:active {
 }
 
 .nav-group-item {
-    cursor: pointer;
     padding: 8px 16px;
     margin: 8px 8px;
     border-radius: 4px;
@@ -131,6 +130,21 @@ a:active {
 
 .nav-group-item:hover {
     color: var(--white-solid)
+}
+
+.nav-group-item.click {
+    cursor: default;
+    text-decoration: none;
+    color: var(--grey-solid);
+}
+
+.nav-group-item.click:hover {
+    color: var(--white-solid)
+}
+
+.nav-group-item.click:active {
+    transition: 0s;
+    background-color: var(--grey-solid_5);
 }
 
 .window-action-group {

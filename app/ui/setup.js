@@ -8,8 +8,10 @@ function dataReveal() {
 
     window.bridgeApis.invoke('get-states', ['secrets-received', 'false'])
         .then(value => {
-            if (value === "true") windowContent.classList.remove('gone')
-            else {
+            if (value == "true") {
+                windowContent.classList.remove('gone')
+                modal.style.setProperty('display', 'none')
+            } else {
                 modal.style.setProperty('display', 'flex')
             }
         })

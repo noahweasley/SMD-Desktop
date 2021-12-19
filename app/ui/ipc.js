@@ -5,7 +5,9 @@ window.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault()
-            window.bridgeApis.send('navigate-link', link.getAttribute('href'))
+            let li = link.getAttribute('href')
+            li = li === "#" ? "music" : li 
+            window.bridgeApis.send('navigate-link', li)
         })
     })
 

@@ -6,25 +6,35 @@
 
  const path = require('path')
  const fs = require('fs')
- 
- const preferenceFilePath = path.join(app.getPath('userData'), 'preference', 'preference.json')
+
+ const preferenceFileDir = path.join(app.getPath('userData'), 'preference')
+ const preferenceFilePath = path.join(preferenceFileDir, 'preference.json')
 
  function getPreferences() {
      try {
          const data = fs.readFileSync(preferenceFilePath, 'utf8')
          return JSON.parse(data)
      } catch (err) {
-         console.error('An error occurred while reading file')
+         return createPrefFile()
+     }
+
+     function createPrefFile() {
+         fs.writeFileSync(preferenceFilePath, "{}", err => {
+             if (err) console.log('An error occurred while writing file')
+         })
+
          return {}
      }
  }
 
  function setPreferences(pref) {
+     const preference = JSON.stringify(pref)
      try {
-         fs.writeFileSync(preferenceFilePath, pref)
+         fs.writeFileSync(preferenceFilePath, preference)
+         return true
      } catch (err) {
          console.error('An error occurred while writing file')
-         return {}
+         return false
      }
  }
 
@@ -32,9 +42,9 @@
   * Checks if the key specified by *key* is present in app preference
   * @param key the key to check it's existence
   */
- module.exports.checkExistingKey = function (key) {
+ module.exports.checkExistingKey = function(key) {
      if (!key instanceof String) throw new Error(key + " has to be a string")
-     // check if object has property key
+         // check if object has property key
      for (let pref in getPreferences()) {
          if (pref === key) return true
      }
@@ -48,13 +58,14 @@
   * @param {*} key the key in settings in which it's value would be retrieved 
   * @param {*} defaultValue the default value to be retrieved if that key has never been set
   */
- module.exports.getState = function (key, defaultValue) {
+ module.exports.getState = function(key, defaultValue) {
      if (!key instanceof String) throw new Error(key + " has to be a string")
-
+     // first check if key exists
      if (this.checkExistingKey(key)) {
          const dataOB = getPreferences()
-         return dataOB[`${key}`]
-     } else return defaultValue
+         // wrap return value with String, to provide hint on what getState returns
+         return new String(dataOB[`${key}`])
+     } else return new String(defaultValue)
  }
 
  /**
@@ -64,10 +75,10 @@
   * @param {*} key the key in settings in which it's value would be retrieved 
   * @param {*} value the value to be set
   */
- module.exports.setState = function (key, value) {
+ module.exports.setState = function(key, value) {
      let pref = getPreferences()
      pref[`${key}`] = `${value}`
-     setPreferences(JSON.stringify(pref))
+     return setPreferences(pref)
  }
 
  /**

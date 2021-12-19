@@ -1,6 +1,8 @@
 'use-strict'
 
-const { authorize } = require('../background/authorize')
+const {
+    authorize
+} = require('../background/authorize')
 const Settings = require('../background/settings/settings')
 
 const {
@@ -67,8 +69,7 @@ ipcMain.on('action-click-event', (_event, id) => {
 
 // ... link navigate
 ipcMain.on('navigate-link', (_event, arg) => {
-    // console.log(arg)
-    shell.openExternal(`${arg}`)
+    shell.openExternal(`${arg == "music" ? `file://${app.getPath('music')}` : arg}`)
 })
 
 // ... settings requests
@@ -91,9 +92,9 @@ ipcMain.handle('authorize-app', (_event, args) => {
 ipcMain.handle('clipboard-request', () => {
 
     async function getRefreshedAccessToken() {
-        const response =  await getRefeshResponse()
+        const response = await getRefeshResponse()
         return response.access_token
-        
+
         async function getRefeshResponse() {
             const response = await spotifyApi.refreshAccessToken()
             const responseBody = response.body
@@ -108,7 +109,7 @@ ipcMain.handle('clipboard-request', () => {
     spotifyApi.setClientSecret(Settings.getState('spotify-user-client-secret'))
     spotifyApi.setRefreshToken(Settings.getState('spotify-refresh-token'))
 
-    spotifyApi.setAccessToken(getRefreshedAccessToken())
+    spotifyApi.setAccessToken(Settings.getState('spotify-access-token'))
 
     if (spotifyLinkRegex.test(clipboardContent)) {
         // then ...
@@ -235,7 +236,7 @@ function createPreferenceFile() {
     const prefDir = path.join(app.getPath('userData'), 'preference')
     const preferenceFilePath = path.join(prefDir, 'preference.json')
 
-    fs.open(preferenceFilePath, 'wx', (err, fd) => {
+    fs.open(preferenceFilePath, 'wx', (err, _fd) => {
 
         function createPrefDirectory() {
             fs.mkdir(prefDir, {
@@ -250,7 +251,6 @@ function createPreferenceFile() {
             else if (err.code === 'ENOENT') createPrefDirectory()
             else console.log(err.code)
         } else {
-            createPrefDirectory()
             fs.writeFile(preferenceFilePath, "{}", err => {
                 if (err) console.log('An error occurred while creating file')
             })
