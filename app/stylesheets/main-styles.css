@@ -123,6 +123,11 @@ a:active {
     transition: all 0.1s ease-in 0.1s;
 }
 
+.nav-group-item,
+.nav-group-item>* {
+    cursor: pointer;
+}
+
 .nav-group-item.active {
     color: var(--white-solid);
     background-color: var(--grey-solid_5);
@@ -133,9 +138,13 @@ a:active {
 }
 
 .nav-group-item.click {
-    cursor: default;
     text-decoration: none;
     color: var(--grey-solid);
+}
+
+.nav-group-item.click,
+.nav-group-item.click>* {
+    cursor: default;
 }
 
 .nav-group-item.click:hover {
