@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "express": "^4.17.2",
+    "request": "^2.88.2",
     "soundcloud": "^3.3.2",
     "spotify-web-api-node": "^5.0.2"
   }
