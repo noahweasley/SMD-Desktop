@@ -14,4 +14,10 @@ window.addEventListener("DOMContentLoaded", () => {
       navItem.classList.add("active");
     });
   });
+
+  // ...
+  document.querySelectorAll(".media-object").forEach((m) => {
+    m.addEventListener('error', () =>  m.setAttribute("src", "music.jpg"));
+  });
+  
 });

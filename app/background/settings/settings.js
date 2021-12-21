@@ -67,6 +67,22 @@ module.exports.getState = function (key, defaultValue) {
 };
 
 /**
+ * Retrieves the state of a user preference using a key-value pair
+ *
+ * @param {*} key the key in settings in which it's value would be retrieved
+ * @param {*} defaultValue the default value to be retrieved if that key has never been set
+ */
+module.exports.getState = function (key, defaultValue) {
+  if (!key instanceof String) throw new Error(key + " has to be a string");
+  // first check if key exists
+  if (this.checkExistingKey(key)) {
+    const dataOB = getPreferences();
+    // wrap return value with String, to provide hint on what getState returns
+    return new String(dataOB[`${key}`]);
+  } else return new String(defaultValue);
+};
+
+/**
  * Sets the state of a user preference using a key-value pair
  * Note: A new key would be created after this request
  *

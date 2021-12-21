@@ -81,37 +81,26 @@ module.exports.authorize = function (args) {
   connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
 };
 
-module.exports.refreshTokenAtInterval = function (interval) {
-  // convert token expiration time to mil
-  let tems = parseInt(Settings.getState("spotify-token-expiration", 3600)) * 1000;
-  if (interval > 0) setInterval(() => refreshToken(), tems / interval);
-  else refreshToken();
+module.exports.refreshToken = function () {
+  // When our access token will expire
+  let tokenExpirationEpoch;
 
-  function refreshToken() {
-    const refresh_token = Settings.getState("spotify-refresh-token");
-    const client_id = Settings.getState("spotify-user-client-id");
-    const client_secret = Settings.getState("spotify-user-client-secret");
+  spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
+  spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
+  spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
-    const authOptions = {
-      url: "https://accounts.spotify.com/api/token",
-      headers: {
-        Authorization: "Basic " + new Buffer(client_id + ":" + client_secret).toString("base64"),
-      },
-      form: {
-        grant_type: "refresh_token",
-        refresh_token: refresh_token,
-      },
-      json: true,
-    };
-
-    request.post(authOptions, function (error, response, body) {
-      if (!error && response.statusCode === 200) {
-        var access_token = body.access_token;
-        console.log(access_token);
-        if (err) {
-          console.log(`Refresh error occurred retrying in: ${tems / interval}`);
-        } else Settings.setState("spotify-access-token", access_token);
-      }
-    });
-  }
+  spotifyApi.refreshAccessToken().then(
+    function (data) {
+      Settings.setState("spotify-access-token", data.body["access_token"]);
+      tokenExpirationEpoch = new Date().getTime() / 1000 + data.body["expires_in"];
+      console.log(
+        "Refreshed token. It now expires in " +
+          Math.floor(tokenExpirationEpoch - new Date().getTime() / 1000) +
+          " seconds!"
+      );
+    },
+    function (err) {
+      console.log("Could not refresh the token!", err.message);
+    }
+  );
 };

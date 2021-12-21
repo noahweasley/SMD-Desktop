@@ -1,6 +1,6 @@
 "use-strict";
 
-const { authorize, refreshTokenAtInterval, refreshToken } = require("../background/authorize");
+const { authorize, refreshToken } = require("../background/authorize");
 const Settings = require("../background/settings/settings");
 
 const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require("electron");
@@ -71,7 +71,7 @@ ipcMain.handle("set-states", (_event, args) => {
 
 // ... settings requests
 ipcMain.on("start-token-refresh", (_event, args) => {
-  refreshTokenAtInterval(1000);
+  // refreshTokenAtInterval(1000);
 });
 
 // ... application authorization
@@ -87,35 +87,33 @@ ipcMain.handle("clipboard-request", () => {
   spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setAccessToken(Settings.getState("spotify-access-token"));
+  spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
   try {
-    spotifyApi.getMe();
-  } catch (err) {
-    refreshTokenAtInterval(0);
-    spotifyApi.setAccessToken(Settings.getState("spotify-access-token"));
-  }
-
-  if (spotifyLinkRegex.test(clipboardContent)) {
-    // then ...
-    let spotifyURLType = getSpotifyURLType(clipboardContent);
-    switch (spotifyURLType) {
-      case SpotifyURLType.TRACK:
-        return performTrackDownloadAction(clipboardContent);
-      case SpotifyURLType.ALBUM:
-        return performAlbumDownloadAction(clipboardContent);
-      case SpotifyURLType.ARTIST:
-        return performArtistDownloadAction(clipboardContent);
-      case SpotifyURLType.PLAYLIST:
-        return performPlaylistDownloadAction(clipboardContent);
-      default:
-        throw new Error(`${spotifyURLType} is not supported yet`);
+    if (spotifyLinkRegex.test(clipboardContent)) {
+      // then ...
+      let spotifyURLType = getSpotifyURLType(clipboardContent);
+      switch (spotifyURLType) {
+        case SpotifyURLType.TRACK:
+          return performTrackDownloadAction(clipboardContent);
+        case SpotifyURLType.ALBUM:
+          return performAlbumDownloadAction(clipboardContent);
+        case SpotifyURLType.ARTIST:
+          return performArtistDownloadAction(clipboardContent);
+        case SpotifyURLType.PLAYLIST:
+          return performPlaylistDownloadAction(clipboardContent);
+        default:
+          throw new Error(`${spotifyURLType} is not supported yet`);
+      }
+    } else {
+      // ... display modal dialog with details of error
+      dialog.showErrorBox(
+        "Clipboard content not a Spotify link",
+        "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
+      );
     }
-  } else {
-    // ... display modal dialog with details of error
-    dialog.showErrorBox(
-      "Clipboard content not a Spotify link",
-      "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
-    );
+  } catch (err) {
+    console.log("An Error occurred");
   }
 });
 
@@ -142,10 +140,7 @@ async function performArtistDownloadAction(artistUrl) {
  * @param {*} the artist identifier to be used in download
  */
 async function performPlaylistDownloadAction(playlistUrl) {
-  let playlist = playlistUrl.substring(
-    "https://open.spotify.com/playlist/".length,
-    playlistUrl.length
-  );
+  let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
 
   const data = await spotifyApi.getPlaylist(playlist);
   const body = data.body;
@@ -183,7 +178,15 @@ async function performPlaylistDownloadAction(playlistUrl) {
 async function performTrackDownloadAction(trackUrl) {
   let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
 
-  const data = await spotifyApi.getTrack(track);
+  let data;
+
+  try {
+    data = await spotifyApi.getTrack(track);
+  } catch (err) {
+    refreshToken()
+    return;
+  }
+
   const body = data.body;
   let songTitle = body["name"];
   let artists = body["artists"];

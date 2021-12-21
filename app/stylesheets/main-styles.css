@@ -384,11 +384,7 @@ body,
 .media-body > .horizontal-progress::before {
   display: block;
   content: "";
-  background: linear-gradient(
-    var(--normal-scrolbar-clr),
-    var(--primary-color-dark),
-    var(--normal-scrolbar-clr)
-  );
+  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
   width: var(--progress-width);
   height: 100%;
   position: absolute;
@@ -404,8 +400,13 @@ body,
   /* background-color: blue; */
   height: 100px;
   width: 100%;
+  transition: 0.1s;
 }
 
+ .list-group > *:hover {
+  background-color: var(--grey-solid_5);
+ }
+ 
 .downloads-operation > * {
   transition: 0.5s;
   /* cursor: pointer; */
@@ -601,8 +602,8 @@ form {
 
 .form-control:focus {
   border-color: var(--solid-green);
-  box-shadow: 3px 3px 0 var(--solid-green), -3px -3px 0 var(--solid-green),
-    -3px 3px 0 var(--solid-green), 3px -3px 0 var(--solid-green);
+  box-shadow: 3px 3px 0 var(--solid-green), -3px -3px 0 var(--solid-green), -3px 3px 0 var(--solid-green),
+    3px -3px 0 var(--solid-green);
 }
 
 .btn-form {
