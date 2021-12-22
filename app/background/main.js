@@ -121,7 +121,22 @@ ipcMain.handle("clipboard-request", () => {
  * starts album downlaod
  * @param {*} album the album identifier to be used in download
  */
-async function performAlbumDownloadAction(albumUrl) {}
+async function performAlbumDownloadAction(albumUrl) {
+  let album = artistUrl.substring("https://open.spotify.com/artist/".length, albumUrl.length);
+
+  let data;
+
+  while (true) {
+    try {
+      data = await spotifyApi.getAlbum(album);
+      break;
+    } catch (err) {
+      refreshToken();
+    }
+  }
+
+  return data;
+}
 
 /**
  * starts artist download
@@ -130,9 +145,18 @@ async function performAlbumDownloadAction(albumUrl) {}
 async function performArtistDownloadAction(artistUrl) {
   let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
 
-  spotifyApi.getArtist(artist).then((data) => {
-    console.log(data.body);
-  });
+  let data;
+
+  while (true) {
+    try {
+      data = await spotifyApi.getArtist(artist);
+      break;
+    } catch (err) {
+      refreshToken();
+    }
+  }
+
+  return data;
 }
 
 /**
@@ -142,26 +166,26 @@ async function performArtistDownloadAction(artistUrl) {
 async function performPlaylistDownloadAction(playlistUrl) {
   let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
 
-  const data = await spotifyApi.getPlaylist(playlist);
+  let data;
+
+  while (true) {
+    try {
+      data = await spotifyApi.getPlaylist(playlist);
+      break;
+    } catch (err) {
+      refreshToken();
+    }
+  }
+
   const body = data.body;
   const playListName = body["name"];
   const tracks = body["tracks"];
 
-  // tracks['items'].map(i => i.track).forEach(tr => {
-  //     let artists = tr["artists"]
-  //     let songTitle = tr['name']
-  //     let artistNames = artists.map(artist => artist['name'])
-  //     trackCollection.push({ songTitle, artistNames })
-  // })
-
-  // track-item => track => { song-title, artist-names }
   let trackCollection = tracks["items"]
     .map((i) => i.track)
     .map((tr) => {
-      tr["name"], tr["artists"].map((artist) => artist.name);
+      return { songTitle: tr["name"], artistNames: tr["artists"].map((artist) => artist.name) };
     });
-
-  console.log(trackCollection);
 
   return {
     type: SpotifyURLType.PLAYLIST,
@@ -180,11 +204,13 @@ async function performTrackDownloadAction(trackUrl) {
 
   let data;
 
-  try {
-    data = await spotifyApi.getTrack(track);
-  } catch (err) {
-    refreshToken()
-    return;
+  while (true) {
+    try {
+      data = await spotifyApi.getTrack(track);
+      break;
+    } catch (err) {
+      refreshToken();
+    }
   }
 
   const body = data.body;

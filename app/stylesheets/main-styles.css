@@ -1,6 +1,6 @@
 :root {
-  --toolbar-height: 40px;
-  --progress-size: 30px;
+  --toolbar-height: 30px;
+  --progress-size: 15px;
   --white-solid: #eeeeee;
   --grey-solid: #828282;
   --grey-solid_5: #a09f9f25;
@@ -86,14 +86,21 @@ a:active {
   animation: none;
 }
 
+.title {
+  line-height: var(--toolbar-height);
+  width: max-content;
+  position: absolute;
+  top: 5px;
+}
+
 .toolbar {
   line-height: var(--toolbar-height);
   height: var(--toolbar-height);
 }
 
 .toolbar-footer {
-  height: 30px;
-  max-height: 22px;
+  height: 28px;
+  max-height: 28px;
   border: 1px solid var(--grey-solid_5);
 }
 
@@ -371,12 +378,6 @@ body,
   margin-top: 8px;
 }
 
-.indeterminate-progress {
-  width: var(--progress-size);
-  height: var(--progress-size);
-  background-color: red;;
-}
-
 .media-body > .horizontal-progress {
   --progress-width: 20px;
   --progress-anim: 2s move linear infinite forwards;
@@ -410,10 +411,10 @@ body,
   transition: 0.1s;
 }
 
- .list-group > *:hover {
+.list-group > *:hover {
   background-color: var(--grey-solid_5);
- }
- 
+}
+
 .downloads-operation > * {
   transition: 0.5s;
   /* cursor: pointer; */
@@ -505,6 +506,39 @@ body,
   background: url(../../sample-images/background.jpg) no-repeat;
   background-position: center;
   object-fit: cover;
+}
+
+.indeterminate-progress {
+  position: absolute;
+  top: calc(var(--toolbar-height) + 45%);
+  right: 50%;
+  width: var(--progress-size);
+  height: var(--progress-size);
+  animation: 1s rotate ease-in-out infinite forwards;
+}
+
+.indeterminate-progress::before {
+  content: "";
+  display: block;
+  background-color: var(--primary-color);
+  width: var(--progress-size);
+  height: var(--progress-size);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 100%;
+  animation: 1s down-up ease-in-out infinite forwards;
+}
+
+.indeterminate-progress::after {
+  content: "";
+  display: block;
+  background-color: var(--primary-color);
+  width: var(--progress-size);
+  height: var(--progress-size);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -100%;
+  animation: 1s up-down ease-in-out infinite forwards;
 }
 
 .modal__login {
@@ -643,6 +677,31 @@ form {
   background-color: transparent;
 }
 
+.online-stat {
+  position: absolute;
+  top: 22%;
+  right: 20px;
+  width: 15px;
+  height: 15px;
+  background-color: rgba(255, 38, 0, 0.473);
+  border-radius: 50%;
+}
+
+.online {
+  background-color: green;
+}
+
+.icon-footer {
+  position: absolute;
+  right: 30px;
+  top: 5%;
+}
+
+.icon-download {
+  color: var(--solid-green);
+  margin-right: 8px;
+}
+
 /* ------------------ Animation Key Frames ----------------- */
 
 @keyframes scale-bounce {
@@ -698,5 +757,31 @@ form {
   100% {
     transform: scaleX(1);
     left: 100%;
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes up-down {
+  50% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes down-up {
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
   }
 }
