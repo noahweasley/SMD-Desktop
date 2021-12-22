@@ -82,8 +82,6 @@ module.exports.authorize = function (args) {
 };
 
 module.exports.refreshToken = function () {
-  // When our access token will expire
-  let tokenExpirationEpoch;
 
   spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
@@ -91,13 +89,8 @@ module.exports.refreshToken = function () {
 
   spotifyApi.refreshAccessToken().then(
     function (data) {
+      // reset access token
       Settings.setState("spotify-access-token", data.body["access_token"]);
-      tokenExpirationEpoch = new Date().getTime() / 1000 + data.body["expires_in"];
-      console.log(
-        "Refreshed token. It now expires in " +
-          Math.floor(tokenExpirationEpoch - new Date().getTime() / 1000) +
-          " seconds!"
-      );
     },
     function (err) {
       console.log("Could not refresh the token!", err.message);
