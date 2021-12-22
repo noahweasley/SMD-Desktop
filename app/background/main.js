@@ -257,7 +257,7 @@ function createWindow() {
 }
 
 /**
- * create the settings data in app's path
+ * create the download directory
  */
 function createAppFiles() {
   const downloadDir = path.join(app.getPath("music"), app.getName());
@@ -283,4 +283,5 @@ function createAppFiles() {
       } else console.log(err.code);
     }
   });
+  
 }

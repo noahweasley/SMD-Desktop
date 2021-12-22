@@ -1,5 +1,5 @@
 :root {
-  --toolbar-height: 30px;
+  --toolbar-height: 40px;
   --progress-size: 15px;
   --white-solid: #eeeeee;
   --grey-solid: #828282;
@@ -89,8 +89,6 @@ a:active {
 .title {
   line-height: var(--toolbar-height);
   width: max-content;
-  position: absolute;
-  top: 5px;
 }
 
 .toolbar {
@@ -99,9 +97,13 @@ a:active {
 }
 
 .toolbar-footer {
-  height: 28px;
-  max-height: 28px;
+  height: 22px;
+  max-height: 22px;
   border: 1px solid var(--grey-solid_5);
+}
+
+.toolbar-header {
+  height: var(--toolbar-height);
 }
 
 .toolbar > h1 {
@@ -171,7 +173,7 @@ a:active {
   right: 0;
   width: 138px;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0.01);
+  background-color: #ffffff03;
 }
 
 .non-draggable {

@@ -22,12 +22,4 @@ function dataReveal() {
 window.addEventListener("DOMContentLoaded", () => {
   // 3 seconds time delay before displaying contents to user ...
   setTimeout(dataReveal, 3000);
-  
-  // check online status
-  const onlineStat = document.querySelector('.online-stat')
-  setInterval(() => {
-    let online = window.navigator.onLine;
-    if (online) onlineStat.classList.add("online");
-    else onlineStat.classList.remove("online");
-  }, 2000);
 });
