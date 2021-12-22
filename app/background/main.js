@@ -119,7 +119,8 @@ ipcMain.handle("clipboard-request", () => {
 
 /**
  * starts album downlaod
- * @param {*} album the album identifier to be used in download
+ * 
+ * @param albumUrl the album identifier to be used in download
  */
 async function performAlbumDownloadAction(albumUrl) {
   let album = artistUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
@@ -140,7 +141,8 @@ async function performAlbumDownloadAction(albumUrl) {
 
 /**
  * starts artist download
- * @param {*} the artist identifier to be used in download
+ * 
+ * @param artistUrl the artist identifier to be used in download
  */
 async function performArtistDownloadAction(artistUrl) {
   let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
@@ -160,8 +162,9 @@ async function performArtistDownloadAction(artistUrl) {
 }
 
 /**
- * starts artist download
- * @param {*} the artist identifier to be used in download
+ * starts playlist download
+ * 
+ * @param playlistUrl the playlist identifier to be used in download
  */
 async function performPlaylistDownloadAction(playlistUrl) {
   let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
@@ -197,7 +200,9 @@ async function performPlaylistDownloadAction(playlistUrl) {
 }
 
 /**
- *
+ * starts track download
+ * 
+ * @param track the track identifier to be used in download
  */
 async function performTrackDownloadAction(trackUrl) {
   let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
