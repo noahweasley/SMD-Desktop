@@ -122,7 +122,7 @@ ipcMain.handle("clipboard-request", () => {
  * @param {*} album the album identifier to be used in download
  */
 async function performAlbumDownloadAction(albumUrl) {
-  let album = artistUrl.substring("https://open.spotify.com/artist/".length, albumUrl.length);
+  let album = artistUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
 
   let data;
 
