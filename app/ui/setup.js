@@ -1,7 +1,8 @@
 "use-strict";
 
 function dataReveal() {
-  const windowContent = document.querySelector(".window");
+  const windowContent = document.querySelector(".window-content");
+  const inderminateProgres = document.querySelector(".indeterminate-progress");
   const modal = document.querySelector(".modal");
   const titileBar = document.querySelector(".toolbar-header");
   titileBar.classList.remove("gone");
@@ -10,19 +11,16 @@ function dataReveal() {
     window.bridgeApis.send("start-token-refresh");
     if (value == "true") {
       windowContent.classList.remove("gone");
+      inderminateProgres.classList.add('gone')
       modal.style.setProperty("display", "none");
     } else {
       modal.style.setProperty("display", "flex");
     }
   });
 
-  // window.bridgeApis.invoke('set-states', ['data3', `Created at: ${Date.now()}`])
-  //     .then(result => {
-  //         console.log(result)
-  //     })
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   // 3 seconds time delay before displaying contents to user ...
-  setTimeout(dataReveal, 3000);
+  // setTimeout(dataReveal, 3000);
 });

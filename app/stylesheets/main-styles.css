@@ -1,8 +1,9 @@
 :root {
   --toolbar-height: 40px;
+  --progress-size: 30px;
   --white-solid: #eeeeee;
   --grey-solid: #828282;
-  --grey-solid_5: rgba(160, 159, 159, 0.144);
+  --grey-solid_5: #a09f9f25;
   --black_transparent: rgba(0, 0, 0, 0.726);
   --normal-scrolbar-clr: #1ed75f18;
   --active-scrolbar-clr: #1ed75f38;
@@ -209,7 +210,7 @@ body,
   border: none;
 }
 
-.nav-group-item [class="active"] {
+.nav-group-item.active {
   color: var(--white-solid);
 }
 
@@ -368,6 +369,12 @@ body,
 
 .message {
   margin-top: 8px;
+}
+
+.indeterminate-progress {
+  width: var(--progress-size);
+  height: var(--progress-size);
+  background-color: red;;
 }
 
 .media-body > .horizontal-progress {

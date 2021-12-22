@@ -17,7 +17,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ...
   document.querySelectorAll(".media-object").forEach((m) => {
-    m.addEventListener('error', () =>  m.setAttribute("src", "music.jpg"));
+    m.addEventListener("error", () => m.setAttribute("src", "../assets/graphics/music_note_2.png"));
   });
-  
 });
