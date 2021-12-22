@@ -24,7 +24,7 @@ const State = Object.freeze({
 });
 
 app.whenReady().then(() => {
-  createPreferenceFile();
+  createAppFiles();
   createWindow();
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -259,14 +259,14 @@ function createWindow() {
 /**
  * create the settings data in app's path
  */
-function createPreferenceFile() {
-  const prefDir = path.join(app.getPath("userData"), "preference");
-  const preferenceFilePath = path.join(prefDir, "preference.json");
+function createAppFiles() {
+  const downloadDir = path.join(app.getPath("music"), app.getName());
 
-  fs.open(preferenceFilePath, "wx", (err, _fd) => {
-    function createPrefDirectory() {
+  fs.open(prefDir, "wx", (err, _fd) => {
+    // create downloads directory
+    function createDownloadsDirectory() {
       fs.mkdir(
-        prefDir,
+        downloadDir,
         {
           recursive: true,
         },
@@ -278,12 +278,9 @@ function createPreferenceFile() {
 
     if (err) {
       if (err.code === "EEXIST") return;
-      else if (err.code === "ENOENT") createPrefDirectory();
-      else console.log(err.code);
-    } else {
-      fs.writeFile(preferenceFilePath, "{}", (err) => {
-        if (err) console.log("An error occurred while creating file");
-      });
+      else if (err.code === "ENOENT") {
+        createDownloadsDirectory();
+      } else console.log(err.code);
     }
   });
 }
