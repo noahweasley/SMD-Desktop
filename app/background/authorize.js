@@ -72,7 +72,12 @@ server.get("/callback", (req, res) => {
   });
 });
 
-module.exports.authorize = function (args) {
+/**
+ * Starts a server to authorize Spotify details using the Authorization flow
+ *
+ * @param {*} args [0] = Spotify Client ID, [1] = Spotify Client secret
+ */
+module.exports.authorizeSpotify = function (args) {
   spotifyApi.setClientId(args[0]);
   spotifyApi.setClientSecret(args[1]);
   Settings.setState("spotify-user-client-id", args[0]);
@@ -81,8 +86,10 @@ module.exports.authorize = function (args) {
   connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
 };
 
-module.exports.refreshToken = function () {
-
+/**
+ * Refreshes the user's Spotify access token
+ */
+module.exports.refreshSpoifyAccessToken = function () {
   spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));

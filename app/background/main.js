@@ -1,6 +1,6 @@
 "use-strict";
 
-const { authorize, refreshToken } = require("../background/authorize");
+const { authorizeSpotify, refreshSpoifyAccessToken } = require("../background/authorize");
 const Settings = require("../background/settings/settings");
 
 const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require("electron");
@@ -76,7 +76,7 @@ ipcMain.on("start-token-refresh", (_event, args) => {
 
 // ... application authorization
 ipcMain.handle("authorize-app", (_event, args) => {
-  authorize(args);
+  authorizeSpotify(args);
 });
 
 // ... clipboard content request
@@ -131,7 +131,7 @@ async function performAlbumDownloadAction(albumUrl) {
       data = await spotifyApi.getAlbum(album);
       break;
     } catch (err) {
-      refreshToken();
+      refreshSpoifyAccessToken();
     }
   }
 
@@ -152,7 +152,7 @@ async function performArtistDownloadAction(artistUrl) {
       data = await spotifyApi.getArtist(artist);
       break;
     } catch (err) {
-      refreshToken();
+      refreshSpoifyAccessToken();
     }
   }
 
@@ -173,7 +173,7 @@ async function performPlaylistDownloadAction(playlistUrl) {
       data = await spotifyApi.getPlaylist(playlist);
       break;
     } catch (err) {
-      refreshToken();
+      refreshSpoifyAccessToken();
     }
   }
 
@@ -209,7 +209,7 @@ async function performTrackDownloadAction(trackUrl) {
       data = await spotifyApi.getTrack(track);
       break;
     } catch (err) {
-      refreshToken();
+      refreshSpoifyAccessToken();
     }
   }
 
