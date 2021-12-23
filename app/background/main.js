@@ -1,15 +1,13 @@
 "use-strict";
 
-const { authorizeSpotify, refreshSpoifyAccessToken } = require("../background/authorize");
 const Settings = require("../background/settings/settings");
-
-const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require("electron");
-
+const { refreshSpoifyAccessToken, authorizeApp } = require("../background/authorize");
 const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
 
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
 const SpotifyWebApi = require("spotify-web-api-node");
+const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require("electron");
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -69,14 +67,9 @@ ipcMain.handle("set-states", (_event, args) => {
   return Settings.setState(args[0], args[1]);
 });
 
-// ... settings requests
-ipcMain.on("start-token-refresh", (_event, args) => {
-  // refreshTokenAtInterval(1000);
-});
-
 // ... application authorization
 ipcMain.handle("authorize-app", (_event, args) => {
-  authorizeSpotify(args);
+  authorizeApp(args);
 });
 
 // ... clipboard content request
@@ -113,18 +106,20 @@ ipcMain.handle("clipboard-request", () => {
       );
     }
   } catch (err) {
-    console.log("An Error occurred");
+    console.log("An Error occurred ", err);
+    return err;
   }
 });
 
 /**
  * starts album downlaod
- * 
+ *
  * @param albumUrl the album identifier to be used in download
+ * @throws error if error occurred while fetching data, this can be caused by network
  */
-async function performAlbumDownloadAction(albumUrl) {
+async function performAlbumDownloadAction(albumUrl, _limits) {
   let album = artistUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
-
+  let refreshCount = 0;
   let data;
 
   while (true) {
@@ -132,21 +127,30 @@ async function performAlbumDownloadAction(albumUrl) {
       data = await spotifyApi.getAlbum(album);
       break;
     } catch (err) {
+      if (refreshCount === 3) throw new Error("An error occurred while retrieving album data");
       refreshSpoifyAccessToken();
+      ++refreshCount;
     }
   }
 
-  return data;
+  const body = data.body;
+  const albumName = body["name"];
+
+  return {
+    type: SpotifyURLType.ALBUM,
+    description: {},
+  };
 }
 
 /**
  * starts artist download
- * 
+ *
  * @param artistUrl the artist identifier to be used in download
+ * @throws error if error occurred while fetching data, this can be caused by network
  */
-async function performArtistDownloadAction(artistUrl) {
+async function performArtistDownloadAction(artistUrl, _limits) {
   let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
-
+  let refreshCount = 0;
   let data;
 
   while (true) {
@@ -154,21 +158,27 @@ async function performArtistDownloadAction(artistUrl) {
       data = await spotifyApi.getArtist(artist);
       break;
     } catch (err) {
+      if (refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
+      ++refreshCount;
     }
   }
 
-  return data;
+  return {
+    type: SpotifyURLType.ARTIST,
+    description: {},
+  };
 }
 
 /**
  * starts playlist download
- * 
+ *
  * @param playlistUrl the playlist identifier to be used in download
+ * @throws error if error occurred while fetching data, this can be caused by network
  */
 async function performPlaylistDownloadAction(playlistUrl) {
   let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
-
+  let refreshCount = 0;
   let data;
 
   while (true) {
@@ -176,7 +186,9 @@ async function performPlaylistDownloadAction(playlistUrl) {
       data = await spotifyApi.getPlaylist(playlist);
       break;
     } catch (err) {
+      if (refreshCount === 3) throw new Error("An error occurred while retrieving playlist data");
       refreshSpoifyAccessToken();
+      ++refreshCount;
     }
   }
 
@@ -201,12 +213,13 @@ async function performPlaylistDownloadAction(playlistUrl) {
 
 /**
  * starts track download
- * 
+ *
  * @param track the track identifier to be used in download
+ * @throws error if error occurred while fetching data, this can be caused by network
  */
 async function performTrackDownloadAction(trackUrl) {
   let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
-
+  let refreshCount;
   let data;
 
   while (true) {
@@ -214,7 +227,9 @@ async function performTrackDownloadAction(trackUrl) {
       data = await spotifyApi.getTrack(track);
       break;
     } catch (err) {
+      if (refreshCount === 3) throw new Error("An error occurred while retrieving track data");
       refreshSpoifyAccessToken();
+      ++refreshCount;
     }
   }
 
@@ -267,7 +282,7 @@ function createWindow() {
 function createAppFiles() {
   const downloadDir = path.join(app.getPath("music"), app.getName());
 
-  fs.open(prefDir, "wx", (err, _fd) => {
+  fs.open(downloadDir, "wx", (err, _fd) => {
     // create downloads directory
     function createDownloadsDirectory() {
       fs.mkdir(
@@ -288,5 +303,4 @@ function createAppFiles() {
       } else console.log(err.code);
     }
   });
-  
 }

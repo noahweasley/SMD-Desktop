@@ -1,10 +1,9 @@
+const Settings = require("../background/settings/settings");
 const { shell } = require("electron");
 const express = require("express");
 const server = express();
 const path = require("path");
-const request = require("request");
 const SpotifyWebApi = require("spotify-web-api-node");
-const Settings = require("../background/settings/settings");
 
 const scopes = [
   "user-read-playback-state",
@@ -75,14 +74,18 @@ server.get("/callback", (req, res) => {
 /**
  * Starts a server to authorize Spotify details using the Authorization flow
  *
- * @param {*} args [0] = Spotify Client ID, [1] = Spotify Client secret
+ * @param args [0] = Client ID , [1] = Client secret, [2] authorization method
  */
-module.exports.authorizeSpotify = function (args) {
-  spotifyApi.setClientId(args[0]);
-  spotifyApi.setClientSecret(args[1]);
-  Settings.setState("spotify-user-client-id", args[0]);
-  Settings.setState("spotify-user-client-secret", args[1]);
-
+module.exports.authorizeApp = function (args) {
+  if (args[2] == "auth-spotify") {
+    spotifyApi.setClientId(args[0]);
+    spotifyApi.setClientSecret(args[1]);
+    Settings.setState("spotify-user-client-id", args[0]);
+    Settings.setState("spotify-user-client-secret", args[1]);
+  } else {
+    
+  }
+  
   connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
 };
 

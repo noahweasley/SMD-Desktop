@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Authorization successful</title>
+    <link rel="apple-touch-icon" sizes="180x180" href=../../docs/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../docs/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../../docs/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="../../docs/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="../../docs/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
   </head>
   <style>
     :root {
@@ -21,15 +28,26 @@
     body {
       background-color: #1dbb54;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    img {
+      margin-bottom: 20px;
     }
 
     h1,
     h2 {
       text-align: center;
+      text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.432);
+      margin: 8px;
     }
   </style>
 
   <body>
+    <img src="../assets/graphics/app_icon.png" alt="SMD Desktop app icon" width="200px" height="180px" />
     <h1 class="title">Spotify Authorization Successful</h1>
     <h2 class="message">You can close this window now</h2>
   </body>

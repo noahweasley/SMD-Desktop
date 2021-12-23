@@ -8,7 +8,6 @@ function dataReveal() {
   titileBar.classList.remove("gone");
 
   window.bridgeApis.invoke("get-states", ["secrets-received", "false"]).then((value) => {
-    window.bridgeApis.send("start-token-refresh");
     inderminateProgres.classList.add("gone");
     if (value == "true") {
       windowContent.classList.remove("gone");
