@@ -127,9 +127,8 @@ async function performAlbumDownloadAction(albumUrl, _limits) {
       data = await spotifyApi.getAlbum(album);
       break;
     } catch (err) {
-      if (refreshCount === 3) throw new Error("An error occurred while retrieving album data");
+      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
-      ++refreshCount;
     }
   }
 
@@ -158,9 +157,8 @@ async function performArtistDownloadAction(artistUrl, _limits) {
       data = await spotifyApi.getArtist(artist);
       break;
     } catch (err) {
-      if (refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
+      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
-      ++refreshCount;
     }
   }
 
@@ -186,9 +184,8 @@ async function performPlaylistDownloadAction(playlistUrl) {
       data = await spotifyApi.getPlaylist(playlist);
       break;
     } catch (err) {
-      if (refreshCount === 3) throw new Error("An error occurred while retrieving playlist data");
+      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
-      ++refreshCount;
     }
   }
 
@@ -227,9 +224,8 @@ async function performTrackDownloadAction(trackUrl) {
       data = await spotifyApi.getTrack(track);
       break;
     } catch (err) {
-      if (refreshCount === 3) throw new Error("An error occurred while retrieving track data");
+      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
-      ++refreshCount;
     }
   }
 
