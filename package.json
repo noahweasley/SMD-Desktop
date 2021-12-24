@@ -32,12 +32,11 @@
     "electron-packager": "^15.4.0"
   },
   "funding": {
-    "type" : "buymeacoffee",
-    "url" : "https://www.buymeacofee.com/noahweasley"
+    "type": "buymeacoffee",
+    "url": "https://www.buymeacofee.com/noahweasley"
   },
   "dependencies": {
     "express": "^4.17.2",
-    "soundcloud": "^3.3.2",
     "spotify-web-api-node": "^5.0.2"
   }
 }
