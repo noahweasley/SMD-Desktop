@@ -1,0 +1,139 @@
+:root {
+  --toolbar-height: 40px;
+  --progress-size: 15px;
+  --white-solid: #eeeeee;
+  --grey-solid: #828282;
+  --grey-solid_5: #a09f9f25;
+  --black_transparent: rgba(0, 0, 0, 0.726);
+  --normal-scrolbar-clr: #1ed75f18;
+  --active-scrolbar-clr: #1ed75f38;
+  --grey-solid_10: rgba(160, 159, 159, 0.247);
+  --primary-color: #1ed760;
+  --primary-color-dark: #1dbb54;
+  --primary-color-dark-alt-2: hsl(144, 82%, 38%);
+  --primary-color-dark-alt: hsl(143, 63%, 10%);
+  --spotify-green: #22cc5db2;
+  --soundcloud-orange: #fe5000;
+  --btn-disabled: #6fc48db2;
+  --solid-blue: hsl(225, 76%, 10%);
+  --solid-blue-alt: hsl(223, 78%, 12%);
+  --solid-dark: #0c0b0b;
+  --solid-dark-alt: #161313;
+  --solid-darker: #000;
+  --sand-solid: #ecebe8;
+  --window-actions-elevation: 2;
+  color: var(--grey-solid);
+}
+
+* {
+  outline: none;
+}
+
+body {
+  background-color: var(--solid-darker);
+}
+
+.download-window {
+  width: 100%;
+  height: 100%;
+}
+
+.list {
+  position: absolute;
+  border: 2px solid var(--grey-solid_5);
+  top: 20px;
+  bottom: 15%;
+  left: 20px;
+  right: 20px;
+  overflow-y: scroll;
+}
+
+.list::-webkit-scrollbar {
+  width: 15px;
+  border-left: 1px solid var(--normal-scrolbar-clr);
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--normal-scrolbar-clr);
+  border-radius: 100vw;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--active-scrolbar-clr);
+}
+
+.list::-webkit-scrollbar-track {
+  background-color: transparent;
+  margin-block: 8px;
+}
+
+.list-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.list-actions > button {
+  margin: 10px;
+  padding: 5px 20px;
+  background-color: var(--primary-color-dark);
+  color: white;
+}
+
+.list-actions > button:hover {
+  opacity: 0.8;
+}
+
+.list-group-item {
+  position: relative;
+  border-bottom: 1px solid var(--grey-solid_5);
+}
+
+.list-group {
+  height: 100%;
+  width: 100%;
+}
+
+.list-group-item img {
+  width: 100px;
+  height: 90%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.media-body {
+  position: relative;
+  height: 100%;
+  padding: 10px;
+}
+
+.list-group > .list-group-item {
+  height: 100px;
+  width: 100%;
+  transition: 0.1s;
+}
+
+.list-group > .list-group-item:hover {
+  background-color: var(--grey-solid_5);
+}
+
+.list-group-item input[type="checkbox"] {
+  position: absolute;
+  top: 40%;
+  right: 20px;
+}
+
+.list-group-header {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 20px;
+  border-bottom: 1px solid var(--grey-solid_5);
+}
+
+.list-group-header > .select-action {
+  display: flex;
+  gap: 10px;
+}

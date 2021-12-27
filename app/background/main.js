@@ -7,13 +7,13 @@ const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
 const path = require("path");
 const fs = require("fs");
 const SpotifyWebApi = require("spotify-web-api-node");
-const { app, BrowserWindow, ipcMain, shell, clipboard, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, clipboard, dialog, Menu } = require("electron");
 
 const spotifyApi = new SpotifyWebApi();
 
 // ---------------------------------------------------------------------------------
 
-let smd_window;
+let smd_window, download_window;
 let WINDOW_STATE;
 
 const State = Object.freeze({
@@ -23,9 +23,9 @@ const State = Object.freeze({
 
 app.whenReady().then(() => {
   createAppFiles();
-  createWindow();
+  createApplicationWindow();
   app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) createApplicationWindow();
   });
 });
 
@@ -82,19 +82,21 @@ ipcMain.handle("clipboard-request", () => {
   spotifyApi.setAccessToken(Settings.getState("spotify-access-token"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
+  let data;
+
   try {
     if (spotifyLinkRegex.test(clipboardContent)) {
       // then ...
       let spotifyURLType = getSpotifyURLType(clipboardContent);
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
-          return performTrackDownloadAction(clipboardContent);
+          data = performTrackDownloadAction(clipboardContent);
         case SpotifyURLType.ALBUM:
-          return performAlbumDownloadAction(clipboardContent);
+          data = performAlbumDownloadAction(clipboardContent);
         case SpotifyURLType.ARTIST:
-          return performArtistDownloadAction(clipboardContent);
+          data = performArtistDownloadAction(clipboardContent);
         case SpotifyURLType.PLAYLIST:
-          return performPlaylistDownloadAction(clipboardContent);
+          data = performPlaylistDownloadAction(clipboardContent);
         default:
           throw new Error(`${spotifyURLType} is not supported yet`);
       }
@@ -107,7 +109,9 @@ ipcMain.handle("clipboard-request", () => {
     }
   } catch (err) {
     console.log("An Error occurred ", err);
-    return err;
+  } finally {
+    // show download details window
+    createDownloadWindow(data);
   }
 });
 
@@ -152,7 +156,7 @@ async function performArtistDownloadAction(artistUrl, _limits) {
   let refreshCount = 0;
   let data;
 
-  while (true) {
+  for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getArtist(artist);
       break;
@@ -216,18 +220,19 @@ async function performPlaylistDownloadAction(playlistUrl) {
  */
 async function performTrackDownloadAction(trackUrl) {
   let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
-  let refreshCount;
-  let data;
+  let data, dataReceived;
 
-  while (true) {
+  for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getTrack(track);
+      dataReceived = true;
       break;
     } catch (err) {
-      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
       refreshSpoifyAccessToken();
     }
   }
+
+  if (!dataReceived) return;
 
   const body = data.body;
   let songTitle = body["name"];
@@ -248,11 +253,39 @@ async function performTrackDownloadAction(trackUrl) {
 }
 
 /**
- * Spawns up a new SMD window with a limitations of 2 winodws
+ * Creates a download window with the data speified
+ *
+ * @param data the data to be displayed on the window
  */
-function createWindow() {
-  // only 2 window is allowed to be spawned
-  if (BrowserWindow.getAllWindows().length == 2) return;
+function createDownloadWindow(data) {
+  if (download_window) return;
+  
+  download_window = new BrowserWindow({
+    title: "Confirm the list",
+    parent: smd_window,
+    show: false,
+    modal: true,
+    width: 700,
+    height: 500,
+    backgroundColor: "#0c0b0b",
+    resizable: false,
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, "../preload.js"),
+    },
+  });
+
+  download_window.setMenu(null);
+  download_window.loadFile(path.join("app", "pages", "downloads.html"));
+  download_window.once("ready-to-show", download_window.show);
+}
+
+/**
+ * Spawns up a new SMD window with a limitations of 1 winodws
+ */
+function createApplicationWindow() {
+  // only 1 window is allowed to be spawned
+  if (smd_window) return;
 
   smd_window = new BrowserWindow({
     show: false,
