@@ -3,6 +3,7 @@
 const Settings = require("../background/settings/settings");
 const { refreshSpoifyAccessToken, authorizeApp } = require("../background/authorize");
 const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
+const menu = require("../background/menu");
 
 const path = require("path");
 const fs = require("fs");
@@ -13,8 +14,8 @@ const spotifyApi = new SpotifyWebApi();
 
 // ---------------------------------------------------------------------------------
 
-let smd_window, download_window;
-let WINDOW_STATE;
+var smd_window, download_window, about_window;
+var WINDOW_STATE;
 
 const State = Object.freeze({
   MAXIMIZED: "window-maximized",
@@ -53,9 +54,24 @@ ipcMain.on("action-click-event", (_event, id) => {
 
 // ... link navigate
 ipcMain.on("navigate-link", (_event, arg) => {
-  // console.log(arg)
-  shell.openExternal(`${arg == "music" ? `file://${app.getPath("music")}` : arg}`);
+  let linkType;
+  switch (arg) {
+    case "#music":
+      linkType = `file://${app.getPath("music")}`;
+      break;
+    case "#video":
+      linkType = `file://${app.getPath("videos")}`;
+      break;
+    default:
+      linkType = arg;
+  }
+
+  // then open link in default app
+  shell.openExternal(linkType);
 });
+
+// ... show about window
+ipcMain.on("show-app-info", () => createAboutWindow());
 
 // ... settings requests
 ipcMain.handle("get-states", (_event, args) => {
@@ -259,7 +275,7 @@ async function performTrackDownloadAction(trackUrl) {
  */
 function createDownloadWindow(data) {
   if (download_window) return;
-  
+
   download_window = new BrowserWindow({
     title: "Confirm the list",
     parent: smd_window,
@@ -267,8 +283,8 @@ function createDownloadWindow(data) {
     modal: true,
     width: 700,
     height: 500,
-    backgroundColor: "#0c0b0b",
     resizable: false,
+    backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, "../preload.js"),
@@ -300,11 +316,36 @@ function createApplicationWindow() {
       preload: path.join(__dirname, "../preload.js"),
     },
   });
-  // Menu.setApplicationMenu(menu)
+
+  Menu.setApplicationMenu(menu);
   smd_window.loadFile(path.join("app", "pages", "index.html"));
   smd_window.once("ready-to-show", smd_window.show);
 }
 
+function createAboutWindow() {
+  // only 1 window is allowed to be spawned
+  if (about_window) {
+    about_window.focus();
+    return;
+  }
+
+  about_window = new BrowserWindow({
+    title: `About ${app.getName()}`,
+    show: false,
+    width: 700,
+    height: 500,
+    resizable: false,
+    backgroundColor: "#0c0b0b",
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, "../preload.js"),
+    },
+  });
+  
+  Menu.setApplicationMenu(null);
+  about_window.loadFile(path.join("app", "pages", "about.html"));
+  about_window.once("ready-to-show", about_window.show);
+}
 /**
  * create the download directory
  */

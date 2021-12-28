@@ -19,7 +19,7 @@
 
     <header class="toolbar toolbar-header toolbar-borderless draggable gone">
         <h1 class="title draggable">SMD Desktop</h1>
-        <img class="draggable" src="../assets/graphics/app_icon.png" alt="Spotity mucsic downloader icon" width="23px" height="20px">
+        <img class="draggable" src="../assets/graphics/app_icon.png" alt="Spotity music downloader icon" width="23px" height="20px">
 
         <!-- window action buttons -->
         <div class="window-action-group non-draggable">
@@ -55,7 +55,7 @@
                             Home
                         </span>
 
-                        <a href="#" class="nav-group-item click">
+                        <a href="#music" class="nav-group-item click">
                             <span class="icon icon-folder click"></span>
                             Files
                         </a>
@@ -63,6 +63,11 @@
                         <span class="nav-group-item">
                             <span class="icon icon-cog icon-x2"></span>
                             Settings
+                        </span>
+                        
+                        <span class="nav-group-item click" id="about">
+                            <span class="icon icon-info-circled icon-x2 click"></span>
+                            About
                         </span>
 
                         <button class="btn btn-large abs-bottom donate bounce">
@@ -103,7 +108,7 @@
 
                     //.. tab contents
 
-                    <div class="tab-content">
+                    <div class="tab-content scroll">
                         
                         <div class="tab-content__downloading invisible" id="tab-content__downloading">
 
@@ -353,7 +358,7 @@
         </div>
     </div>
     
-        <div class="indeterminate-progress"></div>
+        <div class="indeterminate-progress normal-progress"></div>
     
         <!-- Scripts -->
         <script src="../ui/setup.js"></script>

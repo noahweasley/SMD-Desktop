@@ -1,0 +1,201 @@
+:root {
+  --toolbar-height: 40px;
+  --progress-size: 15px;
+  --progress-size-small: 10px;
+  --white-solid: #eeeeee;
+  --grey-solid: #828282;
+  --grey-solid_5: #a09f9f25;
+  --black_transparent: rgba(0, 0, 0, 0.726);
+  --normal-scrolbar-clr: #1ed75f18;
+  --active-scrolbar-clr: #1ed75f38;
+  --grey-solid_10: rgba(160, 159, 159, 0.247);
+  --primary-color: #1ed760;
+  --primary-color-dark: #1dbb54;
+  --primary-color-dark-alt-2: hsl(144, 82%, 38%);
+  --primary-color-dark-alt: hsl(143, 63%, 10%);
+  --spotify-green: #22cc5db2;
+  --soundcloud-orange: #fe5000;
+  --btn-disabled: #6fc48db2;
+  --solid-blue: hsl(225, 76%, 10%);
+  --solid-blue-alt: hsl(223, 78%, 12%);
+  --solid-dark: #0c0b0b;
+  --solid-dark-alt: #161313;
+  --solid-darker: #000;
+  --sand-solid: #ecebe8;
+  --button-negative-clr: rgb(199, 28, 28);
+  --window-actions-elevation: 2;
+  color: var(--grey-solid);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: var(--solid-darker);
+}
+
+* {
+  outline: none;
+}
+
+.invisible {
+  display: none;
+}
+
+.gone {
+  display: none;
+}
+
+.border-less {
+  border: none;
+}
+
+.icon-x2 {
+  font-size: 1.8em;
+}
+
+.indeterminate-progress {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  animation: 1s rotate ease-in-out infinite forwards;
+}
+
+.indeterminate-progress::before {
+  content: "";
+  display: block;
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 100%;
+  animation: 1s down-up ease-in-out infinite forwards;
+}
+
+.indeterminate-progress::after {
+  content: "";
+  display: block;
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -100%;
+  animation: 1s up-down ease-in-out infinite forwards;
+}
+
+.normal-progress {
+  width: var(--progress-size);
+  height: var(--progress-size);
+}
+
+.small-progress {
+  width: var(--progress-size-small);
+  height: var(--progress-size-small);
+}
+
+.scroll::-webkit-scrollbar {
+    width: 15px;
+    border-left: 1px solid var(--normal-scrolbar-clr);
+  }
+  
+  .scroll::-webkit-scrollbar-thumb {
+    background-color: var(--normal-scrolbar-clr);
+    border-radius: 100vw;
+  }
+  
+  .scroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--active-scrolbar-clr);
+  }
+  
+  .scroll::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin-block: 8px;
+  }
+/* ------------------ Animation Key Frames ----------------- */
+
+@keyframes scale-bounce {
+  0%,
+  10% {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(1.1);
+  }
+
+  30% {
+    transform: scale(1);
+  }
+
+  32% {
+    transform: scale(1.1);
+  }
+
+  34% {
+    transform: scale(1);
+  }
+
+  36% {
+    transform: scale(1);
+  }
+
+  38% {
+    transform: scale(1.1);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+
+  90%,
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes move {
+  0% {
+    transform: scaleX(1);
+    left: -10%;
+  }
+
+  50% {
+    transform: scaleX(1.5);
+  }
+
+  100% {
+    transform: scaleX(1);
+    left: 100%;
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes up-down {
+  50% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes down-up {
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}

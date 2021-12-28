@@ -117,14 +117,14 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
  * Sets the state of a user preference using a key-value pair
  * Note: A new key would be created after this request
  *
- * @param {*} prefPath refers to file name for the preference to be use if this was set, if not, then
+ * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
  *                     the default file would be used
  * @param {*} key the key in settings in which it's value would be retrieved
  * @param {*} value the value to be set
  */
-module.exports.setState = function (key, value, prefPath) {
-  checkArgs(key, prefPath);
-  let pref = getPreferences(prefPath);
+module.exports.setState = function (key, value, prefFileName) {
+  checkArgs(key, prefFileName);
+  let pref = getPreferences(prefFileName);
   pref[`${key}`] = `${value}`;
   return setPreferences(pref);
 };
@@ -137,7 +137,6 @@ module.exports.setState = function (key, value, prefPath) {
  */
 module.exports.deleteKey = function (key, prefFileName) {
   checkArgs(key, prefFileName);
-
   let pref = getPreferences();
   // check if key is present in prefs
   if (this.hasKey(key)) {
