@@ -3,7 +3,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const about = document.getElementById("about");
   about.addEventListener("click", (_event) => {
-    console.log("about clicked");
     window.bridgeApis.send("show-app-info");
   });
   // deactive link default actions

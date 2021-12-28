@@ -1,1 +1,15 @@
 @import url(global-styles.css);
+
+#app-name {
+  color: white;
+}
+
+.info {
+  margin-inline: 16px;
+  color: whitesmoke;
+}
+
+.icon-heart {
+  color: hotpink;
+  margin: 8px;
+}

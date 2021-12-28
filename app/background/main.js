@@ -24,7 +24,8 @@ const State = Object.freeze({
 
 app.whenReady().then(() => {
   createAppFiles();
-  createApplicationWindow();
+  let windowState = Settings.getState("window-state");
+  createApplicationWindow(windowState);
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createApplicationWindow();
   });
@@ -72,6 +73,11 @@ ipcMain.on("navigate-link", (_event, arg) => {
 
 // ... show about window
 ipcMain.on("show-app-info", () => createAboutWindow());
+
+// ... get app info
+ipcMain.handle("app-details", () => {
+  return [app.getName(), app.getVersion()];
+});
 
 // ... settings requests
 ipcMain.handle("get-states", (_event, args) => {
@@ -294,12 +300,13 @@ function createDownloadWindow(data) {
   download_window.setMenu(null);
   download_window.loadFile(path.join("app", "pages", "downloads.html"));
   download_window.once("ready-to-show", download_window.show);
+  download_window.on("closed", () => (download_window = null));
 }
 
 /**
  * Spawns up a new SMD window with a limitations of 1 winodws
  */
-function createApplicationWindow() {
+function createApplicationWindow(state) {
   // only 1 window is allowed to be spawned
   if (smd_window) return;
 
@@ -320,6 +327,13 @@ function createApplicationWindow() {
   Menu.setApplicationMenu(menu);
   smd_window.loadFile(path.join("app", "pages", "index.html"));
   smd_window.once("ready-to-show", smd_window.show);
+  smd_window.on("close", (event) => {
+    event.preventDefault();
+    // let [x, y] = smd_window.getPosition();
+    // let [width, height] = smd_window.getSize();
+    // Settings.setState("window-state", `${{ x, y, width, height }}`);
+    smd_window.destroy();
+  });
 }
 
 function createAboutWindow() {
@@ -341,11 +355,13 @@ function createAboutWindow() {
       preload: path.join(__dirname, "../preload.js"),
     },
   });
-  
+
   Menu.setApplicationMenu(null);
   about_window.loadFile(path.join("app", "pages", "about.html"));
   about_window.once("ready-to-show", about_window.show);
+  about_window.on("closed", () => (about_window = null));
 }
+
 /**
  * create the download directory
  */
