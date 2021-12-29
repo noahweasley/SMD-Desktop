@@ -1,5 +1,9 @@
 @import url(global-styles.css);
 
+.icon-alert {
+  color: orange;
+}
+
 .download-window {
   width: 100%;
   height: 100%;
@@ -12,6 +16,38 @@
   bottom: 15%;
   left: 20px;
   right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-container > .error-decor {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: whitesmoke;
+}
+
+.list-container > .error-decor > p {
+  font-size: 1.2em;
+  letter-spacing: 0.2em;
+}
+
+.list-container > .error-decor > input[type="button"] {
+  background-color: transparent;
+  border: 1px solid var(--primary-color-dark);
+  border-radius: 4px;
+  padding: 8px 24px;
+  cursor: pointer;
+}
+
+.list-container > .error-decor > input[type="button"]:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.list-container > .error-decor > input[type="button"]:active {
+  background-color: var(--spotify-green);
 }
 
 .list {

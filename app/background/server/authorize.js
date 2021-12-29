@@ -1,4 +1,4 @@
-const Settings = require("../background/settings/settings");
+const Settings = require("../settings/settings");
 const { shell } = require("electron");
 const express = require("express");
 const server = express();

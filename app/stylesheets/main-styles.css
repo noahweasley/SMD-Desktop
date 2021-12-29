@@ -264,14 +264,14 @@ a:active {
   transition: 0.3s;
 }
 
-.tab-content > .info-decor {
+.tab-content > * > .info-decor {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 16px;
 }
 
-.tab-content > .info-decor > img {
+.tab-content > * > .info-decor > img {
   border-radius: 8px;
   display: block;
   position: absolute;
@@ -280,7 +280,7 @@ a:active {
   box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.3);
 }
 
-.tab-content > .info-decor > p {
+.tab-content > * > .info-decor > p {
   display: flex;
   align-items: center;
   font-size: 1.1em;
@@ -288,7 +288,7 @@ a:active {
   top: 60%;
 }
 
-.tab-content > .info-decor .icon {
+.tab-content > * > .info-decor .icon {
   margin: 16px;
   color: var(--primary-color);
 }

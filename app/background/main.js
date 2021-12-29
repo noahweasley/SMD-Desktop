@@ -1,7 +1,7 @@
 "use-strict";
 
 const Settings = require("../background/settings/settings");
-const { refreshSpoifyAccessToken, authorizeApp } = require("../background/authorize");
+const { refreshSpoifyAccessToken, authorizeApp } = require("../background/server/authorize");
 const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
 const menu = require("../background/menu");
 
@@ -53,6 +53,14 @@ ipcMain.on("action-click-event", (_event, id) => {
   }
 });
 
+// ... window acton click
+ipcMain.on("download-click-event", (_event, id) => {
+  if (id === "cancel-download") {
+    download_window.close();
+  } else {
+  }
+});
+
 // ... link navigate
 ipcMain.on("navigate-link", (_event, arg) => {
   let linkType;
@@ -92,6 +100,11 @@ ipcMain.handle("set-states", (_event, args) => {
 // ... application authorization
 ipcMain.handle("authorize-app", (_event, args) => {
   authorizeApp(args);
+});
+
+// ...
+ipcMain.handle("download-data", () => {
+  return null;
 });
 
 // ... clipboard content request
@@ -300,7 +313,15 @@ function createDownloadWindow(data) {
   download_window.setMenu(null);
   download_window.loadFile(path.join("app", "pages", "downloads.html"));
   download_window.once("ready-to-show", download_window.show);
-  download_window.on("closed", () => (download_window = null));
+  // listening for close event on download window helped to solve quick window flash issue.
+  // Adding hide() on window was the key to solve this issue, but I don't have an idea why
+  // the quick flash issue occurrs.
+  download_window.on("close", (event) => {
+    event.preventDefault();
+    download_window.hide();
+    download_window.destroy();
+    download_window = null;
+  });
 }
 
 /**

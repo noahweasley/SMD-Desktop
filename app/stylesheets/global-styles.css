@@ -10,7 +10,7 @@
   --active-scrolbar-clr: #1ed75f38;
   --grey-solid_10: rgba(160, 159, 159, 0.247);
   --primary-color: #1ed760;
-  --primary-color-dark: #1dbb54;
+  --primary-color-dark: #1cad4f;
   --primary-color-dark-alt-2: hsl(144, 82%, 38%);
   --primary-color-dark-alt: hsl(143, 63%, 10%);
   --spotify-green: #22cc5db2;
@@ -55,6 +55,10 @@ body {
 
 .icon-x2 {
   font-size: 1.8em;
+}
+
+.icon-x4 {
+  font-size: 4em;
 }
 
 a {
