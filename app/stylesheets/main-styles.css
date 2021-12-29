@@ -14,7 +14,7 @@ a {
   text-decoration: none;
   color: white;
   cursor: pointer;
-  pointer-events: stroke;
+  pointer-events: visible;
 }
 
 a:hover {
@@ -262,6 +262,28 @@ a:active {
   right: 0;
   left: 0;
   transition: 0.3s;
+}
+
+.tab-content > .info-decor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px;
+}
+
+.tab-content > .info-decor > img {
+  border-radius: 8px;
+  display: block;
+  position: absolute;
+  bottom: 50%;
+  pointer-events: none;
+}
+
+.tab-content > .info-decor > p {
+  font-size: 1.1em;
+  display: block;
+  position: absolute;
+  top: 60%;
 }
 
 .list-group-item {

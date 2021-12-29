@@ -12,10 +12,12 @@ function dummyAnimate(listPos) {
   let progress = 0;
   setTimeout(() => {
     setInterval(() => {
+      
       setProgress(
         `download-progress-${listPos}`,
         `${(progress = progress === 100 ? (progress = 0) : (progress += 2))}%`
       );
+      
     }, 1000);
   }, 10000);
 }
