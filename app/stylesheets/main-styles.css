@@ -277,13 +277,20 @@ a:active {
   position: absolute;
   bottom: 50%;
   pointer-events: none;
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.3);
 }
 
 .tab-content > .info-decor > p {
+  display: flex;
+  align-items: center;
   font-size: 1.1em;
-  display: block;
   position: absolute;
   top: 60%;
+}
+
+.tab-content > .info-decor .icon {
+  margin: 16px;
+  color: var(--primary-color);
 }
 
 .list-group-item {
