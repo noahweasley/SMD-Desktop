@@ -53,14 +53,6 @@ ipcMain.on("action-click-event", (_event, id) => {
   }
 });
 
-// ... window acton click
-ipcMain.on("download-click-event", (_event, id) => {
-  if (id === "cancel-download") {
-    download_window.close();
-  } else {
-  }
-});
-
 // ... link navigate
 ipcMain.on("navigate-link", (_event, arg) => {
   let linkType;
@@ -77,6 +69,12 @@ ipcMain.on("navigate-link", (_event, arg) => {
 
   // then open link in default app
   shell.openExternal(linkType);
+});
+
+// ..
+ipcMain.handle("get-list-data", () => {
+  // query list data from sqlite database
+  return null;
 });
 
 // ... show about window
@@ -104,51 +102,96 @@ ipcMain.handle("authorize-app", (_event, args) => {
 
 // ...
 ipcMain.handle("download-data", () => {
-  return null;
+  return getSongData();
+});
+
+// ... show download details window
+ipcMain.on("show-download-list", (_event) => {
+  createDownloadWindow();
+});
+
+// ... download acton click
+ipcMain.on("download-click-event", (_event, id) => {
+  download_window.close();
+  if (id === "proceed-download") {
+    // perform download data in main process and send download progress to renderer process
+  }
 });
 
 // ... clipboard content request
 ipcMain.handle("clipboard-request", () => {
-  const clipboardContent = clipboard.readText();
-  const spotifyLinkRegex = new RegExp("https://open.spotify.com");
+  let urlType, errMsg;
+  try {
+    urlType = getSpotifyURLType(clipboard.readText());
+  } catch (err) {
+    errMsg = err.message;
+    // display modal dialog with details of error
+    dialog.showErrorBox(
+      "Clipboard content not a Spotify link",
+      "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
+    );
+  } finally {
+    return urlType || errMsg;
+  }
+});
+
+/**
+ * @returns an object with the requested Spotify data
+ */
+function getSongData() {
+  let data, spotifyURLType;
+  let clipboardContent = clipboard.readText();
+
+  try {
+    spotifyURLType = getSpotifyURLType(clipboardContent);
+  } catch (error) {
+    // display modal dialog with details of error
+    dialog.showErrorBox(
+      "Clipboard content not a Spotify link",
+      "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
+    );
+
+    return error.message;
+  }
 
   spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setAccessToken(Settings.getState("spotify-access-token"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
-  let data;
-
+  const spotifyLinkRegex = new RegExp("https://open.spotify.com");
   try {
     if (spotifyLinkRegex.test(clipboardContent)) {
       // then ...
-      let spotifyURLType = getSpotifyURLType(clipboardContent);
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
           data = performTrackDownloadAction(clipboardContent);
+          break;
         case SpotifyURLType.ALBUM:
           data = performAlbumDownloadAction(clipboardContent);
+          break;
         case SpotifyURLType.ARTIST:
           data = performArtistDownloadAction(clipboardContent);
+          break;
         case SpotifyURLType.PLAYLIST:
           data = performPlaylistDownloadAction(clipboardContent);
+          break;
         default:
-          throw new Error(`${spotifyURLType} is not supported yet`);
+          throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
       }
     } else {
-      // ... display modal dialog with details of error
+      // display modal dialog with details of error
       dialog.showErrorBox(
         "Clipboard content not a Spotify link",
-        "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
+        "Clipboard content has changed, go to Spotify and copy link, then click 'Paste URL'"
       );
     }
   } catch (err) {
-    console.log("An Error occurred ", err);
-  } finally {
-    // show download details window
-    createDownloadWindow(data);
+    return err.message;
   }
-});
+
+  return data;
+}
 
 /**
  * starts album downlaod
@@ -157,7 +200,7 @@ ipcMain.handle("clipboard-request", () => {
  * @throws error if error occurred while fetching data, this can be caused by network
  */
 async function performAlbumDownloadAction(albumUrl, _limits) {
-  let album = artistUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
+  let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
   let refreshCount = 0;
   let data;
 
@@ -166,7 +209,7 @@ async function performAlbumDownloadAction(albumUrl, _limits) {
       data = await spotifyApi.getAlbum(album);
       break;
     } catch (err) {
-      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
+      if (++refreshCount === 3) return "An error occurred while retrieving album data";
       refreshSpoifyAccessToken();
     }
   }
@@ -196,7 +239,7 @@ async function performArtistDownloadAction(artistUrl, _limits) {
       data = await spotifyApi.getArtist(artist);
       break;
     } catch (err) {
-      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
+      if (++refreshCount === 3) return "An error occurred while retrieving artist data";
       refreshSpoifyAccessToken();
     }
   }
@@ -223,7 +266,7 @@ async function performPlaylistDownloadAction(playlistUrl) {
       data = await spotifyApi.getPlaylist(playlist);
       break;
     } catch (err) {
-      if (++refreshCount === 3) throw new Error("An error occurred while retrieving artist data");
+      if (++refreshCount === 3) return "An error occurred while retrieving playlist data";
       refreshSpoifyAccessToken();
     }
   }
@@ -267,7 +310,7 @@ async function performTrackDownloadAction(trackUrl) {
     }
   }
 
-  if (!dataReceived) return;
+  if (!dataReceived) return "An Error occurred while retrieving track data";
 
   const body = data.body;
   let songTitle = body["name"];
@@ -289,10 +332,8 @@ async function performTrackDownloadAction(trackUrl) {
 
 /**
  * Creates a download window with the data speified
- *
- * @param data the data to be displayed on the window
  */
-function createDownloadWindow(data) {
+function createDownloadWindow() {
   if (download_window) return;
 
   download_window = new BrowserWindow({

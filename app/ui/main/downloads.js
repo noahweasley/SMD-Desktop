@@ -24,7 +24,7 @@ function dummyAnimate(listPos) {
 
 // ... user interactions on window
 window.addEventListener("DOMContentLoaded", () => {
-  dummyAnimate(0);
+  // dummyAnimate(0);
   // ---      download inter-process communication   ---
   window.bridgeApis.on("download-progress-update", (event) => {});
 });

@@ -1,12 +1,11 @@
 @import url(global-styles.css);
 
-#app-name {
+h4 {
   color: white;
 }
 
 .info {
-  margin-inline: 16px;
-  margin-block: 24px;
+  margin: 16px;
   color: whitesmoke;
 }
 

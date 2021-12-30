@@ -265,7 +265,7 @@ a:active {
 }
 
 .tab-content > * > .info-decor {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   margin: 16px;
@@ -479,39 +479,6 @@ a:active {
   background: url(../../sample-images/background.jpg) no-repeat;
   background-position: center;
   object-fit: cover;
-}
-
-.indeterminate-progress {
-  position: absolute;
-  top: calc(var(--toolbar-height) + 45%);
-  right: 50%;
-  width: var(--progress-size);
-  height: var(--progress-size);
-  animation: 1s rotate ease-in-out infinite forwards;
-}
-
-.indeterminate-progress::before {
-  content: "";
-  display: block;
-  background-color: var(--primary-color);
-  width: var(--progress-size);
-  height: var(--progress-size);
-  border-radius: 50%;
-  position: absolute;
-  bottom: 100%;
-  animation: 1s down-up ease-in-out infinite forwards;
-}
-
-.indeterminate-progress::after {
-  content: "";
-  display: block;
-  background-color: var(--primary-color);
-  width: var(--progress-size);
-  height: var(--progress-size);
-  border-radius: 50%;
-  position: absolute;
-  bottom: -100%;
-  animation: 1s up-down ease-in-out infinite forwards;
 }
 
 .modal__login {

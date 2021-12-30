@@ -27,11 +27,21 @@
   justify-content: center;
   flex-direction: column;
   color: whitesmoke;
+  margin-inline: 16px;
 }
 
 .list-container > .error-decor > p {
   font-size: 1.2em;
   letter-spacing: 0.2em;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.list-container > .error-decor > p > span {
+  max-height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
 }
 
 .list-container > .error-decor > input[type="button"] {

@@ -24,6 +24,9 @@
   --sand-solid: #ecebe8;
   --button-negative-clr: rgb(199, 28, 28);
   --window-actions-elevation: 2;
+  --progress-anim-time: 0.7s;
+  --progress-timin-funct: linear;
+  --progress-timin-funct-2: ease-in-out;
   color: var(--grey-solid);
 }
 
@@ -79,7 +82,9 @@ a:active {
   position: absolute;
   top: 50%;
   right: 50%;
-  animation: 1s rotate ease-in-out infinite forwards;
+  align-self: center;
+  justify-self: center;
+  animation:var(--progress-anim-time) rotate var(--progress-timin-funct) infinite forwards;
 }
 
 .indeterminate-progress::before {
@@ -91,7 +96,7 @@ a:active {
   border-radius: 50%;
   position: absolute;
   bottom: 100%;
-  animation: 1s down-up ease-in-out infinite forwards;
+  animation: var(--progress-anim-time) down-up var(--progress-timin-funct-2) infinite forwards;
 }
 
 .indeterminate-progress::after {
@@ -103,7 +108,7 @@ a:active {
   border-radius: 50%;
   position: absolute;
   bottom: -100%;
-  animation: 1s up-down ease-in-out infinite forwards;
+  animation: var(--progress-anim-time) up-down var(--progress-timin-funct-2) infinite forwards;
 }
 
 .normal-progress {

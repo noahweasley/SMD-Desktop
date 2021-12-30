@@ -29,7 +29,13 @@ window.addEventListener("DOMContentLoaded", () => {
   // ...
   document.querySelector(".paste").addEventListener("click", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
-      console.log(content);
+      if (content == "track") {
+        // download immediately
+      } else {
+        // a funny eror message would be emitted to the renderer process, hence the 'Uh'
+        if (content.startsWith("Uh")) return;
+        window.bridgeApis.send("show-download-list");
+      }
     });
   });
 

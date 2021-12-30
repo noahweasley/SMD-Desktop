@@ -2,13 +2,13 @@
 
 function dataReveal() {
   const windowContent = document.querySelector(".window");
-  const inderminateProgres = document.querySelector(".indeterminate-progress");
+  const loader = document.getElementById("window-data-loader");
   const modal = document.querySelector(".modal");
   const titileBar = document.querySelector(".toolbar-header");
   titileBar.classList.remove("gone");
 
   window.bridgeApis.invoke("get-states", ["secrets-received", "false"]).then((value) => {
-    inderminateProgres.classList.add("gone");
+    loader.classList.add("gone");
     if (value == "true") {
       windowContent.classList.remove("gone");
       modal.style.setProperty("display", "none");

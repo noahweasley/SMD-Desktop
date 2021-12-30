@@ -83,9 +83,8 @@ module.exports.authorizeApp = function (args) {
     Settings.setState("spotify-user-client-id", args[0]);
     Settings.setState("spotify-user-client-secret", args[1]);
   } else {
-    
   }
-  
+
   connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
 };
 
@@ -97,13 +96,18 @@ module.exports.refreshSpoifyAccessToken = function () {
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
-  spotifyApi.refreshAccessToken().then(
-    function (data) {
-      // reset access token
-      Settings.setState("spotify-access-token", data.body["access_token"]);
-    },
-    function (err) {
-      console.log("Could not refresh the token!", err.message);
-    }
-  );
+  spotifyApi
+    .refreshAccessToken()
+    .then(
+      function (data) {
+        // reset access token
+        Settings.setState("spotify-access-token", data.body["access_token"]);
+      },
+      function (err) {
+        console.log("Could not refresh the token!", err.message);
+      }
+    )
+    .catch((err) => {
+      console.log("An error occured in autorize()", err.message);
+    });
 };
