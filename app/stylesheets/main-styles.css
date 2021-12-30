@@ -127,8 +127,8 @@ a:active {
 .window-action-group {
   position: absolute;
   display: flex;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 2px;
   width: 138px;
   height: 40px;
   background-color: #ffffff03;
