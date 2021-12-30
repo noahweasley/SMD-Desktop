@@ -162,7 +162,7 @@ a:active {
 }
 
 .window-action-close:hover {
-  background-color: rgb(155, 14, 14);
+  background-color: hsl(0, 100%, 40%);
 }
 
 .window-content,

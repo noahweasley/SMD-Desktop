@@ -58,10 +58,10 @@ ipcMain.on("navigate-link", (_event, arg) => {
   let linkType;
   switch (arg) {
     case "#music":
-      linkType = `file://${app.getPath("music")}`;
+      linkType = path.join(`file://${app.getPath("music")}`, app.getName(), "download");
       break;
     case "#video":
-      linkType = `file://${app.getPath("videos")}`;
+      linkType = path.join(`file://${app.getPath("video")}`, app.getName());
       break;
     default:
       linkType = arg;
@@ -201,18 +201,19 @@ function getSongData() {
  */
 async function performAlbumDownloadAction(albumUrl, _limits) {
   let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
-  let refreshCount = 0;
-  let data;
+  let data, dataReceived;
 
-  while (true) {
+  for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getAlbum(album);
+      dataReceived = true;
       break;
     } catch (err) {
-      if (++refreshCount === 3) return "An error occurred while retrieving album data";
       refreshSpoifyAccessToken();
     }
   }
+
+  if (!dataReceived) return "An error occurred while retrieving album data";
 
   const body = data.body;
   const albumName = body["name"];
@@ -231,18 +232,19 @@ async function performAlbumDownloadAction(albumUrl, _limits) {
  */
 async function performArtistDownloadAction(artistUrl, _limits) {
   let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
-  let refreshCount = 0;
-  let data;
+  let data, dataReceived;
 
   for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getArtist(artist);
+      dataReceived = true;
       break;
     } catch (err) {
-      if (++refreshCount === 3) return "An error occurred while retrieving artist data";
       refreshSpoifyAccessToken();
     }
   }
+
+  if (!dataReceived) return "An error occurred while retrieving artist data";
 
   return {
     type: SpotifyURLType.ARTIST,
@@ -258,18 +260,19 @@ async function performArtistDownloadAction(artistUrl, _limits) {
  */
 async function performPlaylistDownloadAction(playlistUrl) {
   let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
-  let refreshCount = 0;
-  let data;
+  let data, dataReceived;
 
-  while (true) {
+  for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getPlaylist(playlist);
+      dataReceived = true;
       break;
     } catch (err) {
-      if (++refreshCount === 3) return "An error occurred while retrieving playlist data";
       refreshSpoifyAccessToken();
     }
   }
+
+  if (!dataReceived) return "An error occurred while retrieving playlist data";
 
   const body = data.body;
   const playListName = body["name"];
@@ -428,20 +431,22 @@ function createAboutWindow() {
  * create the download directory
  */
 function createAppFiles() {
-  const downloadDir = path.join(app.getPath("music"), app.getName());
+  const appDir = path.join(app.getPath("music"), app.getName());
+  const downloadDir = path.join(appDir, "download");
+  const thumbnailDir = path.join(downloadDir, ".thumb");
 
-  fs.open(downloadDir, "wx", (err, _fd) => {
+  fs.open(appDir, "r+", (err, _fd) => {
     // create downloads directory
     function createDownloadsDirectory() {
-      fs.mkdir(
-        downloadDir,
-        {
-          recursive: true,
-        },
-        function (err) {
-          if (err) console.log("An error occurred while creating directory");
-        }
-      );
+      fs.mkdirSync(appDir, 755, function (err) {
+        if (err) console.log("An error occurred while creating directory");
+      });
+      fs.mkdirSync(downloadDir, 755, function (err) {
+        if (err) console.log("An error occurred while creating directory");
+      });
+      fs.mkdir(thumbnailDir, 755, function (err) {
+        if (err) console.log("An error occurred while creating directory");
+      });
     }
 
     if (err) {

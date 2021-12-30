@@ -96,18 +96,9 @@ module.exports.refreshSpoifyAccessToken = function () {
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
-  spotifyApi
-    .refreshAccessToken()
-    .then(
-      function (data) {
-        // reset access token
-        Settings.setState("spotify-access-token", data.body["access_token"]);
-      },
-      function (err) {
-        console.log("Could not refresh the token!", err.message);
-      }
-    )
-    .catch((err) => {
-      console.log("An error occured in autorize()", err.message);
-    });
+  spotifyApi.refreshAccessToken((_error, data) => {
+    Settings.setState("spotify-access-token", data.body["access_token"]);
+    Settings.setState("spotify-refresh-token", data.body["refresh_token"]);
+    Settings.setState("spotify-token-expiration", data.body["expires_in"]);
+  });
 };
