@@ -55,20 +55,20 @@ ipcMain.on("action-click-event", (_event, id) => {
 
 // ... link navigate
 ipcMain.on("navigate-link", (_event, arg) => {
-  let linkType;
+  let linkByType;
   switch (arg) {
     case "#music":
-      linkType = path.join(`file://${app.getPath("music")}`, app.getName(), "download");
+      linkByType = path.join(`file://${app.getPath("music")}`, app.getName(), "download");
       break;
     case "#video":
-      linkType = path.join(`file://${app.getPath("video")}`, app.getName());
+      linkByType = path.join(`file://${app.getPath("video")}`, app.getName());
       break;
     default:
-      linkType = arg;
+      linkByType = arg;
   }
 
   // then open link in default app
-  shell.openExternal(linkType);
+  shell.openExternal(linkByType);
 });
 
 // ..
@@ -110,12 +110,13 @@ ipcMain.on("show-download-list", (_event) => {
   createDownloadWindow();
 });
 
+// ... request to start downloading
+ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
+
 // ... download acton click
 ipcMain.on("download-click-event", (_event, id) => {
   download_window.close();
-  if (id === "proceed-download") {
-    // perform download data in main process and send download progress to renderer process
-  }
+  if (id === "proceed-download") beginDownloads();
 });
 
 // ... clipboard content request
@@ -334,6 +335,11 @@ async function performTrackDownloadAction(trackUrl) {
 }
 
 /**
+ * Starts donwloading tracks available at the the link url in the clipboard
+ */
+function beginDownloads(args) {}
+
+/**
  * Creates a download window with the data speified
  */
 function createDownloadWindow() {
@@ -431,28 +437,14 @@ function createAboutWindow() {
  * create the download directory
  */
 function createAppFiles() {
-  const appDir = path.join(app.getPath("music"), app.getName());
-  const downloadDir = path.join(appDir, "download");
+  const downloadDir = path.join(app.getPath("music"), app.getName(), "download");
   const thumbnailDir = path.join(downloadDir, ".thumb");
 
-  fs.open(appDir, "r+", (err, _fd) => {
-    // create downloads directory
-    function createDownloadsDirectory() {
-      fs.mkdirSync(appDir, 755, function (err) {
-        if (err) console.log("An error occurred while creating directory");
-      });
-      fs.mkdirSync(downloadDir, 755, function (err) {
-        if (err) console.log("An error occurred while creating directory");
-      });
-      fs.mkdir(thumbnailDir, 755, function (err) {
-        if (err) console.log("An error occurred while creating directory");
-      });
-    }
-
+  fs.open(downloadDir, "r+", (err, _fd) => {
     if (err) {
       if (err.code === "EEXIST") return;
       else if (err.code === "ENOENT") {
-        createDownloadsDirectory();
+        fs.mkdirSync(thumbnailDir, { recursive: true });
       } else console.log(err.code);
     }
   });

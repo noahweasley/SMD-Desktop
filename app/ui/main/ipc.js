@@ -31,6 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
       if (content == "track") {
         // download immediately
+        window.bridgeApis.send("begin-download");
       } else {
         // a funny eror message would be emitted to the renderer process, hence the 'Uh'
         if (content.startsWith("Uh")) return;

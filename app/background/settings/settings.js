@@ -5,8 +5,8 @@ const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
-const preferenceFileDir = path.join(app.getPath("userData"), "preference");
-const defPreferenceFilePath = path.join(preferenceFileDir, "preference.json");
+const preferenceFileDir = path.join(app.getPath("userData"), "User", "Preferences");
+const defPreferenceFilePath = path.join(preferenceFileDir, "Settings.json");
 
 // check arguments so that there is no error thrown at runtime
 function checkArgs(...args) {
@@ -24,29 +24,22 @@ function getPreferences(prefFileName) {
   let fileName = prefFileName ? path.join(preferenceFileDir, prefFileName) : defPreferenceFilePath;
 
   try {
-    let data;
-    if (prefFileName) {
-      data = fs.readFileSync(path.join(preferenceFileDir, fileName));
-    } else {
-      data = fs.readFileSync(fileName, "utf8");
-    }
+    let data = fs.readFileSync(fileName, "utf8");
     return JSON.parse(data);
   } catch (err) {
     return createPrefFile();
   }
 
   function createPrefFile() {
-
     fs.open(fileName, "wx", (err, _fd) => {
-      
       function createPrefDirectory() {
-        fs.mkdir(
-          prefDir,
+        fs.mkdirSync(
+          preferenceFileDir,
           {
             recursive: true,
           },
           function (err) {
-            if (err) console.log("An error occurred while creating directory");
+            if (err) console.log("An error occurred while creating setttings directory");
           }
         );
       }

@@ -16,6 +16,12 @@ window.addEventListener("DOMContentLoaded", () => {
       displayDecors();
     }
   });
+
+  // actions related to file downloads
+  window.bridgeApis.on("download-progress-update", (_event, args) => {
+    let [listPos, progress] = args;
+    setDownloadProgress(listPos, progress);
+  });
 });
 
 function displayDecors() {
@@ -45,7 +51,7 @@ function registerEventListeners() {
     const navItemChildren = Array.from(navItem.parentElement.children);
 
     navItem.addEventListener("click", (_event) => {
-      // dont change active state of the file nav item
+      // dont change active state of the nav item that have the 'click' class as attribute
       if (navItemChildren.indexOf(navItem) === 1 || navItemChildren.indexOf(navItem) === navItemChildren.length - 2) {
         return;
       }
@@ -61,4 +67,26 @@ function registerEventListeners() {
   document.querySelectorAll(".media-object").forEach((m) => {
     m.addEventListener("error", () => m.setAttribute("src", "../assets/graphics/musical.png"));
   });
+}
+
+// actions related to file downloads
+
+function setProgress(elementId, prog) {
+  const progress = document.getElementById(elementId);
+  progress.style.setProperty("--progress-width", prog);
+  progress.style.setProperty("--progress-anim", "none");
+}
+
+function setDownloadProgress(listPos, progress) {}
+
+function dummyAnimate(listPos) {
+  let progress = 0;
+  setTimeout(() => {
+    setInterval(() => {
+      setProgress(
+        `download-progress-${listPos}`,
+        `${(progress = progress === 100 ? (progress = 0) : (progress += 2))}%`
+      );
+    }, 1000);
+  }, 10000);
 }
