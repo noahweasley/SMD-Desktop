@@ -1,5 +1,16 @@
 @import url(global-styles.css);
 
+/* 
+    Note: ovrflow on these selectors areonly useful for development purpose and is not used in production all
+          You are free to override 
+ */
+.window,
+.window-content,
+.pane,
+.scroll {
+  overflow: hidden;
+}
+
 .abs-bottom {
   position: absolute;
   bottom: 10px;
@@ -264,9 +275,11 @@ a:active {
 
 .tab-content > * > .info-decor {
   display: none;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  margin: 16px;
+  padding: 16px;
 }
 
 .tab-content > * > .info-decor > img {
