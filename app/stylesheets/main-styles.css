@@ -52,6 +52,7 @@ a:active {
 }
 
 .title {
+  font-size: 11.5px; /* adjust font-size if toolbar height changes */
   line-height: var(--toolbar-height);
   width: max-content;
 }
@@ -83,8 +84,10 @@ a:active {
 
 .toolbar > img {
   position: absolute;
-  top: 8px;
+  top: 20%;
   left: 20px;
+  width: 23px; /* adjust width if toolbar height changes */
+  height: 60%;
 }
 
 .window {
@@ -138,9 +141,10 @@ a:active {
 .window-action-group {
   position: absolute;
   display: flex;
-  top: 2px;
-  right: 2px;
+  top: 0px;
+  right: 0px;
   width: 138px;
+  padding: 2px;
   height: var(--toolbar-height);
   background-color: #ffffff03;
 }
@@ -156,7 +160,7 @@ a:active {
 
 .window-action-group > * {
   width: calc(138px / 3);
-  height: 90%;
+  height: 100%;
 }
 
 .window-action > img {
