@@ -1,7 +1,7 @@
 @import url(global-styles.css);
 
 /* 
-    Note: ovrflow on these selectors areonly useful for development purpose and is not used in production all
+    Note: ovrflow on these selectors are only useful for development purpose and is not used in production at all
           You are free to override 
  */
 .window,
