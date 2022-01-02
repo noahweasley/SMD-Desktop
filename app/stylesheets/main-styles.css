@@ -51,10 +51,22 @@ a:active {
   animation: none;
 }
 
-.title {
+.toolbar-header .title {
   font-size: 11.5px; /* adjust font-size if toolbar height changes */
   line-height: var(--toolbar-height);
   width: max-content;
+}
+
+.pane-settings .title {
+  font-size: 1.5em;
+  padding: 8px;
+  font-weight: bold;
+}
+
+.pane-settings .list-group {
+  overflow-y: scroll;
+  border-left: 2px solid var(--grey-solid_5);
+  border-top: 1px solid var(--grey-solid_5);
 }
 
 .toolbar {
@@ -181,7 +193,9 @@ a:active {
 .window-content,
 .pane-group,
 .pane-sm,
-.toolbar {
+.toolbar,
+.pane-settings .title,
+.pane-settings .list-group {
   background-color: var(--solid-darker);
 }
 
@@ -399,7 +413,7 @@ a:active {
   transition: 0.1s;
 }
 
-.list-group > *:hover {
+.pane-main .list-group > *:hover {
   background-color: var(--grey-solid_5);
 }
 

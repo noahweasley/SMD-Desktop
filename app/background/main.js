@@ -19,6 +19,8 @@ var smd_window, download_window, about_window;
 var WINDOW_STATE;
 
 const State = Object.freeze({
+  BLURRED: "window-blurred",
+  FOCUSED: "window-focused",
   MAXIMIZED: "window-maximized",
   MINIMIZED: "window-minimized",
 });

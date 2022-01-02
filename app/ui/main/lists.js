@@ -1,5 +1,12 @@
 "use-strict";
 
+const State = Object.freeze({
+  MAIN: "main-pane",
+  SETTINGS: "settings-pane",
+});
+
+var WINDOW_CONTENT_STATE = State.MAIN;
+
 window.addEventListener("DOMContentLoaded", () => {
   // retreive user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
@@ -152,6 +159,8 @@ function populateList(data) {
 // Register all event listeners on the list section UI in here
 function registerEventListeners() {
   let navItems = document.querySelectorAll(".nav-group-item");
+  const settingsPane = document.querySelector(".pane-settings");
+  const mainPane = document.querySelector(".pane-main");
 
   navItems.forEach((navItem) => {
     const navItemChildren = Array.from(navItem.parentElement.children);
@@ -166,10 +175,24 @@ function registerEventListeners() {
         navItems[x].classList.remove("active");
       }
       navItem.classList.add("active");
+
+      // toggle main and settings pane's visibility
+      if (WINDOW_CONTENT_STATE != State.MAIN && navItemChildren.indexOf(navItem) == 0) {
+        mainPane.classList.remove("gone");
+        settingsPane.classList.add("gone");
+        WINDOW_CONTENT_STATE = State.MAIN;
+      } else if (
+        WINDOW_CONTENT_STATE != State.SETTINGS &&
+        navItemChildren.indexOf(navItem) === navItemChildren.length - 3
+      ) {
+        mainPane.classList.add("gone");
+        settingsPane.classList.remove("gone");
+        WINDOW_CONTENT_STATE = State.SETTINGS;
+      }
     });
   });
 
-  // ...
+  // fallback image on thumnail load error
   document.querySelectorAll(".media-object").forEach((m) => {
     m.addEventListener("error", () => m.setAttribute("src", "../assets/graphics/musical.png"));
   });
