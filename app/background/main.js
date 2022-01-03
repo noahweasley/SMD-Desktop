@@ -3,7 +3,7 @@
 const Settings = require("../background/settings/settings");
 const { refreshSpoifyAccessToken, authorizeApp } = require("../background/server/authorize");
 const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
-const { getDownloadData } = require("../background/database/database");
+const database = require("../background/database/database");
 const menu = require("../background/menu");
 
 const path = require("path");
@@ -77,7 +77,7 @@ ipcMain.on("navigate-link", (_event, arg) => {
 // request to fetch and display list data
 ipcMain.handle("get-list-data", () => {
   // query list data from sqlite database
-  return getDownloadData();
+  return database.getDownloadData();
 });
 
 // ... show about window
