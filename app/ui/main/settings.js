@@ -8,6 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       loader.classList.add("gone");
       settingsList.classList.remove("gone");
-    }, 10000);
+    }, 3000);
   });
 });

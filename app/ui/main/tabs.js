@@ -5,12 +5,14 @@ function getElementIndex(element) {
 }
 
 function registerTabEvents(tabItem, ...tabContent) {
-  //...
-  let tabItems = document.querySelectorAll(tabItem);
-
   // ...
   let tabContent_0 = document.getElementById(tabContent[0]);
   let tabContent_1 = document.getElementById(tabContent[1]);
+  //...
+  let isDownloadTabs = tabContent[0] === "tab-content__downloading" && tabContent[1] === "tab-content__downloaded";
+  let pauseButton = document.querySelector(".pause");
+  let refreshButton = document.querySelector(".refresh");
+  let tabItems = document.querySelectorAll(tabItem);
 
   tabItems.forEach((tabItem) => {
     tabItem.addEventListener("click", (_event) => {
@@ -26,10 +28,20 @@ function registerTabEvents(tabItem, ...tabContent) {
           tabContent_1.classList.add("invisible");
         }
 
+        if (isDownloadTabs) {
+          pauseButton.setAttribute("disabled", "false");
+          refreshButton.setAttribute("disabled", "false");
+        }
+
         tabContent_0.classList.remove("invisible");
       } else {
         if (!tabContent_0.classList.contains("invisible")) {
           tabContent_0.classList.add("invisible");
+        }
+
+        if (isDownloadTabs) {
+          pauseButton.setAttribute("disabled", "true");
+          refreshButton.setAttribute("disabled", "true");
         }
 
         tabContent_1.classList.remove("invisible");
@@ -40,9 +52,5 @@ function registerTabEvents(tabItem, ...tabContent) {
 
 window.addEventListener("DOMContentLoaded", () => {
   registerTabEvents(".__tab-item", "tab-content__downloading", "tab-content__downloaded");
-  registerTabEvents(
-    ".tab-item__form",
-    "tab-content__form__spotify",
-    "tab-content__form__soundcloud"
-  );
+  registerTabEvents(".tab-item__form", "tab-content__form__spotify", "tab-content__form__soundcloud");
 });
