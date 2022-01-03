@@ -540,7 +540,7 @@ a:active {
   padding: 16px;
 }
 
-.modal__login > .split-pane.split-pane > h5 {
+.modal__login > .split-pane > h5 {
   position: relative;
   font-size: 1.5em;
   letter-spacing: 0.1em;
