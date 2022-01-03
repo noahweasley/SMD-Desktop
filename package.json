@@ -37,6 +37,8 @@
   },
   "dependencies": {
     "express": "^4.17.2",
-    "spotify-web-api-node": "^5.0.2"
+    "knex": "^0.95.15",
+    "spotify-web-api-node": "^5.0.2",
+    "sqlite3": "^5.0.2"
   }
 }
