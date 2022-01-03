@@ -19,8 +19,8 @@ window.addEventListener("DOMContentLoaded", () => {
       displayDecors();
     }
 
-    // display any indeterminate progress bar
-    document.querySelectorAll(".indeterminate-progress").forEach((loader) => {
+    // display any indeterminate progress bar that exists inside main-pain's tab content 
+    document.querySelectorAll(".tab-content .indeterminate-progress").forEach((loader) => {
       if (loader.id != "window-data-loader") loader.classList.add("gone");
     });
   });

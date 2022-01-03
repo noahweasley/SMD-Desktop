@@ -81,11 +81,11 @@
 
                         <div class="paste not-draggable">Paste URL</div>
 
-                        <div class="refresh not-draggable">
+                        <div class="refresh not-draggable" disabled>
                             <span class="icon icon-ccw icon-x2"></span>
                         </div>
 
-                        <div class="pause not-draggable">
+                        <div class="pause not-draggable" disabled>
                             <span class="icon icon-pause icon-x2"></span>
                         </div>
 
@@ -286,18 +286,28 @@
                 
                 <div class="pane pane-settings gone">
                      <h1 class="title draggable">User Settings</h1>
-                     <ul class="list-group scroll">
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                       <li class="list-group-item"></li>
-                     </ul>
+                     
+                     <div class="list-group-container">
+                         
+                         <ul class="list-group scroll gone">
+                             
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                           <li class="list-group-item"></li>
+                      
+                           
+                        </ul>
+                        
+                     </div>
+                     
+                    <div class="indeterminate-progress normal-progress" id="settings-loader"></div>
                 </div>
                 
             </div>
@@ -394,10 +404,11 @@
         <div class="indeterminate-progress normal-progress" id="window-data-loader"></div>
     
         <!-- Scripts -->
-        <script src="../ui/main//setup.js"></script>
+        <script src="../ui/main/setup.js"></script>
         <script src="../ui/main/tabs.js"></script>
         <script src="../ui/main/ipc.js"></script>
         <script src="../ui/main/lists.js"></script>
+        <script src="../ui/main/settings.js"></script>
 
 </body>
 

@@ -9,8 +9,8 @@ function registerTabEvents(tabItem, ...tabContent) {
   let tabItems = document.querySelectorAll(tabItem);
 
   // ...
-  let tabContent_Downloading = document.getElementById(tabContent[0]);
-  let tabContent_Downloaded = document.getElementById(tabContent[1]);
+  let tabContent_0 = document.getElementById(tabContent[0]);
+  let tabContent_1 = document.getElementById(tabContent[1]);
 
   tabItems.forEach((tabItem) => {
     tabItem.addEventListener("click", (_event) => {
@@ -22,17 +22,17 @@ function registerTabEvents(tabItem, ...tabContent) {
 
       // toggle tab content visibility
       if (getElementIndex(tabItem) === 0) {
-        if (!tabContent_Downloaded.classList.contains("invisible")) {
-          tabContent_Downloaded.classList.add("invisible");
+        if (!tabContent_1.classList.contains("invisible")) {
+          tabContent_1.classList.add("invisible");
         }
 
-        tabContent_Downloading.classList.remove("invisible");
+        tabContent_0.classList.remove("invisible");
       } else {
-        if (!tabContent_Downloading.classList.contains("invisible")) {
-          tabContent_Downloading.classList.add("invisible");
+        if (!tabContent_0.classList.contains("invisible")) {
+          tabContent_0.classList.add("invisible");
         }
 
-        tabContent_Downloaded.classList.remove("invisible");
+        tabContent_1.classList.remove("invisible");
       }
     });
   });

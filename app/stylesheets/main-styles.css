@@ -61,12 +61,18 @@ a:active {
   font-size: 1.5em;
   padding: 8px;
   font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.list-group-container {
+  width: 100%;
+  height: calc(100% - 60px);
+  border: 2px solid var(--normal-scrolbar-clr);
 }
 
 .pane-settings .list-group {
   overflow-y: scroll;
-  border-left: 2px solid var(--grey-solid_5);
-  border-top: 1px solid var(--grey-solid_5);
+  padding: 16px;
 }
 
 .toolbar {
@@ -195,8 +201,8 @@ a:active {
 .pane-sm,
 .toolbar,
 .pane-settings .title,
-.pane-settings .list-group {
-  background-color: var(--solid-darker);
+.pane-settings {
+  background-color: var(--solid-darker) !important;
 }
 
 * {
@@ -327,13 +333,11 @@ a:active {
 }
 
 .list-group {
-  /* background-color: red; */
   height: 100%;
   width: 100%;
 }
 
 .list-group-item > :first-child {
-  /* background-color: red; */
   width: 100px;
   height: 90%;
   border-radius: 4px;
@@ -343,7 +347,6 @@ a:active {
   position: relative;
   height: 100%;
   padding: 10px;
-  /* background-color: red; */
 }
 
 .media-body > .op-icon {
@@ -479,6 +482,12 @@ a:active {
 
 .downloads-operation > * + *:active {
   border: 1px solid var(--primary-color-dark);
+}
+
+.downloads-operation > * + *[disabled] {
+  background-color: var(--grey-solid_5_disabled);
+  color: var(--grey-solid-disabled);
+  pointer-events: none;
 }
 
 .donate {

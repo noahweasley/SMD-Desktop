@@ -4,7 +4,9 @@
   --progress-size-small: 10px;
   --white-solid: #eeeeee;
   --grey-solid: #828282;
+  --grey-solid-disabled: #616161;
   --grey-solid_5: #a09f9f25;
+  --grey-solid_5_disabled: #5f5f5f25;
   --black_transparent: rgba(0, 0, 0, 0.726);
   --normal-scrolbar-clr: #1ed75f18;
   --active-scrolbar-clr: #1ed75f38;
