@@ -139,7 +139,12 @@ section.product-display > a.download {
   text-decoration: none;
   color: white;
   transition: 0.2s;
+  padding: 1em;
   margin-top: 30px;
+}
+
+section.product-display > a.download > i {
+  margin-inline: 16px;
 }
 
 section.product-display > a.download:hover {
@@ -169,7 +174,7 @@ section.info {
   ul.topnav.responsive {
     position: relative;
   }
-  
+
   ul.topnav.responsive li.icon {
     position: absolute;
     right: 0;
