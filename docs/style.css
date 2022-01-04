@@ -248,7 +248,6 @@ section.epilogue > .heading {
 
 section.form {
   width: 100%;
-  height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -256,10 +255,63 @@ section.form {
   background-color: var(--solid-darker);
 }
 
+form.contact-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  padding: 50px;
+}
+
+form.contact-form > .name {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2em;
+}
+
+form.contact-form > .name > * {
+  flex: 1;
+}
+
+.form-control {
+  display: inline-block;
+  width: 100%;
+  min-height: 25px;
+  padding: 5px 10px;
+  font-size: 1em;
+  line-height: 1.6;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  padding: 16px;
+}
+
+.form-control:focus {
+  border-color: #6db3fd;
+  box-shadow: 3px 3px 0 #6db3fd, -3px -3px 0 #6db3fd, -3px 3px 0 #6db3fd, 3px -3px 0 #6db3fd;
+}
+
+textarea.form-control {
+  max-height: 500px;
+  resize: vertical;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+button[type="submit"] {
+  width: 200px;
+  height: 50px;
+  border: none;
+  padding: 8px 24px;
+  color: white;
+  background-color: var(--solid-green);
+}
+
 footer {
   text-align: center;
   font-size: 1em;
-  color: #eeeeeec0;
+  color: #eeeeee93;
   padding: 20px;
 }
 
@@ -296,10 +348,22 @@ i.fa-heart {
   section {
     padding: 20px;
   }
+
+  form.contact-form > .name > * {
+    flex: none;
+  }
+
+  textarea.form-control {
+    max-height: 300px;
+  }
 }
 
 @media screen and (max-width: 996px) {
   ul.topnav > .logo {
     overflow: hidden;
+  }
+
+  form.contact-form > .name > * {
+    flex: none;
   }
 }
