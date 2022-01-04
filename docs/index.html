@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMD - Spotify music downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
@@ -19,22 +20,43 @@
 
 <body>
     <nav>
-        <ul class="topnav">
-            <img src="assets/app_icon.png" alt="Homepage" width="45px" height="40px"><a href="http://www.github.com/noahweasley/smd-desktop"></a></img>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#news">News</a></li>
-            <li><a class="active" href="#home">Home</a></li>
+        <ul class="topnav" id="top-nav">
+            <div class="logo">
+                <img src="assets/app_icon.png" alt="Homepage" width="45px" height="40px"><a href="http://www.github.com/noahweasley/smd-desktop"></a></img>
+                <p class="app-name">S.M.D</p>
+            </div>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Term of use</a></li>
+            <li><a href="#" class="active">Home</a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" onclick="toggleNav()">
+                   <i class="fa fa-bars"></i>
+                </a>   
+            </li>
         </ul>
     </nav>
 
     <main>
         <section class="product-display">
-
+            <div class="app-name-container">
+                <h1 class="s-app-name">S.MD</h1>
+                <h3 class="app-name">Spotify Music Downloader</h3>
+            </div>
+            <h4 class="description">Discover Unlimited Songs Now</h4>
+            <div class="event">
+                <div>IOS Coming Soon !</div>
+                <div>Android Coming Soon !</div>
+            </div>
+            <a href="#" class="download">Download For Desktop</a>
         </section>
 
+        <section class="info">
+            
+        </section>
     </main>
 
+    <script src="action.js" async defer></script>
 </body>
 
 </html>
