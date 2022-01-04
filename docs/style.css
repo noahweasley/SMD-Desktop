@@ -11,7 +11,7 @@
   --primary-color-dark-alt-2: hsl(144, 82%, 38%);
   --primary-color-dark-alt: hsl(143, 63%, 10%);
   --solid-green: #22cc5db2;
-  --solid-blue: hsl(225, 76%, 10%);
+  --solid-blue: hsl(225, 77%, 33%);
   --solid-blue-alt: hsl(223, 78%, 12%);
   --solid-dark: #0c0b0b;
   --solid-dark-alt: #161313;
@@ -23,6 +23,15 @@
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -31,6 +40,26 @@ body {
 body,
 section.product-display {
   background-color: var(--solid-dark);
+}
+
+.icon-x2 {
+  font-size: 2em;
+}
+
+.icon-x3 {
+  font-size: 2.3em;
+}
+
+.dev-name {
+  color: var(--solid-blue);
+}
+
+.padded-less {
+  padding: 8px;
+}
+
+.padded-less-horizontal {
+  padding-inline: 8px;
 }
 
 nav {
@@ -98,11 +127,12 @@ ul.topnav li.right {
 
 section {
   border-bottom: 1px solid var(--grey-solid_10);
+  padding: 50px;
 }
 
 section.product-display {
   width: 100%;
-  height: 500px;
+  height: calc(100px + 65vh);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,12 +183,88 @@ section.product-display > a.download:hover {
 
 section.info {
   width: 100%;
-  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: var(--solid-darker);
+}
+
+section.info > .info-cards {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  padding: 50px;
+  gap: 2em;
+  overflow: hidden;
+}
+
+section.info > .info-cards > * {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+section.info > .info-cards .info-icon {
+  background-color: var(--solid-blue);
+  width: 100px;
+  height: 100px;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0px 0px 16px 4px rgba(48, 48, 214, 0.473);
+}
+
+section.info > .info-cards p {
+  text-align: center;
+}
+
+section.epilogue {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  /* background-color: var(--solid-darker); */
+}
+
+section.epilogue > * {
+  max-width: 1080px;
+  text-align: center;
+}
+
+section.epilogue > .heading {
+  /* justify-self: flex-start;   */
+  font-size: 2em;
+}
+
+section.form {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--solid-darker);
+}
+
+footer {
+  text-align: center;
+  font-size: 1em;
+  color: #eeeeeec0;
+  padding: 20px;
+}
+
+i.fa-heart {
+  color: hotpink;
 }
 
 @media screen and (max-width: 600px) {
@@ -185,6 +291,10 @@ section.info {
     float: none;
     display: block;
     text-align: left;
+  }
+
+  section {
+    padding: 20px;
   }
 }
 

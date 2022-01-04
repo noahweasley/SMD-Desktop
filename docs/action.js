@@ -42,5 +42,10 @@ if (os) {
     osIcon.className = "fa fa-linux";
   }
 } else {
-  osSpan.innerText = "Not supported on your device";
+  downloadButton.innerText = "Not supported on your device";
+  downloadButton.setAttribute("disabled", "true");
 }
+
+// date 
+const date = document.querySelector(".date");
+date.innerText = new Date(Date.now()).getFullYear(); 
