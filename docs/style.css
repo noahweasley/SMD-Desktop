@@ -32,6 +32,10 @@
   box-sizing: inherit;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -60,6 +64,33 @@ section.product-display {
 
 .padded-less-horizontal {
   padding-inline: 8px;
+}
+
+.scale-0 {
+  transform: scale(0, 0);
+  opacity: 0;
+}
+
+.scale-1 {
+  transform: scale(1, 1);
+  opacity: 1;
+}
+
+#top-button {
+  text-decoration: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  position: sticky;
+  bottom: 16px;
+  left: 16px;
+  background-color: var(--solid-green);
+  border-radius: 50%;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: 0.5s;
 }
 
 nav {
@@ -114,7 +145,7 @@ ul.topnav li a {
 }
 
 ul.topnav li a:hover:not(.active) {
-  background-color: #111;
+  color: var(--primary-color);
 }
 
 ul.topnav li a.active {
@@ -258,19 +289,27 @@ section.form {
 form.contact-form {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 2em;
-  padding: 50px;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
-form.contact-form > .name {
+.form-group {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  /* padding: 50px; */
+}
+
+form.contact-form .name {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 2em;
 }
 
-form.contact-form > .name > * {
+form.contact-form .name > * {
   flex: 1;
 }
 
@@ -349,7 +388,13 @@ i.fa-heart {
     padding: 20px;
   }
 
-  form.contact-form > .name > * {
+  .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  form.contact-form .name > * {
     flex: none;
   }
 
@@ -363,7 +408,13 @@ i.fa-heart {
     overflow: hidden;
   }
 
-  form.contact-form > .name > * {
+  .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  form.contact-form .name > * {
     flex: none;
   }
 }

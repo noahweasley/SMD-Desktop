@@ -25,7 +25,7 @@
                 <img src="assets/app_icon.png" alt="Homepage" width="45px" height="40px"><a href="http://www.github.com/noahweasley/smd-desktop"></a></img>
                 <p class="app-name">S.M.D</p>
             </div>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="#contact-form-section">Contact Us</a></li>
             <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Term of use</a></li>
             <li><a href="#" class="active">Home</a></li>
@@ -102,23 +102,29 @@
             </p>
         </section>
         
-        <section class="form">
+        <section class="form" id="contact-form-section">
             <h1 class="form-title">CONTACT US</h1>
             <form class="contact-form" action="" method="post">
-                <div class="name">
-                    <input class="form-control" placeholder="First Name" type="text" name="" id="">
-                    <input class="form-control" placeholder="Last Name" type="text" name="" id="">
+                <div class="form-group">
+                    
+                    <div class="name">
+                        <input class="form-control" placeholder="First Name" type="text" name="" id="" required>
+                        <input class="form-control" placeholder="Last Name" type="text" name="" id="" required>
+                    </div>
+                    <input class="form-control" placeholder="Email Address" type="email" name="" id="" required>
+                    <textarea rows="10" class="form-control" placeholder="Write your comment here" type="text" name="" id="" required></textarea>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    
                 </div>
-                <input class="form-control" placeholder="Email Address" type="email" name="" id="">
-                <textarea rows="10" class="form-control" placeholder="Write your comment here" type="text" name="" id=""></textarea>
-                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </section>
     </main>
 
     <footer>
-         <p>© <span class="date"></span> &nbsp S.M.D Desktop. Built with <i class="fa fa-heart padded-less" aria-hidden="true"></i> by <span class="dev-name">Noah Wesley</span></p>    
+        <p>© <span class="date"></span> &nbsp S.M.D Desktop. Built with <i class="fa fa-heart padded-less" aria-hidden="true"></i> by <span class="dev-name">Noah Wesley</span></p>    
     </footer>
+    
+    <a href="#" id="top-button" title="Go to top" class="scale-0"><i class="fa fa-arrow-up" aria-hidden="true"></i></a> 
     
     <script src="action.js" async defer></script>
 </body>

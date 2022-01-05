@@ -1,3 +1,15 @@
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function () {
+  //  Get the scroll button
+  const scrollbutton = document.getElementById("top-button");
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+    scrollbutton.classList.add("scale-1");
+  } else {
+    scrollbutton.classList.remove("scale-1");
+  }
+};
+
 /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
 function toggleNav() {
   const nav = document.getElementById("top-nav");
@@ -46,6 +58,6 @@ if (os) {
   downloadButton.setAttribute("disabled", "true");
 }
 
-// date 
+// date
 const date = document.querySelector(".date");
-date.innerText = new Date(Date.now()).getFullYear(); 
+date.innerText = new Date(Date.now()).getFullYear();
