@@ -1,4 +1,3 @@
-
 // When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function () {
   //  Get the scroll button
@@ -24,12 +23,11 @@ function getOS() {
   } else if (!os && /Linux/.test(platform)) {
     os = "Linux";
   }
-
   return os;
 }
 
 const downloadButton = document.querySelector(".download");
-const osSpan = downloadButton.lastChild;
+const osSpan = document.querySelector(".os");
 const osIcon = downloadButton.firstChild;
 
 let os = getOS();
