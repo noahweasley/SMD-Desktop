@@ -339,6 +339,7 @@ form.contact-form .name > * {
 }
 
 textarea.form-control {
+  min-height: 100px;
   max-height: 500px;
   resize: vertical;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
