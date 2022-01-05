@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMD - Spotify music downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body>
+    <nav>
+        <ul class="topnav" id="top-nav">
+            <div class="logo">
+                <img src="assets/app_icon.png" alt="Homepage" width="45px" height="40px"><a href="http://www.github.com/noahweasley/smd-desktop"></a></img>
+                <p class="app-name">S.M.D</p>
+            </div>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Term of use</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li class="icon">
+                <a href="javascript:void(0);" onclick="toggleNav()">
+                   <i class="fa fa-bars"></i>
+                </a>   
+            </li>
+        </ul>
+    </nav>
+    
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+        function toggleNav() {
+         const nav = document.getElementById("top-nav");
+         if (nav.className === "topnav") {
+             nav.className += " responsive";
+         } else {
+            nav.className = "topnav";
+            }
+        }
+    </script>
+</body>
+</html>

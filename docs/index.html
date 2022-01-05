@@ -26,8 +26,8 @@
                 <p class="app-name">S.M.D</p>
             </div>
             <li><a href="#contact-form-section">Contact Us</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Term of use</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Term of use</a></li>
             <li><a href="#" class="active">Home</a></li>
             <li class="icon">
                 <a href="javascript:void(0);" onclick="toggleNav()">
@@ -75,6 +75,7 @@
                     
                     <div class="info-icon">
                         <i class="fa fa-headphones icon-x3"></i>
+                        <i class="fas fa-headphones-alt icon-x3"></i>
                     </div>   
                     <p>Listen to ad-free music just the way you like it. Streaming when you have strong internet 
                         connection or downloaded when you are on a metered connection.</p>
@@ -127,6 +128,17 @@
     <a href="#" id="top-button" title="Go to top" class="scale-0"><i class="fa fa-arrow-up" aria-hidden="true"></i></a> 
     
     <script src="action.js" async defer></script>
+    <script>
+    /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+    function toggleNav() {
+     const nav = document.getElementById("top-nav");
+     if (nav.className === "topnav") {
+         nav.className += " responsive";
+     } else {
+        nav.className = "topnav";
+        }
+    }
+    </script>
 </body>
 
 </html>
