@@ -358,6 +358,8 @@ i.fa-heart {
   color: hotpink;
 }
 
+/* Mobile phone-like screen sizes */
+
 @media screen and (max-width: 600px) {
   ul.topnav li:not(:last-child) {
     display: none;
@@ -402,6 +404,8 @@ i.fa-heart {
     max-height: 300px;
   }
 }
+
+/* Tablet-like screen sizes */
 
 @media screen and (max-width: 996px) {
   ul.topnav > .logo {
