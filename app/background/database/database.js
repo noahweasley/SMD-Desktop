@@ -21,6 +21,8 @@ module.exports.Mode = Object.freeze({
   SELECT: "Some-download-data",
 });
 
+// ----------------------------------------------------------------------------------
+
 /**
  * The database object used in CRUD operations
  */
@@ -33,71 +35,137 @@ const database = (module.exports.database = knex({
   },
 }));
 
+// vs file is used to manage dabase versions
+function createVSFile() {
+  // the initial data in the vs file, when the database is created
+  const vsObj = {
+    DATABASE_VERSION: "1.0.0",
+  };
+  fs.writeFile(dbConfigFile, JSON.stringify(vsObj), function (err) {
+    if (err) console.log(`Error while creating VS file: ${err.message}`);
+  });
+  return "1.0.0";
+}
+
 // Creates the schema used in CRUD operation
 function createDatabaseSchema() {
-  createDBFolder();
+  return new Promise((resolve, reject) => {
+    createDBFolder();
 
-  function createDBFolder() {
-    fs.open(dbFile, "wx", (err, _fd) => {
-      function createDirectory() {
-        fs.mkdir(
-          dbPath,
-          {
-            recursive: true,
-          },
-          function (err) {
-            if (err) console.log("An error occurred while creating db directories");
-            else {
-              onCreateDatabase();
+    function createDBFolder() {
+      fs.open(dbFile, "wx", async (err, _fd) => {
+        function createDirectory() {
+          fs.mkdir(
+            dbPath,
+            {
+              recursive: true,
+            },
+            function (err) {
+              if (err) reject(`An error occurred while creating db directories: ${err.message}`);
+              else {
+                // if database folder was created successfully, then create the db and vs file and
+                // start populating it with tables
+                createVSFile();
+                resolve(onCreateDatabase());
+              }
             }
-          }
-        );
-      }
-
-      if (err) {
-        if (err.code === "EEXIST") {
-          if (checkDatabaseVersion()) onUpgradeDatabase();
-        } else if (err.code === "ENOENT") createDirectory(dbPath);
-        else console.log(err.code);
-      }
-    });
-  }
-
-  ///////////////////////////////////////
-  function checkDatabaseVersion() {
-    fs.openSync(dbConfigFile, "wx", (err, _fd) => {
-      if (err) {
-        if (err.code === "EEXIST") {
-        } else {
-          createVSFile();
+          );
         }
-      }
-    });
-  }
-  ///////////////////////////////////////
 
-  function onCreateDatabase() {
-    // Create the schema for the table to persist window properties on start-up
-    database.schema
-      .hasTable(DOWNLOADING_TABLE)
-      .then((exists) => {
-        if (!exists) {
-          return database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
-            tableBuilder.increments();
-          });
+        if (err) {
+          if (err.code === "EEXIST") {
+            let dbVersion = checkDatabaseVersion();
+            if (dbVersion !== DATABASE_VERSION) {
+              // call onUpgradeDatabase() when the database schema needs to be altered or updated
+              await upgradeDatabaseVersion();
+              resolve(onUpgradeDatabase(dbVersion, DATABASE_VERSION));
+            }
+          } else if (err.code === "ENOENT") createDirectory();
+          else console.log(err.code);
         }
-      })
-      .catch((error) => {
-        console.log(`An error occurred while creating schema: ${error.message}`);
       });
+    }
+
+    function upgradeDatabaseVersion() {
+      return new Promise((resolve, reject) => {
+        // read the curent database version
+        fs.readFile(dbConfigFile, function (err, vsf) {
+          if (err) {
+            // vs file corrupt! This would probably be caused by user action
+            reject(err.message);
+          } else {
+            let vsObj = JSON.parse(vsf.toString());
+            // replace with new database version
+            vsObj["DATABASE_VERSION"] = DATABASE_VERSION;
+            fs.writeFile(dbConfigFile, JSON.stringify(vsObj), function (err) {
+              if (err) reject(err.message);
+              else {
+                resolve(DATABASE_VERSION);
+              }
+            });
+          }
+        });
+      });
+    }
+
+    function checkDatabaseVersion() {
+      let dbVersion;
+      let data;
+
+      try {
+        data = fs.readFileSync(dbConfigFile, "utf-8");
+        dbVersion = JSON.parse(data)["DATABASE_VERSION"];
+      } catch (error) {
+        dbVersion = createVSFile();
+      }
+
+      return dbVersion;
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------------------
+
+/**
+ * Called in database lifecycle when the database is about to be created.
+ *  onUpgradeDatabase() would be called instead of this, if the database already exist.
+ */
+function onCreateDatabase() {
+  // Create the schema for the table to persist window properties on start-up
+  async function createTables() {
+    await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
+      tableBuilder.increments();
+      tableBuilder.integer("Track_Download_Size");
+      tableBuilder.string("Track_Playlist_Title");
+      tableBuilder.string("Track_Title");
+      tableBuilder.string("Track_Artists");
+    });
+
+    await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
+      tableBuilder.increments();
+      tableBuilder.boolean("Error_Occured");
+      tableBuilder.string("Download_State");
+      tableBuilder.string("Track_Playlist_Title");
+      tableBuilder.string("Track_Title");
+      tableBuilder.string("Track_Artists");
+      tableBuilder.integer("Downloaded_Size");
+      tableBuilder.integer("Track_Download_Size");
+      tableBuilder.string("Download_Progress");
+    });
   }
+
+  return createTables();
 }
 
 /**
+ * This callback would be called when the database version has changed.
+ * You should alter tables in this function
  *
+ * @param oldversion the old version code of the database
+ * @param newVersion the new version code of the database
  */
 function onUpgradeDatabase(oldVersion, newVersion) {
-  console.log("Database exists, onUpgradeDatabase() called");
+  console.log(`onUpgradeDatabase() called with: {${oldVersion}, ${newVersion}}`);
 }
 
 /**
@@ -121,10 +189,10 @@ module.exports.checkMode = function (mode) {
  *
  * @returns the list data as stored in the application's database
  */
-module.exports.getDownloadData = function (data, mode) {
+module.exports.getDownloadData = async function (arg, mode) {
   this.checkMode(mode);
-  createDatabaseSchema();
-  const table = database(DOWNLOADING_TABLE);
+  // only create database when the data is about to be used
+  await createDatabaseSchema();
   return null;
 };
 
@@ -133,19 +201,23 @@ module.exports.getDownloadData = function (data, mode) {
  *
  * @param {*} type the type of data to be added into database
  */
-module.exports.addDownloadData = function (data, mode) {
+module.exports.addDownloadData = async function (arg, mode) {
   this.checkMode(mode);
-  createDatabaseSchema();
-  const table = database(DOWNLOADS_TABLE);
+  // only create database when the data is about to be used
+  await createDatabaseSchema();
 };
 
+/**
+ *
+ */
+module.exports.updateDownloadData = async function (arg, mode) {};
 /**
  * Deletes download data to app's database
  *
  * @param {*} type the type of data to be added into database
  */
-module.exports.deleteDownloadData = function (data, mode) {
+module.exports.deleteDownloadData = async function (arg, mode) {
   this.checkMode(mode);
-  createDatabaseSchema();
-  const table = database(DOWNLOADS_TABLE);
+  // only create database when the data is about to be used
+  await createDatabaseSchema();
 };

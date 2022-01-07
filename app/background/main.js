@@ -77,7 +77,13 @@ ipcMain.on("navigate-link", (_event, arg) => {
 // request to fetch and display list data
 ipcMain.handle("get-list-data", () => {
   // query list data from sqlite database
-  return database.getDownloadData({}, database.Mode.ALL);
+  try {
+    database.getDownloadData({}, database.Mode.ALL);
+  } catch (error) {
+    console.log("Error: ", error.message);
+  }
+
+  return;
 });
 
 // ... show about window
