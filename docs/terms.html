@@ -25,9 +25,9 @@
                 <img src="assets/app_icon.png" alt="Homepage" width="45px" height="40px"><a href="http://www.github.com/noahweasley/smd-desktop"></a></img>
                 <p class="app-name">S.M.D</p>
             </div>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="active">Term of use</a></li>
             <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Term of use</a></li>
-            <li><a href="index.html" class="active">Home</a></li>
             <li class="icon">
                 <a href="javascript:void(0);" onclick="toggleNav()">
                    <i class="fa fa-bars"></i>
@@ -35,16 +35,13 @@
             </li>
         </ul>
     </nav>
+
     <script>
-        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-        function toggleNav() {
-         const nav = document.getElementById("top-nav");
-         if (nav.className === "topnav") {
-             nav.className += " responsive";
-         } else {
-            nav.className = "topnav";
-            }
-        }
+    /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+    function toggleNav() {
+     const nav = document.getElementById("top-nav");
+     nav.classList.toggle("responsive");
+    }
     </script>
 </body>
 </html>

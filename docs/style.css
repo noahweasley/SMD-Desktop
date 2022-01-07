@@ -113,6 +113,9 @@ ul.topnav {
   background-color: var(--solid-darker);
   padding: 16px 8px 16px 16px;
   border-bottom: 1px solid var(--grey-solid_10);
+  display: flex;
+  justify-content: flex-end;
+  min-height: 80px;
 }
 
 /* Hide the link that should open and close the topnav on small screens */
@@ -120,14 +123,18 @@ ul.topnav .icon {
   border: 1px solid var(--primary-color);
   display: none;
   transform: scaleX(1.2);
-  margin-right: 8px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 
 ul.topnav > .logo {
   display: flex;
-  float: left;
   max-width: 50px;
   pointer-events: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 ul.topnav > .logo p {
@@ -152,6 +159,11 @@ ul.topnav li a {
 
 ul.topnav li a:hover:not(.active) {
   color: var(--primary-color);
+}
+
+
+ul.topnav li a:visited {
+  color: white;
 }
 
 ul.topnav li a.active {
@@ -388,12 +400,14 @@ i.fa-heart {
 
   ul.topnav.responsive {
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   ul.topnav.responsive li.icon {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 20px;
+    top: 20px;
   }
 
   ul.topnav.responsive li {
