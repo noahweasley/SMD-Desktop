@@ -21,6 +21,15 @@ module.exports.Mode = Object.freeze({
   SELECT: "Some-download-data",
 });
 
+/**
+ *
+ */
+module.exports.Type = Object.freeze({
+  DOWNLOADED: "Downloaded",
+  DOWNLOADING: "Downloading",
+  JOINED: "Join",
+});
+
 // ----------------------------------------------------------------------------------
 
 /**
@@ -79,6 +88,8 @@ function createDatabaseSchema() {
               // call onUpgradeDatabase() when the database schema needs to be altered or updated
               await upgradeDatabaseVersion();
               resolve(onUpgradeDatabase(dbVersion, DATABASE_VERSION));
+            } else {
+              resolve(true);
             }
           } else if (err.code === "ENOENT") createDirectory();
           else console.log(err.code);
@@ -122,6 +133,8 @@ function createDatabaseSchema() {
       return dbVersion;
     }
   });
+
+  // promise end
 }
 
 // ---------------------------------------------------------------------------------------
@@ -133,25 +146,31 @@ function createDatabaseSchema() {
 function onCreateDatabase() {
   // Create the schema for the table to persist window properties on start-up
   async function createTables() {
-    await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
-      tableBuilder.increments();
-      tableBuilder.integer("Track_Download_Size");
-      tableBuilder.string("Track_Playlist_Title");
-      tableBuilder.string("Track_Title");
-      tableBuilder.string("Track_Artists");
-    });
+    try {
+      await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
+        tableBuilder.increments();
+        tableBuilder.integer("Track_Download_Size");
+        tableBuilder.string("Track_Playlist_Title");
+        tableBuilder.string("Track_Title");
+        tableBuilder.string("Track_Artists");
+      });
 
-    await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
-      tableBuilder.increments();
-      tableBuilder.boolean("Error_Occured");
-      tableBuilder.string("Download_State");
-      tableBuilder.string("Track_Playlist_Title");
-      tableBuilder.string("Track_Title");
-      tableBuilder.string("Track_Artists");
-      tableBuilder.integer("Downloaded_Size");
-      tableBuilder.integer("Track_Download_Size");
-      tableBuilder.string("Download_Progress");
-    });
+      await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
+        tableBuilder.increments();
+        tableBuilder.boolean("Error_Occured");
+        tableBuilder.string("Download_State");
+        tableBuilder.string("Track_Playlist_Title");
+        tableBuilder.string("Track_Title");
+        tableBuilder.string("Track_Artists");
+        tableBuilder.integer("Downloaded_Size");
+        tableBuilder.integer("Track_Download_Size");
+        tableBuilder.string("Download_Progress");
+      });
+
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   return createTables();
@@ -166,12 +185,14 @@ function onCreateDatabase() {
  */
 function onUpgradeDatabase(oldVersion, newVersion) {
   console.log(`onUpgradeDatabase() called with: {${oldVersion}, ${newVersion}}`);
+
+  return true;
 }
 
 /**
  * Checks if a particular mode is valid
  *
- * @param {*} mode the mode to be checked
+ * @param mode the mode to be checked
  * @returns return true if mode is valid, fthrows an exception if not
  */
 module.exports.checkMode = function (mode) {
@@ -187,37 +208,89 @@ module.exports.checkMode = function (mode) {
  * @param {*} type the type of download data to be retrieved, if null or empty all the
  * download data would be appended together, with downloading being the first and downloaded being the last
  *
+ * @param arg an object in format {query: {}}, as an additional query parameter
+ * @param mode the mode used in fetching the data from database
  * @returns the list data as stored in the application's database
  */
 module.exports.getDownloadData = async function (arg, mode) {
   this.checkMode(mode);
   // only create database when the data is about to be used
   await createDatabaseSchema();
-  return null;
+
+  if (arg["type"] == this.Type.DOWNLOADED) {
+    if (mode == this.Mode.ALL) {
+      return await database.select("*").from(DOWNLOADED_TABLE);
+    }
+  } else if (arg["type"] == this.Type.DOWNLOADING) {
+    if (mode == this.Mode.ALL) {
+      return await database.select("*").from(DOWNLOADING_TABLE);
+    }
+  } else throw new Error(`${arg["type"]} is not supported`);
 };
 
 /**
  * Adds download data to app's database
  *
- * @param {*} type the type of data to be added into database
+ * @param mode the mode used in fetching the data from database
+ * @param arg an object in format {query: {}}, as an additional query parameter
+ * @returns true if the data was added
  */
 module.exports.addDownloadData = async function (arg, mode) {
   this.checkMode(mode);
   // only create database when the data is about to be used
   await createDatabaseSchema();
+
+  if (arg["type"] == this.Type.DOWNLOADED) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else if (arg["type"] == this.Type.DOWNLOADING) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else throw new Error(`${arg["type"]} is not supported`);
+
+  return true;
 };
 
 /**
+ * Updates downlod data in app's database
  *
+ * @param arg an object in format {query: {}}, as an additional query parameter
+ * @param mode the mode used in fetching the data from database
+ * @returns true if the data was updated
  */
-module.exports.updateDownloadData = async function (arg, mode) {};
+module.exports.updateDownloadData = async function (arg, mode) {
+  this.checkMode(mode);
+  // only create database when the data is about to be used
+  await createDatabaseSchema();
+
+  if (arg["type"] == this.Type.DOWNLOADED) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else if (arg["type"] == this.Type.DOWNLOADING) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else throw new Error(`${arg["type"]} is not supported`);
+
+  return true;
+};
+
 /**
- * Deletes download data to app's database
+ * Deletes download data in app's database
  *
- * @param {*} type the type of data to be added into database
+ * @param arg an object in format {query: {}}, as an additional query parameter
+ * @param mode the mode used in fetching the data from database
  */
 module.exports.deleteDownloadData = async function (arg, mode) {
   this.checkMode(mode);
   // only create database when the data is about to be used
   await createDatabaseSchema();
+
+  if (arg["type"] == this.Type.DOWNLOADED) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else if (arg["type"] == this.Type.DOWNLOADING) {
+    if (mode == this.Mode.ALL) {
+    }
+  } else throw new Error(`${arg["type"]} is not supported`);
+  return true;
 };

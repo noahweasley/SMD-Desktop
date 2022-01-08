@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // retreive user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
-    if (data) {
+    if (data[0] && data[0].length > 0 && data[1] && data[1].length > 0) {
       populateList(data);
       // Now display the populated list items, becuase when they were created their visibility was set to gone.
       document.getElementsByTagName("li").forEach((listElement) => listElement.classList.remove("gone"));
@@ -19,7 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
       displayDecors();
     }
 
-    // display any indeterminate progress bar that exists inside main-pain's tab content 
+    // display any indeterminate progress bar that exists inside main-pain's tab content
     document.querySelectorAll(".tab-content .indeterminate-progress").forEach((loader) => {
       if (loader.id != "window-data-loader") loader.classList.add("gone");
     });

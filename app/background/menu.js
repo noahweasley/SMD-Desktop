@@ -3,14 +3,18 @@ const { Menu } = require("electron");
 module.exports = Menu.buildFromTemplate([
   {
     label: "Reload",
-    role: "reload"
+    role: "reload",
   },
   {
     label: "Force Reload",
-    role: "forceReload"
+    role: "forceReload",
   },
   {
     label: "Toggle Dev tools",
-    role: "toggleDevTools"
+    role: "toggleDevTools",
+  },
+  {
+    label: "Exit app",
+    role: "quit",
   },
 ]);

@@ -75,15 +75,14 @@ ipcMain.on("navigate-link", (_event, arg) => {
 });
 
 // request to fetch and display list data
-ipcMain.handle("get-list-data", () => {
-  // query list data from sqlite database
+ipcMain.handle("get-list-data", async () => {
   try {
-    database.getDownloadData({}, database.Mode.ALL);
+    let d1 = await database.getDownloadData({ type: database.Type.DOWNLOADED }, database.Mode.ALL);
+    let d2 = await database.getDownloadData({ type: database.Type.DOWNLOADING }, database.Mode.ALL);
+    return [d1, d2];
   } catch (error) {
-    console.log("Error: ", error.message);
+    console.log("Error occurred while fetching data: ", error.message);
   }
-
-  return;
 });
 
 // ... show about window
