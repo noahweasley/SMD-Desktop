@@ -5,7 +5,7 @@ module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
   PLAYLIST: "playlist",
   ALBUM: "album",
   ARTIST: "artist",
-  UNKNOWN: "unknown",
+  UNKNOWN: "Unknown",
 });
 
 /**

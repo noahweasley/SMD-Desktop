@@ -122,9 +122,9 @@ ipcMain.on("show-download-list", (_event) => {
 ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
 
 // ... download acton click
-ipcMain.on("download-click-event", (_event, id) => {
+ipcMain.on("download-click-event", (_event, args) => {
   download_window.close();
-  if (id === "proceed-download") beginDownloads();
+  if (args[0] === "proceed-download") beginDownloads(args[1]);
 });
 
 // ... clipboard content request

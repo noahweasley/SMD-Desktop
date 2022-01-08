@@ -90,15 +90,23 @@ module.exports.authorizeApp = function (args) {
 
 /**
  * Refreshes the user's Spotify access token
+ *
+ * @returns true if the access token was refreshed
  */
-module.exports.refreshSpoifyAccessToken = function () {
+module.exports.refreshSpoifyAccessToken = async function () {
   spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
   spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
   spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
 
-  spotifyApi.refreshAccessToken((_error, data) => {
+  let data;
+  try {
+    data = await spotifyApi.refreshAccessToken();
     Settings.setState("spotify-access-token", data.body["access_token"]);
     Settings.setState("spotify-refresh-token", data.body["refresh_token"]);
     Settings.setState("spotify-token-expiration", data.body["expires_in"]);
-  });
+  } catch (error) {
+    return false;
+  }
+
+  return !!data;
 };

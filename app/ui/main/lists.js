@@ -47,18 +47,17 @@ function populateList(data) {
 
   // populate the 'downloaded' - list with item fetched from database
   function createListItemDownloads(item) {
-    const listSize = item["length"] || 1;
     const uLElement = document.createElement("ul");
     uLElement.classList.add("list-group");
 
     // create the list items populating it with the fetched data from database
-    for (let i = 0; i < listSize; i++) {
+    for (let i = 0; i < item.length; i++) {
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", state["thumbnail"]);
+      thumbnailElement.setAttribute("src", item["thumbnail"]);
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody());
@@ -114,7 +113,7 @@ function populateList(data) {
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", state["thumbnail"]);
+      thumbnailElement.setAttribute("src", item["thumbnail"]);
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody());

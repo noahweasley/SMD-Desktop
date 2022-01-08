@@ -242,13 +242,19 @@ module.exports.addDownloadData = async function (arg, mode) {
 
   if (arg["type"] == this.Type.DOWNLOADED) {
     if (mode == this.Mode.ALL) {
+      let result = database.insert(arg["data"]).into(DOWNLOADED_TABLE);
+      // the value at result[0] would return the number os data inserted
+      if (result[0]) return true;
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
+      let result = database.insert(arg["data"]).into(DOWNLOADING_TABLE);
+      // the value at result[0] would return the number os data inserted
+      if (result[0]) return true;
     }
   } else throw new Error(`${arg["type"]} is not supported`);
 
-  return true;
+  return false;
 };
 
 /**
@@ -265,9 +271,11 @@ module.exports.updateDownloadData = async function (arg, mode) {
 
   if (arg["type"] == this.Type.DOWNLOADED) {
     if (mode == this.Mode.ALL) {
+      throw new Error("Update is not yet supported");
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
+      throw new Error("Update is not yet supported");
     }
   } else throw new Error(`${arg["type"]} is not supported`);
 
