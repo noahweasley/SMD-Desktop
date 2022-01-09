@@ -226,7 +226,7 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
   if (!dataReceived) return "An error occurred while retrieving album data";
 
   const albumName = data2.body["name"];
-  const thumbnails = data2.body["images"].map(thumb => thumb.url);
+  const thumbnails = data2.body["images"].map((thumb) => thumb.url);
 
   const tracks = data.body["items"];
 
@@ -271,8 +271,8 @@ async function performArtistDownloadAction(artistUrl) {
   if (!dataReceived) return "An error occurred while retrieving artist data";
 
   const artistName = data2.body["name"];
-  const thumbnails = data2.body["images"].map(thumb => thumb.url);
-  
+  const thumbnails = data2.body["images"].map((thumb) => thumb.url);
+
   const body = data.body;
 
   let tracks = body["tracks"];
@@ -317,8 +317,8 @@ async function performPlaylistDownloadAction(playlistUrl) {
   const body = data.body;
   const playListName = body["name"];
   const tracks = body["tracks"];
-  const thumbnails = data.body["images"].map(thumb => thumb.url);
-  
+  const thumbnails = data.body["images"].map((thumb) => thumb.url);
+
   let trackCollection = tracks["items"]
     .map((i) => i.track)
     .map((tr) => {
@@ -418,18 +418,23 @@ function createDownloadWindow() {
 /**
  * Spawns up a new SMD window with a limitations of 1 winodws
  */
-function createApplicationWindow(state) {
+async function createApplicationWindow() {
   // only 1 window is allowed to be spawned
   if (smd_window) return;
 
+  let winState = await Settings.getState("window-state", {});
+  winState = JSON.parse(winState);
+
   smd_window = new BrowserWindow({
+    x: winState.x,
+    y: winState.y,
     show: false,
     backgroundColor: "#0c0b0b",
     frame: false,
     minWidth: 900,
     minHeight: 400,
-    width: 1000,
-    height: 620,
+    width: winState.width ? winState.width : 1000,
+    height: winState.height ? winState.height : 620,
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, "../preload.js"),
@@ -437,14 +442,27 @@ function createApplicationWindow(state) {
   });
 
   Menu.setApplicationMenu(menu);
+
   smd_window.loadFile(path.join("app", "pages", "index.html"));
-  smd_window.once("ready-to-show", smd_window.show);
-  smd_window.on("close", (event) => {
+
+  smd_window.once("ready-to-show", () => {
+    smd_window.show();
+    // to prevent glith on window maximize, after displaying the window, then maximize it
+    if (winState.isMaximized) {
+      WINDOW_STATE = State.MAXIMIZED;
+      smd_window.maximize();
+    }
+  });
+
+  smd_window.on("close", async (event) => {
     event.preventDefault();
-    // let [x, y] = smd_window.getPosition();
-    // let [width, height] = smd_window.getSize();
-    // Settings.setState("window-state", `${{ x, y, width, height }}`);
-    smd_window.destroy();
+    let [x, y] = smd_window.getPosition();
+    let [width, height] = smd_window.getSize();
+    let isCompleted = await Settings.setState(
+      "window-state",
+      JSON.stringify({ x: x, y: y, width: width, height: height, isMaximized: smd_window.isMaximized() })
+    );
+    if (isCompleted) smd_window.destroy();
   });
 }
 
