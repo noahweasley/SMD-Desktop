@@ -1,4 +1,4 @@
 /node_modules
 /dist
 /app/config.json
-/test.js
+/tests
