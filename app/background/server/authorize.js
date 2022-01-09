@@ -56,10 +56,10 @@ server.get("/callback", (req, res) => {
 
     res.sendFile(path.join(__dirname, "../pages/success.html"));
 
-    Settings.setState("spotify-access-token", access_token);
-    Settings.setState("spotify-refresh-token", refresh_token);
-    Settings.setState("spotify-token-expiration", expires_in);
-    Settings.setState("secrets-received", true);
+    Settings.setStateSync("spotify-access-token", access_token);
+    Settings.setStateSync("spotify-refresh-token", refresh_token);
+    Settings.setStateSync("spotify-token-expiration", expires_in);
+    Settings.setStateSync("secrets-received", true);
 
     connection.close();
 
@@ -80,8 +80,8 @@ module.exports.authorizeApp = function (args) {
   if (args[2] == "auth-spotify") {
     spotifyApi.setClientId(args[0]);
     spotifyApi.setClientSecret(args[1]);
-    Settings.setState("spotify-user-client-id", args[0]);
-    Settings.setState("spotify-user-client-secret", args[1]);
+    Settings.setStateSync("spotify-user-client-id", args[0]);
+    Settings.setStateSync("spotify-user-client-secret", args[1]);
   } else {
   }
 
@@ -94,16 +94,16 @@ module.exports.authorizeApp = function (args) {
  * @returns true if the access token was refreshed
  */
 module.exports.refreshSpoifyAccessToken = async function () {
-  spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
-  spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
-  spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
+  spotifyApi.setClientId(Settings.getStateSync("spotify-user-client-id"));
+  spotifyApi.setClientSecret(Settings.getStateSync("spotify-user-client-secret"));
+  spotifyApi.setRefreshToken(Settings.getStateSync("spotify-refresh-token"));
 
   let data;
   try {
     data = await spotifyApi.refreshAccessToken();
-    Settings.setState("spotify-access-token", data.body["access_token"]);
-    Settings.setState("spotify-refresh-token", data.body["refresh_token"]);
-    Settings.setState("spotify-token-expiration", data.body["expires_in"]);
+    Settings.setStateSync("spotify-access-token", data.body["access_token"]);
+    Settings.setStateSync("spotify-refresh-token", data.body["refresh_token"]);
+    Settings.setStateSync("spotify-token-expiration", data.body["expires_in"]);
   } catch (error) {
     return false;
   }

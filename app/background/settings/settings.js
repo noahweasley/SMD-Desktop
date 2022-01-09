@@ -97,13 +97,49 @@ module.exports.hasKey = function (key, prefFileName) {
  * @param {*} key the key in settings in which it's value would be retrieved
  * @param {*} defaultValue the default value to be retrieved if that key has never been set
  */
-module.exports.getState = function (key, defaultValue, prefFileName) {
+module.exports.getStateSync = function (key, defaultValue, prefFileName) {
   checkArgs(key, prefFileName);
   // first check if key exists
   if (this.hasKey(key)) {
     const dataOB = getPreferences(prefFileName);
     return `${dataOB[`${key}`]}`;
   } else return `${defaultValue}`;
+};
+
+/**
+ * Retrieves the state of a user preference using a key-value pair
+ *
+ * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
+ *                     the default file would be used
+ * @param {*} key the key in settings in which it's value would be retrieved
+ * @param {*} defaultValue the default value to be retrieved if that key has never been set
+ * @returns a Promises that resolves to the value set previously or just resolves to the default value
+ */
+module.exports.getState = function (key, defaultValue, prefFileName) {
+  return new Promise((resolve, _reject) => {
+    checkArgs(key, prefFileName);
+    // first check if key exists
+    if (this.hasKey(key)) {
+      const dataOB = getPreferences(prefFileName);
+      resolve(`${dataOB[`${key}`]}`);
+    } else resolve(`${defaultValue}`);
+  });
+};
+
+/**
+ * Sets the state of a user preference using a key-value pair
+ * Note: A new key would be created after this request
+ *
+ * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
+ *                     the default file would be used
+ * @param {*} key the key in settings in which it's value would be retrieved
+ * @param {*} value the value to be set
+ */
+module.exports.setStateSync = function (key, value, prefFileName) {
+  checkArgs(key, prefFileName);
+  let pref = getPreferences(prefFileName);
+  pref[`${key}`] = `${value}`;
+  return setPreferences(pref);
 };
 
 /**
@@ -116,10 +152,12 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
  * @param {*} value the value to be set
  */
 module.exports.setState = function (key, value, prefFileName) {
-  checkArgs(key, prefFileName);
-  let pref = getPreferences(prefFileName);
-  pref[`${key}`] = `${value}`;
-  return setPreferences(pref);
+  return new Promise((resolve, _reject) => {
+    checkArgs(key, prefFileName);
+    let pref = getPreferences(prefFileName);
+    pref[`${key}`] = `${value}`;
+    resolve(setPreferences(pref));
+  });
 };
 
 /**
