@@ -127,6 +127,33 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
 };
 
 /**
+ * Retrieves the state of a user preference using a key-value pair
+ *
+ * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
+ *                     the default file would be used
+ * @param {*} key the key in settings in which it's value would be retrieved
+ * @param {*} defaultValue the default value to be retrieved if that key has never been set
+ * @returns a Promises that resolves to the values set previously or just resolves to an empty array
+ */
+module.exports.getStates = function (states, prefFileName) {
+  return new Promise((resolve, reject) => {
+    reject(checkArgs(prefFileName));
+    if (!states instanceof []) {
+      reject("states must be a qualified Array object");
+    }
+    const dataOB = getPreferences(prefFileName);
+    let values = [];
+    for (let key in states) {
+      // first check if key exists
+      if (this.hasKey(key)) {
+        values.push(`${dataOB[`${key}`]}`);
+      }
+    }
+    resolve(values);
+  });
+};
+
+/**
  * Sets the state of a user preference using a key-value pair
  * Note: A new key would be created after this request
  *
@@ -156,6 +183,27 @@ module.exports.setState = function (key, value, prefFileName) {
     checkArgs(key, prefFileName);
     let pref = getPreferences(prefFileName);
     pref[`${key}`] = `${value}`;
+    resolve(setPreferences(pref));
+  });
+};
+
+/**
+ * Sets the states of a user preference using a JSON object containing key-value pairs
+ *
+ * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
+ *                     the default file would be used
+ * @param states an object representing the states to be synched
+ */
+module.exports.setStates = function (states, prefFileName) {
+  return new Promise((resolve, reject) => {
+    reject(checkArgs(prefFileName));
+    if (!states instanceof {}) {
+      reject("states must be a qualified JSON object");
+    }
+    let pref = getPreferences(prefFileName);
+    for (let key in states) {
+      pref[`${key}`] = `${states[`${key}`]}`;
+    }
     resolve(setPreferences(pref));
   });
 };
