@@ -27,7 +27,7 @@ const State = Object.freeze({
 
 app.whenReady().then(() => {
   createAppFiles();
-  let windowState = Settings.getState("window-state");
+  let windowState = Settings.getStateSync("window-state");
   createApplicationWindow(windowState);
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createApplicationWindow();
@@ -64,7 +64,7 @@ ipcMain.on("navigate-link", (_event, arg) => {
       linkByType = path.join(`file://${app.getPath("music")}`, app.getName(), "download");
       break;
     case "#video":
-      linkByType = path.join(`file://${app.getPath("video")}`, app.getName());
+      linkByType = path.join(`file://${app.getPath("video")}`, app.getName(), "download");
       break;
     default:
       linkByType = arg;
@@ -95,12 +95,12 @@ ipcMain.handle("app-details", () => {
 
 // ... settings requests
 ipcMain.handle("get-states", (_event, args) => {
-  return Settings.getState(args[0], args[1]);
+  return Settings.getStateSync(args[0], args[1]);
 });
 
 // ... settings requests
 ipcMain.handle("set-states", (_event, args) => {
-  return Settings.setState(args[0], args[1]);
+  return Settings.setStateSync(args[0], args[1]);
 });
 
 // ... application authorization
@@ -163,10 +163,10 @@ function getSongData() {
     return error.message;
   }
 
-  spotifyApi.setClientId(Settings.getState("spotify-user-client-id"));
-  spotifyApi.setClientSecret(Settings.getState("spotify-user-client-secret"));
-  spotifyApi.setAccessToken(Settings.getState("spotify-access-token"));
-  spotifyApi.setRefreshToken(Settings.getState("spotify-refresh-token"));
+  spotifyApi.setClientId(Settings.getStateSync("spotify-user-client-id"));
+  spotifyApi.setClientSecret(Settings.getStateSync("spotify-user-client-secret"));
+  spotifyApi.setAccessToken(Settings.getStateSync("spotify-access-token"));
+  spotifyApi.setRefreshToken(Settings.getStateSync("spotify-refresh-token"));
 
   const spotifyLinkRegex = new RegExp("https://open.spotify.com");
   try {
@@ -208,13 +208,14 @@ function getSongData() {
  * @param albumUrl the album identifier to be used in download
  * @throws error if error occurred while fetching data, this can be caused by network
  */
-async function performAlbumDownloadAction(albumUrl, _limits) {
+async function performAlbumDownloadAction(albumUrl, limit = 20) {
   let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
-  let data, dataReceived;
+  let data, data2, dataReceived;
 
   for (let x = 0; x <= 3; x++) {
     try {
-      data = await spotifyApi.getAlbum(album);
+      data = await spotifyApi.getAlbumTracks(album, { limit });
+      data2 = await spotifyApi.getAlbum(album);
       dataReceived = true;
       break;
     } catch (err) {
@@ -224,12 +225,23 @@ async function performAlbumDownloadAction(albumUrl, _limits) {
 
   if (!dataReceived) return "An error occurred while retrieving album data";
 
-  const body = data.body;
-  const albumName = body["name"];
+  const albumName = data2.body["name"];
+  const thumbnails = data2.body["images"].map(thumb => thumb.url);
+
+  const tracks = data.body["items"];
+
+  let albumTracks = [];
+
+  tracks.forEach((track) => {
+    let songTitle = track["name"];
+    let artists = track["artists"];
+    let artistNames = artists.map((artist) => artist["name"]);
+    albumTracks.push({ songTitle, artistNames });
+  });
 
   return {
     type: SpotifyURLType.ALBUM,
-    description: {},
+    description: { thumbnails, albumName, albumTracks },
   };
 }
 
@@ -239,13 +251,16 @@ async function performAlbumDownloadAction(albumUrl, _limits) {
  * @param artistUrl the artist identifier to be used in download
  * @throws error if error occurred while fetching data, this can be caused by network
  */
-async function performArtistDownloadAction(artistUrl, _limits) {
+async function performArtistDownloadAction(artistUrl) {
   let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
-  let data, dataReceived;
+  let data, data2, dataReceived;
 
   for (let x = 0; x <= 3; x++) {
     try {
-      data = await spotifyApi.getArtist(artist);
+      let user = await spotifyApi.getMe();
+      let userCountry = user.body["country"];
+      data = await spotifyApi.getArtistTopTracks(artist, userCountry);
+      data2 = await spotifyApi.getArtist(artist);
       dataReceived = true;
       break;
     } catch (err) {
@@ -255,9 +270,25 @@ async function performArtistDownloadAction(artistUrl, _limits) {
 
   if (!dataReceived) return "An error occurred while retrieving artist data";
 
+  const artistName = data2.body["name"];
+  const thumbnails = data2.body["images"].map(thumb => thumb.url);
+  
+  const body = data.body;
+
+  let tracks = body["tracks"];
+
+  let artistTracks = [];
+
+  tracks.forEach((track) => {
+    let songTitle = track["name"];
+    let artists = track["artists"];
+    let artistNames = artists.map((artist) => artist["name"]);
+    artistTracks.push({ songTitle, artistNames });
+  });
+
   return {
     type: SpotifyURLType.ARTIST,
-    description: {},
+    description: { thumbnails, artistName, artistTracks },
   };
 }
 
@@ -286,7 +317,8 @@ async function performPlaylistDownloadAction(playlistUrl) {
   const body = data.body;
   const playListName = body["name"];
   const tracks = body["tracks"];
-
+  const thumbnails = data.body["images"].map(thumb => thumb.url);
+  
   let trackCollection = tracks["items"]
     .map((i) => i.track)
     .map((tr) => {
@@ -296,6 +328,7 @@ async function performPlaylistDownloadAction(playlistUrl) {
   return {
     type: SpotifyURLType.PLAYLIST,
     description: {
+      thumbnails,
       playListName,
       trackCollection,
     },
