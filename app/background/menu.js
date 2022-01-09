@@ -1,4 +1,4 @@
-const { Menu } = require("electron");
+const { app, Menu } = require("electron");
 
 module.exports = Menu.buildFromTemplate([
   {
@@ -14,7 +14,23 @@ module.exports = Menu.buildFromTemplate([
     role: "toggleDevTools",
   },
   {
-    label: "Exit app",
-    role: "quit",
+    label: "Exit",
+    accelerator: "ESC",
+    click: () => app.quit(),
+  },
+  {
+    label: "Restore",
+    accelerator: "F1",
+    click: (_i, win) => win.restore(),
+  },
+  {
+    label: "Maximize",
+    accelerator: "F2",
+    click: (_i, win) => win.maximize(),
+  },
+  {
+    label: "Minimize",
+    accelerator: "F3",
+    click: (_i, win) => win.minimize(),
   },
 ]);
