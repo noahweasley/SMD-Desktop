@@ -327,11 +327,7 @@ async function performPlaylistDownloadAction(playlistUrl) {
 
   return {
     type: SpotifyURLType.PLAYLIST,
-    description: {
-      thumbnails,
-      playListName,
-      trackCollection,
-    },
+    description: { thumbnails, playListName, trackCollection },
   };
 }
 
@@ -366,12 +362,7 @@ async function performTrackDownloadAction(trackUrl) {
 
   return {
     type: SpotifyURLType.TRACK,
-    description: [
-      {
-        songTitle,
-        artistNames,
-      },
-    ],
+    description: { songTitle, artistNames },
   };
 }
 
