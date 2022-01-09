@@ -9,15 +9,19 @@
 **N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-Desktop/tree/master/app)_
 
 
-| Folder      | Function                                                                               |
-|-------------|----------------------------------------------------------------------------------------|
-| assets      | contains all application assets used in both build and production                      |
-| background  | contains all the main processes (Node JS) code, executed on the background.            |
-| fonts       | contains Photon's font and icon library                                                |
-| pages       | contains all the HTML files that would be loaded into each Browser Window              |
-| stylesheets | contains CSS or stylesheets that would accompany each page                             |
-| ui          | contains all the renderer processes (Chromium v8 Engine) code, executed on the browser |
-|             |                                                                                        |
+| Folder                    | Function                                                                               |
+|---------------------------|----------------------------------------------------------------------------------------|
+| app                       | contains main application code used in production                                      |
+| app/background            | contains all the main processes (Node JS) code, executed on the background.            |
+| app/background/database   | contains all the main processes (Node JS) code, executed on the background.            |
+| app/background/server     | contains all the main processes (Node JS) code, executed on the background.            |
+| app/background/settings   | contains all the main processes (Node JS) code, executed on the background.            |
+| app/fonts                 | contains Photon's font and icon library                                                |
+| app/stylesheets           | contains CSS or stylesheets that would accompany each page                             |
+| app/pages                 | contains all the HTML files that would be loaded into each Browser Window              |
+| app/ui                    | contains all the renderer processes (Chromium v8 Engine) code, executed on the browser |
+| assets                    | contains all application assets used in both build and production                      |
+| docs                      | contains code used in product website                                                  |
 
 
 ## Contributing
