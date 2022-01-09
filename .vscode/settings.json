@@ -1,3 +1,13 @@
 {
-    "workbench.colorTheme": "Halcyon"
+    "workbench.colorTheme": "Halcyon",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "UserDB",
+            "group": "Grroup1",
+            "database": "C:\\Users\\Noah\\AppData\\Roaming\\SMD Desktop\\User\\Database\\UserDB.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
