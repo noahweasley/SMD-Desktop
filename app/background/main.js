@@ -414,7 +414,11 @@ async function createApplicationWindow() {
   if (smd_window) return;
 
   let winState = await Settings.getState("window-state", {});
-  winState = JSON.parse(winState);
+  try {
+    winState = JSON.parse(winState);
+  } catch (error) {
+    winState = {};
+  }
 
   smd_window = new BrowserWindow({
     x: winState.x,
