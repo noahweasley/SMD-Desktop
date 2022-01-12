@@ -146,6 +146,7 @@ ul.topnav > .logo p {
 ul.topnav li {
   position: relative;
   float: right;
+  margin-right: 10px;
 }
 
 ul.topnav li a {
@@ -172,6 +173,11 @@ ul.topnav li a.active {
 
 ul.topnav li.right {
   float: right;
+}
+
+ul.topnav #donate {
+  color: white;
+  background-color: var(--solid-green);
 }
 
 section {
@@ -388,7 +394,7 @@ i.fa-heart {
 
 /* Mobile phone-like screen sizes */
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   ul.topnav li:not(:last-child) {
     display: none;
   }
