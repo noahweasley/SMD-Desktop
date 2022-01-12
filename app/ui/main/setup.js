@@ -7,7 +7,7 @@ function dataReveal() {
   const titileBar = document.querySelector(".toolbar-header");
   titileBar.classList.remove("gone");
 
-  window.bridgeApis.invoke("get-states", ["secrets-received", "false"]).then((value) => {
+  window.bridgeApis.invoke("get-states", ["spotify-secrets-received", "false"]).then((value) => {
     loader.classList.add("gone");
     if (value == "true") {
       windowContent.classList.remove("gone");

@@ -38,6 +38,9 @@
   "dependencies": {
     "express": "^4.17.2",
     "knex": "^0.95.15",
+    "soundcloud": "^3.3.2",
+    "soundcloud-downloader": "^1.0.0",
+    "soundcloud-v2-api": "^0.1.4",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.0.2"
   }

@@ -98,14 +98,26 @@ ipcMain.handle("get-states", (_event, args) => {
   return Settings.getStateSync(args[0], args[1]);
 });
 
+ipcMain.handle("get-multiple-states", (_event, args) => {
+  return await Settings.getStates(args);
+})
 // ... settings requests
 ipcMain.handle("set-states", (_event, args) => {
   return Settings.setStateSync(args[0], args[1]);
 });
 
 // ... application authorization
-ipcMain.handle("authorize-app", (_event, args) => {
-  authorizeApp(args);
+ipcMain.handle("authorize-app", async (_event, args) => {
+  if (args[1] == "auth-soundcloud") {
+    let [res1, res2] = await Promise.all([
+      Settings.setState("soundcloud-secrets-received", true),
+      Settings.setState("soundcloud-user-client-id", args[0]),
+    ]);
+
+    return res1 && res2;
+  } else {
+    authorizeApp(args);
+  }
 });
 
 // ...

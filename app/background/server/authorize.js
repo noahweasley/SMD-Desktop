@@ -59,7 +59,7 @@ server.get("/callback", (req, res) => {
     Settings.setStateSync("spotify-access-token", access_token);
     Settings.setStateSync("spotify-refresh-token", refresh_token);
     Settings.setStateSync("spotify-token-expiration", expires_in);
-    Settings.setStateSync("secrets-received", true);
+    Settings.setStateSync("spotify-secrets-received", true);
 
     connection.close();
 
@@ -82,10 +82,9 @@ module.exports.authorizeApp = function (args) {
     spotifyApi.setClientSecret(args[1]);
     Settings.setStateSync("spotify-user-client-id", args[0]);
     Settings.setStateSync("spotify-user-client-secret", args[1]);
-  } else {
+    
+    connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
   }
-
-  connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
 };
 
 /**

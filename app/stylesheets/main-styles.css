@@ -723,6 +723,14 @@ form {
   margin: 30px;
 }
 
+.btn.btn-form:hover{
+  opacity: 0.8;
+}
+
+.btn.btn-form:active {
+  opacity: 1;
+}
+
 .icon-check {
   color: var(--spotify-green);
   border-radius: 50%;
@@ -738,4 +746,17 @@ form {
 
 .icon-spotify {
   color: var(--spotify-green);
+}
+
+#auth-soundcloud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+}
+
+#auth-soundcloud span {
+  color: white;
+  border: none;
+  margin: 0px;
 }

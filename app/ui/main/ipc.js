@@ -40,11 +40,17 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  window.bridgeApis.invoke("app-details").then((content) => {
+    const names = document.querySelectorAll(".name");
+    names.forEach((name) => {
+      name.innerText = content[0];
+    });
+  });
+
   // ..
   const s = document.getElementById("spcid");
   const s1 = document.getElementById("spcs");
   const s2 = document.getElementById("socid");
-  const s3 = document.getElementById("socs");
 
   document.querySelectorAll(".btn-form").forEach((auth) => {
     auth.addEventListener("click", () => {
@@ -55,16 +61,24 @@ window.addEventListener("DOMContentLoaded", () => {
           data = [s.value, s1.value];
           break;
         case "auth-soundcloud":
-          data = [s2.value, s3.value];
+          data = [s2.value];
           break;
       }
 
       data.push(auth.id);
-      window.bridgeApis.invoke("authorize-app", data);
-
-      // disable button and enable it only when the server timeout has reached
-      auth.setAttribute("disabled", "true");
-      setTimeout(() => auth.removeAttribute("disabled"), 11000);
+      window.bridgeApis.invoke("authorize-app", data).then((result) => {
+        if (result && auth.id == "auth-soundcloud") {
+          auth.innerText = "Saved";
+          // <span class="icon icon-check"></span>
+          const icon = document.createElement("span");
+          icon.classList.add("icon", "icon-check");
+          auth.appendChild(icon);
+        } else {
+          // disable button and enable it only when the server timeout has reached
+          auth.setAttribute("disabled", "true");
+          setTimeout(() => auth.removeAttribute("disabled"), 30000);
+        }
+      });
     });
   });
 });

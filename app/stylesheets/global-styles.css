@@ -44,6 +44,10 @@ body {
   display: none;
 }
 
+.op-0 {
+opacity: 0;  
+}
+
 .gone {
   display: none;
 }
