@@ -100,7 +100,7 @@ ipcMain.handle("get-states", (_event, args) => {
 
 ipcMain.handle("get-multiple-states", async (_event, args) => {
   return await Settings.getStates(args);
-})
+});
 
 // ... settings requests
 ipcMain.handle("set-states", (_event, args) => {

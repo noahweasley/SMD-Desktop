@@ -137,13 +137,13 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
  */
 module.exports.getStates = function (states, prefFileName) {
   return new Promise((resolve, reject) => {
-    reject(checkArgs(prefFileName));
-    if (!states instanceof []) {
+    checkArgs(prefFileName);
+    if (!states instanceof Array) {
       reject("states must be a qualified Array object");
     }
     const dataOB = getPreferences(prefFileName);
     let values = [];
-    for (let key in states) {
+    for (let key of states) {
       // first check if key exists
       if (this.hasKey(key)) {
         values.push(`${dataOB[`${key}`]}`);

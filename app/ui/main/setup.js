@@ -7,15 +7,17 @@ function dataReveal() {
   const titileBar = document.querySelector(".toolbar-header");
   titileBar.classList.remove("gone");
 
-  window.bridgeApis.invoke("get-states", ["spotify-secrets-received", "false"]).then((value) => {
-    loader.classList.add("gone");
-    if (value == "true") {
-      windowContent.classList.remove("gone");
-      modal.style.setProperty("display", "none");
-    } else {
-      modal.style.setProperty("display", "flex");
-    }
-  });
+  window.bridgeApis
+    .invoke("get-multiple-states", ["spotify-secrets-received", "soundcloud-secrets-received"])
+    .then((value) => {
+      loader.classList.add("gone");
+      if (value[0] == "true" && value[1] == "true") {
+        windowContent.classList.remove("gone");
+        modal.style.setProperty("display", "none");
+      } else {
+        modal.style.setProperty("display", "flex");
+      }
+    });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
