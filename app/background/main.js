@@ -98,9 +98,10 @@ ipcMain.handle("get-states", (_event, args) => {
   return Settings.getStateSync(args[0], args[1]);
 });
 
-ipcMain.handle("get-multiple-states", (_event, args) => {
+ipcMain.handle("get-multiple-states", async (_event, args) => {
   return await Settings.getStates(args);
 })
+
 // ... settings requests
 ipcMain.handle("set-states", (_event, args) => {
   return Settings.setStateSync(args[0], args[1]);
