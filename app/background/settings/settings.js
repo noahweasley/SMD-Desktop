@@ -82,7 +82,7 @@ function setPreferences(pref, prefFileName) {
 module.exports.hasKey = function (key, prefFileName) {
   checkArgs(key, prefFileName);
   // check if object has property key
-  for (let pref in getPreferences()) {
+  for (let pref in getPreferences(prefFileName)) {
     if (pref === key) return true;
   }
 
@@ -100,7 +100,7 @@ module.exports.hasKey = function (key, prefFileName) {
 module.exports.getStateSync = function (key, defaultValue, prefFileName) {
   checkArgs(key, prefFileName);
   // first check if key exists
-  if (this.hasKey(key)) {
+  if (this.hasKey(key, prefFileName)) {
     const dataOB = getPreferences(prefFileName);
     return `${dataOB[`${key}`]}`;
   } else return `${defaultValue}`;
@@ -119,7 +119,7 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
   return new Promise((resolve, _reject) => {
     checkArgs(key, prefFileName);
     // first check if key exists
-    if (this.hasKey(key)) {
+    if (this.hasKey(key, prefFileName)) {
       const dataOB = getPreferences(prefFileName);
       resolve(`${dataOB[`${key}`]}`);
     } else resolve(`${defaultValue}`);
@@ -145,8 +145,10 @@ module.exports.getStates = function (states, prefFileName) {
     let values = [];
     for (let key of states) {
       // first check if key exists
-      if (this.hasKey(key)) {
+      if (this.hasKey(key, prefFileName)) {
         values.push(`${dataOB[`${key}`]}`);
+      } else {
+        values.push(null);
       }
     }
     resolve(values);
@@ -218,7 +220,7 @@ module.exports.deleteKey = function (key, prefFileName) {
   checkArgs(key, prefFileName);
   let pref = getPreferences();
   // check if key is present in prefs
-  if (this.hasKey(key)) {
+  if (this.hasKey(key, prefFileName)) {
     delete pref[`${key}`];
   } else {
     // nothing was deleted, but still return true
