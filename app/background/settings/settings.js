@@ -203,9 +203,8 @@ module.exports.setStates = function (states, prefFileName) {
       reject("states must be a qualified JSON object");
     }
     let pref = getPreferences(prefFileName);
-    for (let key in states) {
-      pref[`${key}`] = `${states[`${key}`]}`;
-    }
+    Object.keys(states).forEach((key) => (pref[`${key}`] = `${states[`${key}`]}`));
+
     resolve(setPreferences(pref));
   });
 };
