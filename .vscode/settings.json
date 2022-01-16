@@ -9,5 +9,6 @@
             "database": "C:\\Users\\Noah\\AppData\\Roaming\\SMD Desktop\\User\\Database\\UserDB.db"
         }
     ],
-    "sqltools.useNodeRuntime": true
+    "sqltools.useNodeRuntime": true,
+    "liveServer.settings.port": 5501
 }
