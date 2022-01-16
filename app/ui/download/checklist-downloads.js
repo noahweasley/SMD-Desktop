@@ -13,6 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
   select.forEach((s_cbx) => {
     s_cbx.addEventListener("click", () => {
       SELECTED_POS[Array.from(select).indexOf(s_cbx)] = s_cbx.checked;
+      console.log(SELECTED_POS);
     });
   });
 
@@ -23,7 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      window.bridgeApis.send("download-click-event", button.id, listData);
+      window.bridgeApis.send("download-click-event", [button.id, listData, SELECTED_POS]);
     });
   });
 
@@ -50,11 +51,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector(".loader");
     const errorDecoration = document.querySelector(".error-decor");
 
-    const list = document.querySelector(".list");
+    const list = document.querySelector(".list-group");
 
     window.bridgeApis.invoke("download-data").then((data) => {
       loader.classList.add("gone");
-      if (!data instanceof String) {
+      if (data instanceof Object) {
         displayDataOnList(data, list);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
@@ -70,6 +71,41 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function displayDataOnList(data, list) {
     listData = data;
+    if (data["type"] == "album") {
+      persistAlbumOnList(list, data["description"]);
+    }
+
+    function persistAlbumOnList(list, description) {
+      for (let pos = 0; pos < description["albumTracks"].length; pos++) {
+        appendListItem(pos, list, description);
+      }
+
+      function appendListItem(position, list, description) {
+        //   <li class="list-group-item">
+        //   <img
+        //     class="media-object pull-left"
+        //     src="../../sample-images/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg"
+        //   />
+
+        //   <div class="media-body">
+        //     <strong>8. Middle Finger</strong>
+        //     <p class="message">Failed to download, please try again</p>
+        //   </div>
+
+        //   <label for="select">
+        //     <input type="checkbox" name="select" id="select" class="cbx-select" />
+        //   </label>
+        // </li>
+        const listElement = document.createElement("li");
+        const thumbnailElement = document.createElement("img");
+        thumbnailElement.classList.add("media-object", "pull-left");
+        
+        thumbnailElement.setAttribute("src", description.thumbnails[0]);
+        listElement.appendChild(thumbnailElement);
+        
+        list.appendChild(listElement);
+      }
+    }
   }
 
   // end DOMContentLoaded callbck

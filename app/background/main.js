@@ -23,11 +23,12 @@ const State = Object.freeze({
   FOCUSED: "window-focused",
   MAXIMIZED: "window-maximized",
   MINIMIZED: "window-minimized",
+  DEFAULT: "window-default",
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   createAppFiles();
-  let windowState = Settings.getStateSync("window-state");
+  let windowState = await Settings.getState("window-state");
   createApplicationWindow(windowState);
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createApplicationWindow();
@@ -46,12 +47,12 @@ ipcMain.on("action-click-event", (_event, id) => {
   } else if (id === "window-action-minimize") {
     smd_window.minimize();
   } else {
-    if (!!!WINDOW_STATE || WINDOW_STATE === State.MINIMIZED) {
+    if (!!!WINDOW_STATE || WINDOW_STATE === State.DEFAULT) {
       smd_window.maximize();
       WINDOW_STATE = State.MAXIMIZED;
     } else {
       smd_window.restore();
-      WINDOW_STATE = State.MINIMIZED;
+      WINDOW_STATE = State.DEFAULT;
     }
   }
 });
@@ -132,12 +133,12 @@ ipcMain.on("show-download-list", (_event) => {
 });
 
 // ... request to start downloading
-ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
+ipcMain.on("begin-download", (_event) => beginDownloads());
 
 // ... download acton click
 ipcMain.on("download-click-event", (_event, args) => {
   download_window.close();
-  if (args[0] === "proceed-download") beginDownloads(args[1]);
+  if (args[0] === "proceed-download") beginDownloads(args);
 });
 
 // ... clipboard content request
@@ -223,39 +224,40 @@ function getSongData() {
  */
 async function performAlbumDownloadAction(albumUrl, limit = 20) {
   let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
-  let data, data2, dataReceived;
-
+  let data, dataReceived;
+  
   for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getAlbumTracks(album, { limit });
-      data2 = await spotifyApi.getAlbum(album);
       dataReceived = true;
       break;
     } catch (err) {
       refreshSpoifyAccessToken();
     }
   }
-
+  
   if (!dataReceived) return "An error occurred while retrieving album data";
-
-  const albumName = data2.body["name"];
-  const thumbnails = data2.body["images"].map((thumb) => thumb.url);
-
-  const tracks = data.body["items"];
-
+  
+  const tracks = data.body["tracks"].items;
+  const albumName = data.body["name"];
+  const thumbnails = data.body["images"].map((thumb) => thumb.url);
+  
   let albumTracks = [];
-
+  
   tracks.forEach((track) => {
     let songTitle = track["name"];
     let artists = track["artists"];
     let artistNames = artists.map((artist) => artist["name"]);
-    albumTracks.push({ songTitle, artistNames });
-  });
-
+    let thumbnails = track["images"];
+    albumTracks.push({thumbnails,  songTitle, artistNames });
+  });  
+  
+  
   return {
     type: SpotifyURLType.ALBUM,
     description: { thumbnails, albumName, albumTracks },
   };
+
 }
 
 /**
@@ -382,7 +384,13 @@ async function performTrackDownloadAction(trackUrl) {
 /**
  * Starts donwloading tracks available at the the link url in the clipboard
  */
-function beginDownloads(args) {}
+function beginDownloads(args) {
+  if (args) {
+  } else {
+    let trackData = getSongData();
+    console.log(trackData);
+  }
+}
 
 /**
  * Creates a download window with the data speified
@@ -504,14 +512,16 @@ function createAboutWindow() {
  * create the download directory
  */
 function createAppFiles() {
-  const downloadDir = path.join(app.getPath("music"), app.getName(), "download");
+  const downloadDir = path.join(app.getPath("music"), app.getName(), "Download");
   const thumbnailDir = path.join(downloadDir, ".thumb");
+  const tempThumbDir = path.join(downloadDir, ".temp", ".thumb");
 
   fs.open(downloadDir, "r+", (err, _fd) => {
     if (err) {
       if (err.code === "EEXIST") return;
       else if (err.code === "ENOENT") {
-        fs.mkdirSync(thumbnailDir, { recursive: true });
+        fs.mkdir(thumbnailDir, { recursive: true }, (_err) => {});
+        fs.mkdir(tempThumbDir, { recursive: true }, (_err) => {});
       } else console.log(err.code);
     }
   });

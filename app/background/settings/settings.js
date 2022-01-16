@@ -195,17 +195,25 @@ module.exports.setState = function (key, value, prefFileName) {
  * @param {*} prefFileName refers to file name for the preference to be use if this was set, if not, then
  *                     the default file would be used
  * @param states an object representing the states to be synched
+ * @returns the
  */
 module.exports.setStates = function (states, prefFileName) {
   return new Promise((resolve, reject) => {
-    reject(checkArgs(prefFileName));
-    if (!states instanceof {}) {
+    let inserted = [];
+    checkArgs(prefFileName);
+    if (!states instanceof Object) {
       reject("states must be a qualified JSON object");
     }
     let pref = getPreferences(prefFileName);
-    Object.keys(states).forEach((key) => (pref[`${key}`] = `${states[`${key}`]}`));
+    Object.keys(states).forEach((key) => {
+      pref[`${key}`] = `${states[`${key}`]}`;
+      inserted.push(pref[`${key}`]);
+      return;
+    });
 
-    resolve(setPreferences(pref));
+    if (!setPreferences(pref)) return;
+
+    resolve(inserted);
   });
 };
 

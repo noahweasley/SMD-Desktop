@@ -40,7 +40,7 @@ server.get("/callback", (req, res) => {
   const code = req.query.code;
 
   if (error) {
-    res.sendFile(path.join(__dirname, "../pages/failed.html"));
+    res.sendFile(path.join(__dirname, "../../pages/failed.html"));
     connection.close();
     timeout = null;
     return;
@@ -54,7 +54,7 @@ server.get("/callback", (req, res) => {
     spotifyApi.setAccessToken(access_token);
     spotifyApi.setRefreshToken(refresh_token);
 
-    res.sendFile(path.join(__dirname, "../pages/success.html"));
+    res.sendFile(path.join(__dirname, "../../pages/success.html"));
 
     Settings.setStateSync("spotify-access-token", access_token);
     Settings.setStateSync("spotify-refresh-token", refresh_token);
@@ -76,14 +76,20 @@ server.get("/callback", (req, res) => {
  *
  * @param args [0] = Client ID , [1] = Client secret, [2] authorization method
  */
-module.exports.authorizeApp = function (args) {
-  if (args[2] == "auth-spotify") {
-    spotifyApi.setClientId(args[0]);
-    spotifyApi.setClientSecret(args[1]);
-    Settings.setStateSync("spotify-user-client-id", args[0]);
-    Settings.setStateSync("spotify-user-client-secret", args[1]);
-    
-    connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
+module.exports.authorizeApp = async function (args) {
+  // start a server at port 8888 only if that server isn't alive
+  if (!connection) {
+    if (args[2] == "auth-spotify") {
+      let inserted = await Settings.setStates({
+        "spotify-user-client-id": args[0],
+        "spotify-user-client-secret": args[1],
+      });
+
+      spotifyApi.setClientId(inserted[0]);
+      spotifyApi.setClientSecret(inserted[1]);
+
+      connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
+    }
   }
 };
 
