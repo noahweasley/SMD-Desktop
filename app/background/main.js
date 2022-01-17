@@ -252,7 +252,6 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
     albumTracks.push({thumbnails,  songTitle, artistNames });
   });  
   
-  
   return {
     type: SpotifyURLType.ALBUM,
     description: { thumbnails, albumName, albumTracks },
@@ -267,44 +266,46 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
  * @throws error if error occurred while fetching data, this can be caused by network
  */
 async function performArtistDownloadAction(artistUrl) {
-  let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
-  let data, data2, dataReceived;
+  return "Artist URL support coming soon, try again later";
+  // let artist = artistUrl.substring("https://open.spotify.com/artist/".length, artistUrl.length);
+  // let data, data2, dataReceived;
 
-  for (let x = 0; x <= 3; x++) {
-    try {
-      let user = await spotifyApi.getMe();
-      let userCountry = user.body["country"];
-      data = await spotifyApi.getArtistTopTracks(artist, userCountry);
-      data2 = await spotifyApi.getArtist(artist);
-      dataReceived = true;
-      break;
-    } catch (err) {
-      refreshSpoifyAccessToken();
-    }
-  }
+  // for (let x = 0; x <= 3; x++) {
+  //   try {
+  //     let user = await spotifyApi.getMe();
+  //     let userCountry = user.body["country"];
+  //     data = await spotifyApi.getArtistTopTracks(artist, userCountry);
+  //     data2 = await spotifyApi.getArtist(artist);
+  //     dataReceived = true;
+  //     break;
+  //   } catch (err) {
+  //     refreshSpoifyAccessToken();
+  //   }
+  // }
 
-  if (!dataReceived) return "An error occurred while retrieving artist data";
+  // if (!dataReceived) return "An error occurred while retrieving artist data";
 
-  const artistName = data2.body["name"];
-  const thumbnails = data2.body["images"].map((thumb) => thumb.url);
+  // const artistName = data2.body["name"];
+  // const thumbnails = data2.body["images"].map((thumb) => thumb.url);
 
-  const body = data.body;
+  // const body = data.body;
 
-  let tracks = body["tracks"];
+  // let tracks = body["tracks"];
 
-  let artistTracks = [];
+  // let artistTracks = [];
 
-  tracks.forEach((track) => {
-    let songTitle = track["name"];
-    let artists = track["artists"];
-    let artistNames = artists.map((artist) => artist["name"]);
-    artistTracks.push({ songTitle, artistNames });
-  });
+  
+  // tracks.forEach((track) => {
+  //   let songTitle = track["name"];
+  //   let artists = track["artists"];
+  //   let artistNames = artists.map((artist) => artist["name"]);
+  //   artistTracks.push({ songTitle, artistNames });
+  // });
 
-  return {
-    type: SpotifyURLType.ARTIST,
-    description: { thumbnails, artistName, artistTracks },
-  };
+  // return {
+  //   type: SpotifyURLType.ARTIST,
+  //   description: { thumbnails, artistName, artistTracks },
+  // };
 }
 
 /**
@@ -384,10 +385,10 @@ async function performTrackDownloadAction(trackUrl) {
 /**
  * Starts donwloading tracks available at the the link url in the clipboard
  */
-function beginDownloads(args) {
+async function beginDownloads(args) {
   if (args) {
   } else {
-    let trackData = getSongData();
+    let trackData = await getSongData();
     console.log(trackData);
   }
 }
