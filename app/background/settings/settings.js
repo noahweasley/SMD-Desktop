@@ -208,11 +208,9 @@ module.exports.setStates = function (states, prefFileName) {
     Object.keys(states).forEach((key) => {
       pref[`${key}`] = `${states[`${key}`]}`;
       inserted.push(pref[`${key}`]);
-      return;
     });
 
-    if (!setPreferences(pref)) return;
-
+    setPreferences(pref);
     resolve(inserted);
   });
 };
