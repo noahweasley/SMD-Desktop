@@ -22,7 +22,7 @@ const scopes = [
   "user-read-recently-played",
 ];
 
-const TIMEOUT = 10000;
+const TIMEOUT = 30000;
 let timeout;
 let connection;
 
@@ -46,7 +46,7 @@ server.get("/callback", (req, res) => {
     return;
   }
 
-  spotifyApi.authorizationCodeGrant(code).then((data) => {
+  spotifyApi.authorizationCodeGrant(code).then(async (data) => {
     const access_token = data.body["access_token"];
     const refresh_token = data.body["refresh_token"];
     const expires_in = data.body["expires_in"];
@@ -56,10 +56,12 @@ server.get("/callback", (req, res) => {
 
     res.sendFile(path.join(__dirname, "../../pages/success.html"));
 
-    Settings.setStateSync("spotify-access-token", access_token);
-    Settings.setStateSync("spotify-refresh-token", refresh_token);
-    Settings.setStateSync("spotify-token-expiration", expires_in);
-    Settings.setStateSync("spotify-secrets-received", true);
+    await Settings.setStates({
+      "spotify-access-token": access_token,
+      "spotify-refresh-token": refresh_token,
+      "spotify-token-expiration": expires_in,
+      "spotify-secrets-received": true,
+    });
 
     connection.close();
 
@@ -78,18 +80,16 @@ server.get("/callback", (req, res) => {
  */
 module.exports.authorizeApp = async function (args) {
   // start a server at port 8888 only if that server isn't alive
-  if (!connection) {
-    if (args[2] == "auth-spotify") {
-      let inserted = await Settings.setStates({
-        "spotify-user-client-id": args[0],
-        "spotify-user-client-secret": args[1],
-      });
+  if (!connection && args[2] == "auth-spotify") {
+    let inserted = await Settings.setStates({
+      "spotify-user-client-id": args[0],
+      "spotify-user-client-secret": args[1],
+    });
 
-      spotifyApi.setClientId(inserted[0]);
-      spotifyApi.setClientSecret(inserted[1]);
+    spotifyApi.setClientId(inserted[0]);
+    spotifyApi.setClientSecret(inserted[1]);
 
-      connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
-    }
+    connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
   }
 };
 
@@ -99,19 +99,27 @@ module.exports.authorizeApp = async function (args) {
  * @returns true if the access token was refreshed
  */
 module.exports.refreshSpoifyAccessToken = async function () {
-  spotifyApi.setClientId(Settings.getStateSync("spotify-user-client-id"));
-  spotifyApi.setClientSecret(Settings.getStateSync("spotify-user-client-secret"));
-  spotifyApi.setRefreshToken(Settings.getStateSync("spotify-refresh-token"));
+  let [clientId, clientSecret, refreshToken] = await Settings.getStates([
+    "spotify-user-client-id",
+    "spotify-user-client-secret",
+    "spotify-refresh-token",
+  ]);
+
+  spotifyApi.setClientId(clientId);
+  spotifyApi.setClientSecret(clientSecret);
+  spotifyApi.setRefreshToken(refreshToken);
 
   let data;
   try {
     data = await spotifyApi.refreshAccessToken();
-    Settings.setStateSync("spotify-access-token", data.body["access_token"]);
-    Settings.setStateSync("spotify-refresh-token", data.body["refresh_token"]);
-    Settings.setStateSync("spotify-token-expiration", data.body["expires_in"]);
+    let states = await Settings.setStates({
+      "spotify-access-token": data.body["access_token"],
+      "spotify-refresh-token": data.body["refresh_token"],
+      "spotify-token-expiration": data.body["expires_in"],
+    });
+
+    return !!states;
   } catch (error) {
     return false;
   }
-
-  return !!data;
 };
