@@ -325,7 +325,7 @@
                     <li class="step"><a href="https://developer.spotify.com/dashboard/login">Get a CLIENT ID and CLIENT
                             SECRET from Spotify</a></li>
                     <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into  <span class="name"></span></li>
-                    <li class="step">Click on the next step (Soundcloud)</li>
+                    <li class="step">Set Redirect URL as <b class="selectable-text">http://localhost:8888/callback</b></li>
                     <li class="step"><a href="https://soundcloud.com/">Get a CLIENT ID from Soundcloud</a></li>
                     <li class="step">Copy and Paste the CLIENT ID into <span class="name"></span></li>
                     <li class="step">Start Vibing <span class="icon icon-megaphone"></span></li>
@@ -351,7 +351,7 @@
 
                 <div class="tab-content__form">
 
-                    <di id="tab-content__form__spotify">
+                    <div id="tab-content__form__spotify">
 
                         <form>
                             <div class="form-group">
@@ -368,7 +368,7 @@
                             <span class="icon icon-check padded-less gone"></span>
                         </div>
                         
-                    </di>
+                    </div>
 
                     <div class="invisible" id="tab-content__form__soundcloud">
 
@@ -380,7 +380,6 @@
                         </form>
                         <div class="form-actions">
                             <button class="btn btn-form" id="auth-soundcloud">Save</button>
-                            <span class="icon icon-megaphone padded-less"></span>
                         </div>
 
                     </div>

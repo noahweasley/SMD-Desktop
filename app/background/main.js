@@ -135,6 +135,11 @@ ipcMain.on("show-download-list", (_event) => {
 // ... request to start downloading
 ipcMain.on("begin-download", (_event) => beginDownloads());
 
+// .. request to reload current focused window
+ipcMain.on("reload-current-window", () => {
+  BrowserWindow.getFocusedWindow().reload();
+});
+
 // ... download acton click
 ipcMain.on("download-click-event", (_event, args) => {
   download_window.close();
@@ -225,7 +230,7 @@ function getSongData() {
 async function performAlbumDownloadAction(albumUrl, limit = 20) {
   let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
   let data, dataReceived;
-  
+
   for (let x = 0; x <= 3; x++) {
     try {
       data = await spotifyApi.getAlbumTracks(album, { limit });
@@ -235,28 +240,27 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
       refreshSpoifyAccessToken();
     }
   }
-  
+
   if (!dataReceived) return "An error occurred while retrieving album data";
-  
+
   const tracks = data.body["tracks"].items;
   const albumName = data.body["name"];
   const thumbnails = data.body["images"].map((thumb) => thumb.url);
-  
+
   let albumTracks = [];
-  
+
   tracks.forEach((track) => {
     let songTitle = track["name"];
     let artists = track["artists"];
     let artistNames = artists.map((artist) => artist["name"]);
     let thumbnails = track["images"];
-    albumTracks.push({thumbnails,  songTitle, artistNames });
-  });  
-  
+    albumTracks.push({ thumbnails, songTitle, artistNames });
+  });
+
   return {
     type: SpotifyURLType.ALBUM,
     description: { thumbnails, albumName, albumTracks },
   };
-
 }
 
 /**
@@ -294,7 +298,6 @@ async function performArtistDownloadAction(artistUrl) {
 
   // let artistTracks = [];
 
-  
   // tracks.forEach((track) => {
   //   let songTitle = track["name"];
   //   let artists = track["artists"];
@@ -387,6 +390,7 @@ async function performTrackDownloadAction(trackUrl) {
  */
 async function beginDownloads(args) {
   if (args) {
+    console.log(args);
   } else {
     let trackData = await getSongData();
     console.log(trackData);
