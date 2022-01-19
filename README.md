@@ -1,8 +1,9 @@
 # SMD Desktop
 
-## The best Open-sourced desktop app to download Spotity songs for free, it's multi-platform and built using Electron.
+## The Best  Multi-platform Open-sourced desktop app to download Spotity songs for free
 
 <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
+
 
 ## About SMD Desktop
 
