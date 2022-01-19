@@ -22,7 +22,7 @@ const scopes = [
   "user-read-recently-played",
 ];
 
-const TIMEOUT = 30000;
+const TIMEOUT = 60000;
 let timeout;
 let connection;
 
@@ -32,7 +32,10 @@ const spotifyApi = new SpotifyWebApi({
 
 server.get("/authorize", (_req, res) => {
   res.redirect(spotifyApi.createAuthorizeURL(scopes));
-  timeout = setTimeout(() => connection.close(), TIMEOUT);
+  timeout = setTimeout(() => {
+    connection.close();
+    connection = null;
+  }, TIMEOUT);
 });
 
 server.get("/callback", (req, res) => {
@@ -64,6 +67,7 @@ server.get("/callback", (req, res) => {
     });
 
     connection.close();
+    connection = null;
 
     setInterval(async () => {
       const data = await spotifyApi.refreshAccessToken();
@@ -112,14 +116,17 @@ module.exports.refreshSpoifyAccessToken = async function () {
   let data;
   try {
     data = await spotifyApi.refreshAccessToken();
+    console.log("New Access Token:", data.body["access_token"]);
+    
     let states = await Settings.setStates({
       "spotify-access-token": data.body["access_token"],
       "spotify-refresh-token": data.body["refresh_token"],
       "spotify-token-expiration": data.body["expires_in"],
     });
 
-    return !!states;
+    return states.length == 3;
   } catch (error) {
+    console.log("Error refreshing: ", error.message);
     return false;
   }
 };
