@@ -3,6 +3,7 @@
 const Settings = require("../background/settings/settings");
 const { refreshSpoifyAccessToken, authorizeApp } = require("../background/server/authorize");
 const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
+const soundcloud = require("../background/server/soundcloud-downloader");
 const database = require("../background/database/database");
 const menu = require("../background/menu");
 
@@ -237,7 +238,7 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
       dataReceived = true;
       break;
     } catch (err) {
-      refreshSpoifyAccessToken();
+      await refreshSpoifyAccessToken();
     }
   }
 
@@ -389,12 +390,15 @@ async function performTrackDownloadAction(trackUrl) {
  * Starts donwloading tracks available at the the link url in the clipboard
  */
 async function beginDownloads(args) {
+  let trackData;
   if (args) {
-    console.log(args);
+    trackData = args;
   } else {
-    let trackData = await getSongData();
-    console.log(trackData);
+     trackData = await getSongData();
   }
+  
+  soundcloud.searchTracks(trackData);
+
 }
 
 /**
