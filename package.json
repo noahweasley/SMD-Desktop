@@ -12,7 +12,8 @@
     "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/assets/build/win/app_icon.ico",
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/assets/build/win/app_icon.ico",
     "build": "npm run pack:win32 && npm run pack:win64",
-    "package": "npm run build && npm run start"
+    "package": "npm run build && npm run start",
+    "generate": "node package/electron-winstaller.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,8 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "electron": "^15.3.1",
-    "electron-packager": "^15.4.0"
+    "electron-packager": "^15.4.0",
+    "electron-winstaller": "^5.0.0"
   },
   "funding": {
     "type": "buymeacoffee",
@@ -38,7 +40,6 @@
   "dependencies": {
     "express": "^4.17.2",
     "knex": "^0.95.15",
-    "soundcloud": "^3.3.2",
     "soundcloud-downloader": "^1.0.0",
     "soundcloud-v2-api": "^0.1.4",
     "spotify-web-api-node": "^5.0.2",
