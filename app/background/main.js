@@ -16,7 +16,7 @@ const spotifyApi = new SpotifyWebApi();
 
 // ---------------------------------------------------------------------------------
 
-var smd_window, download_window, about_window;
+var smd_window, search_window, download_window, about_window;
 var WINDOW_STATE;
 
 const State = Object.freeze({
@@ -24,7 +24,7 @@ const State = Object.freeze({
   FOCUSED: "window-focused",
   MAXIMIZED: "window-maximized",
   MINIMIZED: "window-minimized",
-  DEFAULT: "window-default",
+  DEFAULT: "window-default"
 });
 
 app.whenReady().then(async () => {
@@ -114,7 +114,7 @@ ipcMain.handle("authorize-app", async (_event, args) => {
   if (args[1] == "auth-soundcloud") {
     let [res1, res2] = await Promise.all([
       Settings.setState("soundcloud-secrets-received", true),
-      Settings.setState("soundcloud-user-client-id", args[0]),
+      Settings.setState("soundcloud-user-client-id", args[0])
     ]);
 
     return res1 && res2;
@@ -130,11 +130,14 @@ ipcMain.handle("download-data", () => {
 
 // ... show download details window
 ipcMain.on("show-download-list", (_event) => {
-  createDownloadWindow();
+  createSearchWindow();
 });
 
 // ... request to start downloading
-ipcMain.on("begin-download", (_event) => beginDownloads());
+ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
+
+// ... request to search for tracks to download
+ipcMain.on("search-tracks", (_event, args) => searchTracks(args));
 
 // .. request to reload current focused window
 ipcMain.on("reload-current-window", () => {
@@ -143,8 +146,10 @@ ipcMain.on("reload-current-window", () => {
 
 // ... download acton click
 ipcMain.on("download-click-event", (_event, args) => {
-  download_window.close();
-  if (args[0] === "proceed-download") beginDownloads(args);
+  search_window.close();
+  if (args[0] === "proceed-download") {
+    searchTracks(args);
+  }
 });
 
 // ... clipboard content request
@@ -163,6 +168,8 @@ ipcMain.handle("clipboard-request", () => {
     return urlType || errMsg;
   }
 });
+
+function searchTracks(args) {}
 
 /**
  * @returns an object with the requested Spotify data
@@ -260,7 +267,7 @@ async function performAlbumDownloadAction(albumUrl, limit = 20) {
 
   return {
     type: SpotifyURLType.ALBUM,
-    description: { thumbnails, albumName, albumTracks },
+    description: { thumbnails, albumName, albumTracks }
   };
 }
 
@@ -347,7 +354,7 @@ async function performPlaylistDownloadAction(playlistUrl) {
 
   return {
     type: SpotifyURLType.PLAYLIST,
-    description: { thumbnails, playListName, trackCollection },
+    description: { thumbnails, playListName, trackCollection }
   };
 }
 
@@ -382,7 +389,7 @@ async function performTrackDownloadAction(trackUrl) {
 
   return {
     type: SpotifyURLType.TRACK,
-    description: { songTitle, artistNames },
+    description: { songTitle, artistNames }
   };
 }
 
@@ -394,21 +401,20 @@ async function beginDownloads(args) {
   if (args) {
     trackData = args;
   } else {
-     trackData = await getSongData();
+    trackData = await getSongData();
   }
-  
-  soundcloud.searchTracks(trackData);
 
+  soundcloud.searchTracks(trackData);
 }
 
 /**
  * Creates a download window with the data speified
  */
-function createDownloadWindow() {
-  if (download_window) return;
+function createSearchWindow() {
+  if (search_window) return;
 
-  download_window = new BrowserWindow({
-    title: "Confirm the list",
+  search_window = new BrowserWindow({
+    title: "Choose tracks to download",
     parent: smd_window,
     show: false,
     modal: true,
@@ -418,21 +424,21 @@ function createDownloadWindow() {
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, "../preload.js"),
-    },
+      preload: path.join(__dirname, "../preload.js")
+    }
   });
 
-  download_window.setMenu(null);
-  download_window.loadFile(path.join("app", "pages", "downloads.html"));
-  download_window.once("ready-to-show", download_window.show);
+  search_window.setMenu(null);
+  search_window.loadFile(path.join("app", "pages", "downloads.html"));
+  search_window.once("ready-to-show", search_window.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
   // the quick flash issue occurrs.
-  download_window.on("close", (event) => {
+  search_window.on("close", (event) => {
     event.preventDefault();
-    download_window.hide();
-    download_window.destroy();
-    download_window = null;
+    search_window.hide();
+    search_window.destroy();
+    search_window = null;
   });
 }
 
@@ -462,8 +468,8 @@ async function createApplicationWindow() {
     height: winState.height ? winState.height : 620,
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, "../preload.js"),
-    },
+      preload: path.join(__dirname, "../preload.js")
+    }
   });
 
   Menu.setApplicationMenu(menu);
@@ -491,6 +497,38 @@ async function createApplicationWindow() {
   });
 }
 
+function createDownloadWindow() {
+  if (download_window) return;
+
+  search_window = new BrowserWindow({
+    title: "Condownload_windowfirm the list",
+    parent: smd_window,
+    show: false,
+    modal: true,
+    width: 700,
+    height: 500,
+    resizable: false,
+    backgroundColor: "#0c0b0b",
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, "../preload.js")
+    }
+  });
+
+  download_window.setMenu(null);
+  download_window.loadFile(path.join("app", "pages", "downloads.html"));
+  download_window.once("ready-to-show", search_window.show);
+  // listening for close event on download window helped to solve quick window flash issue.
+  // Adding hide() on window was the key to solve this issue, but I don't have an idea why
+  // the quick flash issue occurrs.
+  download_window.on("close", (event) => {
+    event.preventDefault();
+    download_window.hide();
+    download_window.destroy();
+    download_window = null;
+  });
+}
+
 function createAboutWindow() {
   // only 1 window is allowed to be spawned
   if (about_window) {
@@ -507,8 +545,8 @@ function createAboutWindow() {
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, "../preload.js"),
-    },
+      preload: path.join(__dirname, "../preload.js")
+    }
   });
 
   Menu.setApplicationMenu(null);

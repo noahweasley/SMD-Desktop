@@ -34,7 +34,7 @@
             <div class="window-action window-action-close" id="window-action-close">
                 <img src="../assets/graphics/close.svg" alt="close icon">
             </div>
-            
+
         </div>
 
     </header>
@@ -50,23 +50,19 @@
                     <nav class="nav-group">
 
                         <span class="nav-group-item active">
-                            <span class="icon icon-home"></span>
-                            Home
+                            <span class="icon icon-home"></span> Home
                         </span>
 
                         <a href="#music" class="nav-group-item click">
-                            <span class="icon icon-folder click"></span>
-                            Files
+                            <span class="icon icon-folder click"></span> Files
                         </a>
 
                         <span class="nav-group-item">
-                            <span class="icon icon-cog icon-x2"></span>
-                            Settings
+                            <span class="icon icon-cog icon-x2"></span> Settings
                         </span>
-                        
+
                         <span class="nav-group-item click" id="about">
-                            <span class="icon icon-info-circled icon-x2 click"></span>
-                            About
+                            <span class="icon icon-info-circled icon-x2 click"></span> About
                         </span>
 
                         <button class="btn btn-large abs-bottom donate bounce">
@@ -108,16 +104,16 @@
                     <!--  tab contents -->
 
                     <div class="tab-content scroll">
-                        
+
                         <div class="tab-content__downloading invisible" id="tab-content__downloading">
 
                             <div class="indeterminate-progress normal-progress"></div>
-                            
+
                             <div class="info-decor">
                                 <img src="../assets/graphics/musical.png" alt="decorations">
                                 <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet ?? &nbsp Try performing some actions, and you would see the results here <span class="icon icon-dot icon-x2"></span></p>
                             </div>
-                            
+
                             <!-- <ul class="list-group">
 
                                 <li class="list-group-item">
@@ -139,18 +135,18 @@
                                 </li>
 
                             </ul> -->
-                            
+
                         </div>
 
                         <div class="tab-content__downloaded" id="tab-content__downloaded">
-                            
+
                             <div class="indeterminate-progress normal-progress"></div>
-                            
+
                             <div class="info-decor">
                                 <img src="../assets/graphics/musical.png" alt="decorations">
                                 <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet ?? &nbsp Try performing some actions, and you would see the results here <span class="icon icon-dot icon-x2"></span></p>
                             </div>
-                            
+
                             <!-- <ul class="list-group">
 
                                 <li class="list-group-item">
@@ -283,31 +279,31 @@
                     </div>
 
                 </div>
-                
+
                 <div class="pane pane-settings gone">
-                     <h1 class="title draggable">User Settings</h1>
-                     
-                     <div class="list-group-container">
-                         
-                         <ul class="list-group scroll gone">
-                             
-                           <li class="list-group-item">
-                               <!-- <h1 class="settings-title">Download Location</h1>
+                    <h1 class="title draggable">User Settings</h1>
+
+                    <div class="list-group-container">
+
+                        <ul class="list-group scroll gone">
+
+                            <li class="list-group-item">
+                                <!-- <h1 class="settings-title">Download Location</h1>
                                <div class="state">
                                    <p class="preference-state">%Music/SMD Desktop/downloads</p>
                                    <button class="action">CHOOSE</button>
                                </div> -->
-                           </li>
-                           
-                           <li class="list-group-item"></li>
-                           
+                            </li>
+
+                            <li class="list-group-item"></li>
+
                         </ul>
-                        
-                     </div>
-                     
+
+                    </div>
+
                     <div class="indeterminate-progress normal-progress" id="settings-loader"></div>
                 </div>
-                
+
             </div>
 
         </div>
@@ -324,7 +320,7 @@
                 <ol class="steps">
                     <li class="step"><a href="https://developer.spotify.com/dashboard/login">Get a CLIENT ID and CLIENT
                             SECRET from Spotify</a></li>
-                    <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into  <span class="name"></span></li>
+                    <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into <span class="name"></span></li>
                     <li class="step">Set Redirect URL as <b class="selectable-text">http://localhost:8888/callback</b></li>
                     <li class="step"><a href="https://soundcloud.com/">Get a CLIENT ID from Soundcloud</a></li>
                     <li class="step">Copy and Paste the CLIENT ID into <span class="name"></span></li>
@@ -340,12 +336,10 @@
 
                 <div class="tab-group tab-group__form eleme-centered">
                     <div class="__tab-item tab-item__form active">
-                        <span class="icon icon-spotify icon-x2"></span>
-                        Spotify
+                        <span class="icon icon-spotify icon-x2"></span> Spotify
                     </div>
                     <div class="__tab-item tab-item__form">
-                        <span class="icon icon-soundcloud icon-x2"></span>
-                        SoundCloud
+                        <span class="icon icon-soundcloud icon-x2"></span> SoundCloud
                     </div>
                 </div>
 
@@ -367,7 +361,7 @@
                             <button class="btn btn-form" id="auth-spotify">Authorize</button>
                             <span class="icon icon-check padded-less gone"></span>
                         </div>
-                        
+
                     </div>
 
                     <div class="invisible" id="tab-content__form__soundcloud">
@@ -392,15 +386,15 @@
 
         </div>
     </div>
-    
-        <div class="indeterminate-progress normal-progress" id="window-data-loader"></div>
-    
-        <!-- Scripts -->
-        <script src="../ui/main/setup.js"></script>
-        <script src="../ui/main/tabs.js"></script>
-        <script src="../ui/main/ipc.js"></script>
-        <script src="../ui/main/lists.js"></script>
-        <script src="../ui/main/settings.js"></script>
+
+    <div class="indeterminate-progress normal-progress" id="window-data-loader"></div>
+
+    <!-- Scripts -->
+    <script src="../ui/main/setup.js"></script>
+    <script src="../ui/main/tabs.js"></script>
+    <script src="../ui/main/ipc.js"></script>
+    <script src="../ui/main/lists.js"></script>
+    <script src="../ui/main/settings.js"></script>
 
 </body>
 
