@@ -15,7 +15,7 @@ module.exports.getDummyArtists = function (size) {
     "Neffex",
     "Lan Del Rey",
     "Billy Ellish",
-    "Vicetone",
+    "Vicetone"
   ];
 
   if (size > artists.length) {

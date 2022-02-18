@@ -5,7 +5,6 @@ const scdl = require("soundcloud-downloader").default;
 const Settings = require("../settings/settings");
 const fs = require("fs");
 const stream = require("stream");
-const { default: FORMATS } = require("soundcloud-downloader/src/formats");
 
 module.exports.searchTracks = async function (tracks = []) {
   let searchResults = [];
@@ -47,7 +46,7 @@ module.exports.searchTracks = async function (tracks = []) {
 module.exports.downloadTracks = async function (tracks = []) {
   let writer = fs.createWriteStream("");
 
-  scdl.downloadFormat("", FORMATS.MP3).then((downloadStream) => {
+  scdl.download("").then((downloadStream) => {
     downloadStream.on("readable", () => {});
 
     downloadStream.on("end", () => {
