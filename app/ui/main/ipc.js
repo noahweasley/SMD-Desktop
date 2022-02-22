@@ -31,12 +31,12 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".paste").addEventListener("click", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
       if (content == "track") {
-        // download immediately
-        window.bridgeApis.send("begin-download");
+        // search for tracks to download
+        window.bridgeApis.send("show-search-download-window");
       } else {
         // a funny eror message would be emitted to the renderer process, hence the 'Uh'
         if (content.startsWith("Uh")) return;
-        window.bridgeApis.send("show-download-list");
+        window.bridgeApis.send("show-download-window");
       }
     });
   });

@@ -128,16 +128,21 @@ ipcMain.handle("download-data", () => {
   return getSongData();
 });
 
-// ... show download details window
-ipcMain.on("show-download-list", (_event) => {
+// ... search download details window
+ipcMain.on("show-search-download-window", (_event) => {
   createSearchWindow();
 });
 
-// ... request to start downloading
-ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
+// ... show download details window
+ipcMain.on("show-download-window", (_event) => {
+  createDownloadWindow();
+});
 
 // ... request to search for tracks to download
 ipcMain.on("search-tracks", (_event, args) => searchTracks(args));
+
+// ... request to start downloading
+ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
 
 // .. request to reload current focused window
 ipcMain.on("reload-current-window", () => {
@@ -145,10 +150,10 @@ ipcMain.on("reload-current-window", () => {
 });
 
 // ... download acton click
-ipcMain.on("download-click-event", (_event, args) => {
-  search_window.close();
+ipcMain.on("search-click-event", (_event, args) => {
+  download_window.close();
   if (args[0] === "proceed-download") {
-    searchTracks(args);
+    createSearchWindow(args);
   }
 });
 
@@ -429,7 +434,7 @@ function createSearchWindow() {
   });
 
   search_window.setMenu(null);
-  search_window.loadFile(path.join("app", "pages", "downloads.html"));
+  search_window.loadFile(path.join("app", "pages", "search.html"));
   search_window.once("ready-to-show", search_window.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
@@ -500,7 +505,7 @@ async function createApplicationWindow() {
 function createDownloadWindow() {
   if (download_window) return;
 
-  search_window = new BrowserWindow({
+  download_window = new BrowserWindow({
     title: "Condownload_windowfirm the list",
     parent: smd_window,
     show: false,
@@ -517,7 +522,7 @@ function createDownloadWindow() {
 
   download_window.setMenu(null);
   download_window.loadFile(path.join("app", "pages", "downloads.html"));
-  download_window.once("ready-to-show", search_window.show);
+  download_window.once("ready-to-show", download_window.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
   // the quick flash issue occurrs.

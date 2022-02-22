@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      window.bridgeApis.send("download-click-event", [button.id, listData, SELECTED_POS]);
+      window.bridgeApis.send("search-click-event", [button.id, listData, SELECTED_POS]);
     });
   });
 

@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="../stylesheets/photon.css" />
     <link rel="stylesheet" type="text/css" href="../stylesheets/list-syles.css" />
-    <title>Confirm the list</title>
+    <title>Confirm the list to download</title>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
                 <p class="message text-center">Something went wrong, please try again</p>
                 <input type="button" value="Try again" id="retry" />
             </div>
-            <div class="list scroll gone">
+            <div class="list scroll">
                 <ul class="list-group">
                     <div class="list-group-header">
                         <p>Track Thumbnail</p>
@@ -34,7 +34,7 @@
                     </div>
                 </ul>
             </div>
-            <div class="loader">
+            <div class="loader gone">
                 <div class="indeterminate-progress small-progress"></div>
                 <p class="meessage">Analyzing please wait ...</p>
             </div>
@@ -42,13 +42,11 @@
 
         <div class="list-actions">
             <button class="btn btn-negative btn-downloads" id="cancel-download" disabled>Cancel</button>
-            <button class="btn btn-positive btn-downloads" id="proceed-download" disabled>Search</button>
+            <button class="btn btn-positive btn-downloads" id="proceed-download" disabled>Download</button>
         </div>
     </div>
 
-    <strong class="download-type gone"><span class="type"></span> <span class="option"></spanc></strong>
-
-    <script src="../ui/download/checklist-downloads.js"></script>
+    <script src="../ui/download/search-downloads.js"></script>
 </body>
 
 </html>
