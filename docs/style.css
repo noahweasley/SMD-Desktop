@@ -262,13 +262,14 @@ section.product-display > a.download {
   border-radius: 8px;
   padding: 1em 3em;
   border: 1px solid var(--solid-green);
+  
 }
 
 section.product-display > a.download {
   text-decoration: none;
   color: white;
   transition: 0.2s;
-  padding: 1em;
+  padding: 1em 2em;
   margin-top: 30px;
 }
 
