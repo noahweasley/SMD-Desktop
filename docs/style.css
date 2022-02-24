@@ -80,6 +80,10 @@ section.product-display {
   opacity: 1;
 }
 
+.text-center {
+  text-align: center;
+}
+
 #top-button {
   text-decoration: none;
   color: white;
@@ -162,7 +166,6 @@ ul.topnav li a:hover:not(.active) {
   color: var(--primary-color);
 }
 
-
 ul.topnav li a:visited {
   color: white;
 }
@@ -178,6 +181,47 @@ ul.topnav li.right {
 ul.topnav #donate {
   color: white;
   background-color: var(--solid-green);
+}
+
+h1 {
+  font-family: sans;
+  letter-spacing: 0.1em;
+}
+
+.download-container {
+  height: 400px;
+  width: 90%;
+  background-color: black;
+  display: flex;
+  margin: auto;
+  border-radius: 8px;
+}
+
+.download-list {
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  gap: 3em;
+  padding: 16px;
+}
+
+.download-list-item {
+  text-align: center;
+  font-size: 1.2em;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.download-list-item:hover {
+  background-color: var(--grey-solid_10);
+}
+
+.download-list-item i{
+  margin-right: 24px;
 }
 
 section {

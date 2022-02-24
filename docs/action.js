@@ -26,26 +26,6 @@ function getOS() {
   return os;
 }
 
-const downloadButton = document.querySelector(".download");
-const osSpan = document.querySelector(".os");
-const osIcon = downloadButton.firstChild;
-
-let os = getOS();
-
-if (os) {
-  osSpan.innerText = os;
-  if (os == "Windows") {
-    osIcon.className = "fa fa-windows";
-  } else if (os == "Mac Os") {
-    osIcon.className = "fa fa-apple";
-  } else {
-    osIcon.className = "fa fa-linux";
-  }
-} else {
-  downloadButton.innerText = "Not supported on your device";
-  downloadButton.setAttribute("disabled", "true");
-}
-
 // date
 const date = document.querySelector(".date");
 date.innerText = new Date(Date.now()).getFullYear();
