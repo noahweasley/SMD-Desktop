@@ -2,7 +2,19 @@
 
 const State = Object.freeze({
   MAIN: "main-pane",
-  SETTINGS: "settings-pane",
+  SETTINGS: "settings-pane"
+});
+
+const Mode = Object.freeze({
+  ALL: "All-download-data",
+  SINGLE: "One-download-data",
+  SELECT: "Some-download-data"
+});
+
+const Type = Object.freeze({
+  DOWNLOADED: "Downloaded",
+  DOWNLOADING: "Downloading",
+  JOINED: "Join"
 });
 
 var WINDOW_CONTENT_STATE = State.MAIN;
@@ -11,10 +23,10 @@ window.addEventListener("DOMContentLoaded", () => {
   // retreive user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
-    if (data[0] && data[0].length > 0 && data[1] && data[1].length > 0) {
+    if ((data[0] && data[0].length > 0) || (data[1] && data[1].length > 0)) {
       populateList(data);
       // Now display the populated list items, becuase when they were created their visibility was set to gone.
-      document.getElementsByTagName("li").forEach((listElement) => listElement.classList.remove("gone"));
+      Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
       displayDecors();
     }
@@ -39,41 +51,44 @@ function displayDecors() {
   decors.forEach((decor) => decor.style.setProperty("display", "flex"));
 }
 
+function displayDecorById(decorId) {
+  const decor = document.getElementById(decorId);
+  decor.style.setProperty("display", "flex");
+}
+
 function populateList(data) {
-  const listDownloads = document.getElementById("tab-content__downloaded");
-  const listDownloading = document.getElementById("tab-content__downloading");
-  listDownloads.append(createListItemDownloads(data[0]));
-  listDownloading.append(createListItemDownloading(data[1]));
+  data[0] ? createListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded");
+  data[1] ? createListItemDownloading(data[1]) : displayDecorById("info_decor__downloading");
 
   // populate the 'downloaded' - list with item fetched from database
-  function createListItemDownloads(item) {
-    const uLElement = document.createElement("ul");
-    uLElement.classList.add("list-group");
-
+  function createListItemDownloaded(item) {
+    const uLElement = document.querySelector(".list-group__downloaded");
+    if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
     for (let i = 0; i < item.length; i++) {
       const listElement = document.createElement("li");
-      listElement.classList.add("list-group-item", "gone"); // create but don't display yet
+      listElement.classList.add("list-group-item"); // create but don't display yet
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", item["thumbnail"]);
+      thumbnailElement.setAttribute("src", "../assets/graphics/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
-      listElement.append(createMediaBody());
+      listElement.append(createMediaBody(i, item[i]));
       // append list item to list
       uLElement.append(listElement);
     }
 
     // creates a media body element
-    function createMediaBody(state) {
+    function createMediaBody(position, item) {
       const mediaBody = document.createElement("div");
+      mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerText = state["trackTitle"];
+      trackTitleElement.innerText = `${position + 1}. ${item["Track_Title"]} - ${item["Track_Artists"]}`;
       // create the message element
       const messageElement = document.createElement("p");
-      messageElement.innerText = state["message"];
+      messageElement.innerText = item["Track_Download_Size"];
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer1 = document.createElement("div");
@@ -82,10 +97,26 @@ function populateList(data) {
       const opIcon2 = document.createElement("span");
       // ... classes
       opIconContainer1.classList.add("op-icon", "not-draggable", "pull-right");
-      opIconContainer1.classList.add("op-icon", "not-draggable", "pull-right");
+      opIconContainer2.classList.add("op-icon", "not-draggable", "pull-right");
       // ..
       opIcon1.classList.add("icon", "icon-folder", "icon-x2");
       opIcon2.classList.add("icon", "icon-trash", "icon-x2");
+
+      // navigate to file
+      opIconContainer1.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
+      // delete local database entry and file on disk
+      opIconContainer2.addEventListener("click", () => {
+        let args = { data: item, type: Type.DOWNLOADED, mode: Mode.SINGLE };
+        window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
+          if (isFileDeleted) {
+            let listItem = opIconContainer1.parentElement.parentElement;
+            let listGroup = listItem.parentElement;
+
+            listGroup.removeChild(listItem);
+          }
+        });
+      });
+
       opIconContainer1.append(opIcon1);
       opIconContainer2.append(opIcon2);
 
@@ -96,24 +127,20 @@ function populateList(data) {
 
       return mediaBody;
     }
-
-    return uLElement;
   }
 
   // populate the 'downloading' - list with item fetched from database
   function createListItemDownloading(item) {
-    const listSize = item["length"] || 1;
-    const uLElement = document.createElement("ul");
-    uLElement.classList.add("list-group");
-
+    const uLElement = document.querySelector(".list-group__downloading");
+    if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
-    for (let i = 0; i < listSize; i++) {
+    for (let i = 0; i < item["length"]; i++) {
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", item["thumbnail"]);
+      thumbnailElement.setAttribute("src", "../assets/graphics/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody());
@@ -122,14 +149,14 @@ function populateList(data) {
     }
 
     // creates a media body element
-    function createMediaBody(state) {
+    function createMediaBody(item) {
       const mediaBody = document.createElement("div");
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerText = state["trackTitle"];
+      trackTitleElement.innerText = item["trackTitle"];
       // create the message element
       const messageElement = document.createElement("p");
-      messageElement.innerText = state["message"];
+      messageElement.innerText = item["message"];
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer = document.createElement("div");
@@ -141,7 +168,7 @@ function populateList(data) {
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
       downloadProgressElement.classList.add("horizontal-progress");
-      downloadProgressElement.id = `download-progress${state["listPos"]}`;
+      downloadProgressElement.id = `download-progress${item["listPos"]}`;
       // finally append the created element nodes as children to the parent media body node
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
@@ -150,8 +177,6 @@ function populateList(data) {
 
       return mediaBody;
     }
-
-    return uLElement;
   }
 }
 
@@ -169,7 +194,7 @@ function registerEventListeners() {
       if (navItemChildren.indexOf(navItem) === 1 || navItemChildren.indexOf(navItem) === navItemChildren.length - 2) {
         return;
       }
-      // remove nav-item acive state
+      // remove nav-item active state
       for (x = 0; x < navItems.length; x++) {
         navItems[x].classList.remove("active");
       }

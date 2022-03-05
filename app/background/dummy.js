@@ -7,16 +7,7 @@
  * @returns the required size of dummy artists
  */
 module.exports.getDummyArtists = function (size) {
-  const artists = [
-    "Marshmello",
-    "Alan walker",
-    "Carley Jaspen",
-    "Kygo",
-    "Neffex",
-    "Lan Del Rey",
-    "Billy Ellish",
-    "Vicetone"
-  ];
+  const artists = ["Katy Perry", "Ashley Price", "Saphire", "Night-core High", "Alan Walker"];
 
   if (size > artists.length) {
     let index = 0;
@@ -37,18 +28,18 @@ module.exports.getDummyArtists = function (size) {
  * @returns the required size of dummy song titles
  */
 module.exports.getDummySongTitles = function (size) {
-  const artists = [];
+  const songs = ["Daisies", "Overwhelmed", "Unity (Acoustic)", "Apollo", "Darkside"];
 
-  if (size > artists.length) {
+  if (size > songs.length) {
     let index = 0;
     for (let x = 0; x < size; x++) {
-      artists.push(artists[(index = index++ == artists.length ? (index = 0) : index)]);
+      songs.push(songs[(index = index++ == songs.length ? (index = 0) : index)]);
     }
 
-    return artists;
+    return songs;
   }
 
-  return artists.slice(0, size);
+  return songs.slice(0, size);
 };
 
 /**
@@ -61,5 +52,11 @@ module.exports.getDummyTrack = function (size) {
   const songs = this.getDummySongTitles(size);
   const artists = this.getDummyArtists(size);
 
-  return { songs, artists };
+  let dummy = [];
+  
+  for (let i = 0; i < size; i++) {
+    dummy.push({song: songs[i], artist: artists[i]})
+  }
+  
+  return dummy;
 };

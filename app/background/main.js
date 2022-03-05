@@ -6,6 +6,7 @@ const { SpotifyURLType, getSpotifyURLType } = require("../background/util");
 const soundcloud = require("../background/server/soundcloud-downloader");
 const database = require("../background/database/database");
 const menu = require("../background/menu");
+const dummy = require("./dummy");
 
 const path = require("path");
 const fs = require("fs");
@@ -31,6 +32,7 @@ app.whenReady().then(async () => {
   createAppFiles();
   let windowState = await Settings.getState("window-state");
   createApplicationWindow(windowState);
+  // =-================================
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createApplicationWindow();
   });
@@ -76,6 +78,10 @@ ipcMain.on("navigate-link", (_event, arg) => {
   shell.openExternal(linkByType);
 });
 
+ipcMain.handle("get-dummy-list-data", () => {
+  return [dummy.getDummyTrack(10), dummy.getDummyTrack(2)];
+});
+
 // request to fetch and display list data
 ipcMain.handle("get-list-data", async () => {
   try {
@@ -102,6 +108,16 @@ ipcMain.handle("get-states", (_event, args) => {
 
 ipcMain.handle("get-multiple-states", async (_event, args) => {
   return await Settings.getStates(args);
+});
+
+// simple debug; sending renderer process log messsages to the main process; [0] = tag, [1] = message
+ipcMain.on("debug", (_event, args) => {
+  console.log(`${args[0]}: ${args[1]}\n\n`);
+});
+
+// delete file in database
+ipcMain.handle("delete-file", (_event, arg) => {
+  return database.deleteDownloadData(arg, arg.mode);
 });
 
 // ... settings requests
@@ -481,6 +497,7 @@ async function createApplicationWindow() {
 
   smd_window.loadFile(path.join("app", "pages", "index.html"));
 
+  // smd_window.webContents.openDevTools()
   smd_window.once("ready-to-show", () => {
     smd_window.show();
     // to prevent glith on window maximize, after displaying the window, then maximize it

@@ -18,7 +18,7 @@ const dbConfigFile = path.join(dbPath, "dbConfig.json");
 module.exports.Mode = Object.freeze({
   ALL: "All-download-data",
   SINGLE: "One-download-data",
-  SELECT: "Some-download-data",
+  SELECT: "Some-download-data"
 });
 
 /**
@@ -27,7 +27,7 @@ module.exports.Mode = Object.freeze({
 module.exports.Type = Object.freeze({
   DOWNLOADED: "Downloaded",
   DOWNLOADING: "Downloading",
-  JOINED: "Join",
+  JOINED: "Join"
 });
 
 // ----------------------------------------------------------------------------------
@@ -40,15 +40,15 @@ const database = (module.exports.database = knex({
   version: DATABASE_VERSION,
   useNullAsDefault: true,
   connection: {
-    filename: path.join(app.getPath("userData"), "User", "Database", "UserDB.db"),
-  },
+    filename: path.join(app.getPath("userData"), "User", "Database", "UserDB.db")
+  }
 }));
 
 // vs file is used to manage dabase versions
 function createVSFile() {
   // the initial data in the vs file, when the database is created
   const vsObj = {
-    DATABASE_VERSION: "1.0.0",
+    DATABASE_VERSION: "1.0.0"
   };
   fs.writeFile(dbConfigFile, JSON.stringify(vsObj), function (err) {
     if (err) console.log(`Error while creating VS file: ${err.message}`);
@@ -67,7 +67,7 @@ function createDatabaseSchema() {
           fs.mkdir(
             dbPath,
             {
-              recursive: true,
+              recursive: true
             },
             function (err) {
               if (err) reject(`An error occurred while creating db directories: ${err.message}`);
@@ -219,11 +219,13 @@ module.exports.getDownloadData = async function (arg, mode) {
 
   if (arg["type"] == this.Type.DOWNLOADED) {
     if (mode == this.Mode.ALL) {
-      return await database.select("*").from(DOWNLOADED_TABLE);
+      let data = await database.select("*").from(DOWNLOADED_TABLE);
+      return data.length > 0 ? data : null;
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
-      return await database.select("*").from(DOWNLOADING_TABLE);
+      let data = await database.select("*").from(DOWNLOADING_TABLE);
+      return data.length > 0 ? data : null;
     }
   } else throw new Error(`${arg["type"]} is not supported`);
 };
@@ -242,13 +244,14 @@ module.exports.addDownloadData = async function (arg, mode) {
 
   if (arg["type"] == this.Type.DOWNLOADED) {
     if (mode == this.Mode.ALL) {
-      let result = database.insert(arg["data"]).into(DOWNLOADED_TABLE);
+      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
       // the value at result[0] would return the number os data inserted
+      console.log(result);
       if (result[0]) return true;
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
-      let result = database.insert(arg["data"]).into(DOWNLOADING_TABLE);
+      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
       // the value at result[0] would return the number os data inserted
       if (result[0]) return true;
     }
@@ -289,15 +292,23 @@ module.exports.updateDownloadData = async function (arg, mode) {
  * @param mode the mode used in fetching the data from database
  */
 module.exports.deleteDownloadData = async function (arg, mode) {
+  console.log("arg: ", arg)
+  let data = arg["data"];
   this.checkMode(mode);
   // only create database when the data is about to be used
   await createDatabaseSchema();
 
   if (arg["type"] == this.Type.DOWNLOADED) {
     if (mode == this.Mode.ALL) {
+    } else if (mode == this.Mode.SINGLE) {
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+      return result.length > 0;
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
+    } else if (mode == this.Mode.SINGLE) {
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+      return result.length > 0;
     }
   } else throw new Error(`${arg["type"]} is not supported`);
   return true;
