@@ -5,9 +5,19 @@ const scdl = require("soundcloud-downloader").default;
 const Settings = require("../settings/settings");
 const fs = require("fs");
 const stream = require("stream");
+const { SpotifyURLType } = require("../util");
 
-module.exports.searchTracks = async function (tracks = []) {
+module.exports.searchTracks = async function (arg) {
+  let querySeletedIndices = arg.indices;
+  let queryDownloadData = arg.data;
+  let queryType = queryDownloadData.type;
+  let dataDescription = queryDownloadData.description;
+  let albumTracks = dataDescription.albumTracks;
+  let playlistTracks = dataDescription.trackCollection;
+
+  let queries = [];
   let searchResults = [];
+
   let soundcloudClientId = await Settings.getState("soundcloud-user-client-id");
   if (!soundcloudClientId) return;
 
@@ -15,13 +25,47 @@ module.exports.searchTracks = async function (tracks = []) {
     clientId: soundcloudClientId
   });
 
-  for (let track of track) {
-    let query = track.trackTitle;
-    let keywords = query.split(" ");
+  let listLength = albumTracks ? albumTracks.length : playlistTracks.length;
+
+  for (let x = 0; x < listLength; x++) {
+    switch (queryType) {
+      case SpotifyURLType.ALBUM:
+        let ssArtistNames = "";
+        let track = albumTracks[x];
+        let artistNames = track.artistNames;
+        let songTitle = track.songTitle;
+
+        artistNames.forEach((entry) => (ssArtistNames = ssArtistNames.concat(entry).concat(" ")));
+
+        queries.push(songTitle + " - " + ssArtistNames);
+        break;
+      case SpotifyURLType.PLAYLIST:
+        let sArtistNames = "";
+        let track1 = playlistTracks[x];
+        let artistNames1 = track1.artistNames;
+        let songTitle1 = track1.songTitle;
+
+        artistNames1.forEach((entry) => (sArtistNames = sArtistNames.concat(entry).concat(" ")));
+
+        queries.push(songTitle1 + " - " + sArtistNames);
+        break;
+      case SpotifyURLType.TRACK:
+        break;
+      case SpotifyURLType.ARTIST:
+      case SpotifyURLType.UNKNOWN:
+        return;
+    }
+  }
+
+  ///////////////////////////////////////////
+
+  for (let x = 0; x < listLength; x++) {
+    // now loop through all the search queries generated
+    let keywords = queries[x].split(" ");
 
     try {
       let result = await soundcloudApi.get("/search/tracks", {
-        q: query,
+        q: queries[x],
         limit: 20
       });
 
@@ -30,17 +74,20 @@ module.exports.searchTracks = async function (tracks = []) {
       let $collection = collection.filter((track) => {
         let matches = true;
         for (let keyword of keywords) {
-          matches &= track.title.toUpperCase().includes(keyword.toUpperCase());
+          matches &= queries[x].toUpperCase().includes(keyword.toUpperCase());
         }
 
         return track.downloadable == true && matches;
       });
-      // .map((track) => track.title);
-      searchResults.push({ query, result: $collection });
+
+      searchResults.push({ query: queries[x], result: $collection });
     } catch (error) {
-      console.log("An error occurred while establishing a secure connection");
+      console.log(error.message);
+      return error.message;
     }
   }
+
+  console.log(searchResults);
 };
 
 module.exports.downloadTracks = async function (tracks = []) {

@@ -93,14 +93,18 @@ function populateList(data) {
       // create the icons for the media body
       const opIconContainer1 = document.createElement("div");
       const opIconContainer2 = document.createElement("div");
+      const opIconContainer3 = document.createElement("div");
       const opIcon1 = document.createElement("span");
       const opIcon2 = document.createElement("span");
+      const opIcon3 = document.createElement("span");
       // ... classes
       opIconContainer1.classList.add("op-icon", "not-draggable", "pull-right");
       opIconContainer2.classList.add("op-icon", "not-draggable", "pull-right");
+      opIconContainer3.classList.add("op-icon", "not-draggable", "pull-right");
       // ..
       opIcon1.classList.add("icon", "icon-folder", "icon-x2");
       opIcon2.classList.add("icon", "icon-trash", "icon-x2");
+      opIcon3.classList.add("icon", "icon-play", "icon-x2");
 
       // navigate to file
       opIconContainer1.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
@@ -113,17 +117,23 @@ function populateList(data) {
             let listGroup = listItem.parentElement;
 
             listGroup.removeChild(listItem);
+            if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
+            displayDecorById("info_decor__downloaded");
           }
         });
       });
 
+      opIconContainer3.addEventListener("click", () => window.bridgeApis.send("play-music", "default"));
+
       opIconContainer1.append(opIcon1);
       opIconContainer2.append(opIcon2);
+      opIconContainer3.append(opIcon3);
 
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
       mediaBody.append(opIconContainer1);
       mediaBody.append(opIconContainer2);
+      mediaBody.append(opIconContainer3);
 
       return mediaBody;
     }

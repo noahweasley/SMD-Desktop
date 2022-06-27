@@ -292,7 +292,6 @@ module.exports.updateDownloadData = async function (arg, mode) {
  * @param mode the mode used in fetching the data from database
  */
 module.exports.deleteDownloadData = async function (arg, mode) {
-  console.log("arg: ", arg)
   let data = arg["data"];
   this.checkMode(mode);
   // only create database when the data is about to be used
@@ -302,13 +301,13 @@ module.exports.deleteDownloadData = async function (arg, mode) {
     if (mode == this.Mode.ALL) {
     } else if (mode == this.Mode.SINGLE) {
       let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
-      return result.length > 0;
+      return result > 0;
     }
   } else if (arg["type"] == this.Type.DOWNLOADING) {
     if (mode == this.Mode.ALL) {
     } else if (mode == this.Mode.SINGLE) {
       let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
-      return result.length > 0;
+      return result > 0;
     }
   } else throw new Error(`${arg["type"]} is not supported`);
   return true;

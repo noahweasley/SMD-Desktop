@@ -51,7 +51,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // ..
   const s = document.getElementById("spcid");
   const s1 = document.getElementById("spcs");
-  const s2 = document.getElementById("socid");
+  const s2 = document.getElementById("ytak");
 
   document.querySelectorAll(".btn-form").forEach((auth) => {
     auth.addEventListener("click", () => {
@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", () => {
         case "auth-spotify":
           data = [s.value, s1.value];
           break;
-        case "auth-soundcloud":
+        case "auth-youtube":
           data = [s2.value];
           break;
       }
@@ -75,13 +75,13 @@ window.addEventListener("DOMContentLoaded", () => {
         return s.setAttribute("placeholder", "Client ID can't be empty");
       } else if (auth.id == "auth-spotify" && s1.value == "") {
         return s1.setAttribute("placeholder", "Client Secret can't be empty");
-      } else if (auth.id == "auth-soundcloud" && s2.value == "") {
-        return s2.setAttribute("placeholder", "Client ID can't be empty");
+      } else if (auth.id == "auth-youtube" && s2.value == "") {
+        return s2.setAttribute("placeholder", "API Key can't be empty");
       } else {
         // authorize application with parameters provided by user
         data.push(auth.id);
         window.bridgeApis.invoke("authorize-app", data).then((result) => {
-          if (result && auth.id == "auth-soundcloud") {
+          if (result && auth.id == "auth-youtube") {
             auth.innerText = "Saved";
             // <span class="icon icon-check"></span>
             const icon = document.createElement("span");
@@ -106,13 +106,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function switchAuthorizationTabs(authId) {
   const authTabContent1 = document.getElementById("tab-content__form__spotify");
-  const authTabContent2 = document.getElementById("tab-content__form__soundcloud");
+  const authTabContent2 = document.getElementById("tab-content__form__youtube");
   const authTabItems = document.querySelectorAll(".tab-item__form");
 
   if (authId == "auth-spotify") {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
     window.bridgeApis
-      .invoke("get-multiple-states", ["spotify-secrets-received", "soundcloud-secrets-received"])
+      .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
       .then((value) => {
         if (value[0] == "true" && value[1] == "true") {
           window.bridgeApis.send("reload-current-window");
@@ -126,7 +126,7 @@ function switchAuthorizationTabs(authId) {
   } else {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
     window.bridgeApis
-      .invoke("get-multiple-states", ["spotify-secrets-received", "soundcloud-secrets-received"])
+      .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
       .then((value) => {
         if (value[0] == "true" && value[1] == "true") {
           window.bridgeApis.send("reload-current-window");

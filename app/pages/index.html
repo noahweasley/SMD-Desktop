@@ -147,132 +147,7 @@
                                 <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet ?? &nbsp Try performing some actions, and you would see the results here <span class="icon icon-dot icon-x2"></span></p>
                             </div>
 
-                            <ul class="list-group list-group__downloaded gone">
-<!-- 
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left"
-                                        src="../../sample-images/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg">
-
-                                    <div class="media-body">
-                                        <strong>8. Middle Finger</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li>
-
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left" src="../../sample-images/Arduino kit.jpg">
-
-                                    <div class="media-body">
-                                        <strong>1. Why do I?</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li>
-                                
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left"
-                                        src="../../sample-images/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg">
-
-                                    <div class="media-body">
-                                        <strong>8. Middle Finger</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li>
-
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left" src="../../sample-images/Arduino kit.jpg">
-
-                                    <div class="media-body">
-                                        <strong>1. Why do I?</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li>
-
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left"
-                                        src="../../sample-images/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg">
-
-                                    <div class="media-body">
-                                        <strong>8. Middle Finger</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li>
-
-                                <li class="list-group-item">
-
-                                    <img class="media-object pull-left" src="../../sample-images/Arduino kit.jpg">
-
-                                    <div class="media-body">
-                                        <strong>1. Why do I?</strong>
-                                        <p class="message">Failed to download, please try again</p>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-folder icon-x2"></span>
-                                        </div>
-
-                                        <div class="op-icon not-draggable pull-right">
-                                            <span class="icon icon-trash icon-x2"></span>
-                                        </div>
-
-                                    </div>
-
-                                </li> -->
-
-                            </ul>
+                            <ul class="list-group list-group__downloaded gone"></ul>
 
                         </div>
 
@@ -322,8 +197,8 @@
                             SECRET from Spotify</a></li>
                     <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into <span class="name"></span></li>
                     <li class="step">Set Redirect URL as <b class="selectable-text">http://localhost:8888/callback</b></li>
-                    <li class="step"><a href="https://soundcloud.com/">Get a CLIENT ID from Soundcloud</a></li>
-                    <li class="step">Copy and Paste the CLIENT ID into <span class="name"></span></li>
+                    <li class="step"><a href="https://soundcloud.com/">Get a YouTube API key from YouTube (optional)</a></li>
+                    <li class="step">Copy and Paste the API Key into <span class="name"></span> (optional)</li>
                     <li class="step">Start Vibing <span class="icon icon-megaphone"></span></li>
                 </ol>
 
@@ -339,7 +214,7 @@
                         <span class="icon icon-spotify icon-x2"></span> Spotify
                     </div>
                     <div class="__tab-item tab-item__form">
-                        <span class="icon icon-soundcloud icon-x2"></span> SoundCloud
+                        <span class="icon icon-video icon-x2"></span> YouTube
                     </div>
                 </div>
 
@@ -364,16 +239,16 @@
 
                     </div>
 
-                    <div class="invisible" id="tab-content__form__soundcloud">
+                    <div class="invisible" id="tab-content__form__youtube">
 
                         <form>
                             <div class="form-group">
-                                <label>SoundCloud Client ID</label>
-                                <input type="text" class="form-control" placeholder="Client ID" id="socid" required>
+                                <label>Optional Youtube API Key</label>
+                                <input type="text" class="form-control" placeholder="API Key" id="ytak" required>
                             </div>
                         </form>
                         <div class="form-actions">
-                            <button class="btn btn-form" id="auth-soundcloud">Save</button>
+                            <button class="btn btn-form" id="auth-youtube">Save</button>
                         </div>
 
                     </div>

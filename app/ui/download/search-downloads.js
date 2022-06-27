@@ -43,10 +43,15 @@ window.addEventListener("DOMContentLoaded", () => {
           list.classList.remove("gone");
           errorDecoration.style.setProperty("display", "none");
           buttons.forEach((button) => button.removeAttribute("disabled"));
-        } else {
+        } else if (data instanceof String) {
           list.classList.add("gone");
           errorDecoration.style.setProperty("display", "flex");
           message.innerText = data;
+          buttons[0].removeAttribute("disabled");
+        } else {
+          list.classList.add("gone");
+          errorDecoration.style.setProperty("display", "flex");
+          message.innerText = "Something went wrong";
           buttons[0].removeAttribute("disabled");
         }
   

@@ -3,8 +3,8 @@
 const { app } = require("electron");
 
 const path = require("path");
+const fsp = require("fs/promises");
 const fs = require("fs");
-
 const preferenceFileDir = path.join(app.getPath("userData"), "User", "Preferences");
 const defPreferenceFilePath = path.join(preferenceFileDir, "Settings.json");
 
@@ -19,12 +19,12 @@ function checkArgs(...args) {
 
 // read the preference file from disk and then return an object representation
 // of the file
-function getPreferences(prefFileName) {
+async function getPreferences(prefFileName) {
   checkArgs(prefFileName);
   let fileName = prefFileName ? path.join(preferenceFileDir, prefFileName) : defPreferenceFilePath;
 
   try {
-    let data = fs.readFileSync(fileName, "utf8");
+    let data = await fsp.readFile(fileName, "utf8");
     return JSON.parse(data);
   } catch (err) {
     return createPrefFile();
@@ -32,16 +32,14 @@ function getPreferences(prefFileName) {
 
   function createPrefFile() {
     fs.open(fileName, "wx", (err, _fd) => {
-      function createPrefDirectory() {
-        fs.mkdirSync(
-          preferenceFileDir,
-          {
-            recursive: true,
-          },
-          function (err) {
-            if (err) console.log("An error occurred while creating setttings directory");
-          }
-        );
+      async function createPrefDirectory() {
+        try {
+          return await fsp.mkdir(preferenceFileDir, {
+            recursive: true
+          });
+        } catch (err) {
+          console.log("Error while creating file directory");
+        }
       }
 
       if (err) {
@@ -49,9 +47,7 @@ function getPreferences(prefFileName) {
         else if (err.code === "ENOENT") createPrefDirectory(fileName);
         else console.log(err.code);
       } else {
-        fs.writeFileSync(fileName, "{}", (err) => {
-          if (err) console.log("An error occurred while writing file");
-        });
+        fsp.writeFile(fileName, "{}");
       }
     });
 
@@ -60,13 +56,13 @@ function getPreferences(prefFileName) {
 }
 
 // writes to file, the specific pref specified by *pref*
-function setPreferences(pref, prefFileName) {
+async function setPreferences(pref, prefFileName) {
   checkArgs(pref, prefFileName);
   let fileName = prefFileName ? path.join(preferenceFileDir, prefFileName) : defPreferenceFilePath;
 
   const preference = JSON.stringify(pref);
   try {
-    fs.writeFileSync(fileName, preference);
+    await fsp.writeFile(fileName, preference);
     return true;
   } catch (err) {
     console.error("An error occurred while writing file");

@@ -8,7 +8,7 @@ function dataReveal() {
   titileBar.classList.remove("gone");
 
   window.bridgeApis
-    .invoke("get-multiple-states", ["spotify-secrets-received", "soundcloud-secrets-received"])
+    .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
     .then((value) => {
       loader.classList.add("gone");
       if (value[0] == "true" && value[1] == "true") {

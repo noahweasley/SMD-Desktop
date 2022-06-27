@@ -389,7 +389,7 @@ a:active {
   position: absolute;
   top: 30%;
   width: 40px;
-  background-color: var(--grey-solid_5);
+ background-color: var(--grey-solid_5);
   border-radius: 8px;
   padding: 0 8px;
   display: flex;
@@ -402,8 +402,12 @@ a:active {
   left: var(--pos);
 }
 
-.media-body > .op-icon:last-of-type {
+.media-body > .op-icon:nth-of-type(2) {
   left: calc(var(--pos) - 70px);
+}
+
+.media-body > .op-icon:nth-of-type(3) {
+  left: calc(var(--pos) - 140px);
 }
 
 .media-body > .op-icon:hover {
@@ -742,23 +746,23 @@ form {
   margin-left: 10px;
 }
 
-.icon-soundcloud,
+.icon-video,
 .icon-megaphone {
-  color: var(--soundcloud-orange);
+  color: var(--yt-red);
 }
 
 .icon-spotify {
   color: var(--spotify-green);
 }
 
-#auth-soundcloud {
+#auth-youtube {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.7em;
 }
 
-#auth-soundcloud span {
+#auth-youtube span {
   color: white;
   border: none;
   margin: 0px;

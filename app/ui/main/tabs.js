@@ -52,5 +52,5 @@ function registerTabEvents(tabItem, ...tabContent) {
 
 window.addEventListener("DOMContentLoaded", () => {
   registerTabEvents(".__tab-item", "tab-content__downloading", "tab-content__downloaded");
-  registerTabEvents(".tab-item__form", "tab-content__form__spotify", "tab-content__form__soundcloud");
+  registerTabEvents(".tab-item__form", "tab-content__form__spotify", "tab-content__form__youtube");
 });

@@ -61,20 +61,21 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
       document.querySelectorAll(".cbx-select").forEach((s_cbx) => {
+        let cbx_Index = Array.from(select).indexOf(s_cbx);
+        SELECTED_POS[cbx_Index] = false;
         s_cbx.addEventListener("click", () => {
-          SELECTED_POS[Array.from(select).indexOf(s_cbx)] = s_cbx.checked;
-          console.log(SELECTED_POS);
+          SELECTED_POS[cbx_Index] = s_cbx.checked;
         });
       });
     });
   }
 
   function displayDataOnList(data, list) {
+    listData = data;
     const downloadType = document.querySelector(".download-type");
     const type = document.querySelector(".download-type .type");
     const option = document.querySelector(".download-type .option");
     
-    listData = data;
     downloadType.classList.remove("gone");
     
     if (data["type"] == "album") {
