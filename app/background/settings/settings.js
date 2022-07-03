@@ -4,7 +4,6 @@ const { app } = require("electron");
 
 const path = require("path");
 const fsp = require("fs/promises");
-const fs = require("fs");
 const preferenceFileDir = path.join(app.getPath("userData"), "User", "Preferences");
 const defPreferenceFilePath = path.join(preferenceFileDir, "Settings.json");
 
@@ -30,26 +29,25 @@ async function getPreferences(prefFileName) {
     return createPrefFile();
   }
 
-  function createPrefFile() {
-    fs.open(fileName, "wx", (err, _fd) => {
-      async function createPrefDirectory() {
-        try {
-          return await fsp.mkdir(preferenceFileDir, {
-            recursive: true
-          });
-        } catch (err) {
-          console.log("Error while creating file directory");
-        }
-      }
+  async function createPrefFile() {
+    try {
+      await fsp.open(fileName, "wx");
+      fsp.writeFile(fileName, "{}");
+    } catch (err) {
+      if (err.code === "EEXIST") return;
+      else if (err.code === "ENOENT") createPrefDirectory(fileName);
+      else console.log(err.code);
+    }
 
-      if (err) {
-        if (err.code === "EEXIST") return;
-        else if (err.code === "ENOENT") createPrefDirectory(fileName);
-        else console.log(err.code);
-      } else {
-        fsp.writeFile(fileName, "{}");
+    async function createPrefDirectory() {
+      try {
+        return await fsp.mkdir(preferenceFileDir, {
+          recursive: true
+        });
+      } catch (err) {
+        console.log("Error while creating file directory");
       }
-    });
+    }
 
     return {};
   }

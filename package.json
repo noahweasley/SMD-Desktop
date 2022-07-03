@@ -5,7 +5,9 @@
   "description": "The best desktop app to download Spotity songs for free and legally !!",
   "main": "app/background/main.js",
   "scripts": {
-    "start": "electron .",
+    "transpile": "babel app -d dist",
+    "display": "electron .",
+    "start": "npm run display",
     "debug": "electron . --trace-warnings",
     "codesign": "",
     "pack:osx": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=app/assets/build/osx/app_icon.icns && npm run codesign",
@@ -30,6 +32,9 @@
   "author": "NoahWeasley",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@babel/cli": "^7.18.6",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
     "electron": "^15.3.1",
     "electron-packager": "^15.4.0",
     "electron-winstaller": "^5.0.0"
@@ -44,7 +49,7 @@
     "knex": "^0.95.15",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.0.2",
-    "youtube-dl-exec": "^2.0.12",
-    "youtube-search-without-api-key": "^1.0.7"
+    "youtube-search-without-api-key": "^1.0.7",
+    "yt-dlp-wrap": "^2.3.11"
   }
 }
