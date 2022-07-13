@@ -114,7 +114,7 @@ function switchAuthorizationTabs(authId) {
     window.bridgeApis
       .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
       .then((value) => {
-        if (value[0] == "true" && value[1] == "true") {
+        if (value[0] == "true") {
           window.bridgeApis.send("reload-current-window");
         } else {
           authTabContent1.classList.add("invisible");

@@ -1,5 +1,6 @@
 const SpotifyWebApi = require("spotify-web-api-node");
-const spotifyApi = new SpotifyWebApi();
+const { refreshSpoifyAccessToken } = require("./authorize");
+module.exports.spotifyApi = new SpotifyWebApi();
 
 /**
  * starts album downlaod
@@ -13,10 +14,11 @@ module.exports.performAlbumDownloadAction = async function (albumUrl, limit = 50
 
   for (let x = 0; x <= 3; x++) {
     try {
-      data = await spotifyApi.getAlbumTracks(album, { limit });
+      data = await this.spotifyApi.getAlbumTracks(album, { limit });
       dataReceived = true;
       break;
     } catch (err) {
+      console.log(err)
       await refreshSpoifyAccessToken();
     }
   }
@@ -65,7 +67,7 @@ module.exports.performPlaylistDownloadAction = async function (playlistUrl) {
 
   for (let x = 0; x <= 3; x++) {
     try {
-      data = await spotifyApi.getPlaylist(playlist);
+      data = await this.spotifyApi.getPlaylist(playlist);
       dataReceived = true;
       break;
     } catch (err) {
@@ -104,7 +106,7 @@ module.exports.performTrackDownloadAction = async function (trackUrl) {
 
   for (let x = 0; x <= 3; x++) {
     try {
-      data = await spotifyApi.getTrack(track);
+      data = await this.spotifyApi.getTrack(track);
       dataReceived = true;
       break;
     } catch (err) {

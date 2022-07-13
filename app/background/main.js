@@ -1,8 +1,9 @@
 "use-strict";
 
-const spotifyDownloader = require("./server/spotify-dl");
+const spDl = require("./server/spotify-dl");
+const spotifyApi = spDl.spotifyApi;
 const Settings = require("./settings/settings");
-const { refreshSpoifyAccessToken, authorizeApp } = require("./server/authorize");
+const { authorizeApp } = require("./server/authorize");
 const ytDl = require("./server/youtube-dl");
 const { SpotifyURLType, getSpotifyURLType } = require("./util");
 const database = require("./database/database");
@@ -106,6 +107,7 @@ ipcMain.handle("get-states", async (_event, args) => {
 });
 
 ipcMain.handle("get-multiple-states", async (_event, args) => {
+  console.log(await Settings.getStates(args));
   return await Settings.getStates(args);
 });
 
@@ -197,13 +199,17 @@ ipcMain.handle("clipboard-request", () => {
 
 // ... request to search for tracks to download
 ipcMain.handle("search-tracks", async (_event) => {
-  return await soundcloud.searchTracks({ data: queryDownloadData, indices: querySeletedIndices });
+  let results = [];
+
+  for (let x = 0; x < queryDownloadData; x++) {
+    results.push(ytDl.searchMatchingTracks());
+  }
 });
 
 /**
  * @returns an object with the requested Spotify data
  */
-function getSongData() {
+async function getSongData() {
   let data, spotifyURLType;
   let clipboardContent = clipboard.readText();
 
@@ -219,10 +225,15 @@ function getSongData() {
     return error.message;
   }
 
-  spotifyApi.setClientId(Settings.getStateSync("spotify-user-client-id"));
-  spotifyApi.setClientSecret(Settings.getStateSync("spotify-user-client-secret"));
-  spotifyApi.setAccessToken(Settings.getStateSync("spotify-access-token"));
-  spotifyApi.setRefreshToken(Settings.getStateSync("spotify-refresh-token"));
+  let spotifyUserClientId = await Settings.getState("spotify-user-client-id");
+  let spotifyClientSecret = await Settings.getState("spotify-user-client-secret");
+  let spotifyAccessToken = await Settings.getState("spotify-access-token");
+  let spotifyRefreshToken = await Settings.getState("spotify-refresh-token");
+
+  spotifyApi.setClientId(spotifyUserClientId);
+  spotifyApi.setClientSecret(spotifyClientSecret);
+  spotifyApi.setAccessToken(spotifyAccessToken);
+  spotifyApi.setRefreshToken(spotifyRefreshToken);
 
   const spotifyLinkRegex = new RegExp("https://open.spotify.com");
   try {
@@ -230,16 +241,16 @@ function getSongData() {
       // then ...
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
-          data = spotifyDownloader.performTrackDownloadAction(clipboardContent);
+          data = spDl.performTrackDownloadAction(clipboardContent);
           break;
         case SpotifyURLType.ALBUM:
-          data = spotifyDownloader.performAlbumDownloadAction(clipboardContent);
+          data = spDl.performAlbumDownloadAction(clipboardContent);
           break;
         case SpotifyURLType.ARTIST:
-          data = spotifyDownloader.performArtistDownloadAction(clipboardContent);
+          data = spDl.performArtistDownloadAction(clipboardContent);
           break;
         case SpotifyURLType.PLAYLIST:
-          data = spotifyDownloader.performPlaylistDownloadAction(clipboardContent);
+          data = spDl.performPlaylistDownloadAction(clipboardContent);
           break;
         default:
           throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
@@ -268,9 +279,6 @@ async function beginDownloads(args) {
   } else {
     trackData = await getSongData();
   }
-  
-  
-
 }
 
 /**

@@ -73,10 +73,11 @@ async function setPreferences(pref, prefFileName) {
  
  * @param key the key to check it's existence
  */
-module.exports.hasKey = function (key, prefFileName) {
+module.exports.hasKey = async function (key, prefFileName) {
   checkArgs(key, prefFileName);
   // check if object has property key
-  for (let pref in getPreferences(prefFileName)) {
+  let dataOB = await getPreferences(prefFileName);
+  for (let pref in dataOB) {
     if (pref === key) return true;
   }
 
@@ -91,11 +92,11 @@ module.exports.hasKey = function (key, prefFileName) {
  * @param {*} key the key in settings in which it's value would be retrieved
  * @param {*} defaultValue the default value to be retrieved if that key has never been set
  */
-module.exports.getStateSync = function (key, defaultValue, prefFileName) {
+module.exports.getStateSync = async function (key, defaultValue, prefFileName) {
   checkArgs(key, prefFileName);
   // first check if key exists
   if (this.hasKey(key, prefFileName)) {
-    const dataOB = getPreferences(prefFileName);
+    const dataOB = await getPreferences(prefFileName);
     return `${dataOB[`${key}`]}`;
   } else return `${defaultValue}`;
 };
@@ -110,11 +111,11 @@ module.exports.getStateSync = function (key, defaultValue, prefFileName) {
  * @returns a Promises that resolves to the value set previously or just resolves to the default value
  */
 module.exports.getState = function (key, defaultValue, prefFileName) {
-  return new Promise((resolve, _reject) => {
+  return new Promise(async (resolve, _reject) => {
     checkArgs(key, prefFileName);
     // first check if key exists
     if (this.hasKey(key, prefFileName)) {
-      const dataOB = getPreferences(prefFileName);
+      const dataOB = await getPreferences(prefFileName);
       resolve(`${dataOB[`${key}`]}`);
     } else resolve(`${defaultValue}`);
   });
@@ -129,13 +130,13 @@ module.exports.getState = function (key, defaultValue, prefFileName) {
  * @param {*} defaultValue the default value to be retrieved if that key has never been set
  * @returns a Promises that resolves to the values set previously or just resolves to an empty array
  */
-module.exports.getStates = function (states, prefFileName) {
-  return new Promise((resolve, reject) => {
+module.exports.getStates = async function (states, prefFileName) {
+  return new Promise(async (resolve, reject) => {
     checkArgs(prefFileName);
     if (!states instanceof Array) {
       reject("states must be a qualified Array object");
     }
-    const dataOB = getPreferences(prefFileName);
+    const dataOB = await getPreferences(prefFileName);
     let values = [];
     for (let key of states) {
       // first check if key exists
@@ -158,9 +159,9 @@ module.exports.getStates = function (states, prefFileName) {
  * @param {*} key the key in settings in which it's value would be retrieved
  * @param {*} value the value to be set
  */
-module.exports.setStateSync = function (key, value, prefFileName) {
+module.exports.setStateSync = async function (key, value, prefFileName) {
   checkArgs(key, prefFileName);
-  let pref = getPreferences(prefFileName);
+  let pref = await getPreferences(prefFileName);
   pref[`${key}`] = `${value}`;
   return setPreferences(pref);
 };
@@ -174,10 +175,10 @@ module.exports.setStateSync = function (key, value, prefFileName) {
  * @param {*} key the key in settings in which it's value would be retrieved
  * @param {*} value the value to be set
  */
-module.exports.setState = function (key, value, prefFileName) {
-  return new Promise((resolve, _reject) => {
+module.exports.setState = async function (key, value, prefFileName) {
+  return new Promise(async (resolve, _reject) => {
     checkArgs(key, prefFileName);
-    let pref = getPreferences(prefFileName);
+    let pref = await getPreferences(prefFileName);
     pref[`${key}`] = `${value}`;
     resolve(setPreferences(pref));
   });
@@ -192,13 +193,13 @@ module.exports.setState = function (key, value, prefFileName) {
  * @returns the
  */
 module.exports.setStates = function (states, prefFileName) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let inserted = [];
     checkArgs(prefFileName);
     if (!states instanceof Object) {
       reject("states must be a qualified JSON object");
     }
-    let pref = getPreferences(prefFileName);
+    let pref = await getPreferences(prefFileName);
     Object.keys(states).forEach((key) => {
       pref[`${key}`] = `${states[`${key}`]}`;
       inserted.push(pref[`${key}`]);
@@ -215,9 +216,9 @@ module.exports.setStates = function (states, prefFileName) {
  
  * @param {*} key the key in settings that would be deleted
  */
-module.exports.deleteKey = function (key, prefFileName) {
+module.exports.deleteKey = async function (key, prefFileName) {
   checkArgs(key, prefFileName);
-  let pref = getPreferences();
+  let pref = await getPreferences();
   // check if key is present in prefs
   if (this.hasKey(key, prefFileName)) {
     delete pref[`${key}`];

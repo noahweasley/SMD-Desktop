@@ -11,7 +11,7 @@ const BINARY_LOCATION = path.join(app.getPath("exe"), "ytdlp");
  *
  * @param {*} query the video title to be used in search
  */
-module.exports.searchMatchingTracks = (query) => {
+module.exports.searchMatchingTracks = async (query) => {
   let sarr = await ytSearch.search(query);
   return sarr.map((video) => {
     let videoOb = {
@@ -36,7 +36,7 @@ module.exports.downloadMatchingTrack = async function (options) {
   if (isDownloaded) {
     let ytdlpWrapper = new ytdlp(Setup.binaryLocation);
     ytdlpWrapper
-      .execStream([options.videoLink, "-f", "140"])
+      .execStream([options.videoLink, "-f", "140"]) /** 140 here means that the audio would be extracted */
       .on("progress", (progress) => {
         console.log(progress.percent);
       })
@@ -55,7 +55,7 @@ module.exports.downloadMatchingTrack = async function (options) {
  */
 module.exports.downloadYTDLPBinaries = async function () {
   return new Promise((resolve, reject) => {
-    fs.open(Setup.binaryLocation, "r+", (err, _fd) => {
+    fs.open(Setup.binaryLocation, "r+", async (err, _fd) => {
       if (err && err.code == "ENOENT") {
         try {
           await ytdlp.downloadFromGithub(Setup.binaryLocation, Setup.binaryVersion);
