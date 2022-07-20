@@ -11,7 +11,7 @@ function dataReveal() {
     .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
     .then((value) => {
       loader.classList.add("gone");
-      if (value[0] == "true") {
+      if (value[0] === "true") {
         windowContent.classList.remove("gone");
         modal.style.setProperty("display", "none");
       } else {
