@@ -14,11 +14,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const windowContent = document.getElementById("content");
 
   window.bridgeApis.invoke("app-details").then((content) => {
-    header.innerText = `${content[0]} - version - ${content[1]}`;
-    names.forEach((name) => {
-      name.innerText = content[0];
-    });
-
+    header.innerHTML = `${content[0]}&nbsp&nbsp - &nbsp&nbspversion ${content[1]}`;
+    names.forEach((name) => (name.innerText = content[0]));
+    
     inderminateProgres.classList.add("gone");
     windowContent.classList.remove("gone");
   });
