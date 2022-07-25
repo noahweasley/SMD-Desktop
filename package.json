@@ -2,9 +2,10 @@
   "name": "smd-desktop",
   "productName": "S.M.D Desktop",
   "version": "1.0.0",
-  "description": "The best desktop app to download Spotity songs for free and legally !!",
+  "description": "The best cross-platform desktop app to search and download songs for free, spotify tracks are also searchable",
   "main": "app/background/main.js",
   "scripts": {
+    "test" : "node tests/test",
     "transpile": "babel app -d dist",
     "display": "electron .",
     "start": "npm run display",
