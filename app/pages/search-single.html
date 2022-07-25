@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/photon.css" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/list-syles.css" />
+    <title>Confirm Search List</title>
+</head>
+
+<body>
+    <div class="download-window">
+        <div class="list-container">
+            <div class="error-decor gone">
+                <span class="icon icon-alert icon-x4"></span>
+                <p class="message text-center">Something went wrong, please try again</p>
+                <input type="button" value="Try again" id="retry" />
+            </div>
+            <div class="list scroll gone">
+                <ul class="list-group">
+                    <div class="list-group-header">
+                        <p>TRACK THUMBNAIL</p>
+                        <p>TRACK DETAILS</p>
+                        <div class="select-action">
+                            <label for="select-all">SELECT ALL</label>
+                            <input type="checkbox" name="select-all" id="select-all" aria-checked="true" />
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <div class="loader">
+                <div class="indeterminate-progress small-progress"></div>
+                <p class="meessage">Analyzing please wait ...</p>
+            </div>
+        </div>
+
+        <div class="list-actions">
+            <button class="btn btn-negative btn-downloads" id="cancel-download" disabled>Cancel</button>
+            <button class="btn btn-positive btn-downloads" id="proceed-download" disabled>Search</button>
+        </div>
+    </div>
+
+    <strong class="download-type gone"><span class="type"></span> <span class="option"></span></strong>
+
+    <script src="../ui/download/single-search.js"></script>
+</body>
+
+</html>
