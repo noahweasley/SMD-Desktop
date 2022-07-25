@@ -1,13 +1,14 @@
 # SMD Desktop
 
-## The Best Multi-platform Open-sourced desktop app to download Spotity songs for free
+### The best cross-platform desktop app to search and download songs for free, spotify tracks are also searchable
 
 <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
 
 
 ## About SMD Desktop
 
-Well, I had a deep thought for like... 2 seconds, and I named my App Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use Soundcloud's API to download the actual songs. It was that simple (Easier said than done). I actually used less open-source libraries in SMD Desktop's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer. I built SMD Desktop because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it.
+
+Well, I had a deep thought for like... 2 seconds, and I named my App Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in SMD Desktop's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer. I built SMD Desktop because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it.
 
 
 ## Contributing
@@ -19,22 +20,31 @@ There are many ways in which you can participate in this project, for example:
 * Review the project and make pull requests for anything from typos to additional and new content
 
     
-### Application package usages
+## Application package usages
 
 **N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-Desktop/tree/master/app)_
 
 
-| Folder                    | Function                                                                               |
-|---------------------------|----------------------------------------------------------------------------------------|
-| app                       | contains main application code used in production                                      |
+| Folder                    | Function                                                                               
+|---------------------------|-------------------------------------------------------------------------------|
+| app                       | contains main application code used in production   
+|
+| app/assets                | contains assets used in both development and production
+|
 | app/background            | contains all the main processes (Node JS) code, executed on the background.            |
 | app/background/database   | contains all the main processes (Node JS) code, executed on the background.            |
 | app/background/server     | contains all the main processes (Node JS) code, executed on the background.            |
-| app/background/settings   | contains all the main processes (Node JS) code, executed on the background.            |
 | app/fonts                 | contains Photon's font and icon library                                                |
 | app/stylesheets           | contains CSS or stylesheets that would accompany each page                             |
 | app/pages                 | contains all the HTML files that would be loaded into each Browser Window              |
-| app/ui                    | contains all the renderer processes (Chromium v8 Engine) code, executed on the browser |
+| app/ui                    | contains all the renderer processes (Chromium v8 Engine) code, executed on the browser
+|
+| app/ui/about              | contains program related to about window
+|
+| app/ui/download           | contains program related to file download
+|
+| app/ui/main               | contains program related to main window
+|
 | assets                    | contains all application assets used in both build and production                      |
 | docs                      | contains code used in product website                                                  |
 
