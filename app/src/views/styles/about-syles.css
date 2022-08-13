@@ -1,0 +1,15 @@
+@import url(global-styles.css);
+
+h4 {
+  color: white;
+}
+
+.info {
+  margin: 16px;
+  color: whitesmoke;
+}
+
+.icon-heart {
+  color: hotpink;
+  margin: 8px;
+}

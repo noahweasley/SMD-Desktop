@@ -3,7 +3,7 @@
   "productName": "S.M.D Desktop",
   "version": "1.0.0",
   "description": "The best cross-platform desktop app to search and download songs for free, spotify tracks are also searchable",
-  "main": "app/background/main.js",
+  "main": "app/src/main/index.js",
   "scripts": {
     "test" : "node tests/test",
     "transpile": "babel app -d dist",
