@@ -5,9 +5,6 @@ const menu = require("../main/menu");
 const path = require("path");
 const State = require("../main/util/sp-util");
 
-/**
- * Spawns up a new SMD window with a limitations of 1 winodws
- */
 module.exports = function (settings) {
   let smd_window;
 

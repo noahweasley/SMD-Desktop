@@ -3,16 +3,16 @@
 const settings = require("node-user-settings");
 const browsers = require("../browsers")(settings);
 const { app } = require("electron");
-const { mainWindow } = browsers;
+const { mainWindow} = browsers;
 const database = require("./database")
 const path = require("path")
 const fs = require("fs")
 
-require("../events")(settings, browsers, database);
-
 settings.initialize({
   dir: path.join(app.getPath("userData"), "User", "Preferences")
 });
+
+require("../events")(settings, browsers, database);
 
 app.whenReady().then(async () => {
   createAppFiles();
@@ -21,6 +21,7 @@ app.whenReady().then(async () => {
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) mainWindow.init(windowState);
+    
   });
 });
 

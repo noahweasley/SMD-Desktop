@@ -14,14 +14,13 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
   let WINDOW_STATE = State.DEFAULT;
   const { mainWindow, downloadWindow, multiSearchWindow, singleSearchWindow, aboutWindow } = browsers;
 
-  const smd_window = mainWindow.getWindow();
 
   // window acton click
   ipcMain.on("action-click-event", (_event, id) => {
     if (id === "window-action-close") {
       mainWindow.getWindow().close();
     } else if (id === "window-action-minimize") {
-      smd_window.minimize();
+      mainWindow.getWindow().minimize();
     } else {
       if (!!!WINDOW_STATE || WINDOW_STATE === State.DEFAULT) {
         mainWindow.getWindow().maximize();
@@ -33,7 +32,7 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
     }
   });
 
-  //link navigate
+  // link navigate
   ipcMain.on("navigate-link", (_event, arg) => {
     let linkByType;
     switch (arg) {
@@ -115,20 +114,20 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
     multiSearchWindow.init();
   });
 
-  // ... show single-track-search window
+  //  show single-track-search window
   ipcMain.on("show-single-search-window", () => {
     singleSearchWindow.init();
   });
 
-  // ... show download details window
+  // show download details window
   ipcMain.on("show-download-window", () => {
     downloadWindow.init();
   });
 
-  // ... request to start downloading
+  // request to start downloading
   ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
 
-  // .. request to reload current focused window
+  // request to reload current focused window
   ipcMain.on("reload-current-window", () => {
     if (BrowserWindow.getFocusedWindow() != null) BrowserWindow.getFocusedWindow().reload();
   });
@@ -143,7 +142,7 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
     }
   });
 
-  // ... clipboard content request
+  // clipboard content request
   ipcMain.handle("clipboard-request", () => {
     let urlType, errMsg;
     try {

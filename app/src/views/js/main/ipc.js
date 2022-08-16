@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ...
   document.querySelector(".search").addEventListener("click", () => {
-    window.bridgeApis.invoke("show-single-search-window").then((content) => {});
+    window.bridgeApis.send("show-single-search-window");
   });
 
   window.bridgeApis.invoke("app-details").then((content) => {
