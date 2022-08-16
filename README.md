@@ -19,35 +19,6 @@ There are many ways in which you can participate in this project, for example:
 * Review [source code changes](https://github.com/noahweasley/SMD-desktop/pulls)
 * Review the project and make pull requests for anything from typos to additional and new content
 
-    
-## Application package usages
-
-**N.B** : _All packages listed here are located [here](https://github.com/noahweasley/SMD-Desktop/tree/master/app)_
-
-
-| Folder                    | Function                                                                               
-|---------------------------|-------------------------------------------------------------------------------|
-| app                       | contains main application code used in production   
-|
-| app/assets                | contains assets used in both development and production
-|
-| app/background            | contains all the main processes (Node JS) code, executed on the background.            |
-| app/background/database   | contains all the main processes (Node JS) code, executed on the background.            |
-| app/background/server     | contains all the main processes (Node JS) code, executed on the background.            |
-| app/fonts                 | contains Photon's font and icon library                                                |
-| app/stylesheets           | contains CSS or stylesheets that would accompany each page                             |
-| app/pages                 | contains all the HTML files that would be loaded into each Browser Window              |
-| app/ui                    | contains all the renderer processes (Chromium v8 Engine) code, executed on the browser
-|
-| app/ui/about              | contains program related to about window
-|
-| app/ui/download           | contains program related to file download
-|
-| app/ui/main               | contains program related to main window
-|
-| assets                    | contains all application assets used in both build and production                      |
-| docs                      | contains code used in product website                                                  |
-
 
 ## Download
 
