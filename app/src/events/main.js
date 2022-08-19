@@ -2,18 +2,21 @@
 
 const State = require("../browsers/state");
 const { SpotifyURLType, getSpotifyURLType } = require("../main/util/sp-util");
-const spdl = require("../main/server/spotify-dl");
-const { authorizeApp } = require("../main/server/authorize");
+const spotifyDl = require("../main/server/spotify-dl");
+const auth = require("../main/server/authorize");
 const { app, shell, ipcMain, clipboard, dialog } = require("electron");
 const path = require("path");
-const isDebugging = require("../main/test/is-debug");
+const isDebug = require("../main/test/is-debug");
 const dummy = require("../main/util/dummy");
-const spotifyApi = spdl.spotifyApi;
 
-module.exports = function (settings, browsers, database, queryDownloadData) {
+module.exports = function (settings, browsers, database) {
   let WINDOW_STATE = State.DEFAULT;
-  const { mainWindow, downloadWindow, multiSearchWindow, singleSearchWindow, aboutWindow } = browsers;
 
+  const { mainWindow, downloadWindow, multiSearchWindow, singleSearchWindow, aboutWindow } = browsers;
+  const { authorizeApp } = auth(settings);
+
+  const spdl = spotifyDl(settings);
+  const spotifyApi = spdl.spotifyApi;
 
   // window acton click
   ipcMain.on("action-click-event", (_event, id) => {
@@ -132,21 +135,11 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
     if (BrowserWindow.getFocusedWindow() != null) BrowserWindow.getFocusedWindow().reload();
   });
 
-  // download acton click
-  ipcMain.on("search-click-event", (_event, args) => {
-    queryDownloadData = args[1];
-
-    downloadWindow.getWindow().close();
-    if (args[0] === "proceed-download") {
-      multiSearchWindow.init();
-    }
-  });
-
   // clipboard content request
   ipcMain.handle("clipboard-request", () => {
     let urlType, errMsg;
     try {
-      urlType = getSpotifyURLType(isDebugging ? dummy.getRandomClipboardText() : clipboard.readText());
+      urlType = getSpotifyURLType(isDebug ? dummy.getRandomClipboardText() : clipboard.readText());
     } catch (err) {
       errMsg = err.message;
       // display modal dialog with details of error
@@ -164,7 +157,7 @@ module.exports = function (settings, browsers, database, queryDownloadData) {
    */
   async function getSongData() {
     let data, spotifyURLType;
-    let clipboardContent = isDebugging ? dummy.getRandomClipboardText() : clipboard.readText();
+    let clipboardContent = isDebug ? dummy.getRandomClipboardText() : clipboard.readText();
 
     try {
       spotifyURLType = getSpotifyURLType(clipboardContent);
