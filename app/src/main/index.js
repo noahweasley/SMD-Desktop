@@ -1,16 +1,16 @@
 "use-strict";
 
-const settings = require("node-user-settings");
-const browsers = require("../browsers")(settings);
+const path = require("path");
+const fs = require("fs");
 const { app } = require("electron");
-const { mainWindow} = browsers;
-const database = require("./database")
-const path = require("path")
-const fs = require("fs")
 
-settings.initialize({
-  dir: path.join(app.getPath("userData"), "User", "Preferences")
+const settings = require("node-user-settings")({
+  preferenceFileDir: path.join(app.getPath("userData"), "User", "Preferences")
 });
+
+const browsers = require("../browsers")(settings);
+const { mainWindow } = browsers;
+const database = require("./database");
 
 require("../events")(settings, browsers, database);
 
@@ -21,7 +21,6 @@ app.whenReady().then(async () => {
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) mainWindow.init(windowState);
-    
   });
 });
 
