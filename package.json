@@ -5,7 +5,7 @@
   "description": "The best cross-platform desktop app to search and download songs for free, spotify tracks are also searchable",
   "main": "app/src/main/index.js",
   "scripts": {
-    "test" : "node tests/test",
+    "test": "node tests/test",
     "transpile": "babel app -d dist",
     "display": "electron .",
     "start": "npm run display",
@@ -48,7 +48,7 @@
     "express": "^4.17.2",
     "ffmpeg": "^0.0.4",
     "knex": "^0.95.15",
-    "node-user-settings": "^0.0.1",
+    "node-user-settings": "^0.0.3",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.0.2",
     "youtube-search-without-api-key": "^1.0.7",
