@@ -2,10 +2,10 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
-const { fs } = require("fs");
-const isDev = require("../test/is-debug");
+const fs = require("fs");
+const isDebug = require("../test/is-debug");
 
-const BINARY_LOCATION = path.join("/Users/Noah/Desktop", "ytdlp");
+const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath("appData"), "ytdlp");
 
 /**
  * Searches YouTube for a list of matching videos specified by `query`
@@ -21,26 +21,32 @@ module.exports.searchMatchingTracks = async function (query) {
     }
   ];
 
-  return Promise.resolve({
-    searchQuery: query,
-    searchQueryList: m_sarr1
-  });
+  if (isDebug) {
+    
+    return Promise.resolve({
+      searchQuery: query,
+      searchQueryList: m_sarr1
+    });
+    
+  } else {
+    
+    let sarr = await ytSearch.search(query);
+    let m_sarr = sarr.map((video) => {
+      let videoOb = {
+        videoId: video.id.videoId,
+        videoUrl: video.url,
+        videoTitle: video.title
+      };
 
-  let sarr = await ytSearch.search(query);
-  let m_sarr = sarr.map((video) => {
-    let videoOb = {
-      videoId: video.id.videoId,
-      videoUrl: video.url,
-      videoTitle: video.title
+      return videoOb;
+      
+    });
+
+    return {
+      searchQuery: query,
+      searchQueryList: m_sarr
     };
-
-    return videoOb;
-  });
-
-  return {
-    searchQuery: query,
-    searchQueryList: m_sarr
-  };
+  }
 };
 
 /**
@@ -74,7 +80,7 @@ module.exports.downloadMatchingTrack = async function (options) {
  */
 module.exports.downloadYTDLPBinaries = async function () {
   return new Promise((resolve, reject) => {
-    fs.open(Setup.binaryLocation, "r+", async (err, _fd) => {
+    fs.open(BINARY_LOCATION, "r+", async (err, _fd) => {
       if (err && err.code == "ENOENT") {
         try {
           await ytdlp.downloadFromGithub(BINARY_LOCATION);
