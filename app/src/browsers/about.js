@@ -2,6 +2,8 @@
 
 const { BrowserWindow, app } = require("electron");
 const path = require("path");
+const isDebug = require("../main/test/is-debug");
+const menu = require("../main/menu");
 
 let about_window;
 
@@ -17,7 +19,7 @@ module.exports.init = function () {
     show: false,
     width: 700,
     height: 500,
-    resizable: false,
+    resizable: isDebug,
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
@@ -25,7 +27,7 @@ module.exports.init = function () {
     }
   });
 
-  about_window.setMenu(null);
+  about_window.setMenu(isDebug ? menu : null);
   about_window.loadFile(path.join("app", "src", "views", "pages", "about.html"));
   about_window.once("ready-to-show", about_window.show);
   about_window.on("closed", () => (about_window = null));
