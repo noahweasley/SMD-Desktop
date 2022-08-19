@@ -1,3 +1,3 @@
 "use-strict" 
 
-module.exports = function (settings, browsers, database, queryDownloadData) {}
+module.exports = function (_settings, _browsers, _database) {}
