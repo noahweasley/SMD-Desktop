@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
-  let SELECTED_POS = [];
   let listData;
+  let listDataSelected = {};
   //...
   const selectAll = document.getElementById("select-all");
   const buttons = document.querySelectorAll(".btn");
@@ -14,7 +14,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      window.bridgeApis.send("search-click-event", [button.id, listData, SELECTED_POS]);
+      // change the value of track collections in original list to the selected ones
+      listData = Object.values(listDataSelected);
+      window.bridgeApis.send("download-click-event", [button.id, listData]);
     });
   });
 
@@ -37,9 +39,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     window.bridgeApis.invoke("search-tracks").then((data) => {
       loader.classList.add("gone");
-      console.log(data);
       if (data instanceof Object) {
-        displayDataOnList(data, list);
+        displayDataOnList(data, listGroup);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
         buttons.forEach((button) => button.removeAttribute("disabled"));
@@ -50,29 +51,37 @@ window.addEventListener("DOMContentLoaded", () => {
         buttons[0].removeAttribute("disabled");
       }
 
-      // selectAll.addEventListener("click", () => {
-      //   const sa_IsChecked = selectAll.checked;
-      //   const selectCheckboxes = document.querySelectorAll(".cbx-select");
+      selectAll.addEventListener("click", () => {
+        const sa_IsChecked = selectAll.checked;
+        const selectCheckboxes = document.querySelectorAll(".cbx-select");
 
-      //   for (let x = 0; x < select.length; x++) {
-      //     SELECTED_POS[x] = sa_IsChecked;
-      //     selectCheckboxes[x].checked = sa_IsChecked;
-      //   }
-      // });
+        for (let x = 0; x < select.length; x++) {
+          // select all the check-boxes in the list if the select-all check-box is checked or not
+          selectCheckboxes[x].checked = sa_IsChecked;
+          // add all the selected data to an object map, if the select-all check-box is checked or not
+          sa_IsChecked ? (listDataSelected[`${x}`] = listData[x]) : delete listDataSelected[`${x}`];
+        }
+      });
 
-      // document.querySelectorAll(".cbx-select").forEach((s_cbx) => {
-      //   let cbx_Index = Array.from(select).indexOf(s_cbx);
-      //   SELECTED_POS[cbx_Index] = false;
-      //   s_cbx.addEventListener("click", () => {
-      //     SELECTED_POS[cbx_Index] = s_cbx.checked;
-      //   });
-      // });
+      document.querySelectorAll(".cbx-select").forEach((s_cbx) => {
+        let cbx_Index = Array.from(select).indexOf(s_cbx);
+        // register click events for all check boxes on the list
+        s_cbx.addEventListener("click", () => {
+          if (s_cbx.checked) {
+            // add track at selected index to object map
+            listDataSelected[`${cbx_Index}`] = listData[cbx_Index];
+          } else {
+            // remove / delete track at selected index to object map
+            delete listDataSelected[`${cbx_Index}`];
+          }
+        });
+      });
     });
   }
 
   function displayDataOnList(data, list) {
     listData = data;
-    console.log(data);
+
     persistDataOnList(list, data);
 
     function persistDataOnList(list, listData) {
@@ -81,8 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       function appendListItem(position, list, listData) {
-        console.log(listData);
-
+        // console.log(listData);
         const listGroupItemContainer = document.createElement("div");
         listGroupItemContainer.className = "list-group-item-container";
 
@@ -91,7 +99,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const headerText = document.createElement("p");
 
-        headerText.innerText = `Results for: ${listData.searchQuery}`;
+        headerText.innerHTML = `Results for: &nbsp${listData.searchQuery}`;
 
         const labelElement = document.createElement("label");
         const selectionCheckbox = document.createElement("input");
@@ -107,6 +115,42 @@ window.addEventListener("DOMContentLoaded", () => {
         listGroupItemHeader.appendChild(labelElement);
 
         listGroupItemContainer.appendChild(listGroupItemHeader);
+
+        for (let x = 0; x < listData.searchQueryList.length; x++) {
+          let searchQueryList = listData.searchQueryList;
+          let searchQueryTitle = searchQueryList[x].videoTitle;
+
+          const listGroupItem = document.createElement("div");
+          listGroupItem.className = "list-group-item";
+
+          const thumbnailElement = document.createElement("img");
+          thumbnailElement.className = "media-object pull-left";
+          thumbnailElement.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+
+          const mediaBodyElement = document.createElement("div");
+          mediaBodyElement.className = "media-body";
+
+          const trackTitleElement = document.createElement("strong");
+          trackTitleElement.innerHTML = `${x + 1}. &nbsp&nbsp&nbsp${searchQueryTitle}`;
+
+          mediaBodyElement.appendChild(trackTitleElement);
+
+          const labelElement = document.createElement("label");
+          const selectionCheckbox = document.createElement("input");
+          labelElement.setAttribute("for", "select");
+          selectionCheckbox.setAttribute("type", "checkbox");
+          selectionCheckbox.setAttribute("name", "select");
+          selectionCheckbox.className = "cbx-select";
+          selectionCheckbox.id = "select";
+
+          labelElement.appendChild(selectionCheckbox);
+
+          listGroupItem.appendChild(thumbnailElement);
+          listGroupItem.appendChild(mediaBodyElement);
+          listGroupItem.appendChild(labelElement);
+
+          listGroupItemContainer.appendChild(listGroupItem);
+        }
 
         list.appendChild(listGroupItemContainer);
       }

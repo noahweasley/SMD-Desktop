@@ -110,12 +110,13 @@
 }
 
 .list-group-item-header {
- width: 100%;
- height: max-content;
- padding: 20px;
- border-bottom: 1px solid var(--grey-solid_5);
- display: flex;
- justify-content: space-between;
+  width: 100%;
+  height: max-content;
+  padding: 20px;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid var(--grey-solid_5);
+  display: flex;
+  justify-content: space-between;
 }
 
 .list-group-item {
