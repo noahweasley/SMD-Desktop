@@ -475,32 +475,38 @@ a:active {
 
 .paste {
   left: 2px;
+  border-radius: 4px;
+  width: 110px;
 }
 
-.search {
+.form-control.form-control__search {
   left: 276px;
+  background-color: inherit;
+  width: 40%;
+  color: var(--white-solid);
+  border-width: 2px;
 }
 
 .paste,
-.search {
-  border-radius: 4px;
+.form-control.form-control__search {
   background-color: var(--grey-solid_5);
   position: absolute;
   top: 10%;
-  width: 110px;
   height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.paste:hover,
-.search:hover {
+.form-control.form-control__search {
+  border: 1px solid rgb(70, 70, 70);
+}
+
+.paste:hover {
   background-color: var(--grey-solid_10);
 }
 
-.paste:active,
-.search:active {
+.paste:active {
   border: 1px solid var(--primary-color-dark);
 }
 
@@ -516,7 +522,15 @@ a:active {
   left: 224px;
 }
 
-.downloads-operation > * + *:not(.search) {
+.search {
+  left: calc(283px + 40%);
+}
+
+.search > .icon {
+  color: var(--white-solid);
+}
+
+.downloads-operation > * + *:not(.form-control.form-control__search) {
   border-radius: 4px;
   height: 80%;
   width: 45px;
@@ -534,7 +548,11 @@ a:active {
   cursor: pointer;
 }
 
-.downloads-operation > * + *:hover {
+.form-control.form-control__search {
+  cursor: initial;
+}
+
+.downloads-operation > * + *:hover:not(.form-control.form-control__search) {
   background-color: var(--grey-solid_10);
 }
 
@@ -686,6 +704,12 @@ form {
   border-color: var(--spotify-green);
   box-shadow: 3px 3px 0 var(--spotify-green), -3px -3px 0 var(--spotify-green), -3px 3px 0 var(--spotify-green),
     3px -3px 0 var(--spotify-green);
+}
+
+.form-control.form-control__search:focus {
+  border-color: var(--primary-color-dark-alt);
+  box-shadow: 1px 1px 0 var(--primary-color-dark-alt), -1px -1px 0 var(--primary-color-dark-alt),
+    -1px 1px 0 var(--primary-color-dark-alt), 1px -1px 0 var(--primary-color-dark-alt);
 }
 
 .btn-form {
