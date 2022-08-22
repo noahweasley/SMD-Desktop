@@ -143,8 +143,8 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  /* gap: 1.2em; */
   justify-content: space-around;
+  margin-right: 20px;
 }
 
 .media-body > *:not(strong) {
