@@ -522,11 +522,11 @@ a:active {
   left: 224px;
 }
 
-.search {
+.btn-search {
   left: calc(283px + 40%);
 }
 
-.search > .icon {
+.btn-search > .icon {
   color: var(--white-solid);
 }
 
@@ -747,11 +747,11 @@ form {
 
 .online-stat {
   position: absolute;
-  top: 22%;
-  right: 20px;
+  top: 35%;
+  left: 150px;
   width: 15px;
   height: 15px;
-  background-color: rgba(255, 38, 0, 0.473);
+  background-color: hsla(0, 100%, 50%, 0.5);
   border-radius: 50%;
 }
 

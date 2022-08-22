@@ -17,6 +17,7 @@
 <body>
 
     <header class="toolbar toolbar-header toolbar-borderless draggable gone">
+        <div class="online-stat"></div>
         <h1 class="title draggable"></h1>
         <img class="draggable" src="../../../resources/build/graphics/app_icon.png" alt="Spotity music downloader icon">
 
@@ -89,9 +90,9 @@
                             <span class="icon icon-trash icon-x2"></span>
                         </div>
 
-                        <input type="text" class="form-control form-control__search" placeholder="Search track here" id="search">
+                        <input type="text" class="form-control form-control__search" placeholder="Search track here" id="input-search">
                        
-                        <div class="search not-draggable">
+                        <div class="btn-search not-draggable">
                             <span class="icon icon-search icon-x2"></span>
                         </div>
 
@@ -278,6 +279,7 @@
     <script src="../js/main/ipc.js"></script>
     <script src="../js/main/lists.js"></script>
     <script src="../js/main/settings.js"></script>
+    <script src="../js/main/jobs.js"></script>
 
 </body>
 
