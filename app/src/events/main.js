@@ -1,8 +1,8 @@
 "use-strict";
 
 const State = require("../browsers/state");
-const { SpotifyURLType, getSpotifyURLType } = require("../main/util/sp-util");
-const spotifyDl = require("../main/server/spotify-dl");
+const { getSpotifyURLType } = require("../main/util/sp-util");
+const { getSpotifyLinkData } = require("../main/server/spotify-dl");
 const auth = require("../main/server/authorize");
 const { app, shell, ipcMain, clipboard, dialog } = require("electron");
 const path = require("path");
@@ -12,11 +12,8 @@ const dummy = require("../main/util/dummy");
 module.exports = function (settings, browsers, database) {
   let WINDOW_STATE = State.DEFAULT;
 
-  const { mainWindow, downloadWindow, multiSearchWindow, singleSearchWindow, aboutWindow } = browsers;
+  const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { authorizeApp } = auth(settings);
-
-  const spdl = spotifyDl(settings);
-  const spotifyApi = spdl.spotifyApi;
 
   // window acton click
   ipcMain.on("action-click-event", (_event, id) => {
@@ -104,22 +101,12 @@ module.exports = function (settings, browsers, database) {
 
   // ...
   ipcMain.handle("download-data", () => {
-    return getSongData();
+    return getSpotifyLinkData();
   });
 
   // show about window
   ipcMain.on("show-app-info", () => {
     aboutWindow.init();
-  });
-
-  // search download details window
-  ipcMain.on("show-search-download-window", () => {
-    multiSearchWindow.init();
-  });
-
-  //  show single-track-search window
-  ipcMain.on("show-single-search-window", () => {
-    singleSearchWindow.init();
   });
 
   // show download details window
@@ -153,71 +140,6 @@ module.exports = function (settings, browsers, database) {
   });
 
   /**
-   * @returns an object with the requested Spotify data
-   */
-  async function getSongData() {
-    let data, spotifyURLType;
-    let clipboardContent = isDebug ? dummy.getRandomClipboardText() : clipboard.readText();
-
-    try {
-      spotifyURLType = getSpotifyURLType(clipboardContent);
-    } catch (error) {
-      // display modal dialog with details of error
-      dialog.showErrorBox(
-        "Clipboard content not a Spotify link",
-        "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
-      );
-
-      return error.message;
-    }
-
-    let [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
-      "spotify-user-client-id",
-      "spotify-user-client-secret",
-      "spotify-access-token",
-      "spotify-refresh-token"
-    ]);
-
-    spotifyApi.setClientId(spotifyUserClientId);
-    spotifyApi.setClientSecret(spotifyClientSecret);
-    spotifyApi.setAccessToken(spotifyAccessToken);
-    spotifyApi.setRefreshToken(spotifyRefreshToken);
-
-    const spotifyLinkRegex = new RegExp("https://open.spotify.com");
-    try {
-      if (spotifyLinkRegex.test(clipboardContent)) {
-        // then ...
-        switch (spotifyURLType) {
-          case SpotifyURLType.TRACK:
-            data = spdl.performTrackDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.ALBUM:
-            data = spdl.performAlbumDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.ARTIST:
-            data = spdl.performArtistDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.PLAYLIST:
-            data = spdl.performPlaylistDownloadAction(clipboardContent);
-            break;
-          default:
-            throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
-        }
-      } else {
-        // display modal dialog with details of error
-        dialog.showErrorBox(
-          "Clipboard content not a Spotify link",
-          "Clipboard content has changed, go to Spotify and copy link, then click 'Paste URL'"
-        );
-      }
-    } catch (err) {
-      return err.message;
-    }
-
-    return data;
-  }
-
-  /**
    * Starts donwloading tracks available at the the link url in the clipboard
    */
   async function beginDownloads(args) {
@@ -225,7 +147,7 @@ module.exports = function (settings, browsers, database) {
     if (args) {
       trackData = args;
     } else {
-      trackData = await getSongData();
+      trackData = await getSpotifyLinkData();
     }
   }
 };

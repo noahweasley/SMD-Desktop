@@ -22,30 +22,43 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  //...
+  // donate button click. Navigate to sponsorship page
   document.querySelector(".donate").addEventListener("click", (_event) => {
     window.bridgeApis.send("navigate-link", "https://www.buymeacoffee.com/noahweasley");
   });
 
-  // ...
+  // Paste URL button click
   document.querySelector(".paste").addEventListener("click", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
       if (content == "track") {
         // search for tracks to download
-        window.bridgeApis.send("show-search-download-window");
+        window.bridgeApis.send("show-search-download-window", {
+          type: "track",
+          description: undefined
+        });
       } else {
-        // a funny eror message would be emitted to the renderer process, hence the 'Uh'
+        // a funny error message would be emitted to the renderer process, hence the 'Uh'
         if (content.startsWith("Uh")) return;
         window.bridgeApis.send("show-download-window");
       }
     });
   });
 
-  // ...
-  document.querySelector(".search").addEventListener("click", () => {
-    window.bridgeApis.send("show-single-search-window");
+  // search button click
+  document.querySelector(".btn-search").addEventListener("click", () => {
+    const searchInput = document.getElementById("input-search");
+    if (!searchInput.value) {
+      return searchInput.setAttribute("placeholder", "Field can't be empty");
+    }
+    // Wrap searchQuery in object array, to be compatible with the other kind of search query
+    window.bridgeApis.send("show-search-download-window", {
+      type: "search",
+      value: searchInput.value
+    });
   });
 
+  // request app details; but use only the first content in the array returned, 
+  // which returns the app name
   window.bridgeApis.invoke("app-details").then((content) => {
     const names = document.querySelectorAll(".name");
     names.forEach((name) => {

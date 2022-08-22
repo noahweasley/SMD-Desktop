@@ -1,14 +1,15 @@
 const SpotifyWebApi = require("spotify-web-api-node");
 const authorize = require("./authorize");
+const { dialog, clipboard } = require("electron");
+const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
+const { getDummyAlbum, getDummyPlayList, getRandomClipboardText } = require("../util/dummy");
 
-const { getDummyAlbum, getDummyPlayList } = require("../util/dummy");
-
-const debugging = require("../test/is-debug");
+const isDebug = require("../test/is-debug");
 
 module.exports = function (settings) {
   let auth = authorize(settings);
   let spotifyApi = new SpotifyWebApi();
-
+  
   /**
    * starts album downlaod
    *
@@ -139,11 +140,77 @@ module.exports = function (settings) {
     };
   }
 
+  /**
+   * @returns an object with the requested Spotify data
+   */
+  async function getSpotifyLinkData() {
+    let data, spotifyURLType;
+    let clipboardContent = isDebug ? getRandomClipboardText() : clipboard.readText();
+
+    try {
+      spotifyURLType = getSpotifyURLType(clipboardContent);
+    } catch (error) {
+      // display modal dialog with details of error
+      dialog.showErrorBox(
+        "Clipboard content not a Spotify link",
+        "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
+      );
+
+      return error.message;
+    }
+
+    let [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
+      "spotify-user-client-id",
+      "spotify-user-client-secret",
+      "spotify-access-token",
+      "spotify-refresh-token"
+    ]);
+
+    spotifyApi.setClientId(spotifyUserClientId);
+    spotifyApi.setClientSecret(spotifyClientSecret);
+    spotifyApi.setAccessToken(spotifyAccessToken);
+    spotifyApi.setRefreshToken(spotifyRefreshToken);
+
+    const spotifyLinkRegex = new RegExp("https://open.spotify.com");
+    try {
+      if (spotifyLinkRegex.test(clipboardContent)) {
+        // then ...
+        switch (spotifyURLType) {
+          case SpotifyURLType.TRACK:
+            data = performTrackDownloadAction(clipboardContent);
+            break;
+          case SpotifyURLType.ALBUM:
+            data = performAlbumDownloadAction(clipboardContent);
+            break;
+          case SpotifyURLType.ARTIST:
+            data = performArtistDownloadAction(clipboardContent);
+            break;
+          case SpotifyURLType.PLAYLIST:
+            data = performPlaylistDownloadAction(clipboardContent);
+            break;
+          default:
+            throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
+        }
+      } else {
+        // display modal dialog with details of error
+        dialog.showErrorBox(
+          "Clipboard content not a Spotify link",
+          "Clipboard content has changed, go to Spotify and copy link, then click 'Paste URL'"
+        );
+      }
+    } catch (err) {
+      return err.message;
+    }
+
+    return data;
+  }
+
   return {
     spotifyApi,
     performAlbumDownloadAction,
     performArtistDownloadAction,
     performPlaylistDownloadAction,
-    performTrackDownloadAction
+    performTrackDownloadAction,
+    getSpotifyLinkData
   };
 };
