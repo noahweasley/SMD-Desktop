@@ -2,8 +2,8 @@
 
 const State = require("../browsers/state");
 const { getSpotifyURLType } = require("../main/util/sp-util");
-const { getSpotifyLinkData } = require("../main/server/spotify-dl");
 const auth = require("../main/server/authorize");
+const spotifyDl = require("../main/server/spotify-dl");
 const { app, shell, ipcMain, clipboard, dialog } = require("electron");
 const path = require("path");
 const isDebug = require("../main/test/is-debug");
@@ -14,6 +14,7 @@ module.exports = function (settings, browsers, database) {
 
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { authorizeApp } = auth(settings);
+  const { getSpotifyLinkData } = spotifyDl(settings);
 
   // window acton click
   ipcMain.on("action-click-event", (_event, id) => {
