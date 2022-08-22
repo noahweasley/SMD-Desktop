@@ -17,7 +17,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performAlbumDownloadAction(albumUrl, limit = 50) {
-    if (debugging) return getDummyAlbum();
+    if (isDebug) return getDummyAlbum();
 
     let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
@@ -71,7 +71,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performPlaylistDownloadAction(playlistUrl) {
-    if (debugging) return getDummyPlayList();
+    if (isDebug) return getDummyPlayList();
 
     let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
