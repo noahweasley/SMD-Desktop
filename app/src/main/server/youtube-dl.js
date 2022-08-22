@@ -13,39 +13,39 @@ const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath(
  * @param {*} query the search query
  */
 module.exports.searchMatchingTracks = async function (query) {
-  let m_sarr1 = [
-    {
-      videoId: "video.id.videoId",
-      videoUrl: "video.url",
-      videoTitle: "Alan waker The official audio"
-    }
-  ];
-
   if (isDebug) {
-    
+    let m_sarr1 = [
+      {
+        videoId: "video.id.videoId",
+        videoUrl: "video.url",
+        videoTitle: "Alan waker The official audio"
+      }
+    ];
+
     return Promise.resolve({
       searchQuery: query,
       searchQueryList: m_sarr1
     });
-    
   } else {
-    
-    let sarr = await ytSearch.search(query);
-    let m_sarr = sarr.map((video) => {
-      let videoOb = {
-        videoId: video.id.videoId,
-        videoUrl: video.url,
-        videoTitle: video.title
+    try {
+      let sarr = await ytSearch.search(query);
+      let m_sarr = sarr.map((video) => {
+        let videoOb = {
+          videoId: video.id.videoId,
+          videoUrl: video.url,
+          videoTitle: video.title
+        };
+
+        return videoOb;
+      });
+
+      return {
+        searchQuery: query,
+        searchQueryList: m_sarr
       };
-
-      return videoOb;
-      
-    });
-
-    return {
-      searchQuery: query,
-      searchQueryList: m_sarr
-    };
+    } catch (err) {
+      return Promise.reject(new Error("Network error occurred"));
+    }
   }
 };
 
