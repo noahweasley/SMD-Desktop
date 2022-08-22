@@ -46,7 +46,7 @@ body {
 }
 
 .op-0 {
-opacity: 0;  
+  opacity: 0;
 }
 
 .gone {
@@ -85,7 +85,7 @@ a:active {
   right: 50%;
   align-self: center;
   justify-self: center;
-  animation:var(--progress-anim-time) rotate var(--progress-timin-funct) infinite forwards;
+  animation: var(--progress-anim-time) rotate var(--progress-timin-funct) infinite forwards;
 }
 
 .indeterminate-progress::before {
@@ -140,6 +140,11 @@ a:active {
   background-color: transparent;
   margin-block: 8px;
 }
+
+*::selection {
+  background-color: rgba(31, 214, 95, 0.4);
+}
+
 /* ------------------ Animation Key Frames ----------------- */
 
 @keyframes scale-bounce {
