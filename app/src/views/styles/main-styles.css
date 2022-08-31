@@ -750,6 +750,7 @@ form {
   top: 35%;
   left: 150px;
   width: 15px;
+  transition: 1s;
   height: 15px;
   background-color: hsla(0, 100%, 50%, 0.5);
   border-radius: 50%;

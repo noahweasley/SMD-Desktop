@@ -1,37 +1,18 @@
 "use-strict";
 
-const State = require("../browsers/state");
 const { getSpotifyURLType } = require("../main/util/sp-util");
 const auth = require("../main/server/authorize");
 const spotifyDl = require("../main/server/spotify-dl");
-const { app, shell, ipcMain, clipboard, dialog } = require("electron");
+const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
 const path = require("path");
 const isDebug = require("../main/test/is-debug");
 const dummy = require("../main/util/dummy");
 
 module.exports = function (settings, browsers, database) {
-  let WINDOW_STATE = State.DEFAULT;
 
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { authorizeApp } = auth(settings);
   const { getSpotifyLinkData } = spotifyDl(settings);
-
-  // window acton click
-  ipcMain.on("action-click-event", (_event, id) => {
-    if (id === "window-action-close") {
-      mainWindow.getWindow().close();
-    } else if (id === "window-action-minimize") {
-      mainWindow.getWindow().minimize();
-    } else {
-      if (!!!WINDOW_STATE || WINDOW_STATE === State.DEFAULT) {
-        mainWindow.getWindow().maximize();
-        WINDOW_STATE = State.MAXIMIZED;
-      } else {
-        mainWindow.getWindow().restore();
-        WINDOW_STATE = State.DEFAULT;
-      }
-    }
-  });
 
   // link navigate
   ipcMain.on("navigate-link", (_event, arg) => {
@@ -94,13 +75,12 @@ module.exports = function (settings, browsers, database) {
       return states.length === 2;
     } else {
       return authorizeApp(args, function () {
-        let mainWindow = mainWindow.getWindow();
-        if (mainWindow) mainWindow.reload();
+        mainWindow.getWindow()?.reload();
       });
     }
   });
 
-  // ...
+  // after pasting url and download window is about to display it's content
   ipcMain.handle("download-data", () => {
     return getSpotifyLinkData();
   });
@@ -115,12 +95,9 @@ module.exports = function (settings, browsers, database) {
     downloadWindow.init();
   });
 
-  // request to start downloading
-  ipcMain.on("begin-download", (_event, args) => beginDownloads(args));
-
   // request to reload current focused window
   ipcMain.on("reload-current-window", () => {
-    if (BrowserWindow.getFocusedWindow() != null) BrowserWindow.getFocusedWindow().reload();
+    BrowserWindow.getFocusedWindow()?.reload();
   });
 
   // clipboard content request
@@ -139,16 +116,4 @@ module.exports = function (settings, browsers, database) {
       return urlType || errMsg;
     }
   });
-
-  /**
-   * Starts donwloading tracks available at the the link url in the clipboard
-   */
-  async function beginDownloads(args) {
-    let trackData;
-    if (args) {
-      trackData = args;
-    } else {
-      trackData = await getSpotifyLinkData();
-    }
-  }
 };

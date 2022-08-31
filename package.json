@@ -51,7 +51,7 @@
     "express": "^4.17.2",
     "ffmpeg": "^0.0.4",
     "knex": "^0.95.15",
-    "node-user-settings": "^0.0.3",
+    "node-user-settings": "^1.0.1",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.0.2",
     "youtube-search-without-api-key": "^1.0.7",

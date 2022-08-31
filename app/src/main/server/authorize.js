@@ -147,5 +147,5 @@ module.exports = function (Settings) {
     }
   }
 
-  return {authorizeApp, refreshSpotifyAccessToken, refreshAuthTokenWrap};
+  return { authorizeApp, refreshSpotifyAccessToken, refreshAuthTokenWrap };
 };

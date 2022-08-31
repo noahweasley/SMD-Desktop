@@ -19,7 +19,7 @@ function dataReveal() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  // 3 seconds time delay before displaying contents to user ...
+  // 3 seconds time delay before displaying contents to user
   setTimeout(dataReveal, 3000);
 
   window.bridgeApis.invoke("app-details").then((content) => {

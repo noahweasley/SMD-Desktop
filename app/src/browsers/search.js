@@ -17,7 +17,7 @@ module.exports.init = function () {
     modal: true,
     width: 700,
     height: 500,
-    resizable: isDebug,
+    resizable: true,
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
@@ -25,7 +25,7 @@ module.exports.init = function () {
     }
   });
 
-  search_window.setMenu(isDebug ? menu : null);
+  search_window.setMenu(true ? menu : null);
   search_window.loadFile(path.join("app", "src", "views", "pages", "search.html"));
   search_window.once("ready-to-show", search_window.show);
   // listening for close event on download window helped to solve quick window flash issue.

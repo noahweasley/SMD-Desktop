@@ -57,7 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const sa_IsChecked = selectAll.checked;
         const selectCheckboxes = document.querySelectorAll(".cbx-select");
 
-        for (let x = 0; x < select.length; x++) {
+        for (let x = 0; x < selectCheckboxes.length; x++) {
           // select all the check-boxes in the list if the select-all check-box is checked or not
           selectCheckboxes[x].checked = sa_IsChecked;
           // add all the selected data to an object map, if the select-all check-box is checked or not
@@ -65,20 +65,22 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      document.querySelectorAll(".cbx-select").forEach((s_cbx) => {
-        let cbx_Index = Array.from(select).indexOf(s_cbx);
+      const cbx_list = document.querySelectorAll(".cbx-select");
+
+      for (let index = 0; index < cbx_list.length; index++) {
+        let s_cbx = cbx_list[index];
         // register click events for all check boxes on the list
         s_cbx.addEventListener("click", () => {
           let collection = listData.description.trackCollection;
           if (s_cbx.checked) {
             // add track at selected index to object map
-            listDataSelected[`${cbx_Index}`] = collection[cbx_Index];
+            listDataSelected[`${index}`] = collection[index];
           } else {
             // remove / delete track at selected index to object map
-            delete listDataSelected[`${cbx_Index}`];
+            delete listDataSelected[`${index}`];
           }
         });
-      });
+      }
     });
   }
 
@@ -127,7 +129,7 @@ window.addEventListener("DOMContentLoaded", () => {
       selectionCheckbox.setAttribute("type", "checkbox");
       selectionCheckbox.setAttribute("name", "select");
       selectionCheckbox.className = "cbx-select";
-      selectionCheckbox.id = "select";
+      selectionCheckbox.id = `select-${position}`;
 
       labelElement.appendChild(selectionCheckbox);
 

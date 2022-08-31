@@ -4,6 +4,7 @@ const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const isDebug = require("../test/is-debug");
+const { EventEmitter } = require("events");
 
 const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath("appData"), "ytdlp");
 
@@ -14,6 +15,7 @@ const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath(
  */
 module.exports.searchMatchingTracks = async function (query) {
   if (isDebug) {
+    // developement code
     let m_sarr1 = [
       {
         videoId: "video.id.videoId",
@@ -27,8 +29,10 @@ module.exports.searchMatchingTracks = async function (query) {
       searchQueryList: m_sarr1
     });
   } else {
+    // production code
     try {
       let sarr = await ytSearch.search(query);
+
       let m_sarr = sarr.map((video) => {
         let videoOb = {
           videoId: video.id.videoId,
@@ -56,21 +60,31 @@ module.exports.searchMatchingTracks = async function (query) {
  * @returns a YTDLP event emitter instance
  */
 module.exports.downloadMatchingTrack = async function (options) {
-  let isDownloaded = await this.downloadYTDLPBinaries();
+  let downloadEmitter = new EventEmitter();
+  let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
 
-  if (isDownloaded) {
-    let ytdlpWrapper = new ytdlp(Setup.binaryLocation);
-    ytdlpWrapper
-      .execStream([options.videoLink, "-f", "140"]) /** 140 here means that the audio would be extracted */
-      .on("progress", (progress) => {
-        console.log(progress.percent);
-      })
-      .pipe(fs.createWriteStream(`${options.videoTitle}.m4a`));
+  downloadEmitter.emit("download-binaries");
+  try {
+    let isDownloaded = await this.downloadYTDLPBinaries();
 
-    return ytdlpWrapper;
-  } else {
-    return null;
+    if (isDownloaded) {
+      downloadEmitter.emit("binaries-downloaded");
+
+      ytdlpWrapper
+        .execStream([options.videoLink, "-f", "140"]) /** 140 here means that the audio would be extracted */
+        .on("progress", (progress) => {
+          console.log(progress.percent);
+        })
+        .pipe(fs.createWriteStream(`${options.videoTitle}.m4a`));
+        
+    } else {
+      downloadEmitter.emit("error", "Download Failed");
+    }
+  } catch (err) {
+    downloadEmitter.emit("error", err.message);
   }
+
+  return downloadEmitter;
 };
 
 /**

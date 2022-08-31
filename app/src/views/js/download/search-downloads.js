@@ -1,4 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
+  const errorDecoration = document.querySelector(".error-decor");
   let listData;
   let listDataSelected = {};
   //...
@@ -15,7 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
-      listData = Object.values(listDataSelected);
+      listData.searchQueryList = Object.values(listDataSelected);
       window.bridgeApis.send("download-click-event", [button.id, listData]);
     });
   });
@@ -33,13 +34,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function dataReveal() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-decor");
     const listGroup = document.querySelector(".list-group");
     const list = document.querySelector(".list");
 
     window.bridgeApis.invoke("search-tracks").then((data) => {
       loader.classList.add("gone");
-      if (data instanceof Object) {
+      if (data && data instanceof Object) {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
@@ -51,35 +51,85 @@ window.addEventListener("DOMContentLoaded", () => {
         buttons[0].removeAttribute("disabled");
       }
 
-      selectAll.addEventListener("click", () => {
-        const sa_IsChecked = selectAll.checked;
-        const selectCheckboxes = document.querySelectorAll(".cbx-select");
+      // initialize checkboxes for use after populating data on the list
 
-        for (let x = 0; x < select.length; x++) {
-          // select all the check-boxes in the list if the select-all check-box is checked or not
-          selectCheckboxes[x].checked = sa_IsChecked;
-          // add all the selected data to an object map, if the select-all check-box is checked or not
-          sa_IsChecked ? (listDataSelected[`${x}`] = listData[x]) : delete listDataSelected[`${x}`];
-        }
+      const headerSelectCheckboxes = document.querySelectorAll(".cbx-select-header");
+      const selectCheckboxes = document.querySelectorAll(".cbx-select");
+
+      let headerCheckboxArray = Array.from(headerSelectCheckboxes);
+
+      headerSelectCheckboxes.forEach((header_cbx) => {
+        header_cbx.addEventListener("click", () => {
+          let listGroupItemContainer = header_cbx.parentElement.parentElement.parentElement;
+          let headerSelectIndex = headerCheckboxArray.indexOf(header_cbx);
+          changeChildElementCheckboxStateOf(listGroupItemContainer, header_cbx.checked, headerSelectIndex);
+        });
       });
 
-      document.querySelectorAll(".cbx-select").forEach((s_cbx) => {
-        let cbx_Index = Array.from(select).indexOf(s_cbx);
+      // start select-all listener
+      selectAll.addEventListener("click", () => {
+        const sa_IsChecked = selectAll.checked;
+
+        for (let y = 0; y < headerSelectCheckboxes.length; y++) {
+          let headerSelectCheckbox = headerSelectCheckboxes[y];
+          headerSelectCheckbox.checked = sa_IsChecked;
+          
+          for (let x = 0; x < selectCheckboxes.length; x++) {
+            // select all the check-boxes in the list if the select-all check-box is checked or not
+            selectCheckboxes[x].checked = sa_IsChecked;
+            // add all the selected data to an object map, if the select-all check-box is checked or not
+            sa_IsChecked
+              ? (listDataSelected[`${x}`] = listData[y].searchQueryList[x])
+              : delete listDataSelected[`${x}`];
+          }
+        }
+      });
+      // end select-all listener
+
+      // start cbx-select listener
+      let cbx_list = document.querySelectorAll(".cbx-select");
+
+      for (let index = 0; index < cbx_list.length; index++) {
+        let s_cbx = cbx_list[index];
         // register click events for all check boxes on the list
         s_cbx.addEventListener("click", () => {
           if (s_cbx.checked) {
             // add track at selected index to object map
-            listDataSelected[`${cbx_Index}`] = listData[cbx_Index];
+            listDataSelected[`${index}`] = listData[0].searchQueryList[index];
           } else {
             // remove / delete track at selected index to object map
-            delete listDataSelected[`${cbx_Index}`];
+            delete listDataSelected[`${index}`];
           }
         });
-      });
+      }
+      // end cbx-select listener
+
+      // looping through all child nodes of this list element and change the states of
+      // every checkbox according to isChecked parameter
+      function changeChildElementCheckboxStateOf(element, isChecked, position) {
+        let listItemContainer = element;
+        let listItemContainerChildNodes = listItemContainer.childNodes;
+        let checkboxArray = Array.from(selectCheckboxes);
+
+        for (let x = 1; x < listItemContainer.childElementCount; x++) {
+          let listItems = listItemContainerChildNodes[x];
+          let inputElement = listItems.lastElementChild.firstElementChild;
+          inputElement.checked = isChecked;
+
+          let listIndex = checkboxArray.indexOf(inputElement);
+          // add all the selected data to an object map, if the select-all check-box is checked or not
+
+          isChecked
+            ? (listDataSelected[`${listIndex}`] = listData[position].searchQueryList[listIndex])
+            : delete listDataSelected[`${listIndex}`];
+        }
+      }
     });
   }
 
   function displayDataOnList(data, list) {
+    if (!data) return errorDecoration.style.setProperty("display", "flex");
+
     listData = data;
 
     persistDataOnList(list, data);
@@ -90,7 +140,6 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       function appendListItem(position, list, listData) {
-        // console.log(listData);
         const listGroupItemContainer = document.createElement("div");
         listGroupItemContainer.className = "list-group-item-container";
 
@@ -106,8 +155,8 @@ window.addEventListener("DOMContentLoaded", () => {
         labelElement.setAttribute("for", "select");
         selectionCheckbox.setAttribute("type", "checkbox");
         selectionCheckbox.setAttribute("name", "select");
-        selectionCheckbox.className = "cbx-select";
-        selectionCheckbox.id = "select";
+        selectionCheckbox.className = "cbx-select-header";
+        selectionCheckbox.id = `select-${position}`;
 
         labelElement.appendChild(selectionCheckbox);
 
@@ -141,7 +190,7 @@ window.addEventListener("DOMContentLoaded", () => {
           selectionCheckbox.setAttribute("type", "checkbox");
           selectionCheckbox.setAttribute("name", "select");
           selectionCheckbox.className = "cbx-select";
-          selectionCheckbox.id = "select";
+          selectionCheckbox.id = `select-${position}`;
 
           labelElement.appendChild(selectionCheckbox);
 

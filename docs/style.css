@@ -45,6 +45,10 @@ body {
   padding: 0;
 }
 
+.gone {
+  display: none;
+}
+
 body,
 section.product-display {
   background-color: var(--solid-dark);
@@ -135,7 +139,6 @@ ul.topnav .icon {
 ul.topnav > .logo {
   display: flex;
   max-width: 50px;
-  pointer-events: none;
   position: absolute;
   top: 20px;
   left: 20px;
@@ -236,6 +239,7 @@ section.product-display {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  /* background: url(screenshots/SMD\ snip.PNG) no-repeat; */
 }
 
 section.product-display .s-app-name {

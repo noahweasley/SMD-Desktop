@@ -28,4 +28,11 @@ function getOS() {
 
 // date
 const date = document.querySelector(".date");
-date.innerText = new Date(Date.now()).getFullYear();
+const dateBegin = document.querySelector(".begin");
+let thisYear = new Date(Date.now()).getFullYear();
+
+if (thisYear == dateBegin.innerText) {
+  dateBegin.classList.add("gone");
+}
+
+date.innerText = thisYear;

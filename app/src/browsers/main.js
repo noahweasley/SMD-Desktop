@@ -1,9 +1,8 @@
 "use-strict";
 
-const { BrowserWindow, Menu } = require("electron");
+const { BrowserWindow, Menu, ipcMain } = require("electron");
 const menu = require("../main/menu");
 const path = require("path");
-const State = require("../main/util/sp-util");
 
 module.exports = function (settings) {
   let smd_window;
@@ -45,7 +44,6 @@ module.exports = function (settings) {
       smd_window.show();
       // to prevent glith on window maximize, after displaying the window, then maximize it
       if (winState.isMaximized) {
-        WINDOW_STATE = State.MAXIMIZED;
         smd_window.maximize();
       }
     });
@@ -59,6 +57,17 @@ module.exports = function (settings) {
         JSON.stringify({ x, y, width, height, isMaximized: smd_window.isMaximized() })
       );
       if (isCompleted) smd_window.destroy();
+    });
+
+    // window acton click
+    ipcMain.on("action-click-event", (_event, id) => {
+      if (id === "window-action-close") {
+        smd_window?.close();
+      } else if (id === "window-action-minimize") {
+        smd_window?.minimize();
+      } else {
+        smd_window.isNormal() ? smd_window.maximize() : smd_window.restore();
+      }
     });
   }
 

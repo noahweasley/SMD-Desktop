@@ -1,7 +1,7 @@
 "use-strict";
 
 const path = require("path");
-const fs = require("fs");
+const { mkdir, open } = require("fs");
 const { app } = require("electron");
 
 const settings = require("node-user-settings")({
@@ -16,7 +16,6 @@ require("../events")(settings, browsers, database);
 
 app.whenReady().then(async () => {
   createAppFiles();
-  let windowState = await settings.getState("window-state");
   mainWindow.init();
 
   app.on("activate", function () {
@@ -37,12 +36,12 @@ function createAppFiles() {
   const thumbnailDir = path.join(downloadDir, ".thumb");
   const tempThumbDir = path.join(downloadDir, ".temp", ".thumb");
 
-  fs.open(downloadDir, "r+", (err, _fd) => {
+  open(downloadDir, "r+", (err, _fd) => {
     if (err) {
       if (err.code === "EEXIST") return;
       else if (err.code === "ENOENT") {
-        fs.mkdir(thumbnailDir, { recursive: true }, (_err) => {});
-        fs.mkdir(tempThumbDir, { recursive: true }, (_err) => {});
+        mkdir(thumbnailDir, { recursive: true }, (_err) => {});
+        mkdir(tempThumbDir, { recursive: true }, (_err) => {});
       } else console.log(err.code);
     }
   });
