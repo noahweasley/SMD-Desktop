@@ -106,6 +106,8 @@ section.product-display {
   outline: none;
 }
 
+#top-button 
+
 nav {
   /* Safari */
   position: -webkit-sticky;
@@ -189,6 +191,7 @@ ul.topnav #donate {
 h1 {
   font-family: sans;
   letter-spacing: 0.1em;
+  font-size: calc(0.3vw + 1em);
 }
 
 .download-container {
@@ -217,6 +220,13 @@ h1 {
   border-radius: 8px;
   padding: 16px;
   cursor: pointer;
+}
+
+.download-container a {
+  text-decoration: none;
+  color: inherit;
+  border: initial;
+  font-size: calc(0.3vw + 0.6em);
 }
 
 .download-list-item:hover {
@@ -264,7 +274,7 @@ section.product-display > a.download {
   font-family: "Courier New", Courier, monospace;
   margin: 16px;
   border-radius: 8px;
-  padding: 1em 3em;
+  padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
   border: 1px solid var(--solid-green);
   
 }
