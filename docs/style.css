@@ -62,8 +62,23 @@ section.product-display {
   font-size: 2.3em;
 }
 
-.dev-name {
-  color: var(--solid-blue);
+p {
+  font-size: 1em;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+a:active {
+  color: var(--primary-color-dark);
 }
 
 .padded-less {
@@ -105,8 +120,6 @@ section.product-display {
   transition: 0.5s;
   outline: none;
 }
-
-#top-button 
 
 nav {
   /* Safari */
@@ -218,7 +231,7 @@ h1 {
   text-align: center;
   font-size: 1.2em;
   border-radius: 8px;
-  padding: 16px;
+  padding: 10px;
   cursor: pointer;
 }
 
@@ -233,7 +246,7 @@ h1 {
   background-color: var(--grey-solid_10);
 }
 
-.download-list-item i{
+.download-list-item i {
   margin-right: 24px;
 }
 
@@ -276,7 +289,6 @@ section.product-display > a.download {
   border-radius: 8px;
   padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
   border: 1px solid var(--solid-green);
-  
 }
 
 section.product-display > a.download {
@@ -346,8 +358,6 @@ section.epilogue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  /* background-color: var(--solid-darker); */
 }
 
 section.epilogue > * {
@@ -356,8 +366,7 @@ section.epilogue > * {
 }
 
 section.epilogue > .heading {
-  /* justify-self: flex-start;   */
-  font-size: 2em;
+  font-size: calc(1vw + 1em);
 }
 
 section.form {
@@ -498,6 +507,13 @@ i.fa-heart {
   textarea.form-control {
     max-height: 300px;
   }
+
+  form.contact-form textarea {
+    max-height: 100px;
+  }
+  p {
+    font-size: 0.6em;
+  }
 }
 
 /* Tablet-like screen sizes */
@@ -515,5 +531,12 @@ i.fa-heart {
 
   form.contact-form .name > * {
     flex: none;
+  }
+
+  form.contact-form textarea {
+    max-height: 150px;
+  }
+  p {
+    font-size: 0.8em;
   }
 }
