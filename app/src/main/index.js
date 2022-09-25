@@ -1,11 +1,15 @@
 "use-strict";
 
-const path = require("path");
+const { join } = require("path");
 const { mkdir, open } = require("fs");
 const { app } = require("electron");
 
+// ssmd was used to make the user not be able to open and edit the file created
+
 const settings = require("node-user-settings")({
-  preferenceFileDir: path.join(app.getPath("userData"), "User", "Preferences")
+  preferenceFileDir: join(app.getPath("userData"), "User", "Preferences"),
+  fileName: "Settings",
+  fileExt: "json"
 });
 
 const browsers = require("../browsers")(settings);
@@ -14,7 +18,7 @@ const database = require("./database");
 
 require("../events")(settings, browsers, database);
 
-app.whenReady().then(async () => {
+app.whenReady().then(() => {
   createAppFiles();
   mainWindow.init();
 
@@ -24,7 +28,6 @@ app.whenReady().then(async () => {
 });
 
 app.on("window-all-closed", () => {
-  smd_window = null;
   if (process.platform !== "darwin") app.quit();
 });
 
@@ -32,9 +35,9 @@ app.on("window-all-closed", () => {
  * create the download directory
  */
 function createAppFiles() {
-  const downloadDir = path.join(app.getPath("music"), app.getName(), "Download");
-  const thumbnailDir = path.join(downloadDir, ".thumb");
-  const tempThumbDir = path.join(downloadDir, ".temp", ".thumb");
+  const downloadDir = join(app.getPath("music"), app.getName(), "Download");
+  const thumbnailDir = join(downloadDir, ".thumb");
+  const tempThumbDir = join(downloadDir, ".temp", ".thumb");
 
   open(downloadDir, "r+", (err, _fd) => {
     if (err) {

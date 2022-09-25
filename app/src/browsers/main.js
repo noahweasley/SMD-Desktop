@@ -1,8 +1,8 @@
 "use-strict";
 
 const { BrowserWindow, Menu, ipcMain } = require("electron");
+const { join } = require("path");
 const menu = require("../main/menu");
-const path = require("path");
 
 module.exports = function (settings) {
   let smd_window;
@@ -31,13 +31,13 @@ module.exports = function (settings) {
       height: winState.height ? winState.height : 620,
       webPreferences: {
         contextIsolation: true,
-        preload: path.join(__dirname, "../preload.js")
+        preload: join(__dirname, "../preload.js")
       }
     });
 
     Menu.setApplicationMenu(menu);
 
-    smd_window.loadFile(path.join("app", "src", "views", "pages", "index.html"));
+    smd_window.loadFile(join("app", "src", "views", "pages", "index.html"));
 
     // smd_window.webContents.openDevTools()
     smd_window.once("ready-to-show", () => {
@@ -57,6 +57,7 @@ module.exports = function (settings) {
         JSON.stringify({ x, y, width, height, isMaximized: smd_window.isMaximized() })
       );
       if (isCompleted) smd_window.destroy();
+      smd_window = null;
     });
 
     // window acton click

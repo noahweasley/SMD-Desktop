@@ -1,47 +1,100 @@
 "use-strict";
 
-const ytdl = require("../server/youtube-dl");
 const downloadTask = require("./download-task");
 
 module.exports = function (config) {
-  const { maxParallelDownloads } = config;
+  const { maxParallelDownloads, win } = config;
+  let CONCURRENCY = maxParallelDownloads;
 
-  let downloadQueue = [],
+  let downloadTaskQueue = [],
     activeDownloadTasks = [];
 
-  async function enqueueTask(request = {}) {
-    let task = downloadTask(request);
-    downloadQueue.push(task);
+  const getMaxParallelDownloads = () => maxParallelDownloads;
+
+  const acquireLock = () => {
+    if (CONCURRENCY) {
+      --CONCURRENCY;
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const releaseLock = () => {
+    if (CONCURRENCY < maxParallelDownloads) {
+      ++CONCURRENCY;
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  /**
+   * Enqueue a download tast
+   *
+   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
+   */
+ function enqueueTask(request = {}, listPos = 0) {
+    let task = downloadTask({ win, request, listPos });
+    downloadTaskQueue.push(task);
     return task;
   }
 
-  async function enqueueTasks(requests = []) {
-    // return requests.map((request) => enqueue(request));
-    requests.forEach((request) => {
-      downloadQueue.push(enqueueTask(request));
+  /**
+   * Enqueue a download tast
+   *
+   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
+   */
+  function enqueueTasks(requests = []) {
+    for (let listPos = 0; listPos < requests.length; listPos++) {
+      enqueueTask(requests[listPos], listPos);
+    }
+    return downloadTaskQueue;
+  }
+
+  /**
+   * puts all the download tasks in their active state. If maxParallelDownloads is higher that the
+   * number of download task on the dowload queue, then the remaining tasks enter their pending states
+   */
+  function initiateDownloads() {
+    return new Promise(() => {
+      for (let x = 0; x < downloadTaskQueue.length; x++) {
+        if (acquireLock()) {
+          downloadTaskQueue[x].start();
+          activeDownloadTasks.push(downloadTaskQueue[x]);
+        } else {
+          downloadTaskQueue[x].wait();
+        }
+      }
     });
-
-    return downloadQueue;
   }
 
-  async function initiateDownloads() {}
-
-  async function pauseAll() {
-    downloadQueue.forEach((task) => task.pause());
+  function pauseAll() {
+    downloadTaskQueue.forEach((task) => task.pause());
   }
 
-  async function resumeAll() {
-    downloadQueue.forEach((task) => task.resume());
+   function resumeAll() {
+    return new Promise(() => {
+      for (let x = 0; x < downloadTaskQueue.length; x++) {
+        if (acquireLock()) {
+          downloadTaskQueue[x].resume();
+          activeDownloadTasks.push(downloadTaskQueue[x]);
+        } else {
+          downloadTaskQueue[x].wait();
+        }
+      }
+    });
   }
 
   async function cancelAll() {
-    downloadQueue.forEach((task) => task.cancel());
+    downloadTaskQueue.forEach((task) => task.cancel());
+    activeDownloadTasks = [];
   }
 
   const activeTasks = () => activeDownloadTasks;
 
   return {
-    downloadQueue,
+    getMaxParallelDownloads,
     initiateDownloads,
     enqueueTask,
     enqueueTasks,

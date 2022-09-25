@@ -4,12 +4,10 @@ const { dialog, clipboard } = require("electron");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
 const { getDummyAlbum, getDummyPlayList, getRandomClipboardText } = require("../util/dummy");
 
-const isDebug = require("../test/is-debug");
-
 module.exports = function (settings) {
   let auth = authorize(settings);
   let spotifyApi = new SpotifyWebApi();
-  
+
   /**
    * starts album downlaod
    *
@@ -17,8 +15,6 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performAlbumDownloadAction(albumUrl, limit = 50) {
-    if (isDebug) return getDummyAlbum();
-
     let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
 
@@ -71,8 +67,6 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performPlaylistDownloadAction(playlistUrl) {
-    if (isDebug) return getDummyPlayList();
-
     let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
 
@@ -143,12 +137,12 @@ module.exports = function (settings) {
   /**
    * @returns an object with the requested Spotify data
    */
-  async function getSpotifyLinkData() {
+  async function getSpotifyLinkData(urlType) {
     let data, spotifyURLType;
-    let clipboardContent = isDebug ? getRandomClipboardText() : clipboard.readText();
+    let clipboardContent = clipboard.readText();
 
     try {
-      spotifyURLType = getSpotifyURLType(clipboardContent);
+      spotifyURLType = urlType || getSpotifyURLType(clipboardContent);
     } catch (error) {
       // display modal dialog with details of error
       dialog.showErrorBox(

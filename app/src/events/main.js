@@ -4,12 +4,11 @@ const { getSpotifyURLType } = require("../main/util/sp-util");
 const auth = require("../main/server/authorize");
 const spotifyDl = require("../main/server/spotify-dl");
 const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
-const path = require("path");
-const isDebug = require("../main/test/is-debug");
+const { join } = require("path");
 const dummy = require("../main/util/dummy");
+const { Mode, Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, database) {
-
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { authorizeApp } = auth(settings);
   const { getSpotifyLinkData } = spotifyDl(settings);
@@ -19,10 +18,10 @@ module.exports = function (settings, browsers, database) {
     let linkByType;
     switch (arg) {
       case "#music":
-        linkByType = path.join(`file://${app.getPath("music")}`, app.getName(), "download");
+        linkByType = join(`file://${app.getPath("music")}`, app.getName(), "download");
         break;
       case "#video":
-        linkByType = path.join(`file://${app.getPath("video")}`, app.getName(), "download");
+        linkByType = join(`file://${app.getPath("video")}`, app.getName(), "download");
         break;
       default:
         linkByType = arg;
@@ -35,11 +34,11 @@ module.exports = function (settings, browsers, database) {
   // request to fetch and display list data
   ipcMain.handle("get-list-data", async () => {
     try {
-      let d1 = await database.getDownloadData({ type: database.Type.DOWNLOADED }, database.Mode.ALL);
-      let d2 = await database.getDownloadData({ type: database.Type.DOWNLOADING }, database.Mode.ALL);
+      let d1 = await database.getDownloadData({ type: Type.DOWNLOADED }, Mode.ALL);
+      let d2 = await database.getDownloadData({ type: Type.DOWNLOADING }, Mode.ALL);
       return [d1, d2];
     } catch (error) {
-      console.log("Error occurred while fetching data: ", error.message);
+      return console.log("Error occurred while fetching data: ", error.message);
     }
   });
 
@@ -55,7 +54,7 @@ module.exports = function (settings, browsers, database) {
 
   // play music
   ipcMain.on("play-music", (_event, arg) => {
-    shell.openPath(path.join(`file://${app.getPath("music")}`, app.getName(), arg));
+    shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg));
   });
 
   // delete file in database
@@ -74,9 +73,7 @@ module.exports = function (settings, browsers, database) {
 
       return states.length === 2;
     } else {
-      return authorizeApp(args, function () {
-        mainWindow.getWindow()?.reload();
-      });
+      return authorizeApp(args, () => mainWindow.getWindow()?.reload());
     }
   });
 
@@ -104,7 +101,7 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("clipboard-request", () => {
     let urlType, errMsg;
     try {
-      urlType = getSpotifyURLType(isDebug ? dummy.getRandomClipboardText() : clipboard.readText());
+      urlType = getSpotifyURLType(clipboard.readText());
     } catch (err) {
       errMsg = err.message;
       // display modal dialog with details of error

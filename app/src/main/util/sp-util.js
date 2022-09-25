@@ -1,5 +1,7 @@
 "use-strict";
 
+const { clipboard } = require("electron");
+
 module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
   TRACK: "track",
   PLAYLIST: "playlist",
@@ -15,11 +17,13 @@ module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
 module.exports.getSpotifyURLType = function (url = "") {
   const spotifyLinkRegex = new RegExp("https://open.spotify.com");
 
-  if (spotifyLinkRegex.test(url)) {
-    if (url.search(this.SpotifyURLType.TRACK) != -1) return this.SpotifyURLType.TRACK;
-    else if (url.search(this.SpotifyURLType.PLAYLIST) != -1) return this.SpotifyURLType.PLAYLIST;
-    else if (url.search(this.SpotifyURLType.ALBUM) != -1) return this.SpotifyURLType.ALBUM;
-    else if (url.search(this.SpotifyURLType.ARTIST) != -1) return this.SpotifyURLType.ARTIST;
+  let clipboardContent = url || clipboard.readText();
+
+  if (spotifyLinkRegex.test(clipboardContent)) {
+    if (clipboardContent.search(this.SpotifyURLType.TRACK) != -1) return this.SpotifyURLType.TRACK;
+    else if (clipboardContent.search(this.SpotifyURLType.PLAYLIST) != -1) return this.SpotifyURLType.PLAYLIST;
+    else if (clipboardContent.search(this.SpotifyURLType.ALBUM) != -1) return this.SpotifyURLType.ALBUM;
+    else if (clipboardContent.search(this.SpotifyURLType.ARTIST) != -1) return this.SpotifyURLType.ARTIST;
     else return this.SpotifyURLType.UNKNOWN;
   } else {
     throw new Error(`Uh ohh !! That wasn't a spotify url`);

@@ -2,11 +2,8 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
-const fs = require("fs");
-const isDebug = require("../test/is-debug");
-const { EventEmitter } = require("events");
-
-const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath("appData"), "ytdlp");
+const { open } = require("fs/promises");
+const { pipeline } = require("stream/promises");
 
 /**
  * Searches YouTube for a list of matching videos specified by `query`
@@ -14,77 +11,62 @@ const BINARY_LOCATION = path.join(isDebug ? "/Users/Noah/Desktop" : app.getPath(
  * @param {*} query the search query
  */
 module.exports.searchMatchingTracks = async function (query) {
-  if (isDebug) {
-    // developement code
-    let m_sarr1 = [
-      {
-        videoId: "video.id.videoId",
-        videoUrl: "video.url",
-        videoTitle: "Alan waker The official audio"
-      }
-    ];
+  try {
+    let sarr = await ytSearch.search(query);
 
-    return Promise.resolve({
-      searchQuery: query,
-      searchQueryList: m_sarr1
-    });
-  } else {
-    // production code
-    try {
-      let sarr = await ytSearch.search(query);
-
-      let m_sarr = sarr.map((video) => {
-        let videoOb = {
-          videoId: video.id.videoId,
-          videoUrl: video.url,
-          videoTitle: video.title
-        };
-
-        return videoOb;
-      });
-
-      return {
-        searchQuery: query,
-        searchQueryList: m_sarr
+    let m_sarr = sarr.map((video) => {
+      let videoOb = {
+        videoId: video.id.videoId,
+        videoUrl: video.url,
+        videoTitle: video.title
       };
-    } catch (err) {
-      return Promise.reject(new Error("Network error occurred"));
-    }
+
+      return videoOb;
+    });
+
+    return {
+      searchQuery: query,
+      searchQueryList: m_sarr
+    };
+  } catch (err) {
+    return Promise.reject(new Error("Network error occurred"));
   }
 };
 
 /**
  * Downloads track specified by `options`
  *
- * @param {*} options an object describing the video. {videoLink : ... , videoId : ...}
+ * @param {*} options an object describing the video. `{videoLink : ... , videoId : ...}`
  * @returns a YTDLP event emitter instance
  */
 module.exports.downloadMatchingTrack = async function (options) {
-  let downloadEmitter = new EventEmitter();
-  let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
+  const BINARY_LOCATION = path.join(true ? "/Users/Noah/Desktop" : app.getPath("appData"), "ytdlp");
 
-  downloadEmitter.emit("download-binaries");
+  let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
+  // 140 here means that the audio would be extracted
+  let downloadStream = ytdlpWrapper.execStream([options.videoLink, "-f", "140"]);
+
   try {
+    downloadStream.emit("binaries-downloading");
     let isDownloaded = await this.downloadYTDLPBinaries();
 
     if (isDownloaded) {
-      downloadEmitter.emit("binaries-downloaded");
-
-      ytdlpWrapper
-        .execStream([options.videoLink, "-f", "140"]) /** 140 here means that the audio would be extracted */
-        .on("progress", (progress) => {
-          console.log(progress.percent);
-        })
-        .pipe(fs.createWriteStream(`${options.videoTitle}.m4a`));
-        
+      downloadStream.emit("binaries-downloaded");
+      downloadStream.on("progress", (progress) => {
+        console.log(progress.percent);
+      });
+      // pipe results to file
+      pipeline(downloadStream, fs.createWriteStream(`${options.videoTitle}.m4a`));
     } else {
-      downloadEmitter.emit("error", "Download Failed");
+      downloadStream.emit("error", "Download Failed");
     }
   } catch (err) {
-    downloadEmitter.emit("error", err.message);
+    downloadStream.emit("error", err.message);
+  } finally {
+    downloadStream.destroy();
   }
 
-  return downloadEmitter;
+  return downloadStream;
 };
 
 /**
@@ -94,7 +76,7 @@ module.exports.downloadMatchingTrack = async function (options) {
  */
 module.exports.downloadYTDLPBinaries = async function () {
   return new Promise((resolve, reject) => {
-    fs.open(BINARY_LOCATION, "r+", async (err, _fd) => {
+    open(BINARY_LOCATION, "r+", async (err, _fd) => {
       if (err && err.code == "ENOENT") {
         try {
           await ytdlp.downloadFromGithub(BINARY_LOCATION);

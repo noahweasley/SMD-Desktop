@@ -3,17 +3,20 @@
 const { ipcMain } = require("electron");
 const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
-const isDebug = require("../main/test/is-debug");
-const dummy = require("../main/util/dummy");
 const fdownloader = require("../main/downloads/downloader");
-
-const fileDownloader = fdownloader({
-  maxParallelDownloads: 2
-});
+const database = require("../main/database");
+const { Mode, Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, _database) {
   let downloadQuery;
+  let CONCURRENCY = 2;
   const { downloadWindow, searchWindow, mainWindow } = browsers;
+
+  const fileDownloader = fdownloader({
+    win: mainWindow,
+    maxParallelDownloads: CONCURRENCY
+  });
+
   let { getSpotifyLinkData } = spotifyDl(settings);
   let downloadTasks = [];
 
@@ -36,7 +39,6 @@ module.exports = function (settings, browsers, _database) {
   // request to search for tracks to download
   ipcMain.handle("search-tracks", async (_event) => {
     const emp_error_message = "Uh-oh!! We couldn't find any tracks";
-    let dummyTrackCollection = dummy.getDummyPlayList().description.trackCollection;
 
     if (downloadQuery.type == "search") {
       let searchResults;
@@ -61,7 +63,7 @@ module.exports = function (settings, browsers, _database) {
         return err.message;
       }
     } else {
-      let tracks = isDebug ? dummyTrackCollection : downloadQuery.description.trackCollection;
+      let tracks = downloadQuery.description.trackCollection;
       // map track object to reasonable search query ([Song title] [Artist name])
       const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(" ")}`);
       // transform search queries to search promise
@@ -82,35 +84,57 @@ module.exports = function (settings, browsers, _database) {
     searchWindow.getWindow()?.close();
     if (args[0] === "proceed-download") {
       // get an handler to be used later on file downloads
-      downloadTasks = await fileDownloader.enqueueTasks(args[1]);
-      mainWindow.getWindow()?.send("show-download-tasks", downloadTasks);
+      const searchResults = args[1];
+      downloadTasks = fileDownloader.enqueueTasks(searchResults);
+      addDownloadCallbacks(downloadTasks);
+
+      const downloadData = searchResults.map((searchResult) => {
+        return {
+          Error_Occured: false,
+          Downloaded_Size: "Unknown",
+          Track_Title: searchResult.videoTitle,
+          Download_Progress: "0"
+        };
+      });
+
+      const isAdded = await database.addDownloadData({ type: Type.DOWNLOADING, data: downloadData }, Mode.SINGLE);
+
+      if (isAdded) mainWindow.getWindow()?.send("download-list-update", searchResults);
+      else console.log("downloads was not added");
+    }
+
+    function addDownloadCallbacks(downloadTasks) {
+      downloadTasks.forEach((downloadTask) => {
+        downloadTask.addDownloadCallback((_err, _pos, _progress) => {
+          // logic to send to renderer
+        });
+      });
     }
   });
-  
-  ipcMain.on("initiate-downloads", fileDownloader.initiateDownloads)
 
-  ipcMain.handle("pause", async (_event, _args) => {
-    //
+  ipcMain.on("initiate-downloads", async () => await fileDownloader.initiateDownloads());
+
+  ipcMain.handle("pause", async (_event, _args) => {});
+
+  ipcMain.handle("pause-all", async () => {
+    downloadTasks.forEach((task) => task.pause());
   });
 
-  
-  ipcMain.handle("pause-all", async (_event, _args) => {
-    downloadTasks.forEach(task => task.pause())
+  ipcMain.handle("resume", async (_event, args) => {
+    let { listPos } = args;
+    downloadTasks[listPos].resume();
   });
 
-  ipcMain.handle("resume", async (_event, _args) => {
-    //
+  ipcMain.handle("resume-all", async () => {
+    downloadTasks.forEach((task) => task.resume());
   });
 
-  ipcMain.handle("resume-all", async (_event, _args) => {
-    downloadTasks.forEach(task => task.resume())
+  ipcMain.handle("cancel", async (_event, args) => {
+    let { listPos } = args;
+    downloadTasks[listPos].cancel();
   });
 
-  ipcMain.handle("cancel", async (_event, _args) => {
-    //
-  });
-
-  ipcMain.handle("cancel-all", async (_event, _args) => {
-    downloadTasks.forEach(task => task.cancel())
+  ipcMain.handle("cancel-all", async () => {
+    downloadTasks.forEach((task) => task.cancel());
   });
 };
