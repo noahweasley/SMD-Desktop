@@ -7,10 +7,10 @@ window.addEventListener("DOMContentLoaded", () => {
   // retreive user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
-    if ((data[0] && data[0].length > 0) || (data[1] && data[1].length > 0)) {
+    if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
       data[0] ? createListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded", true);
       data[1] ? createOrAppendListItemDownloading(data[1]) : displayDecorById("info_decor__downloading", true);
-      // Now display the populated list items, becuase when they were created their visibility was set to gone.
+      // Now display the populated list items, becuase when they were crea_
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
       displayAllDecors(true);
@@ -224,7 +224,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // fallback image on thumnail load error
     document.querySelectorAll(".media-object").forEach((m) => {
-      m.addEventListener("error", () => m.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png"));
+      m.addEventListener("error", () =>
+        m.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png")
+      );
     });
   }
 

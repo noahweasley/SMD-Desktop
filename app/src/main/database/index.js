@@ -3,15 +3,17 @@ const { knex } = require("knex");
 const path = require("path");
 const { app } = require("electron");
 const fs = require("fs");
-const { Mode, Type } = require("./constants");
+const { readFile } = require("fs/promises");
+const { Type } = require("./constants");
 
 const DATABASE_VERSION = "1.0.0";
+const DATABASE_NAME = "UserDB.db";
 const DOWNLOADED_TABLE = "Downloaded_Table";
 const DOWNLOADING_TABLE = "Downloading_Table";
 
-const dbPath = path.join(app.getPath("userData"), "User", "Database");
-const dbFile = path.join(dbPath, "UserDB.db");
-const dbConfigFile = path.join(dbPath, "dbConfig.json");
+const DB_FILEPATH = path.join(app.getPath("userData"), "User", "Database");
+const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
+const DB_CONFIGFILE = path.join(DB_FILEPATH, "metadata.json");
 
 /**
  * The database object used in CRUD operations
@@ -20,20 +22,20 @@ const database = (module.exports.database = knex({
   client: "sqlite",
   version: DATABASE_VERSION,
   useNullAsDefault: true,
-  connection: {
-    filename: path.join(app.getPath("userData"), "User", "Database", "UserDB.db")
-  }
+  connection: { filename: DB_FILENAME }
 }));
 
 // vs file is used to manage dabase versions
 function createVSFile() {
-  // the initial data in the vs file, when the database is created
-  const vsObj = { DATABASE_VERSION: "1.0.0" };
-  // write vs to file
-  fs.writeFile(dbConfigFile, JSON.stringify(vsObj), function (err) {
-    if (err) console.error(`Error while creating VS file: ${err.message}`);
+  return new Promise((resolve, reject) => {
+    // the initial data in the vs file, when the database is created
+    const vsObj = { DATABASE_VERSION: "1.0.0" };
+    // write vs to file
+    fs.writeFile(DB_CONFIGFILE, JSON.stringify(vsObj), function (err) {
+      if (err) reject(new Error(`Error while creating VS file: ${err.message}`));
+      else resolve(vsObj.DATABASE_VERSION);
+    });
   });
-  return vsObj.DATABASE_VERSION;
 }
 
 // Creates the schema used in CRUD operation
@@ -42,18 +44,22 @@ function createDatabaseSchema() {
     createDBFolder();
 
     function createDBFolder() {
-      fs.open(dbFile, "wx", async (err, _fd) => {
+      fs.open(DB_FILENAME, "wx", async (err, _fd) => {
         function createDirectory() {
-          fs.mkdir(dbPath, { recursive: true }, async function (err) {
+          fs.mkdir(DB_FILEPATH, { recursive: true }, async function (err) {
             if (err) {
               reject(new Error(`An error occurred while creating db directories: ${err.message}`));
             } else {
               // if database folder was created successfully, then create the db and vs file and
               // start populating it with tables
-              createVSFile();
               try {
-                let created = await onCreateDatabase();
-                resolve(created);
+                await createVSFile();
+              } catch (err1) {
+                console.err(err1);
+              }
+
+              try {
+                resolve(await onCreateDatabase());
               } catch (err) {
                 reject(err);
               }
@@ -63,7 +69,7 @@ function createDatabaseSchema() {
 
         if (err) {
           if (err.code === "EEXIST") {
-            let dbVersion = checkDatabaseVersion();
+            let dbVersion = await checkDatabaseVersion();
             if (dbVersion !== DATABASE_VERSION) {
               // call onUpgradeDatabase() when the database schema needs to be altered or updated
               await upgradeDatabaseVersion();
@@ -71,8 +77,13 @@ function createDatabaseSchema() {
             } else {
               resolve(true);
             }
-          } else if (err.code === "ENOENT") createDirectory();
-          else console.error(`An unknown error occurred: ${err.code}: ${err.message}`);
+          } else if (err.code === "ENOENT") {
+            // create the database directory if file db file doesn't exist.
+            createDirectory();
+          } else {
+            // unknown bug
+            console.error(`An unknown error occurred: ${err.code}: ${err.message}`);
+          }
         }
       });
     }
@@ -80,15 +91,15 @@ function createDatabaseSchema() {
     function upgradeDatabaseVersion() {
       return new Promise((resolve, reject) => {
         // read the curent database version
-        fs.readFile(dbConfigFile, function (err, vsf) {
+        fs.readFile(DB_CONFIGFILE, function (err, vsf) {
           if (err) {
             // vs file corrupt! This would probably be caused by user action
             reject(err);
           } else {
-            let vsObj = JSON.parse(vsf.toString());
+            let vs_obj = JSON.parse(vsf.toString());
             // replace with new database version
-            vsObj["DATABASE_VERSION"] = DATABASE_VERSION;
-            fs.writeFile(dbConfigFile, JSON.stringify(vsObj), function (err) {
+            vs_obj["DATABASE_VERSION"] = DATABASE_VERSION;
+            fs.writeFile(DB_CONFIGFILE, JSON.stringify(vs_obj), function (err) {
               err ? reject(err) : resolve(DATABASE_VERSION);
             });
           }
@@ -96,15 +107,19 @@ function createDatabaseSchema() {
       });
     }
 
-    function checkDatabaseVersion() {
+    async function checkDatabaseVersion() {
       let dbVersion;
       let data;
 
       try {
-        data = fs.readFileSync(dbConfigFile, "utf-8");
+        data = await readFile(DB_CONFIGFILE, { encoding: "utf-8" });
         dbVersion = JSON.parse(data)["DATABASE_VERSION"];
-      } catch (error) {
-        dbVersion = createVSFile();
+      } catch (err) {
+        try {
+          dbVersion = await createVSFile();
+        } catch (err) {
+          console.log(err);
+        }
       }
 
       return dbVersion;
@@ -157,26 +172,10 @@ function onCreateDatabase() {
  * @param newVersion the new version code of the database
  */
 function onUpgradeDatabase(oldVersion, newVersion) {
-  console.info(`onUpgradeDatabase() called with: {${oldVersion}, ${newVersion}}`);
+  console.info(`onUpgradeDatabase() called with; old version: {${oldVersion}, new version: ${newVersion}}`);
 
   return true;
 }
-
-/**
- * Checks if a particular mode is valid
- *
- * @param mode the mode to be checked
- * @returns return true if mode is valid, throws an exception if not
- */
-module.exports.checkMode = function (mode) {
-  for (let m in Mode) {
-    if (Mode[`${m}`] === mode) {
-      return true;
-    }
-  }
-  
-  throw new Error(`${mode} is not supported`);
-};
 
 /**
  * @param {*} type the type of download data to be retrieved, if null or empty all the
@@ -186,22 +185,19 @@ module.exports.checkMode = function (mode) {
  * @param mode the mode used in fetching the data from database
  * @returns the list data as stored in the application's database
  */
-module.exports.getDownloadData = async function (arg, mode) {
-  this.checkMode(mode);
+module.exports.getDownloadData = async function (arg) {
   // only create database when the data is about to be used
   await createDatabaseSchema();
 
   if (arg["type"] == Type.DOWNLOADED) {
-    if (mode == Mode.ALL) {
-      let data = await database.select("*").from(DOWNLOADED_TABLE);
-      return data.length > 0 ? data : null;
-    }
+    let data = await database.select("*").from(DOWNLOADED_TABLE);
+    return data.length > 0 ? data : null;
   } else if (arg["type"] == Type.DOWNLOADING) {
-    if (mode == Mode.ALL) {
-      let data = await database.select("*").from(DOWNLOADING_TABLE);
-      return data.length > 0 ? data : null;
-    }
-  } else throw new Error(`${arg["type"]} is not supported`);
+    let data = await database.select("*").from(DOWNLOADING_TABLE);
+    return data.length > 0 ? data : null;
+  } else {
+    throw new Error(`${arg["type"]} is not supported`);
+  }
 };
 
 /**
@@ -211,27 +207,21 @@ module.exports.getDownloadData = async function (arg, mode) {
  * @param arg an object in format {type, data}, as an additional query parameter
  * @returns true if the data was added
  */
-module.exports.addDownloadData = async function (arg, mode) {
-  this.checkMode(mode);
-  
+module.exports.addDownloadData = async function (arg) {
   // only create database when the data is about to be used
   await createDatabaseSchema();
 
   if (arg["type"] == Type.DOWNLOADED) {
-    if (mode == Mode.SINGLE) {
-      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
-      // the value at result[0] would return the number of data inserted
-      if (result[0]) return true;
-    }
+    let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
+    // the value at result[0] would return the number of data inserted
+    if (result[0]) return true;
   } else if (arg["type"] == Type.DOWNLOADING) {
-    if (mode == Mode.SINGLE) {
-      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
-      // the value at result[0] would return the number os data inserted
-      if (result[0]) return true;
-    } else if (mode == Mode.MULTIPLE) {
-      
-    }
-  } else throw new Error(`${arg["type"]} is not supported`);
+    let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
+    // the value at result[0] would return the number os data inserted
+    if (result[0]) return true;
+  } else {
+    throw new Error(`${arg["type"]} is not supported`);
+  }
 
   return false;
 };
@@ -243,48 +233,35 @@ module.exports.addDownloadData = async function (arg, mode) {
  * @param mode the mode used in fetching the data from database
  * @returns true if the data was updated
  */
-module.exports.updateDownloadData = async function (arg, mode) {
-  this.checkMode(mode);
+module.exports.updateDownloadData = async function (arg) {
   // only create database when the data is about to be used
   await createDatabaseSchema();
 
   if (arg["type"] == Type.DOWNLOADED) {
-    if (mode == Mode.ALL) {
-      throw new Error("Update is not yet supported");
-    }
+    throw new Error("Update is not yet supported");
   } else if (arg["type"] == Type.DOWNLOADING) {
-    if (mode == Mode.ALL) {
-      throw new Error("Update is not yet supported");
-    }
-  } else throw new Error(`${arg["type"]} is not supported`);
-
-  return true;
+    throw new Error("Update is not yet supported");
+  } else {
+    throw new Error(`${arg["type"]} is not supported`);
+  }
 };
 
 /**
  * Deletes download data in app's database
  *
  * @param arg an object in format {query: {}}, as an additional query parameter
- * @param mode the mode used in fetching the data from database
  */
-module.exports.deleteDownloadData = async function (arg, mode) {
+module.exports.deleteDownloadData = async function (arg) {
   let data = arg["data"];
   this.checkMode(mode);
   // only create database when the data is about to be used
   await createDatabaseSchema();
 
   if (arg["type"] == Type.DOWNLOADED) {
-    if (mode == Mode.ALL) {
-    } else if (mode == Mode.SINGLE) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
-      return result > 0;
-    }
+    let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+    return result > 0;
   } else if (arg["type"] == Type.DOWNLOADING) {
-    if (mode == Mode.ALL) {
-    } else if (mode == Mode.SINGLE) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
-      return result > 0;
-    }
+    let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+    return result > 0;
   } else throw new Error(`${arg["type"]} is not supported`);
-  return true;
 };

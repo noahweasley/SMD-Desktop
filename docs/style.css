@@ -112,7 +112,6 @@ a:active {
   bottom: 16px;
   left: 16px;
   background-color: var(--solid-green);
-  border-radius: 50%;
   border: none;
   padding: 8px 16px;
   cursor: pointer;

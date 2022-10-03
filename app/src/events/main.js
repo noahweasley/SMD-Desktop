@@ -6,7 +6,7 @@ const spotifyDl = require("../main/server/spotify-dl");
 const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
 const { join } = require("path");
 const dummy = require("../main/util/dummy");
-const { Mode, Type } = require("../main/database/constants");
+const { Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
@@ -34,11 +34,11 @@ module.exports = function (settings, browsers, database) {
   // request to fetch and display list data
   ipcMain.handle("get-list-data", async () => {
     try {
-      let d1 = await database.getDownloadData({ type: Type.DOWNLOADED }, Mode.ALL);
-      let d2 = await database.getDownloadData({ type: Type.DOWNLOADING }, Mode.ALL);
+      let d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
+      let d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
       return [d1, d2];
     } catch (error) {
-      return console.log("Error occurred while fetching data: ", error.message);
+      return console.error("Error occurred while fetching list data: ", error.message);
     }
   });
 

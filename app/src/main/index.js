@@ -4,13 +4,13 @@ const { join } = require("path");
 const { mkdir, open } = require("fs");
 const { app } = require("electron");
 
-// ssmd was used to make the user not be able to open and edit the file created
-
-const settings = require("node-user-settings")({
+const settingsConfig = {
   preferenceFileDir: join(app.getPath("userData"), "User", "Preferences"),
   fileName: "Settings",
   fileExt: "json"
-});
+};
+
+const settings = require("node-user-settings")(settingsConfig);
 
 const browsers = require("../browsers")(settings);
 const { mainWindow } = browsers;

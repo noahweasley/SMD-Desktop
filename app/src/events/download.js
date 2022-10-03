@@ -5,7 +5,7 @@ const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const fdownloader = require("../main/downloads/downloader");
 const database = require("../main/database");
-const { Mode, Type } = require("../main/database/constants");
+const { Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, _database) {
   let downloadQuery;
@@ -97,8 +97,7 @@ module.exports = function (settings, browsers, _database) {
         };
       });
 
-      const isAdded = await database.addDownloadData({ type: Type.DOWNLOADING, data: downloadData }, Mode.SINGLE);
-
+      const isAdded = await database.addDownloadData({ type: Type.DOWNLOADING, data: downloadData });
       if (isAdded) mainWindow.getWindow()?.send("download-list-update", searchResults);
       else console.log("downloads was not added");
     }

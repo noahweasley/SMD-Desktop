@@ -36,7 +36,6 @@ module.exports = function (settings) {
     });
 
     Menu.setApplicationMenu(menu);
-
     smd_window.loadFile(join("app", "src", "views", "pages", "index.html"));
 
     // smd_window.webContents.openDevTools()
