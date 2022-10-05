@@ -18,6 +18,7 @@
     "package": "npm run build && npm run start",
     "generate": "node package/electron-winstaller.js"
   },
+  "homepage": "https://noahweasley.github.io/SMD-Desktop",
   "repository": {
     "type": "git",
     "url": "www.github.com/noahweasley/SMD-desktop"
@@ -48,9 +49,7 @@
     "url": "https://www.buymeacofee.com/noahweasley"
   },
   "dependencies": {
-    "async": "^3.2.4",
     "express": "^4.17.2",
-    "ffmpeg": "^0.0.4",
     "knex": "^0.95.15",
     "node-user-settings": "^1.1.1",
     "spotify-web-api-node": "^5.0.2",

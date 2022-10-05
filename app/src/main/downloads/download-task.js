@@ -1,7 +1,6 @@
 "use-strict";
 
 const { downloadMatchingTrack } = require("../server/youtube-dl");
-// const async = require("async");
 
 /**
  * Possible states of a download task
@@ -17,7 +16,6 @@ const _States = Object.freeze({
 module.exports.States = _States;
 
 module.exports = function (options) {
-  // let c_window = BrowserWindow.getFocusedWindow();
   let state = _States.PENDING;
   let downloadCallbackQueue = [];
   let { win, request, listPos } = options;

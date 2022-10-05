@@ -2,7 +2,6 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const authorize = require("./authorize");
 const { dialog, clipboard } = require("electron");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
-const { getDummyAlbum, getDummyPlayList, getRandomClipboardText } = require("../util/dummy");
 
 module.exports = function (settings) {
   let auth = authorize(settings);
@@ -20,6 +19,7 @@ module.exports = function (settings) {
 
     for (let x = 0; x <= 3; x++) {
       try {
+        xed;
         data = await spotifyApi.getAlbumTracks(album, { limit });
         dataReceived = true;
         break;
@@ -89,9 +89,7 @@ module.exports = function (settings) {
 
     let trackCollection = tracks["items"]
       .map((i) => i.track)
-      .map((tr) => {
-        return { songTitle: tr["name"], artistNames: tr["artists"].map((artist) => artist.name) };
-      });
+      .map((tr) => ({ songTitle: tr["name"], artistNames: tr["artists"].map((artist) => artist.name) }));
 
     return {
       type: SpotifyURLType.PLAYLIST,

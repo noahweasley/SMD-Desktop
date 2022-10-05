@@ -138,27 +138,33 @@ function createDatabaseSchema() {
 function onCreateDatabase() {
   // Create the schema for the table to persist window properties on start-up
   async function createTables() {
-    await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
-      tableBuilder.increments();
-      tableBuilder.integer("Track_Download_Size");
-      tableBuilder.string("Track_Playlist_Title");
-      tableBuilder.string("Track_Title");
-      tableBuilder.string("Track_Artists");
-    });
+    try {
+      await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
+        tableBuilder.increments();
+        tableBuilder.integer("Track_Download_Size");
+        tableBuilder.string("Track_Playlist_Title");
+        tableBuilder.string("Track_Title");
+        tableBuilder.string("Track_Artists");
+        tableBuilder.string("Track_Url");
+      });
 
-    await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
-      tableBuilder.increments();
-      tableBuilder.boolean("Error_Occured");
-      tableBuilder.string("Download_State");
-      tableBuilder.string("Track_Playlist_Title");
-      tableBuilder.string("Track_Title");
-      tableBuilder.string("Track_Artists");
-      tableBuilder.integer("Downloaded_Size");
-      tableBuilder.integer("Track_Download_Size");
-      tableBuilder.string("Download_Progress");
-    });
-
-    return true;
+      await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
+        tableBuilder.increments();
+        tableBuilder.boolean("Error_Occured");
+        tableBuilder.string("Download_State");
+        tableBuilder.string("Track_Playlist_Title");
+        tableBuilder.string("Track_Title");
+        tableBuilder.string("Track_Artists");
+        tableBuilder.integer("Downloaded_Size");
+        tableBuilder.integer("Track_Download_Size");
+        tableBuilder.integer("Download_Progress");
+        tableBuilder.string("Track_Url");
+      });
+      return true;
+    } catch (err) {
+      console.error(err.message);
+      return false;
+    }
   }
 
   return createTables();
@@ -187,16 +193,21 @@ function onUpgradeDatabase(oldVersion, newVersion) {
  */
 module.exports.getDownloadData = async function (arg) {
   // only create database when the data is about to be used
-  await createDatabaseSchema();
+  try {
+    await createDatabaseSchema();
 
-  if (arg["type"] == Type.DOWNLOADED) {
-    let data = await database.select("*").from(DOWNLOADED_TABLE);
-    return data.length > 0 ? data : null;
-  } else if (arg["type"] == Type.DOWNLOADING) {
-    let data = await database.select("*").from(DOWNLOADING_TABLE);
-    return data.length > 0 ? data : null;
-  } else {
-    throw new Error(`${arg["type"]} is not supported`);
+    if (arg["type"] == Type.DOWNLOADED) {
+      let data = await database.select("*").from(DOWNLOADED_TABLE);
+      return data.length > 0 ? data : null;
+    } else if (arg["type"] == Type.DOWNLOADING) {
+      let data = await database.select("*").from(DOWNLOADING_TABLE);
+      return data.length > 0 ? data : null;
+    } else {
+      throw new Error(`${arg["type"]} is not supported`);
+    }
+  } catch (err) {
+    console.log(err.message);
+    return [];
   }
 };
 
@@ -208,22 +219,29 @@ module.exports.getDownloadData = async function (arg) {
  * @returns true if the data was added
  */
 module.exports.addDownloadData = async function (arg) {
-  // only create database when the data is about to be used
-  await createDatabaseSchema();
+  try {
+    // only create database when the data is about to be used
+    await createDatabaseSchema();
 
-  if (arg["type"] == Type.DOWNLOADED) {
-    let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
-    // the value at result[0] would return the number of data inserted
-    if (result[0]) return true;
-  } else if (arg["type"] == Type.DOWNLOADING) {
-    let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
-    // the value at result[0] would return the number os data inserted
-    if (result[0]) return true;
-  } else {
-    throw new Error(`${arg["type"]} is not supported`);
+    if (arg["type"] == Type.DOWNLOADED) {
+      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
+      // the value at result[0] would return the number of data inserted
+      if (result[0]) return true;
+    } else if (arg["type"] == Type.DOWNLOADING) {
+      // data property is the main db data in the object
+      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
+      // the value at result[0] would return the number os data inserted
+      if (result[0]) return true;
+    } else {
+      throw new Error(`${arg["type"]} is not supported`);
+    }
+
+    return false;
+    
+  } catch (err) {
+    console.error(err.message);
+    return false;
   }
-
-  return false;
 };
 
 /**
@@ -234,15 +252,19 @@ module.exports.addDownloadData = async function (arg) {
  * @returns true if the data was updated
  */
 module.exports.updateDownloadData = async function (arg) {
-  // only create database when the data is about to be used
-  await createDatabaseSchema();
+  try {
+    // only create database when the data is about to be used
+    await createDatabaseSchema();
 
-  if (arg["type"] == Type.DOWNLOADED) {
-    throw new Error("Update is not yet supported");
-  } else if (arg["type"] == Type.DOWNLOADING) {
-    throw new Error("Update is not yet supported");
-  } else {
-    throw new Error(`${arg["type"]} is not supported`);
+    if (arg["type"] == Type.DOWNLOADED) {
+      throw new Error("Update is not yet supported");
+    } else if (arg["type"] == Type.DOWNLOADING) {
+      throw new Error("Update is not yet supported");
+    } else {
+      throw new Error(`${arg["type"]} is not supported`);
+    }
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -254,14 +276,19 @@ module.exports.updateDownloadData = async function (arg) {
 module.exports.deleteDownloadData = async function (arg) {
   let data = arg["data"];
   this.checkMode(mode);
-  // only create database when the data is about to be used
-  await createDatabaseSchema();
+  try {
+    // only create database when the data is about to be used
+    await createDatabaseSchema();
 
-  if (arg["type"] == Type.DOWNLOADED) {
-    let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
-    return result > 0;
-  } else if (arg["type"] == Type.DOWNLOADING) {
-    let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
-    return result > 0;
-  } else throw new Error(`${arg["type"]} is not supported`);
+    if (arg["type"] == Type.DOWNLOADED) {
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+      return result > 0;
+    } else if (arg["type"] == Type.DOWNLOADING) {
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+      return result > 0;
+    } else throw new Error(`${arg["type"]} is not supported`);
+  } catch (err) {
+    console.error(err.message);
+    return false;
+  }
 };

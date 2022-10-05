@@ -1,6 +1,6 @@
 "use-strict";
 
-const { ipcMain } = require("electron");
+const { ipcMain, dialog } = require("electron");
 const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const fdownloader = require("../main/downloads/downloader");
@@ -9,7 +9,7 @@ const { Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, _database) {
   let downloadQuery;
-  let CONCURRENCY = 2;
+  const CONCURRENCY = 2;
   const { downloadWindow, searchWindow, mainWindow } = browsers;
 
   const fileDownloader = fdownloader({
@@ -83,23 +83,39 @@ module.exports = function (settings, browsers, _database) {
 
     searchWindow.getWindow()?.close();
     if (args[0] === "proceed-download") {
-      // get an handler to be used later on file downloads
       const searchResults = args[1];
       downloadTasks = fileDownloader.enqueueTasks(searchResults);
       addDownloadCallbacks(downloadTasks);
 
-      const downloadData = searchResults.map((searchResult) => {
-        return {
-          Error_Occured: false,
-          Downloaded_Size: "Unknown",
-          Track_Title: searchResult.videoTitle,
-          Download_Progress: "0"
-        };
-      });
+      // map the data from search results into debase input format
 
+      const downloadData = searchResults.map((searchResult) => ({
+        Error_Occured: false,
+        Download_State: "RESUMED",
+        Track_Playlist_Title: "Test-PlayList",
+        Track_Title: searchResult.videoTitle,
+        Track_Url: searchResult.videoUrl,
+        Track_Artists: "[Test-Artists]",
+        Downloaded_Size: "Unknown",
+        Download_Progress: 0,
+        Track_Download_Size: 0
+      }));
+
+      // ... then add the search results the pending downloads database
       const isAdded = await database.addDownloadData({ type: Type.DOWNLOADING, data: downloadData });
-      if (isAdded) mainWindow.getWindow()?.send("download-list-update", searchResults);
-      else console.log("downloads was not added");
+
+      if (isAdded) {
+        // start file download process
+        await fileDownloader.initiateDownloads();
+        // update download list UI, with current pending download data]
+        mainWindow.getWindow()?.send("download-list-update", searchResults);
+      } else {
+        // probably some write error to the database
+        dialog.showErrorBox(
+          "Unknown Error Occurred",
+          "Check if there is enough space on disk, which is required to save data"
+        );
+      }
     }
 
     function addDownloadCallbacks(downloadTasks) {

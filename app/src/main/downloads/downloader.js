@@ -11,33 +11,22 @@ module.exports = function (config) {
 
   const getMaxParallelDownloads = () => maxParallelDownloads;
 
-  const acquireLock = () => {
+  function acquireLock() {
     if (CONCURRENCY) {
       --CONCURRENCY;
       return true;
     } else {
       return false;
     }
-  };
+  }
 
-  const releaseLock = () => {
+  function releaseLock() {
     if (CONCURRENCY < maxParallelDownloads) {
       ++CONCURRENCY;
       return true;
     } else {
       return false;
     }
-  };
-
-  /**
-   * Enqueue a download tast
-   *
-   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
-   */
- function enqueueTask(request = {}, listPos = 0) {
-    let task = downloadTask({ win, request, listPos });
-    downloadTaskQueue.push(task);
-    return task;
   }
 
   /**
@@ -45,10 +34,22 @@ module.exports = function (config) {
    *
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
    */
+  function enqueueTask(request = {}, listPos = 0) {
+    let task = downloadTask({ win, request, listPos });
+    downloadTaskQueue.push(task);
+    return task;
+  }
+
+  /**
+   * Enqueue a download task
+   *
+   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
+   */
   function enqueueTasks(requests = []) {
     for (let listPos = 0; listPos < requests.length; listPos++) {
       enqueueTask(requests[listPos], listPos);
     }
+    
     return downloadTaskQueue;
   }
 
@@ -73,7 +74,7 @@ module.exports = function (config) {
     downloadTaskQueue.forEach((task) => task.pause());
   }
 
-   function resumeAll() {
+  function resumeAll() {
     return new Promise(() => {
       for (let x = 0; x < downloadTaskQueue.length; x++) {
         if (acquireLock()) {
@@ -87,7 +88,10 @@ module.exports = function (config) {
   }
 
   async function cancelAll() {
-    downloadTaskQueue.forEach((task) => task.cancel());
+    downloadTaskQueue.forEach((task) => {
+      if (releaseLock()) task.cancel();
+    });
+
     activeDownloadTasks = [];
   }
 
