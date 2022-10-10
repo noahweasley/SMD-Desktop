@@ -1,19 +1,7 @@
 "use-strict";
 
 const { downloadMatchingTrack } = require("../server/youtube-dl");
-
-/**
- * Possible states of a download task
- */
-const _States = Object.freeze({
-  PENDING: 0,
-  ACTIVE: 1,
-  PAUSED: 2,
-  COMPLETED: 3,
-  FAILED: 4
-});
-
-module.exports.States = _States;
+const { States } = require("../database/constants");
 
 module.exports = function (options) {
   let state = _States.PENDING;
@@ -30,22 +18,22 @@ module.exports = function (options) {
   const getListPosition = () => downloadListPos;
 
   function pause() {
-    state = _States.PAUSED;
+    state = States.PAUSED;
     downloadStream?.pause();
   }
 
   function resume() {
-    state = _States.ACTIVE;
+    state = States.ACTIVE;
     downloadStream?.resume();
   }
 
   function cancel() {
-    state = _States.FAILED;
+    state = States.FAILED;
     downloadStream?.destroy();
   }
 
   function start() {
-    if (state == _States.ACTIVE) {
+    if (state == States.ACTIVE) {
       throw new Error("Download task is already active");
     } else {
       state = _States.ACTIVE;
@@ -67,7 +55,7 @@ module.exports = function (options) {
   }
 
   function wait() {
-    state = _States.PENDING;
+    state = States.PENDING;
   }
 
   return { addDownloadCallback, pause, resume, wait, cancel, start, getListPosition };

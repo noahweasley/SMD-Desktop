@@ -5,7 +5,7 @@ const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const fdownloader = require("../main/downloads/downloader");
 const database = require("../main/database");
-const { Type } = require("../main/database/constants");
+const { Type, States } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, _database) {
   let downloadQuery;
@@ -30,7 +30,7 @@ module.exports = function (settings, browsers, _database) {
   ipcMain.on("search-click-event", (_event, args) => {
     downloadQuery = args[1];
 
-    downloadWindow.getWindow().close();
+    downloadWindow.getWindow()?.close();
     if (args[0] === "proceed-download") {
       searchWindow.init();
     }
@@ -83,32 +83,40 @@ module.exports = function (settings, browsers, _database) {
 
     searchWindow.getWindow()?.close();
     if (args[0] === "proceed-download") {
-      const searchResults = args[1];
-      downloadTasks = fileDownloader.enqueueTasks(searchResults);
+      const searchQueryResults = args[1];
+      downloadTasks = fileDownloader.enqueueTasks(searchQueryResults);
       addDownloadCallbacks(downloadTasks);
 
-      // map the data from search results into debase input format
+      // map the data from search results into required database format
 
-      const downloadData = searchResults.map((searchResult) => ({
-        Error_Occured: false,
-        Download_State: "RESUMED",
-        Track_Playlist_Title: "Test-PlayList",
-        Track_Title: searchResult.videoTitle,
-        Track_Url: searchResult.videoUrl,
-        Track_Artists: "[Test-Artists]",
-        Downloaded_Size: "Unknown",
-        Download_Progress: 0,
-        Track_Download_Size: 0
-      }));
+      const downloadData = searchQueryResults
+        .map((searchQueryResult) => searchQueryResult.searchQueryList)
+        .map((searchQueryListItems) => {
+          return searchQueryListItems.map((item) => ({
+            Error_Occured: false,
+            Download_State: States.ACTIVE,
+            Track_Playlist_Title: "-",
+            Track_Title: item.videoTitle,
+            Track_Url: item.videoUrl,
+            Track_Artists: "-",
+            Downloaded_Size: "Unknown",
+            Download_Progress: 0,
+            Track_Download_Size: 0
+          }));
+        });
 
       // ... then add the search results the pending downloads database
-      const isAdded = await database.addDownloadData({ type: Type.DOWNLOADING, data: downloadData });
+      
+      const isAdded = await database.addDownloadData({
+        type: Type.DOWNLOADING,
+        data: downloadData
+      });
 
       if (isAdded) {
         // start file download process
         await fileDownloader.initiateDownloads();
         // update download list UI, with current pending download data]
-        mainWindow.getWindow()?.send("download-list-update", searchResults);
+        mainWindow.getWindow()?.send("download-list-update", searchQueryResults);
       } else {
         // probably some write error to the database
         dialog.showErrorBox(

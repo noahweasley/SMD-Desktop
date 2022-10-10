@@ -104,7 +104,7 @@ window.addEventListener("DOMContentLoaded", () => {
       return mediaBody;
     }
 
-    listData = listData.concat(it);
+    listData = listData.concat(item);
   }
 
   // populate the 'downloaded' - list with item fetched from database

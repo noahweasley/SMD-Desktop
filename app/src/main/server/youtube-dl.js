@@ -14,15 +14,11 @@ module.exports.searchMatchingTracks = async function (query) {
   try {
     let sarr = await ytSearch.search(query);
 
-    let m_sarr = sarr.map((video) => {
-      let videoOb = {
-        videoId: video.id.videoId,
-        videoUrl: video.url,
-        videoTitle: video.title
-      };
-
-      return videoOb;
-    });
+    let m_sarr = sarr.map((vob) => ({
+      videoId: vob.id.videoId,
+      videoUrl: vob.url,
+      videoTitle: vob.title
+    }));
 
     return {
       searchQuery: query,
@@ -40,7 +36,7 @@ module.exports.searchMatchingTracks = async function (query) {
  * @returns a YTDLP event emitter instance
  */
 module.exports.downloadMatchingTrack = async function (options) {
-  const BINARY_LOCATION = path.join(true ? "/Users/Noah/Desktop" : app.getPath("appData"), "ytdlp");
+  const BINARY_LOCATION = path.join(app.getPath("appData"), "ytdlp");
 
   let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
   // 140 here means that the audio would be extracted

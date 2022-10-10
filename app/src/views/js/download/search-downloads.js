@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     window.bridgeApis.invoke("search-tracks").then((data) => {
       loader.classList.add("gone");
-      if (data && data instanceof Object) {
+      if (data && data instanceof Array && data.length > 0) {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
@@ -47,7 +47,7 @@ window.addEventListener("DOMContentLoaded", () => {
       } else {
         list.classList.add("gone");
         errorDecoration.style.setProperty("display", "flex");
-        message.innerText = data;
+        message.innerText = data instanceof String ? data : "No results found for now";
         buttons[0].removeAttribute("disabled");
       }
 
@@ -73,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
         for (let y = 0; y < headerSelectCheckboxes.length; y++) {
           let headerSelectCheckbox = headerSelectCheckboxes[y];
           headerSelectCheckbox.checked = sa_IsChecked;
-          
+
           for (let x = 0; x < selectCheckboxes.length; x++) {
             // select all the check-boxes in the list if the select-all check-box is checked or not
             selectCheckboxes[x].checked = sa_IsChecked;
