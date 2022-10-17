@@ -31,7 +31,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    displayDecorById("info_decor__downloading", false);
+    return console.log(args);
+    
+    displayDecorById("info_decor__downloading", true);
+    displayDecorById("info_decor__downloaded", false);
     createOrAppendListItemDownloading(args);
     registerEventListeners();
   });
@@ -77,6 +80,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // creates a media body element
     function createMediaBody(it) {
       const mediaBody = document.createElement("div");
+      mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
       trackTitleElement.innerText = it["trackTitle"];
@@ -91,6 +95,7 @@ window.addEventListener("DOMContentLoaded", () => {
       opIcon.classList.add("icon", "icon-pause", "icon-x2");
       opIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
       opIconContainer.append(opIcon);
+      
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
       downloadProgressElement.classList.add("horizontal-progress");

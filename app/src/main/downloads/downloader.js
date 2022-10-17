@@ -49,7 +49,7 @@ module.exports = function (config) {
     for (let listPos = 0; listPos < requests.length; listPos++) {
       enqueueTask(requests[listPos], listPos);
     }
-    
+
     return downloadTaskQueue;
   }
 
@@ -58,16 +58,14 @@ module.exports = function (config) {
    * number of download task on the dowload queue, then the remaining tasks enter their pending states
    */
   function initiateDownloads() {
-    return new Promise(() => {
-      for (let x = 0; x < downloadTaskQueue.length; x++) {
-        if (acquireLock()) {
-          downloadTaskQueue[x].start();
-          activeDownloadTasks.push(downloadTaskQueue[x]);
-        } else {
-          downloadTaskQueue[x].wait();
-        }
+    for (let x = 0; x < downloadTaskQueue.length; x++) {
+      if (acquireLock()) {
+        downloadTaskQueue[x].start();
+        activeDownloadTasks.push(downloadTaskQueue[x]);
+      } else {
+        downloadTaskQueue[x].wait();
       }
-    });
+    }
   }
 
   function pauseAll() {
@@ -75,16 +73,14 @@ module.exports = function (config) {
   }
 
   function resumeAll() {
-    return new Promise(() => {
-      for (let x = 0; x < downloadTaskQueue.length; x++) {
-        if (acquireLock()) {
-          downloadTaskQueue[x].resume();
-          activeDownloadTasks.push(downloadTaskQueue[x]);
-        } else {
-          downloadTaskQueue[x].wait();
-        }
+    for (let x = 0; x < downloadTaskQueue.length; x++) {
+      if (acquireLock()) {
+        downloadTaskQueue[x].resume();
+        activeDownloadTasks.push(downloadTaskQueue[x]);
+      } else {
+        downloadTaskQueue[x].wait();
       }
-    });
+    }
   }
 
   async function cancelAll() {

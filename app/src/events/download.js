@@ -89,34 +89,33 @@ module.exports = function (settings, browsers, _database) {
 
       // map the data from search results into required database format
 
-      const downloadData = searchQueryResults
-        .map((searchQueryResult) => searchQueryResult.searchQueryList)
-        .map((searchQueryListItems) => {
-          return searchQueryListItems.map((item) => ({
-            Error_Occured: false,
-            Download_State: States.ACTIVE,
-            Track_Playlist_Title: "-",
-            Track_Title: item.videoTitle,
-            Track_Url: item.videoUrl,
-            Track_Artists: "-",
-            Downloaded_Size: "Unknown",
-            Download_Progress: 0,
-            Track_Download_Size: 0
-          }));
-        });
+      const downloadData = searchQueryResults.searchQueryList.map((searchQuery) => {
+        return searchQuery.map((item) => ({
+          Error_Occured: false,
+          Download_State: States.ACTIVE,
+          Track_Playlist_Title: "-",
+          Track_Title: item.videoTitle,
+          Track_Url: item.videoUrl,
+          Track_Artists: "-",
+          Downloaded_Size: "Unknown",
+          Download_Progress: 0,
+          Track_Download_Size: 0
+        }));
+      });
 
-      // ... then add the search results the pending downloads database
+      // @TODO: Fix database entry, produces extra array, as parent
       
+      // return console.log(downloadData);
+      // ... then add the search results the pending downloads database
+
       const isAdded = await database.addDownloadData({
         type: Type.DOWNLOADING,
         data: downloadData
       });
 
       if (isAdded) {
-        // start file download process
-        await fileDownloader.initiateDownloads();
         // update download list UI, with current pending download data]
-        mainWindow.getWindow()?.send("download-list-update", searchQueryResults);
+        mainWindow.getWindow()?.send("download-list-update", downloadData);
       } else {
         // probably some write error to the database
         dialog.showErrorBox(
@@ -127,15 +126,20 @@ module.exports = function (settings, browsers, _database) {
     }
 
     function addDownloadCallbacks(downloadTasks) {
-      downloadTasks.forEach((downloadTask) => {
-        downloadTask.addDownloadCallback((_err, _pos, _progress) => {
-          // logic to send to renderer
-        });
-      });
+      for (const downloadTask of downloadTasks) {
+        downloadTask.addDownloadCallback(callback);
+      }
+
+      function callback(_err, _pos, _progress) {
+        // logic to send to renderer
+      }
     }
   });
 
-  ipcMain.on("initiate-downloads", async () => await fileDownloader.initiateDownloads());
+  ipcMain.on("initiate-downloads", async () => {
+    // start file download process
+    return fileDownloader.initiateDownloads();
+  });
 
   ipcMain.handle("pause", async (_event, _args) => {});
 

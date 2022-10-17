@@ -369,6 +369,32 @@ section.epilogue > * {
 
 section.epilogue > .heading {
   font-size: calc(1vw + 1em);
+  position: relative;
+  z-index: -1;
+}
+
+section.epilogue > .heading::before {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: -30px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
+}
+
+section.epilogue > .heading::after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 40%;
+  right: -30px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
 }
 
 section.form {
@@ -460,6 +486,15 @@ footer {
 
 i.fa-heart {
   color: hotpink;
+}
+
+div.socials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 3em;
+  padding: 2em;
+  justify-content: center;
 }
 
 /* Mobile phone-like screen sizes */

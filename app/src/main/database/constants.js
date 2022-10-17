@@ -13,9 +13,9 @@ module.exports.Type = Object.freeze({
  * Possible states of a download task
  */
 module.exports.States = Object.freeze({
-  PENDING: 0,
-  ACTIVE: 1,
-  PAUSED: 2,
-  COMPLETED: 3,
-  FAILED: 4
+  PENDING: "Pending",
+  ACTIVE: "Active",
+  PAUSED: "Paused",
+  COMPLETED: "Completed",
+  FAILED: "Failed"
 });

@@ -4,7 +4,7 @@ const { downloadMatchingTrack } = require("../server/youtube-dl");
 const { States } = require("../database/constants");
 
 module.exports = function (options) {
-  let state = _States.PENDING;
+  let state = States.PENDING;
   let downloadCallbackQueue = [];
   let { win, request, listPos } = options;
   let requestUrl = request.url;
@@ -36,7 +36,7 @@ module.exports = function (options) {
     if (state == States.ACTIVE) {
       throw new Error("Download task is already active");
     } else {
-      state = _States.ACTIVE;
+      state = States.ACTIVE;
       let options = {};
       registerDownloadOp(options);
     }
@@ -46,8 +46,8 @@ module.exports = function (options) {
     let stream = await downloadMatchingTrack(options);
     downloadStream = stream;
     // bd => binaries downloading
-    stream.on("binaries-downloading", () => win.webContents.send("show-bd-dialog"));
-    stream.on("binaries-downloaded", () => win.webContents.send("close-bd-dialog"));
+    stream.on("binaries-downloading", () => win.webContents.send("show-bindown-dialog"));
+    stream.on("binaries-downloaded", () => win.webContents.send("close-bindown-dialog"));
     stream.on("error", (err) => {
       console.error(err);
       downloadCallbackQueue.forEach((callback) => callback(err));
