@@ -1,0 +1,62 @@
+:root {
+  --white-solid: #eeeeee;
+  --grey-solid: #828282;
+  --grey-solid_5: rgba(160, 159, 159, 0.144);
+  --black_transparent: rgba(0, 0, 0, 0.726);
+  --normal-scrolbar-clr: #1ed75f18;
+  --active-scrolbar-clr: #1ed75f38;
+  --grey-solid_10: rgba(160, 159, 159, 0.247);
+  --primary-color: #1ed760;
+  --primary-color-dark: #1dbb54;
+  --primary-color-dark-alt-2: hsl(144, 82%, 38%);
+  --primary-color-dark-alt: hsl(143, 63%, 10%);
+  --solid-green: #22cc5db2;
+  --solid-blue: hsl(225, 77%, 33%);
+  --solid-blue-alt: hsl(223, 78%, 12%);
+  --solid-dark: #0c0b0b;
+  --solid-dark-alt: #161313;
+  --solid-darker: #000;
+  --sand-solid: #ecebe8;
+  --window-actions-elevation: 2;
+  color: white;
+  font-size: 14px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: initial;
+}
+
+.accordion {
+  background-color: var(--solid-dark-alt);
+  color: var(--white-solid);
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: calc(1vw + 0.5em);
+  transition: 0.4s;
+  display: flex;
+  justify-content: space-between;
+  margin-block: 8px;
+}
+
+.accordion > i {
+  margin-inline: 1em;
+}
+
+.acc-active,
+.accordion:hover {
+  background-color: var(--grey-solid_5);
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  font-size: calc(1.1vw + 0.5em);
+}

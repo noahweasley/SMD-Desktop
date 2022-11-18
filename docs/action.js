@@ -1,11 +1,6 @@
 // date
 const date = document.querySelector(".date");
 const dateBegin = document.getElementById("begin");
-const sendMailButton = document.getElementById("send-email");
-const emailAddr = document.getElementById("email-addr");
-const emailBody = document.getElementById("email-body");
-const firstName = document.getElementById("first-name");
-const lastName = document.getElementById("last-name");
 
 let thisYear = new Date(Date.now()).getFullYear();
 

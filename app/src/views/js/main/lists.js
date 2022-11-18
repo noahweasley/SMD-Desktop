@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    return console.log(args);
+    return console.log(`Received an update from main process\n\n${args}`);
     
     displayDecorById("info_decor__downloading", true);
     displayDecorById("info_decor__downloaded", false);
