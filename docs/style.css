@@ -21,7 +21,7 @@
   --window-actions-elevation: 2;
   color: white;
   font-size: 14px;
-  font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 * {
@@ -342,6 +342,7 @@ section.info > .info-cards > * {
 
 section.info > .info-cards .info-icon {
   background-color: var(--solid-blue);
+  transition: 1s;
   width: 100px;
   height: 100px;
   color: white;
@@ -351,6 +352,11 @@ section.info > .info-cards .info-icon {
   align-items: center;
   flex-direction: column;
   box-shadow: 0px 0px 16px 4px rgba(48, 48, 214, 0.473);
+}
+
+section.info > .info-cards .info-icon:hover {
+  transform: translateY(-20px);
+  cursor: pointer;
 }
 
 section.info > .info-cards p {
