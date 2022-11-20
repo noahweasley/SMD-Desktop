@@ -154,7 +154,7 @@ ul.topnav .icon {
   top: 20px;
 }
 
-ul.topnav > .logo {
+ul.topnav>.logo {
   display: flex;
   max-width: 50px;
   position: absolute;
@@ -162,7 +162,7 @@ ul.topnav > .logo {
   left: 20px;
 }
 
-ul.topnav > .logo p {
+ul.topnav>.logo p {
   margin-left: 24px;
   letter-spacing: 0.5em;
   font-weight: bold;
@@ -209,15 +209,6 @@ h1 {
   font-size: calc(1vw + 0.8em);
 }
 
-.download-container {
-  height: 400px;
-  width: 90%;
-  background-color: black;
-  display: flex;
-  margin: auto;
-  border-radius: 8px;
-}
-
 .download-list {
   width: 100%;
   list-style: none;
@@ -237,7 +228,7 @@ h1 {
   cursor: pointer;
 }
 
-.download-container a {
+.container a {
   width: 100%;
   height: 100%;
   text-decoration: none;
@@ -280,21 +271,21 @@ section.product-display .app-name {
   letter-spacing: 0.2em;
 }
 
-section.product-display > .event {
+section.product-display>.event {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-section.product-display > .event > *,
-section.product-display > a.download {
+section.product-display>.event>*,
+section.product-display>a.download {
   margin: 16px;
   border-radius: 8px;
   padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
   border: 1px solid var(--solid-green);
 }
 
-section.product-display > a.download {
+section.product-display>a.download {
   text-decoration: none;
   color: white;
   transition: 0.2s;
@@ -302,11 +293,11 @@ section.product-display > a.download {
   margin-top: 30px;
 }
 
-section.product-display > a.download > i {
+section.product-display>a.download>i {
   margin-inline: 16px;
 }
 
-section.product-display > a.download:hover {
+section.product-display>a.download:hover {
   background-color: var(--solid-green);
   color: var(--hover-button-text-clr);
 }
@@ -320,7 +311,7 @@ section.info {
   background-color: var(--solid-darker);
 }
 
-section.info > .info-cards {
+section.info>.info-cards {
   width: 100%;
   height: 100%;
   display: flex;
@@ -332,7 +323,7 @@ section.info > .info-cards {
   overflow: hidden;
 }
 
-section.info > .info-cards > * {
+section.info>.info-cards>* {
   width: 300px;
   display: flex;
   justify-content: center;
@@ -340,7 +331,7 @@ section.info > .info-cards > * {
   flex-direction: column;
 }
 
-section.info > .info-cards .info-icon {
+section.info>.info-cards .info-icon {
   background-color: var(--solid-blue);
   transition: 1s;
   width: 100px;
@@ -354,12 +345,12 @@ section.info > .info-cards .info-icon {
   box-shadow: 0px 0px 16px 4px rgba(48, 48, 214, 0.473);
 }
 
-section.info > .info-cards .info-icon:hover {
+section.info>.info-cards .info-icon:hover {
   transform: translateY(-20px);
   cursor: pointer;
 }
 
-section.info > .info-cards p {
+section.info>.info-cards p {
   text-align: center;
   margin: 2em;
 }
@@ -403,7 +394,7 @@ form.contact-form .name {
   gap: 2em;
 }
 
-form.contact-form .name > * {
+form.contact-form .name>* {
   flex: 1;
 }
 
@@ -430,7 +421,6 @@ textarea.form-control {
   min-height: 100px;
   max-height: 500px;
   resize: vertical;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 button[type="submit"] {
@@ -511,7 +501,7 @@ div.socials {
     justify-content: center;
   }
 
-  form.contact-form .name > * {
+  form.contact-form .name>* {
     flex: none;
   }
 
@@ -522,6 +512,7 @@ div.socials {
   form.contact-form textarea {
     max-height: 100px;
   }
+
   p {
     font-size: 0.6em;
   }
@@ -530,7 +521,7 @@ div.socials {
 /* Tablet-like screen sizes */
 
 @media screen and (max-width: 1080px) {
-  ul.topnav > .logo {
+  ul.topnav>.logo {
     overflow: hidden;
   }
 
@@ -540,13 +531,14 @@ div.socials {
     justify-content: center;
   }
 
-  form.contact-form .name > * {
+  form.contact-form .name>* {
     flex: none;
   }
 
   form.contact-form textarea {
     max-height: 150px;
   }
+
   p {
     font-size: 0.8em;
   }
