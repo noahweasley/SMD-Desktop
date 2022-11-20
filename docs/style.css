@@ -11,6 +11,7 @@
   --primary-color-dark-alt-2: hsl(144, 82%, 38%);
   --primary-color-dark-alt: hsl(143, 63%, 10%);
   --solid-green: #22cc5db2;
+  --hover-button-text-clr: white;
   --solid-blue: hsl(225, 77%, 33%);
   --solid-blue-alt: hsl(223, 78%, 12%);
   --solid-dark: #0c0b0b;
@@ -65,6 +66,7 @@ section.product-display {
 
 p {
   font-size: 1em;
+  line-height: 2em;
 }
 
 a {
@@ -286,7 +288,6 @@ section.product-display > .event {
 
 section.product-display > .event > *,
 section.product-display > a.download {
-  font-family: "Courier New", Courier, monospace;
   margin: 16px;
   border-radius: 8px;
   padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
@@ -307,6 +308,7 @@ section.product-display > a.download > i {
 
 section.product-display > a.download:hover {
   background-color: var(--solid-green);
+  color: var(--hover-button-text-clr);
 }
 
 section.info {
@@ -465,7 +467,7 @@ div.socials {
 
 /* Mobile phone-like screen sizes */
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   ul.topnav li:not(:last-child) {
     display: none;
   }
@@ -521,7 +523,7 @@ div.socials {
 
 /* Tablet-like screen sizes */
 
-@media screen and (max-width: 996px) {
+@media screen and (max-width: 1080px) {
   ul.topnav > .logo {
     overflow: hidden;
   }

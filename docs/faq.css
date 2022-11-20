@@ -39,6 +39,7 @@ body {
   text-align: left;
   outline: none;
   font-size: 1.1em;
+  font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   transition: 0.4s;
   display: flex;
   justify-content: space-between;
