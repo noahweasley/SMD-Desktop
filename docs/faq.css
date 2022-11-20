@@ -19,7 +19,7 @@
   --sand-solid: #ecebe8;
   --window-actions-elevation: 2;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -38,7 +38,7 @@ body {
   border: none;
   text-align: left;
   outline: none;
-  font-size: calc(1vw + 0.5em);
+  font-size: 1.1em;
   transition: 0.4s;
   display: flex;
   justify-content: space-between;
@@ -58,5 +58,4 @@ body {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  font-size: calc(1.1vw + 0.5em);
 }
