@@ -139,7 +139,7 @@ module.exports = function (Settings) {
   /**
    * A simple wrapper to refresh access token and still handle errors
    */
-  async function refreshAuthTokenWrap() {
+  async function __refreshAuthToken() {
     try {
       await refreshSpotifyAccessToken();
     } catch (err) {
@@ -147,5 +147,5 @@ module.exports = function (Settings) {
     }
   }
 
-  return { authorizeApp, refreshSpotifyAccessToken, refreshAuthTokenWrap };
+  return { authorizeApp, refreshSpotifyAccessToken, __refreshAuthToken };
 };

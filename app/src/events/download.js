@@ -3,7 +3,7 @@
 const { ipcMain, dialog } = require("electron");
 const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
-const fdownloader = require("../main/downloads/downloader");
+const downloader = require("../main/downloads/downloader");
 const database = require("../main/database");
 const { Type, States } = require("../main/database/constants");
 
@@ -12,7 +12,7 @@ module.exports = function (settings, browsers, _database) {
   const CONCURRENCY = 2;
   const { downloadWindow, searchWindow, mainWindow } = browsers;
 
-  const fileDownloader = fdownloader({
+  const fileDownloader = downloader({
     win: mainWindow,
     maxParallelDownloads: CONCURRENCY
   });
@@ -91,7 +91,7 @@ module.exports = function (settings, browsers, _database) {
 
       const downloadData = searchQueryResults.searchQueryList.map((searchQuery) => {
         return searchQuery.map((item) => ({
-          Error_Occured: false,
+          Error_Occurred: false,
           Download_State: States.ACTIVE,
           Track_Playlist_Title: "-",
           Track_Title: item.videoTitle,

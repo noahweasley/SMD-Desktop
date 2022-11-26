@@ -8,7 +8,7 @@ module.exports = function (settings) {
   let spotifyApi = new SpotifyWebApi();
 
   /**
-   * starts album downlaod
+   * starts album download
    *
    * @param albumUrl the album identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
@@ -19,12 +19,11 @@ module.exports = function (settings) {
 
     for (let x = 0; x <= 3; x++) {
       try {
-        xed;
         data = await spotifyApi.getAlbumTracks(album, { limit });
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshAuthTokenWrap();
+        await auth.__refreshAuthToken();
       }
     }
 
@@ -76,7 +75,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshAuthTokenWrap();
+        await auth.__refreshAuthToken();
       }
     }
 
@@ -113,7 +112,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshAuthTokenWrap();
+        await auth.__refreshAuthToken();
       }
     }
 
@@ -163,9 +162,8 @@ module.exports = function (settings) {
     spotifyApi.setAccessToken(spotifyAccessToken);
     spotifyApi.setRefreshToken(spotifyRefreshToken);
 
-    const spotifyLinkRegex = new RegExp("https://open.spotify.com");
     try {
-      if (spotifyLinkRegex.test(clipboardContent)) {
+      if (clipboardContent.match(/[https://open.spotify.com]/)) {
         // then ...
         switch (spotifyURLType) {
           case SpotifyURLType.TRACK:
