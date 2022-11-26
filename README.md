@@ -1,6 +1,6 @@
 # SMD Desktop
 
-### The best open-sourced cross-platform desktop app to search and download songs for free, single tracks are also searchable
+### An Open-Sourced Cross-Platform desktop application to search and download songs for free, single tracks are also searchable
 
 <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
 
@@ -28,6 +28,6 @@ There are many ways in which you can participate in this project, for example:
 
 ## License
 
-SMD Desktop :copyright: is under the GPL 3.0 licence
+SMD Desktop :copyright: is under the GPL 3.0 license
 
 Please review [license](https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE) to get full details.

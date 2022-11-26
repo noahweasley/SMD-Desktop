@@ -89,39 +89,44 @@ module.exports = function (settings, browsers, _database) {
 
       // map the data from search results into required database format
 
-      const downloadData = searchQueryResults.searchQueryList.map((searchQuery) => {
-        return searchQuery.map((item) => ({
-          Error_Occurred: false,
-          Download_State: States.ACTIVE,
-          Track_Playlist_Title: "-",
-          Track_Title: item.videoTitle,
-          Track_Url: item.videoUrl,
-          Track_Artists: "-",
-          Downloaded_Size: "Unknown",
-          Download_Progress: 0,
-          Track_Download_Size: 0
-        }));
-      });
+      const downloadData = searchQueryResults
+        .map((searchQueryResult) => searchQueryResult.searchQueryList)
+        .map((searchQueryListItems) => {
+          return searchQueryListItems.map((item) => ({
+            Error_Occurred: false,
+            Download_State: States.ACTIVE,
+            Track_Playlist_Title: "-",
+            Track_Title: item.videoTitle,
+            Track_Url: item.videoUrl,
+            Track_Artists: "-",
+            Downloaded_Size: "Unknown",
+            Download_Progress: 0,
+            Track_Download_Size: 0
+          }));
+        });
 
-      // @TODO: Fix database entry, produces extra array, as parent
-      
-      // return console.log(downloadData);
       // ... then add the search results the pending downloads database
 
-      const isAdded = await database.addDownloadData({
-        type: Type.DOWNLOADING,
-        data: downloadData
-      });
+      try {
+        const isAdded = await database.addDownloadData({
+          type: Type.DOWNLOADING,
+          data: downloadData
+        });
 
-      if (isAdded) {
-        // update download list UI, with current pending download data]
-        mainWindow.getWindow()?.send("download-list-update", downloadData);
-      } else {
+        if (isAdded) {
+          // update download list UI, with current pending download data]
+          mainWindow.getWindow()?.send("download-list-update", downloadData);
+        } else {
+          // probably some write error to the database
+          dialog.showErrorBox(
+            "Unknown Error Occurred",
+            "Check if there is enough space on disk, which is required to save data"
+          );
+        }
+      } catch (err) {
+        console.error(err);
         // probably some write error to the database
-        dialog.showErrorBox(
-          "Unknown Error Occurred",
-          "Check if there is enough space on disk, which is required to save data"
-        );
+        dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }
 

@@ -1,4 +1,4 @@
-require("sqlite3");
+require("better-sqlite3");
 const { knex } = require("knex");
 const path = require("path");
 const { app } = require("electron");
@@ -13,25 +13,25 @@ const DOWNLOADING_TABLE = "Downloading_Table";
 
 const DB_FILEPATH = path.join(app.getPath("userData"), "User", "Database");
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
-const DB_CONFIGFILE = path.join(DB_FILEPATH, "metadata.json");
+const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
 
 /**
  * The database object used in CRUD operations
  */
 const database = (module.exports.database = knex({
-  client: "sqlite",
+  client: "better-sqlite3",
   version: DATABASE_VERSION,
   useNullAsDefault: true,
   connection: { filename: DB_FILENAME }
 }));
 
-// vs file is used to manage dabase versions
+// vs file is used to manage database versions
 function createVSFile() {
   return new Promise((resolve, reject) => {
     // the initial data in the vs file, when the database is created
     const vsObj = { DATABASE_VERSION: "1.0.0" };
     // write vs to file
-    fs.writeFile(DB_CONFIGFILE, JSON.stringify(vsObj), function (err) {
+    fs.writeFile(DB_CONFIG_FILE, JSON.stringify(vsObj), function (err) {
       if (err) reject(new Error(`Error while creating VS file: ${err.message}`));
       else resolve(vsObj.DATABASE_VERSION);
     });
@@ -90,8 +90,8 @@ function createDatabaseSchema() {
 
     function upgradeDatabaseVersion() {
       return new Promise((resolve, reject) => {
-        // read the curent database version
-        fs.readFile(DB_CONFIGFILE, function (err, vsf) {
+        // read the current database version
+        fs.readFile(DB_CONFIG_FILE, function (err, vsf) {
           if (err) {
             // vs file corrupt! This would probably be caused by user action
             reject(err);
@@ -99,7 +99,7 @@ function createDatabaseSchema() {
             let vs_obj = JSON.parse(vsf.toString());
             // replace with new database version
             vs_obj["DATABASE_VERSION"] = DATABASE_VERSION;
-            fs.writeFile(DB_CONFIGFILE, JSON.stringify(vs_obj), function (err) {
+            fs.writeFile(DB_CONFIG_FILE, JSON.stringify(vs_obj), function (err) {
               err ? reject(err) : resolve(DATABASE_VERSION);
             });
           }
@@ -112,7 +112,7 @@ function createDatabaseSchema() {
       let data;
 
       try {
-        data = await readFile(DB_CONFIGFILE, { encoding: "utf-8" });
+        data = await readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
         dbVersion = JSON.parse(data)["DATABASE_VERSION"];
       } catch (err) {
         try {
@@ -150,7 +150,7 @@ function onCreateDatabase() {
 
       await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
         tableBuilder.increments();
-        tableBuilder.boolean("Error_Occured");
+        tableBuilder.boolean("Error_Occurred");
         tableBuilder.string("Download_State");
         tableBuilder.string("Track_Playlist_Title");
         tableBuilder.string("Track_Title");
@@ -174,7 +174,7 @@ function onCreateDatabase() {
  * This callback would be called when the database version has changed.
  * You should alter tables in this function
  *
- * @param oldversion the old version code of the database
+ * @param oldVersion the old version code of the database
  * @param newVersion the new version code of the database
  */
 function onUpgradeDatabase(oldVersion, newVersion) {
@@ -223,6 +223,8 @@ module.exports.addDownloadData = async function (arg) {
     // only create database when the data is about to be used
     await createDatabaseSchema();
 
+    return console.log(arg["data"]);
+
     if (arg["type"] == Type.DOWNLOADED) {
       let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
       // the value at result[0] would return the number of data inserted
@@ -237,15 +239,14 @@ module.exports.addDownloadData = async function (arg) {
     }
 
     return false;
-    
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     return false;
   }
 };
 
 /**
- * Updates downlod data in app's database
+ * Updates download data in app's database
  *
  * @param arg an object in format {query: {}}, as an additional query parameter
  * @param mode the mode used in fetching the data from database

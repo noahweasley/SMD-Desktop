@@ -2,19 +2,19 @@
   "name": "smd-desktop",
   "productName": "S.M.D Desktop",
   "version": "1.0.0",
-  "description": "The best cross-platform desktop app to search and download songs for free, spotify tracks are also searchable",
+  "description": " An Open-Sourced Cross-Platform desktop application to search and download songs for free, spotify tracks are also searchable",
   "main": "app/src/main/index.js",
   "scripts": {
-    "test": "node tests/test",
     "start": "electron .",
     "debug": "electron . --trace-warnings",
-    "pack:osx": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=app/assets/build/osx/app_icon.icns && npm run codesign",
+    "pack:osx": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=app/assets/build/osx/app_icon.icns && npm run code-sign",
     "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/assets/build/win/app_icon.ico",
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/assets/build/win/app_icon.ico",
     "build": "npm run pack:win32 && npm run pack:win64",
     "package": "npm run build && npm run start",
     "code-sign": "",
-    "generate": "node package/electron-windows-installer.js"
+    "generate": "node package/electron-windows-installer.js",
+    "test": "node tests/test"
   },
   "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
   "repository": {
@@ -41,14 +41,15 @@
   "devDependencies": {
     "electron": "^21.3.1",
     "electron-packager": "^17.1.1",
-    "electron-winstaller": "^5.0.0"
+    "electron-winstaller": "^5.1.0"
   },
   "dependencies": {
-    "express": "^4.17.2",
-    "knex": "^0.95.15",
+    "better-sqlite3": "^8.0.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "knex": "^2.3.0",
     "node-user-settings": "^1.2.4",
     "spotify-web-api-node": "^5.0.2",
-    "sqlite3": "^5.0.2",
     "youtube-search-without-api-key": "^1.0.7",
     "yt-dlp-wrap": "^2.3.11"
   }

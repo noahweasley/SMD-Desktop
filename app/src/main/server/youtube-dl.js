@@ -4,6 +4,9 @@ const { app } = require("electron");
 const path = require("path");
 const { open } = require("fs/promises");
 const { pipeline } = require("stream/promises");
+require("dotenv").config();
+
+const BINARY_LOCATION = !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
 
 /**
  * Searches YouTube for a list of matching videos specified by `query`
@@ -36,8 +39,6 @@ module.exports.searchMatchingTracks = async function (query) {
  * @returns a YTDLP event emitter instance
  */
 module.exports.downloadMatchingTrack = async function (options) {
-  const BINARY_LOCATION = path.join(app.getPath("appData"), "ytdlp");
-
   let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
   // 140 here means that the audio would be extracted
   let downloadStream = ytdlpWrapper.execStream([options.videoLink, "-f", "140"]);

@@ -1,5 +1,9 @@
 {
     "workbench.colorTheme": "Community Material Theme Darker High Contrast",
     "liveServer.settings.port": 5501,
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "cSpell.words": [
+        "sarr",
+        "ytdlp"
+    ]
 }
