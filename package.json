@@ -6,19 +6,17 @@
   "main": "app/src/main/index.js",
   "scripts": {
     "test": "node tests/test",
-    "transpile": "babel app -d dist",
-    "display": "electron .",
-    "start": "npm run display",
+    "start": "electron .",
     "debug": "electron . --trace-warnings",
-    "codesign": "",
     "pack:osx": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=app/assets/build/osx/app_icon.icns && npm run codesign",
     "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/assets/build/win/app_icon.ico",
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/assets/build/win/app_icon.ico",
     "build": "npm run pack:win32 && npm run pack:win64",
     "package": "npm run build && npm run start",
-    "generate": "node package/electron-winstaller.js"
+    "code-sign": "",
+    "generate": "node package/electron-windows-installer.js"
   },
-  "homepage": "https://noahweasley.github.io/SMD-Desktop",
+  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
   "repository": {
     "type": "git",
     "url": "www.github.com/noahweasley/SMD-desktop"
@@ -34,19 +32,16 @@
     "youtube-downloader",
     "spotify-downloader"
   ],
-  "author": "NoahWeasley",
+  "author": "Noah Wesley",
   "license": "GPL-3.0",
-  "devDependencies": {
-    "@babel/cli": "^7.18.6",
-    "@babel/core": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "electron": "^15.3.1",
-    "electron-packager": "^15.4.0",
-    "electron-winstaller": "^5.0.0"
-  },
   "funding": {
     "type": "buymeacoffee",
     "url": "https://www.buymeacofee.com/noahweasley"
+  },
+  "devDependencies": {
+    "electron": "^21.3.1",
+    "electron-packager": "^17.1.1",
+    "electron-winstaller": "^5.0.0"
   },
   "dependencies": {
     "express": "^4.17.2",
