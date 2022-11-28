@@ -4,8 +4,8 @@ function dataReveal() {
   const windowContent = document.querySelector(".window");
   const loader = document.getElementById("window-data-loader");
   const modal = document.querySelector(".modal");
-  const titileBar = document.querySelector(".toolbar-header");
-  titileBar.classList.remove("gone");
+  const titleBar = document.querySelector(".toolbar-header");
+  titleBar.classList.remove("gone");
 
   window.bridgeApis.invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"]).then((value) => {
     loader.classList.add("gone");

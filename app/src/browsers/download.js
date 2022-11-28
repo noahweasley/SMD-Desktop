@@ -6,7 +6,7 @@ const { join } = require("path");
 let download_window;
 
 module.exports.init = function () {
-  if (download_window) return;
+  if (download_window) return download_window.focus();
 
   download_window = new BrowserWindow({
     title: "Confirm Search List",

@@ -1,135 +1,127 @@
-require("better-sqlite3");
+require("sqlite3")
 const { knex } = require("knex");
 const path = require("path");
 const { app } = require("electron");
-const fs = require("fs");
+const fsp = require("fs/promises");
 const { readFile } = require("fs/promises");
 const { Type } = require("./constants");
 
 const DATABASE_VERSION = "1.0.0";
 const DATABASE_NAME = "UserDB.db";
-const DOWNLOADED_TABLE = "Downloaded_Table";
-const DOWNLOADING_TABLE = "Downloading_Table";
 
 const DB_FILEPATH = path.join(app.getPath("userData"), "User", "Database");
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
 const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
 
-/**
- * The database object used in CRUD operations
- */
-const database = (module.exports.database = knex({
-  client: "better-sqlite3",
-  version: DATABASE_VERSION,
-  useNullAsDefault: true,
-  connection: { filename: DB_FILENAME }
-}));
+
+// ======================================================================= //
+//                                                                         //
+//                   DATABASE INITIALIZATION CODE                          //
+//                                                                         //
+// ======================================================================= //
 
 // vs file is used to manage database versions
-function createVSFile() {
-  return new Promise((resolve, reject) => {
-    // the initial data in the vs file, when the database is created
-    const vsObj = { DATABASE_VERSION: "1.0.0" };
-    // write vs to file
-    fs.writeFile(DB_CONFIG_FILE, JSON.stringify(vsObj), function (err) {
-      if (err) reject(new Error(`Error while creating VS file: ${err.message}`));
-      else resolve(vsObj.DATABASE_VERSION);
-    });
-  });
+async function createVSFile() {
+  // the initial data in the vs file, when the database is created
+  const vsObj = { DATABASE_VERSION: "1.0.0" };
+  try {
+    await fsp.mkdir(DB_FILEPATH, { recursive: true });
+    await fsp.writeFile(DB_CONFIG_FILE, JSON.stringify(vsObj));
+    return vsObj.DATABASE_VERSION;
+  } catch (err) {
+    throw new Error(`Error while creating VS file: ${err.message}`);
+  }
 }
 
 // Creates the schema used in CRUD operation
-function createDatabaseSchema() {
-  return new Promise((resolve, reject) => {
-    createDBFolder();
+async function createDatabaseSchema() {
+  await createDBFolder();
 
-    function createDBFolder() {
-      fs.open(DB_FILENAME, "wx", async (err, _fd) => {
-        function createDirectory() {
-          fs.mkdir(DB_FILEPATH, { recursive: true }, async function (err) {
-            if (err) {
-              reject(new Error(`An error occurred while creating db directories: ${err.message}`));
-            } else {
-              // if database folder was created successfully, then create the db and vs file and
-              // start populating it with tables
-              try {
-                await createVSFile();
-              } catch (err1) {
-                console.err(err1);
-              }
+  // upgrade database version
+  async function upgradeDatabaseVersion() {
+    let vsf = await fsp.readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
+    // replace with new database version
+    vsf["DATABASE_VERSION"] = DATABASE_VERSION;
+    await fsp.writeFile(DB_CONFIG_FILE, JSON.stringify(vsf));
+    return DATABASE_VERSION;
+  }
 
-              try {
-                resolve(await onCreateDatabase());
-              } catch (err) {
-                reject(err);
-              }
-            }
-          });
-        }
+  // check database version
+  async function checkDatabaseVersion() {
+    let dbVersion;
 
-        if (err) {
-          if (err.code === "EEXIST") {
-            let dbVersion = await checkDatabaseVersion();
-            if (dbVersion !== DATABASE_VERSION) {
-              // call onUpgradeDatabase() when the database schema needs to be altered or updated
-              await upgradeDatabaseVersion();
-              resolve(onUpgradeDatabase(dbVersion, DATABASE_VERSION));
-            } else {
-              resolve(true);
-            }
-          } else if (err.code === "ENOENT") {
-            // create the database directory if file db file doesn't exist.
-            createDirectory();
-          } else {
-            // unknown bug
-            console.error(`An unknown error occurred: ${err.code}: ${err.message}`);
-          }
-        }
-      });
-    }
-
-    function upgradeDatabaseVersion() {
-      return new Promise((resolve, reject) => {
-        // read the current database version
-        fs.readFile(DB_CONFIG_FILE, function (err, vsf) {
-          if (err) {
-            // vs file corrupt! This would probably be caused by user action
-            reject(err);
-          } else {
-            let vs_obj = JSON.parse(vsf.toString());
-            // replace with new database version
-            vs_obj["DATABASE_VERSION"] = DATABASE_VERSION;
-            fs.writeFile(DB_CONFIG_FILE, JSON.stringify(vs_obj), function (err) {
-              err ? reject(err) : resolve(DATABASE_VERSION);
-            });
-          }
-        });
-      });
-    }
-
-    async function checkDatabaseVersion() {
-      let dbVersion;
-      let data;
-
+    try {
+      const data = await readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
+      dbVersion = JSON.parse(data)["DATABASE_VERSION"];
+    } catch (err) {
       try {
-        data = await readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
-        dbVersion = JSON.parse(data)["DATABASE_VERSION"];
+        dbVersion = await createVSFile();
       } catch (err) {
-        try {
-          dbVersion = await createVSFile();
-        } catch (err) {
-          console.log(err);
-        }
+        console.log(err);
+        return "1.0.0";
       }
-
-      return dbVersion;
     }
-  });
 
-  // promise end
+    return dbVersion;
+  }
+
+  // create database folder
+  async function createDBFolder() {
+    // create dir
+    async function createDirectory() {
+      try {
+        await createVSFile();
+        return await onCreateDatabase();
+      } catch (err) {
+        return console.error(err);
+      }
+    }
+
+    // main code start
+    let fileHandle;
+    try {
+      fileHandle = await fsp.open(DB_FILENAME, "r+");
+    } catch (err) {
+      if (err.code === "EEXIST") {
+        let dbVersion = await checkDatabaseVersion();
+        if (dbVersion !== DATABASE_VERSION) {
+          // call onUpgradeDatabase() when the database schema needs to be altered or updated
+          await upgradeDatabaseVersion();
+          return onUpgradeDatabase(dbVersion, DATABASE_VERSION);
+        } else {
+          return true; // same version was returned
+        }
+      } else if (err.code === "ENOENT") {
+        // create the database directory if file db file doesn't exist.
+        await createDirectory();
+      } else {
+        // unknown bug
+        console.error(`An unknown error occurred: ${err.code}: ${err.message}`);
+      }
+    } finally {
+      fileHandle?.close();
+    }
+  }
 }
 
-// ---------------------------------------------------------------------------------------
+/**
+ * The database object used in CRUD operations
+ */
+module.exports.database = knex({
+  client: "sqlite3",
+  version: DATABASE_VERSION,
+  useNullAsDefault: true,
+  connection: { filename: DB_FILENAME }
+});
+
+let __database = this.database;
+
+
+// ======================================================================= //
+//                                                                         //
+//                         MAIN DATABASE CODE                              //
+//                                                                         //
+// ======================================================================= //
 
 /**
  * Called in database lifecycle when the database is about to be created.
@@ -139,7 +131,7 @@ function onCreateDatabase() {
   // Create the schema for the table to persist window properties on start-up
   async function createTables() {
     try {
-      await database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
+      await __database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
         tableBuilder.increments();
         tableBuilder.integer("Track_Download_Size");
         tableBuilder.string("Track_Playlist_Title");
@@ -148,7 +140,7 @@ function onCreateDatabase() {
         tableBuilder.string("Track_Url");
       });
 
-      await database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
+      await __database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
         tableBuilder.increments();
         tableBuilder.boolean("Error_Occurred");
         tableBuilder.string("Download_State");
@@ -223,15 +215,13 @@ module.exports.addDownloadData = async function (arg) {
     // only create database when the data is about to be used
     await createDatabaseSchema();
 
-    return console.log(arg["data"]);
-
     if (arg["type"] == Type.DOWNLOADED) {
-      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE);
+      let result = await __database.insert(arg["data"]).into(DOWNLOADED_TABLE);
       // the value at result[0] would return the number of data inserted
       if (result[0]) return true;
     } else if (arg["type"] == Type.DOWNLOADING) {
       // data property is the main db data in the object
-      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE);
+      let result = await __database.insert(arg["data"]).into(DOWNLOADING_TABLE);
       // the value at result[0] would return the number os data inserted
       if (result[0]) return true;
     } else {
@@ -275,17 +265,18 @@ module.exports.updateDownloadData = async function (arg) {
  * @param arg an object in format {query: {}}, as an additional query parameter
  */
 module.exports.deleteDownloadData = async function (arg) {
-  let data = arg["data"];
   this.checkMode(mode);
+  
+  let data = arg["data"];
   try {
     // only create database when the data is about to be used
     await createDatabaseSchema();
 
     if (arg["type"] == Type.DOWNLOADED) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+      let result = await __database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
       return result > 0;
     } else if (arg["type"] == Type.DOWNLOADING) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+      let result = await __database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
       return result > 0;
     } else throw new Error(`${arg["type"]} is not supported`);
   } catch (err) {

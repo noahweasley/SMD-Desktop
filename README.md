@@ -1,14 +1,13 @@
-# SMD Desktop
+# S.M.D (Spotify Music Downloader)
 
 ### An Open-Sourced Cross-Platform desktop application to search and download songs for free, single tracks are also searchable
 
 <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
 
 
-## About SMD Desktop
+## About S.M.D
 
-
-Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in SMD Desktop's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer. I built SMD Desktop because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :).
+Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in S.M.D's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer. I built S.M.D because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :rocket: 
 
 
 ## Contributing
@@ -28,6 +27,6 @@ There are many ways in which you can participate in this project, for example:
 
 ## License
 
-SMD Desktop :copyright: is under the GPL 3.0 license
+S.M.D :copyright: is under the GPL 3.0 license
 
 Please review [license](https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE) to get full details.

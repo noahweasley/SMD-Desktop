@@ -7,10 +7,7 @@ let about_window;
 
 module.exports.init = function () {
   // only 1 window is allowed to be spawned
-  if (about_window) {
-    about_window.focus();
-    return;
-  }
+  if (about_window) return about_window.focus();
 
   about_window = new BrowserWindow({
     title: `About ${app.getName()}`,

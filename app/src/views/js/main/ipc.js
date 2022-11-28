@@ -2,11 +2,12 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   const about = document.getElementById("about");
+
   about.addEventListener("click", (_event) => {
     window.bridgeApis.send("show-app-info");
   });
 
-  // deactive link default actions
+  // active link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
@@ -44,12 +45,24 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const searchInput = document.getElementById("input-search");
+  const searchButton = document.querySelector(".btn-search");
+  let isFocused = false;
+
+  
+  searchInput.addEventListener("focus", () => (isFocused = true));
+  searchInput.addEventListener("blur", () => (isFocused = false));
+
+  // on enter key pressed, perform search
+  document.addEventListener(
+    "keypress",
+    (event) => isFocused && searchInput.value && event.key == "Enter" && searchButton.click()
+  );
+
   // search button click
-  document.querySelector(".btn-search").addEventListener("click", () => {
-    const searchInput = document.getElementById("input-search");
-    if (!searchInput.value) {
-      return searchInput.setAttribute("placeholder", "Field can't be empty");
-    }
+  searchButton.addEventListener("click", () => {
+    if (!searchInput.value) return searchInput.setAttribute("placeholder", "Field can't be empty");
+
     // Wrap searchQuery in object array, to be compatible with the other kind of search query
     window.bridgeApis.send("show-search-download-window", {
       type: "search",
@@ -57,13 +70,11 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // request app details; but use only the first content in the array returned, 
+  // request app details; but use only the first content in the array returned,
   // which returns the app name
   window.bridgeApis.invoke("app-details").then((content) => {
     const names = document.querySelectorAll(".name");
-    names.forEach((name) => {
-      name.innerText = content[0];
-    });
+    names.forEach((name) => (name.innerText = content[0]));
   });
 
   // ..

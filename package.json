@@ -14,7 +14,7 @@
     "package": "npm run build && npm run start",
     "code-sign": "",
     "generate": "node package/electron-windows-installer.js",
-    "test": "node tests/test"
+    "test": "jest"
   },
   "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
   "repository": {
@@ -44,12 +44,12 @@
     "electron-winstaller": "^5.1.0"
   },
   "dependencies": {
-    "better-sqlite3": "^8.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "knex": "^2.3.0",
     "node-user-settings": "^1.2.4",
     "spotify-web-api-node": "^5.0.2",
+    "sqlite3": "^5.1.2",
     "youtube-search-without-api-key": "^1.0.7",
     "yt-dlp-wrap": "^2.3.11"
   }

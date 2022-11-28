@@ -13,6 +13,59 @@ module.exports = function (settings, browsers, database) {
   const { authorizeApp } = auth(settings);
   const { getSpotifyLinkData } = spotifyDl(settings);
 
+  // dummy data query for testing
+  ipcMain.handle("get-dummy-list-data", () => [dummy.getDummyTrack(10), dummy.getDummyTrack(2)]);
+
+  // get app info
+  ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
+
+  // play music
+  ipcMain.on("play-music", (_event, arg) => shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg)));
+
+  // delete file in database
+  ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg, arg.mode));
+
+  // after pasting url and download window is about to display it's content
+  ipcMain.handle("download-data", () => getSpotifyLinkData());
+
+  // show about window
+  ipcMain.on("show-app-info", () => aboutWindow.init());
+
+  // show download details window
+  ipcMain.on("show-download-window", () => downloadWindow.init());
+
+  // request to reload current focused window
+  ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
+
+  // application authorization
+  ipcMain.handle("authorize-app", async (_event, args) => {
+    if (args[1] == "auth-youtube") {
+      let states = await settings.setStates({
+        "yt-api-key-received": true,
+        "yt-api-key": args[0]
+      });
+
+      return states.length === 2;
+    } else {
+      return authorizeApp(args, () => mainWindow.getWindow()?.reload());
+    }
+  });
+
+  // clipboard content request
+  ipcMain.handle("clipboard-request", () => {
+    try {
+      return getSpotifyURLType(clipboard.readText());
+    } catch (err) {
+      // display modal dialog with details of error
+      dialog.showErrorBox(
+        "Clipboard content not a Spotify link",
+        "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
+      );
+
+      return err.message;
+    }
+  });
+
   // link navigate
   ipcMain.on("navigate-link", (_event, arg) => {
     let linkByType;
@@ -31,6 +84,7 @@ module.exports = function (settings, browsers, database) {
     shell.openExternal(linkByType);
   });
 
+  // @Todo fix getDownloadData() retrieving strange data
   // request to fetch and display list data
   ipcMain.handle("get-list-data", async () => {
     try {
@@ -39,78 +93,6 @@ module.exports = function (settings, browsers, database) {
       return [d1, d2];
     } catch (error) {
       return console.error("Error occurred while fetching list data: ", error.message);
-    }
-  });
-
-  // dummy data query for testing
-  ipcMain.handle("get-dummy-list-data", () => {
-    return [dummy.getDummyTrack(10), dummy.getDummyTrack(2)];
-  });
-
-  // get app info
-  ipcMain.handle("app-details", () => {
-    return [app.getName(), app.getVersion()];
-  });
-
-  // play music
-  ipcMain.on("play-music", (_event, arg) => {
-    shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg));
-  });
-
-  // delete file in database
-  ipcMain.handle("delete-file", async (_event, arg) => {
-    let isDataDeleted = await database.deleteDownloadData(arg, arg.mode);
-    return isDataDeleted;
-  });
-
-  // application authorization
-  ipcMain.handle("authorize-app", async (_event, args) => {
-    if (args[1] == "auth-youtube") {
-      let states = await settings.setStates({
-        "yt-api-key-received": true,
-        "yt-api-key": args[0]
-      });
-
-      return states.length === 2;
-    } else {
-      return authorizeApp(args, () => mainWindow.getWindow()?.reload());
-    }
-  });
-
-  // after pasting url and download window is about to display it's content
-  ipcMain.handle("download-data", () => {
-    return getSpotifyLinkData();
-  });
-
-  // show about window
-  ipcMain.on("show-app-info", () => {
-    aboutWindow.init();
-  });
-
-  // show download details window
-  ipcMain.on("show-download-window", () => {
-    downloadWindow.init();
-  });
-
-  // request to reload current focused window
-  ipcMain.on("reload-current-window", () => {
-    BrowserWindow.getFocusedWindow()?.reload();
-  });
-
-  // clipboard content request
-  ipcMain.handle("clipboard-request", () => {
-    let urlType, errMsg;
-    try {
-      urlType = getSpotifyURLType(clipboard.readText());
-    } catch (err) {
-      errMsg = err.message;
-      // display modal dialog with details of error
-      dialog.showErrorBox(
-        "Clipboard content not a Spotify link",
-        "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
-      );
-    } finally {
-      return urlType || errMsg;
     }
   });
 };

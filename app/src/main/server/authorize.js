@@ -2,7 +2,7 @@ const { shell } = require("electron");
 const express = require("express");
 const server = express();
 const path = require("path");
-const SpotifyWebApi = require("spotify-web-api-node");
+const spotifyWebApi = require("spotify-web-api-node");
 
 module.exports = function (Settings) {
   const scopes = [
@@ -26,7 +26,7 @@ module.exports = function (Settings) {
   let timeout;
   let connection, refreshTimer, authorizationCallback;
 
-  const spotifyApi = new SpotifyWebApi({
+  const spotifyApi = new spotifyWebApi({
     redirectUri: "http://localhost:8888/callback"
   });
 

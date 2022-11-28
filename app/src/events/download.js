@@ -4,12 +4,13 @@ const { ipcMain, dialog } = require("electron");
 const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const downloader = require("../main/downloads/downloader");
-const database = require("../main/database");
 const { Type, States } = require("../main/database/constants");
 
-module.exports = function (settings, browsers, _database) {
+module.exports = function (settings, browsers, database) {
   let downloadQuery;
   const CONCURRENCY = 2;
+  const WHITE_SPACE = " ";
+  
   const { downloadWindow, searchWindow, mainWindow } = browsers;
 
   const fileDownloader = downloader({
@@ -38,14 +39,14 @@ module.exports = function (settings, browsers, _database) {
 
   // request to search for tracks to download
   ipcMain.handle("search-tracks", async (_event) => {
-    const emp_error_message = "Uh-oh!! We couldn't find any tracks";
+    const error_message = "Uh-oh!! We couldn't find any tracks";
 
     if (downloadQuery.type == "search") {
       let searchResults;
       try {
         // Wrap the search results in an array, because the list requires an array as result
         searchResults = await ytdl.searchMatchingTracks(downloadQuery.value);
-        return searchResults ? Array.of(searchResults) : emp_error_message;
+        return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
         return err.message;
       }
@@ -53,19 +54,19 @@ module.exports = function (settings, browsers, _database) {
       const spotifyLinkData = await getSpotifyLinkData();
       // description: { songTitle, artistNames: [] }
       let trackDescription = spotifyLinkData.description;
-      let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(" ")}`;
+      let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
       // Wrap the search results in an array, because the list requires an array as result
       let searchResults;
       try {
         searchResults = await ytdl.searchMatchingTracks(searchQuery);
-        return searchResults ? Array.of(searchResults) : emp_error_message;
+        return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
         return err.message;
       }
     } else {
       let tracks = downloadQuery.description.trackCollection;
       // map track object to reasonable search query ([Song title] [Artist name])
-      const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(" ")}`);
+      const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(WHITE_SPACE)}`);
       // transform search queries to search promise
       let queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
       // resolve and return search queries
@@ -103,7 +104,7 @@ module.exports = function (settings, browsers, _database) {
             Download_Progress: 0,
             Track_Download_Size: 0
           }));
-        });
+        }).flat();
 
       // ... then add the search results the pending downloads database
 
@@ -124,8 +125,7 @@ module.exports = function (settings, browsers, _database) {
           );
         }
       } catch (err) {
-        console.error(err);
-        // probably some write error to the database
+        // i also don't understand this error too. What were you expecting
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }

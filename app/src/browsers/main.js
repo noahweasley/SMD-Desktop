@@ -10,9 +10,10 @@ module.exports = function (settings) {
   async function init() {
     // only 1 window is allowed to be spawned
 
-    if (smd_window) return;
+    if (smd_window) return smd_window.focus();
 
     let winState = await settings.getState("window-state", {});
+
     try {
       winState = JSON.parse(winState);
     } catch (error) {
@@ -38,13 +39,10 @@ module.exports = function (settings) {
     Menu.setApplicationMenu(menu);
     smd_window.loadFile(join("app", "src", "views", "pages", "index.html"));
 
-    // smd_window.webContents.openDevTools()
     smd_window.once("ready-to-show", () => {
       smd_window.show();
-      // to prevent glith on window maximize, after displaying the window, then maximize it
-      if (winState.isMaximized) {
-        smd_window.maximize();
-      }
+      // to prevent glitch on window maximize, after displaying the window, then maximize it
+      if (winState.isMaximized) smd_window.maximize();
     });
 
     smd_window.on("close", async (event) => {

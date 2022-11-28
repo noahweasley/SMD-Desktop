@@ -4,13 +4,13 @@ window.addEventListener("DOMContentLoaded", () => {
   let WINDOW_CONTENT_STATE = State.MAIN;
   let progressMap;
   let listData = [];
-  // retreive user downloads
+  // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
     if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
       data[0] ? createListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded", true);
       data[1] ? createOrAppendListItemDownloading(data[1]) : displayDecorById("info_decor__downloading", true);
-      // Now display the populated list items, becuase when they were crea_
+      // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
       displayAllDecors(true);

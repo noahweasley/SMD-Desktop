@@ -4,6 +4,12 @@
     "git.ignoreLimitWarning": true,
     "cSpell.words": [
         "sarr",
+        "scrolbar",
+        "spcid",
+        "spcs",
+        "topnav",
+        "ytak",
         "ytdlp"
-    ]
+    ],
+    "explorer.excludeGitIgnore": true
 }
