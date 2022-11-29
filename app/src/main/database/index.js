@@ -1,18 +1,21 @@
-require("sqlite3")
+require("sqlite3");
 const { knex } = require("knex");
 const path = require("path");
 const { app } = require("electron");
 const fsp = require("fs/promises");
 const { readFile } = require("fs/promises");
 const { Type } = require("./constants");
+require("dotenv").config();
 
 const DATABASE_VERSION = "1.0.0";
-const DATABASE_NAME = "UserDB.db";
+const DATABASE_NAME = "UserDB.sqlite";
 
-const DB_FILEPATH = path.join(app.getPath("userData"), "User", "Database");
+const DOWNLOADED_TABLE = "Downloaded";
+const DOWNLOADING_TABLE = "Downloading";
+
+const DB_FILEPATH = !app.isPackaged ? process.env.DB_FILEPATH : path.join(app.getPath("userData"), "User", "Database");
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
 const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
-
 
 // ======================================================================= //
 //                                                                         //
@@ -116,7 +119,6 @@ module.exports.database = knex({
 
 let __database = this.database;
 
-
 // ======================================================================= //
 //                                                                         //
 //                         MAIN DATABASE CODE                              //
@@ -151,6 +153,7 @@ function onCreateDatabase() {
         tableBuilder.integer("Track_Download_Size");
         tableBuilder.integer("Download_Progress");
         tableBuilder.string("Track_Url");
+        tableBuilder.string("Message");
       });
       return true;
     } catch (err) {
@@ -189,10 +192,10 @@ module.exports.getDownloadData = async function (arg) {
     await createDatabaseSchema();
 
     if (arg["type"] == Type.DOWNLOADED) {
-      let data = await database.select("*").from(DOWNLOADED_TABLE);
+      let data = await __database.select("*").from(DOWNLOADED_TABLE);
       return data.length > 0 ? data : null;
     } else if (arg["type"] == Type.DOWNLOADING) {
-      let data = await database.select("*").from(DOWNLOADING_TABLE);
+      let data = await __database.select("*").from(DOWNLOADING_TABLE);
       return data.length > 0 ? data : null;
     } else {
       throw new Error(`${arg["type"]} is not supported`);
@@ -266,7 +269,7 @@ module.exports.updateDownloadData = async function (arg) {
  */
 module.exports.deleteDownloadData = async function (arg) {
   this.checkMode(mode);
-  
+
   let data = arg["data"];
   try {
     // only create database when the data is about to be used

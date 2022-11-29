@@ -30,11 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
     setProgress(`download-progress-${listPos}`, progress);
   });
 
+  
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    return console.log(`Received an update from main process\n\n${args}`);
-    
-    displayDecorById("info_decor__downloading", true);
-    displayDecorById("info_decor__downloaded", false);
+    displayDecorById("info_decor__downloading", false);
+    displayDecorById("info_decor__downloaded", true);
     createOrAppendListItemDownloading(args);
     registerEventListeners();
   });
@@ -60,10 +59,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function createOrAppendListItemDownloading(item) {
+    console.log(item);
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
-    for (let i = 0; i < item["length"]; i++) {
+    for (let position = 0; position < item["length"]; position++) {
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
@@ -72,21 +72,21 @@ window.addEventListener("DOMContentLoaded", () => {
       thumbnailElement.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
-      listElement.append(createMediaBody(item[i]));
+      listElement.append(createMediaBody(position + 1, item[position]));
       // append list item to list
       uLElement.append(listElement);
     }
 
     // creates a media body element
-    function createMediaBody(it) {
+    function createMediaBody(position, db_data) {
       const mediaBody = document.createElement("div");
       mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerText = it["trackTitle"];
+      trackTitleElement.innerHTML = `${position}.&nbsp&nbsp${db_data["Track_Title"]}`;
       // create the message element
       const messageElement = document.createElement("p");
-      messageElement.innerText = it["message"];
+      messageElement.innerText = db_data["Message"];
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer = document.createElement("div");
@@ -95,11 +95,11 @@ window.addEventListener("DOMContentLoaded", () => {
       opIcon.classList.add("icon", "icon-pause", "icon-x2");
       opIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
       opIconContainer.append(opIcon);
-      
+
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
       downloadProgressElement.classList.add("horizontal-progress");
-      downloadProgressElement.id = `download-progress${it["listPos"]}`;
+      downloadProgressElement.id = `download-progress${db_data["id"]}`;
       // finally append the created element nodes as children to the parent media body node
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
@@ -201,7 +201,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const navItemChildren = Array.from(navItem.parentElement.children);
 
       navItem.addEventListener("click", (_event) => {
-        // dont change active state of the nav item that have the 'click' class as attribute
+        // don't change active state of the nav item that have the 'click' class as attribute
         if (navItemChildren.indexOf(navItem) === 1 || navItemChildren.indexOf(navItem) === navItemChildren.length - 2) {
           return;
         }
@@ -227,12 +227,14 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // fallback image on thumnail load error
-    document.querySelectorAll(".media-object").forEach((m) => {
-      m.addEventListener("error", () =>
-        m.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png")
+    // fallback image on thumbnail load error
+    document
+      .querySelectorAll(".media-object")
+      .forEach((image) =>
+        image.addEventListener("error", () =>
+          image.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png")
+        )
       );
-    });
   }
 
   // actions related to file downloads

@@ -10,7 +10,7 @@ module.exports = function (settings, browsers, database) {
   let downloadQuery;
   const CONCURRENCY = 2;
   const WHITE_SPACE = " ";
-  
+
   const { downloadWindow, searchWindow, mainWindow } = browsers;
 
   const fileDownloader = downloader({
@@ -92,8 +92,8 @@ module.exports = function (settings, browsers, database) {
 
       const downloadData = searchQueryResults
         .map((searchQueryResult) => searchQueryResult.searchQueryList)
-        .map((searchQueryListItems) => {
-          return searchQueryListItems.map((item) => ({
+        .map((searchQueryListItems) =>
+          searchQueryListItems.map((item) => ({
             Error_Occurred: false,
             Download_State: States.ACTIVE,
             Track_Playlist_Title: "-",
@@ -102,9 +102,11 @@ module.exports = function (settings, browsers, database) {
             Track_Artists: "-",
             Downloaded_Size: "Unknown",
             Download_Progress: 0,
-            Track_Download_Size: 0
-          }));
-        }).flat();
+            Track_Download_Size: 0,
+            Message: "Downloading: 0 MB / NILL" /* A default message to init downloads */
+          }))
+        )
+        .flat();
 
       // ... then add the search results the pending downloads database
 
