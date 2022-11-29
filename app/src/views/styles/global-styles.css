@@ -31,10 +31,17 @@
   --progress-timin-funct: linear;
   --progress-timin-funct-2: ease-in-out;
   color: var(--grey-solid);
+  font-family: 'Montserrat', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(../fonts/Montserrat-Regular.ttf);
 }
 
 body {
   background-color: var(--solid-darker);
+  font-family: 'Montserrat', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
 }
 
 * {
@@ -148,6 +155,7 @@ a:active {
 /* ------------------ Animation Key Frames ----------------- */
 
 @keyframes scale-bounce {
+
   0%,
   10% {
     transform: scale(1);

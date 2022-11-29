@@ -30,7 +30,6 @@ window.addEventListener("DOMContentLoaded", () => {
     setProgress(`download-progress-${listPos}`, progress);
   });
 
-  
   window.bridgeApis.on("download-list-update", (_event, args) => {
     displayDecorById("info_decor__downloading", false);
     displayDecorById("info_decor__downloaded", true);
@@ -59,7 +58,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function createOrAppendListItemDownloading(item) {
-    console.log(item);
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database

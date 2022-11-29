@@ -61,12 +61,16 @@ a:active {
   font-size: 1.5em;
   padding: 8px;
   font-weight: bold;
-  letter-spacing: 0.1em;
+  /* letter-spacing: 0.1em; */
 }
 
 .pane-settings .settings-title {
   font-size: 1.5em;
   font-weight: bold;
+}
+
+.pane-settings .list-group-item:not(:first-child) {
+  border-block: 1px solid var(--grey-solid_10);
 }
 
 .pane-settings .list-group-item {
@@ -78,6 +82,7 @@ a:active {
   display: flex;
   flex-direction: row;
   padding: 8px;
+  justify-content: space-between;
 }
 
 .pane-settings .list-group-item .action {
@@ -748,7 +753,7 @@ form {
 .online-stat {
   position: absolute;
   top: 35%;
-  left: 150px;
+  left: 160px;
   width: 15px;
   transition: 1s;
   height: 15px;
