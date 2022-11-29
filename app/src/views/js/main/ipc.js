@@ -48,7 +48,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("input-search");
   const searchButton = document.querySelector(".btn-search");
   let isFocused = false;
-
   
   searchInput.addEventListener("focus", () => (isFocused = true));
   searchInput.addEventListener("blur", () => (isFocused = false));
