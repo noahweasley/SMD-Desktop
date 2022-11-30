@@ -4,6 +4,7 @@ window.addEventListener("DOMContentLoaded", () => {
   let WINDOW_CONTENT_STATE = State.MAIN;
   let progressMap;
   let listData = [];
+
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
@@ -61,7 +62,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
-    for (let position = 0; position < item["length"]; position++) {
+
+    const oldDataSize = listData.length;
+    const newDataSize = oldDataSize + item["length"];
+
+    for (let position = oldDataSize; position < newDataSize; position++) {
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
