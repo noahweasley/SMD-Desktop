@@ -31,14 +31,15 @@
   --progress-timin-funct: linear;
   --progress-timin-funct-2: ease-in-out;
   color: var(--grey-solid);
-  font-family: 'Montserrat', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
+  font-family: 'Montserrat-SB', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
 }
 
 @font-face {
-  font-family: Montserrat;
+  font-family: Montserrat-SB;
   src: url(../fonts/Montserrat-SemiBold.ttf);
   font-weight: normal;
 }
+
 
 body {
   background-color: var(--solid-darker);
