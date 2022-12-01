@@ -373,6 +373,7 @@ a:active {
 .list-group-container p .icon {
   margin: 16px;
   color: var(--primary-color);
+  animation: 1s grow ease-in-out infinite alternate;
 }
 
 .pane-main .list-group-item {
