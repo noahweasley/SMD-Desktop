@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (loader.id != "window-data-loader") loader.classList.add("gone");
     });
   });
-
+  
   // listen for event after populating the list
   registerEventListeners();
   // actions related to file downloads

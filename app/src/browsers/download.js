@@ -28,7 +28,7 @@ module.exports.init = function () {
   download_window.once("ready-to-show", download_window.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
-  // the quick flash issue occurrs.
+  // the quick flash issue occurs.
   download_window.on("close", (event) => {
     event.preventDefault();
     download_window.hide();

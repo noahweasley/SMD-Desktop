@@ -22,7 +22,13 @@
         "vcard",
         "Vibin",
         "ytak",
-        "ytdlp"
+        "ytdlp",
+        "buymeacoffee",
+        "dosini",
+        "icns",
+        "noahweasley",
+        "winstaller",
+        "ytdl"
     ],
     "explorer.excludeGitIgnore": true,
 }

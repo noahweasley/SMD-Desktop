@@ -30,7 +30,7 @@ module.exports = function (config) {
   }
 
   /**
-   * Enqueue a download tast
+   * Enqueue a download task
    *
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
    */
@@ -55,7 +55,7 @@ module.exports = function (config) {
 
   /**
    * puts all the download tasks in their active state. If maxParallelDownloads is higher that the
-   * number of download task on the dowload queue, then the remaining tasks enter their pending states
+   * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateDownloads() {
     for (let x = 0; x < downloadTaskQueue.length; x++) {

@@ -4,7 +4,10 @@ const server = express();
 const path = require("path");
 const spotifyWebApi = require("spotify-web-api-node");
 
-module.exports = function (Settings) {
+module.exports = function (settings) {
+  const REDIRECT_URL = "http://localhost:8888/callback";
+  const AUTHORIZE_URL = "http://localhost:8888/authorize";
+
   const scopes = [
     "user-read-playback-state",
     "user-modify-playback-state",
@@ -23,17 +26,14 @@ module.exports = function (Settings) {
   ];
 
   const TIMEOUT = 60000;
-  let timeout;
-  let connection, refreshTimer, authorizationCallback;
+  let timeout, connection, refreshTimer, authorizationCallback;
 
-  const spotifyApi = new spotifyWebApi({
-    redirectUri: "http://localhost:8888/callback"
-  });
+  const spotifyApi = new spotifyWebApi({ redirectUri: REDIRECT_URL });
 
   server.get("/authorize", (_req, res) => {
     res.redirect(spotifyApi.createAuthorizeURL(scopes));
     timeout = setTimeout(() => {
-      if (connection) connection.close();
+      connection && connection.close();
       connection = null;
     }, TIMEOUT);
   });
@@ -45,8 +45,10 @@ module.exports = function (Settings) {
     if (error) {
       res.sendFile(path.join(__dirname, "../../pages/failed.html"));
       connection.close();
-      timeout = null;
+      clearTimeout(timeout);
+      clearTimeout(refreshTimer);
       refreshTimer = null;
+      timeout = null;
       return;
     }
 
@@ -60,7 +62,7 @@ module.exports = function (Settings) {
 
       res.sendFile(path.join(__dirname, "../../pages/success.html"));
 
-      let states = await Settings.setStates({
+      let states = await settings.setStates({
         "spotify-access-token": access_token,
         "spotify-refresh-token": refresh_token,
         "spotify-token-expiration": expires_in,
@@ -93,7 +95,7 @@ module.exports = function (Settings) {
     authorizationCallback = callback;
     // start a server at port 8888 only if that server isn't alive
     if (!connection && args[2] == "auth-spotify") {
-      let inserted = await Settings.setStates({
+      let inserted = await settings.setStates({
         "spotify-user-client-id": args[0],
         "spotify-user-client-secret": args[1]
       });
@@ -101,7 +103,7 @@ module.exports = function (Settings) {
       spotifyApi.setClientId(inserted[0]);
       spotifyApi.setClientSecret(inserted[1]);
 
-      connection = server.listen(8888, () => shell.openExternal("http://localhost:8888/authorize"));
+      connection = server.listen(8888, () => shell.openExternal(AUTHORIZE_URL));
     }
   }
 
@@ -111,7 +113,7 @@ module.exports = function (Settings) {
    * @returns true if the access token was refreshed
    */
   async function refreshSpotifyAccessToken() {
-    let [clientId, clientSecret, refreshToken] = await Settings.getStates([
+    let [clientId, clientSecret, refreshToken] = await settings.getStates([
       "spotify-user-client-id",
       "spotify-user-client-secret",
       "spotify-refresh-token"
@@ -125,7 +127,7 @@ module.exports = function (Settings) {
     try {
       data = await spotifyApi.refreshAccessToken();
 
-      let states = await Settings.setStates({
+      let states = await settings.setStates({
         "spotify-access-token": data.body["access_token"],
         "spotify-token-expiration": data.body["expires_in"]
       });
@@ -143,7 +145,7 @@ module.exports = function (Settings) {
     try {
       await refreshSpotifyAccessToken();
     } catch (err) {
-      console.log("Access token refresh failed");
+      console.error("Access token refresh failed", err);
     }
   }
 

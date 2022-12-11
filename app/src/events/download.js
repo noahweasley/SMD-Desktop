@@ -127,7 +127,7 @@ module.exports = function (settings, browsers, database) {
           );
         }
       } catch (err) {
-        // i also don't understand this error too. What were you expecting
+        // i also don't understand this error too. What were you expecting ?? 
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }

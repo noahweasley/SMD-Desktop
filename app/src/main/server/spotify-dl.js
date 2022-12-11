@@ -1,3 +1,5 @@
+"use-strict";
+
 const SpotifyWebApi = require("spotify-web-api-node");
 const authorize = require("./authorize");
 const { dialog, clipboard } = require("electron");
