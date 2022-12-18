@@ -26,6 +26,7 @@
 
 * {
   box-sizing: border-box;
+  /* outline: 2px solid red; */
 }
 
 *::after,
@@ -313,12 +314,13 @@ section.info {
 
 section.info>.info-cards {
   width: 100%;
+  max-width: 1600px;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  padding: 50px;
+  padding: calc(0.1vw + 20px);
   gap: 2em;
   overflow: hidden;
 }

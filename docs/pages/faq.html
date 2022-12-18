@@ -51,36 +51,58 @@
         <h1>Frequently asked questions</h1>
 
         <div class="container">
-            
+
+
+            <button class="accordion">How do I create a Spotify App to start using the App
+                <i class="fa fa-plus"></i>
+            </button>
+            <div class="panel">
+
+                <p>Click on the video below to learn how to create a Spotify App, accept all the permissions and you are
+                    good to go.<br/><b>Please Note</b>: The Spotify App created on your dashboard is private to you, we have no access to it</p>
+
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/yXWw0_UfSFg"
+                    title="How to register Spotify App" frameborder="0"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                <br/>
+            </div>
+
+
             <button class="accordion">Why do I need a Client ID and Secret from Spotify
                 <i class="fa fa-plus"></i>
-        </button>
-        <div class="panel">
-            <p>S.M.D fetches data from spotify, hence the need to register an app in which S.M.D would use. S.M.D is an open-source application, so you actually need to create your own keys. <br>
-                You can register an app <a href="https://developer.spotify.com/dashboard/login">* here * </a>
-            </p>
+            </button>
+            <div class="panel">
+                <p>S.M.D fetches data from spotify, hence the need to register an app in which S.M.D would use. S.M.D is
+                    an open-source application, so you actually need to create your own keys. <br>
+                    You can register an app <a href="https://developer.spotify.com/dashboard/login">* here * </a>
+                </p>
+            </div>
+
+            <button class="accordion"> Is the YouTube API-Key even required
+                <i class="fa fa-plus"></i>
+            </button>
+            <div class="panel">
+                <p>No, it's not, at least for now! It was added there in-case something changes and breaks the app,
+                    hence needing an API-Key</p>
+            </div>
+
+            <button class="accordion">How do I search for a single track
+                <i class="fa fa-plus"></i>
+            </button>
+            <div class="panel">
+                <p>After input-ing the data required after installing the S.M.D, it reloads and displays the main page.
+                    Close to the top-right corner, you'll find a search input, input the search parameter and then click
+                    the <i class="fa fa-sistrix">search</i> icon</p>
+            </div>
+
         </div>
 
-        <button class="accordion"> Is the YouTube API-Key even required
-            <i class="fa fa-plus"></i> 
-        </button>
-        <div class="panel">
-            <p>No, it's not, at least for now! It was added there in-case something changes and breaks the app, hence needing an API-Key</p>
-        </div>
-
-        <button class="accordion">How do I search for a single track 
-            <i class="fa fa-plus"></i> 
-        </button>
-        <div class="panel">
-            <p>After input-ing the data required after installing the S.M.D, it reloads and displays the main page. Close to the top-right corner, you'll find a search input, input the search parameter and then click the <i class="fa fa-sistrix">search</i>  icon</p>
-        </div>
-        
-    </div>
-    
     </main>
-    
+
     <script src="../js/faq.js"></script>
-    
+
     <script>
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
         function toggleNav() {
