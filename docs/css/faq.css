@@ -29,6 +29,21 @@ body {
   position: initial;
 }
 
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+a:active {
+  color: var(--primary-color-dark);
+}
+
 .accordion {
   background-color: var(--solid-dark-alt);
   color: var(--white-solid);
