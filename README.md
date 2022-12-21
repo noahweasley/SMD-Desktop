@@ -2,8 +2,10 @@
 
 ### An Open-Sourced Cross-Platform desktop application to search and download songs for free, single tracks are also searchable
 
-<a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
+<a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Noah A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
 
+
+**Please note**: This application is still in development, send your email to www.iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
 
 ## About S.M.D
 
