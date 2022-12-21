@@ -10,18 +10,13 @@ if (thisYear == dateBegin.innerText) {
 
 date.innerText = thisYear;
 
-sendMailButton.addEventListener("click", (event) => {
-  event.preventDefault();
-  alert("This feature hasn't been implemented yet");
-});
-
 // When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function () {
   //  Get the scroll button
-  const scrollbutton = document.getElementById("top-button");
+  const scrollButton = document.getElementById("top-button");
   if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-    scrollbutton.classList.add("scale-1");
+    scrollButton.classList.remove("gone");
   } else {
-    scrollbutton.classList.remove("scale-1");
+    scrollButton.classList.add("gone");
   }
 };
