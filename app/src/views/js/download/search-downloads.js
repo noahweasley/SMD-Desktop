@@ -1,22 +1,27 @@
+"use-strict";
+
 window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;
   let listDataSelected = {};
   //...
   const selectAll = document.getElementById("select-all");
-  const buttons = document.querySelectorAll(".btn");
+  const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
   const message = document.querySelector(".message");
 
   retryButton.addEventListener("click", () => {
     resetViewState();
-    setTimeout(() => dataReveal(buttons), 3000);
+    setTimeout(() => dataReveal(actionButtons), 3000);
   });
 
-  buttons.forEach((button) => {
+  actionButtons.forEach((button) => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
-      listData.searchQueryList = Object.values(listDataSelected);
+      if (button.id == "proceed-download") {
+        // useless conversion when cancel button is clicked
+        listData.searchQueryList = Object.values(listDataSelected);
+      }
       window.bridgeApis.send("download-click-event", [button.id, listData]);
     });
   });
@@ -29,7 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     errorDecoration.style.setProperty("display", "none");
     loader.classList.remove("gone");
-    buttons.forEach((button) => button.setAttribute("disabled", true));
+    actionButtons.forEach((button) => button.setAttribute("disabled", true));
   }
 
   function dataReveal() {
@@ -43,12 +48,11 @@ window.addEventListener("DOMContentLoaded", () => {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
-        buttons.forEach((button) => button.removeAttribute("disabled"));
+        actionButtons[0].removeAttribute("disabled");
       } else {
         list.classList.add("gone");
         errorDecoration.style.setProperty("display", "flex");
         message.innerText = data instanceof String ? data : "No results found for now";
-        buttons[0].removeAttribute("disabled");
       }
 
       // initialize checkboxes for use after populating data on the list
@@ -62,7 +66,7 @@ window.addEventListener("DOMContentLoaded", () => {
         header_cbx.addEventListener("click", () => {
           let listGroupItemContainer = header_cbx.parentElement.parentElement.parentElement;
           let headerSelectIndex = headerCheckboxArray.indexOf(header_cbx);
-          changeChildElementCheckboxStateOf(listGroupItemContainer, header_cbx.checked, headerSelectIndex);
+          changeChildElementCheckboxStateOf(listGroupItemContainer, header_cbx, headerSelectIndex);
         });
       });
 
@@ -77,10 +81,14 @@ window.addEventListener("DOMContentLoaded", () => {
           for (let x = 0; x < selectCheckboxes.length; x++) {
             // select all the check-boxes in the list if the select-all check-box is checked or not
             selectCheckboxes[x].checked = sa_IsChecked;
-            // add all the selected data to an object map, if the select-all check-box is checked or not
-            sa_IsChecked
-              ? (listDataSelected[`${x}`] = listData[y].searchQueryList[x])
-              : delete listDataSelected[`${x}`];
+
+            if (sa_IsChecked) {
+              listDataSelected[`${x}`] = listData[y].searchQueryList[x];
+              actionButtons[1].removeAttribute("disabled");
+            } else {
+              delete listDataSelected[`${x}`];
+              actionButtons[1].setAttribute("disabled", true);
+            }
           }
         }
       });
@@ -96,9 +104,11 @@ window.addEventListener("DOMContentLoaded", () => {
           if (s_cbx.checked) {
             // add track at selected index to object map
             listDataSelected[`${index}`] = listData[0].searchQueryList[index];
+            actionButtons[1].removeAttribute("disabled");
           } else {
             // remove / delete track at selected index to object map
             delete listDataSelected[`${index}`];
+            if (Object.keys(listDataSelected).length === 0) actionButtons[1].setAttribute("disabled", true);
           }
         });
       }
@@ -106,10 +116,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // looping through all child nodes of this list element and change the states of
       // every checkbox according to isChecked parameter
-      function changeChildElementCheckboxStateOf(element, isChecked, position) {
-        let listItemContainer = element;
+      function changeChildElementCheckboxStateOf(listItemContainer, headerCheckBox, position) {
         let listItemContainerChildNodes = listItemContainer.childNodes;
         let checkboxArray = Array.from(selectCheckboxes);
+        let isChecked = headerCheckBox.checked;
 
         for (let x = 1; x < listItemContainer.childElementCount; x++) {
           let listItems = listItemContainerChildNodes[x];
@@ -117,11 +127,20 @@ window.addEventListener("DOMContentLoaded", () => {
           inputElement.checked = isChecked;
 
           let listIndex = checkboxArray.indexOf(inputElement);
-          // add all the selected data to an object map, if the select-all check-box is checked or not
 
-          isChecked
-            ? (listDataSelected[`${listIndex}`] = listData[position].searchQueryList[listIndex])
-            : delete listDataSelected[`${listIndex}`];
+          if (isChecked) {
+            listDataSelected[`${listIndex}`] = listData[position].searchQueryList[listIndex];
+            actionButtons[1].removeAttribute("disabled");
+            headerCheckBox.checked = true;
+          } else {
+            console.log(Object.keys(listDataSelected).length);
+
+            delete listDataSelected[`${listIndex}`];
+            if (Object.keys(listDataSelected).length === 0) {
+              actionButtons[1].setAttribute("disabled", true);
+              headerCheckBox.checked = false;
+            }
+          }
         }
       }
     });

@@ -1,21 +1,27 @@
+"use-strict";
+
 window.addEventListener("DOMContentLoaded", () => {
   let listData;
   let listDataSelected = {};
   //...
   const selectAll = document.getElementById("select-all");
-  const buttons = document.querySelectorAll(".btn");
+  const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
   const message = document.querySelector(".message");
 
   retryButton.addEventListener("click", () => {
     resetViewState();
-    setTimeout(() => dataReveal(buttons), 3000);
+    setTimeout(() => dataReveal(actionButtons), 3000);
   });
 
-  buttons.forEach((button) => {
+  actionButtons.forEach((button) => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
-      listData.description.trackCollection = Object.values(listDataSelected);
+      if (button.id == "proceed-download") {
+        // useless conversion when cancel button is clicked
+        listData.description.trackCollection = Object.values(listDataSelected);
+      }
+
       window.bridgeApis.send("search-click-event", [button.id, listData]);
     });
   });
@@ -49,7 +55,6 @@ window.addEventListener("DOMContentLoaded", () => {
         list.classList.add("gone");
         errorDecoration.style.setProperty("display", "flex");
         message.innerText = data;
-        buttons[0].removeAttribute("disabled");
       }
 
       selectAll.addEventListener("click", () => {

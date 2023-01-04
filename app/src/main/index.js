@@ -3,14 +3,10 @@
 const { join } = require("path");
 const { app } = require("electron");
 const { createAppFiles } = require("./util");
+const settings = require("node-user-settings").defaults;
 
-const settingsConfig = {
-  preferenceFileDir: join(app.getPath("userData"), "User", "Preferences"),
-  fileName: "Settings",
-  fileExt: "json"
-};
-
-const settings = require("node-user-settings")(settingsConfig);
+const preferenceFilePath = join(app.getPath("userData"), "User", "Preferences", "Settings.json");
+settings.setDefaultPreferenceFilePath(preferenceFilePath)
 
 const browsers = require("../browsers")(settings);
 const { mainWindow } = browsers;

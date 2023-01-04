@@ -9,8 +9,8 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
     if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
-      data[0] ? createListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded", true);
-      data[1] ? createOrAppendListItemDownloading(data[1]) : displayDecorById("info_decor__downloading", true);
+      data[0] ? addListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded", true);
+      data[1] ? addListItemDownloading(data[1]) : displayDecorById("info_decor__downloading", true);
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (loader.id != "window-data-loader") loader.classList.add("gone");
     });
   });
-  
+
   // listen for event after populating the list
   registerEventListeners();
   // actions related to file downloads
@@ -34,7 +34,9 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.on("download-list-update", (_event, args) => {
     displayDecorById("info_decor__downloading", false);
     displayDecorById("info_decor__downloaded", true);
-    createOrAppendListItemDownloading(args);
+
+    // append new data into current data
+    addListItemDownloading(args, true);
     registerEventListeners();
   });
 
@@ -58,15 +60,24 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // populate the 'downloading' - list with item fetched from database
-  function createOrAppendListItemDownloading(item) {
+  function addListItemDownloading(item, shouldAppend) {
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
 
-    const oldDataSize = listData.length;
-    const newDataSize = oldDataSize + item["length"];
+    // @Todo fix duplicate code introduced while trying to fix bug in 'add to downloading list'
 
-    for (let position = oldDataSize; position < newDataSize; position++) {
+    if (shouldAppend) {
+      const oldDataSize = listData.length;
+      const newDataSize = oldDataSize + item.length;
+      // create list, append data
+      for (let position = oldDataSize; position < newDataSize; position++) createList(position);
+    } else {
+      // create list, don't care to append
+      for (let position = 0; position < item.length; position++) createList(position);
+    }
+
+    function createList(position) {
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
@@ -111,12 +122,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
       return mediaBody;
     }
-
-    listData = listData.concat(item);
   }
 
   // populate the 'downloaded' - list with item fetched from database
-  function createListItemDownloaded(item) {
+  function addListItemDownloaded(item) {
     const uLElement = document.querySelector(".list-group__downloaded");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
@@ -231,21 +240,19 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     // fallback image on thumbnail load error
-    document
-      .querySelectorAll(".media-object")
-      .forEach((image) =>
-        image.addEventListener("error", () =>
-          image.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png")
-        )
-      );
+    document.querySelectorAll(".media-object").forEach((image) => {
+      image.addEventListener("error", () => {
+        image.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+      });
+    });
   }
 
   // actions related to file downloads
-  function setProgress(elementId, prog) {
+  function setProgress(elementId, progress) {
     // use cached version of progress or search for it to initialize it, if it hasn't been cached yet
-    const progress = progressMap["elementId"] || (progressMap["elementId"] = document.getElementById(elementId));
+    const progressBar = progressMap["elementId"] || (progressMap["elementId"] = document.getElementById(elementId));
 
-    progress.style.setProperty("--progress-width", `${prog}%`);
-    progress.style.setProperty("--progress-anim", "none");
+    progressBar.style.setProperty("--progress-width", `${progress}%`);
+    progressBar.style.setProperty("--progress-anim", "none");
   }
 });

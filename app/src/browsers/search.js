@@ -23,12 +23,12 @@ module.exports.init = function () {
     }
   });
 
-  search_window.setMenu(null);
+  search_window.setMenu(require("../main/menu"));
   search_window.loadFile(join("app", "src", "views", "pages", "search.html"));
   search_window.once("ready-to-show", search_window.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
-  // the quick flash issue occurrs.
+  // the quick flash issue occurs.
   search_window.on("close", (event) => {
     event.preventDefault();
     search_window.hide();

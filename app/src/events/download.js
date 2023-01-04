@@ -5,6 +5,7 @@ const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const downloader = require("../main/downloads/downloader");
 const { Type, States } = require("../main/database/constants");
+const dummy = require("../main/util/dummy");
 
 module.exports = function (settings, browsers, database) {
   let downloadQuery;
@@ -41,6 +42,8 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("search-tracks", async (_event) => {
     const error_message = "Uh-oh!! We couldn't find any tracks";
 
+    return dummy.getMockDownloadList();
+    
     if (downloadQuery.type == "search") {
       let searchResults;
       try {
@@ -127,7 +130,7 @@ module.exports = function (settings, browsers, database) {
           );
         }
       } catch (err) {
-        // i also don't understand this error too. What were you expecting ?? 
+        // i also don't understand this error too. What were you expecting ??
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }

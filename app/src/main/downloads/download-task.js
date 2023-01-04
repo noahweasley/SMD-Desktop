@@ -45,9 +45,8 @@ module.exports = function (options) {
   async function registerDownloadOp(options) {
     let stream = await downloadMatchingTrack(options);
     downloadStream = stream;
-    // bd => binaries downloading
-    stream.on("binaries-downloading", () => win.webContents.send("show-bindown-dialog"));
-    stream.on("binaries-downloaded", () => win.webContents.send("close-bindown-dialog"));
+    stream.on("binaries-downloading", () => win.webContents.send("show-binary-download-dialog"));
+    stream.on("binaries-downloaded", () => win.webContents.send("close-binary-download-dialog"));
     stream.on("error", (err) => {
       console.error(err);
       downloadCallbackQueue.forEach((callback) => callback(err));

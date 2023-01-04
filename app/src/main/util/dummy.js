@@ -1,12 +1,13 @@
 "use-strict";
+const mockData = require("./mock-data");
 
-module.exports.getRandomClipboardText = function() {
+module.exports.getRandomClipboardText = function () {
   let random = Math.random();
   let albumUrl = "https://open.spotify.com/album/21jF5jlMtzo94wbxmJ18aa?si=ed91578d41954092";
   let playlistUrl = "https://open.spotify.com/playlist/1SDUSy4TAtzB9HnFmvD6yJ?si=2907d6141b2b43d8";
-  
+
   return random > 0.5 ? albumUrl : playlistUrl;
-}
+};
 
 module.exports.getDummyPlayList = function () {
   let trackCollection = [
@@ -299,3 +300,5 @@ module.exports.getDummyTrack = function (size) {
 
   return dummy;
 };
+
+module.exports.getMockDownloadList = () => mockData;
