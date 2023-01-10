@@ -30,5 +30,5 @@
         "winstaller",
         "ytdl"
     ],
-    "explorer.excludeGitIgnore": false,
+    "explorer.excludeGitIgnore": true,
 }

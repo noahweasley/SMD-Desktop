@@ -2,8 +2,7 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   let listData;
-  let listDataSelected = {};
-  //...
+  let selectedListDataMap = {};
   const selectAll = document.getElementById("select-all");
   const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
@@ -19,7 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // change the value of track collections in original list to the selected ones
       if (button.id == "proceed-download") {
         // useless conversion when cancel button is clicked
-        listData.description.trackCollection = Object.values(listDataSelected);
+        listData.description.trackCollection = Object.values(selectedListDataMap);
       }
 
       window.bridgeApis.send("search-click-event", [button.id, listData]);
@@ -66,7 +65,7 @@ window.addEventListener("DOMContentLoaded", () => {
           // select all the check-boxes in the list if the select-all check-box is checked or not
           selectCheckboxes[x].checked = sa_IsChecked;
           // add all the selected data to an object map, if the select-all check-box is checked or not
-          sa_IsChecked ? (listDataSelected[`${x}`] = collection[x]) : delete listDataSelected[`${x}`];
+          sa_IsChecked ? (selectedListDataMap[`${x}`] = collection[x]) : delete selectedListDataMap[`${x}`];
         }
       });
 
@@ -79,10 +78,10 @@ window.addEventListener("DOMContentLoaded", () => {
           let collection = listData.description.trackCollection;
           if (s_cbx.checked) {
             // add track at selected index to object map
-            listDataSelected[`${index}`] = collection[index];
+            selectedListDataMap[`${index}`] = collection[index];
           } else {
             // remove / delete track at selected index to object map
-            delete listDataSelected[`${index}`];
+            delete selectedListDataMap[`${index}`];
           }
         });
       }

@@ -3,8 +3,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;
-  let listDataSelected = {};
-  //...
+  let selectedListDataMap = {};
   const selectAll = document.getElementById("select-all");
   const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
@@ -20,7 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // change the value of track collections in original list to the selected ones
       if (button.id == "proceed-download") {
         // useless conversion when cancel button is clicked
-        listData.searchQueryList = Object.values(listDataSelected);
+        listData.searchQueryList = Object.values(selectedListDataMap);
       }
       window.bridgeApis.send("download-click-event", [button.id, listData]);
     });
@@ -74,8 +73,8 @@ window.addEventListener("DOMContentLoaded", () => {
       selectAll.addEventListener("click", () => {
         const sa_IsChecked = selectAll.checked;
 
-        for (let y = 0; y < headerSelectCheckboxes.length; y++) {
-          let headerSelectCheckbox = headerSelectCheckboxes[y];
+        for (let i = 0; i < headerSelectCheckboxes.length; i++) {
+          let headerSelectCheckbox = headerSelectCheckboxes[i];
           headerSelectCheckbox.checked = sa_IsChecked;
 
           for (let x = 0; x < selectCheckboxes.length; x++) {
@@ -83,10 +82,10 @@ window.addEventListener("DOMContentLoaded", () => {
             selectCheckboxes[x].checked = sa_IsChecked;
 
             if (sa_IsChecked) {
-              listDataSelected[`${x}`] = listData[y].searchQueryList[x];
+              selectedListDataMap[`${x}`] = listData[i].searchQueryList[x];
               actionButtons[1].removeAttribute("disabled");
             } else {
-              delete listDataSelected[`${x}`];
+              delete selectedListDataMap[`${x}`];
               actionButtons[1].setAttribute("disabled", true);
             }
           }
@@ -103,12 +102,19 @@ window.addEventListener("DOMContentLoaded", () => {
         s_cbx.addEventListener("click", () => {
           if (s_cbx.checked) {
             // add track at selected index to object map
-            listDataSelected[`${index}`] = listData[0].searchQueryList[index];
+            selectedListDataMap[`${index}`] = listData[0].searchQueryList[index];
             actionButtons[1].removeAttribute("disabled");
           } else {
             // remove / delete track at selected index to object map
-            delete listDataSelected[`${index}`];
-            if (Object.keys(listDataSelected).length === 0) actionButtons[1].setAttribute("disabled", true);
+            delete selectedListDataMap[`${index}`];
+            if (Object.keys(selectedListDataMap).length === 0) {
+              // very crazy, but I had to search for the header checkbox :)
+              parentHeaderCheckbox =
+                s_cbx.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.firstElementChild;
+
+              parentHeaderCheckbox.checked = false;
+              actionButtons[1].setAttribute("disabled", true);
+            }
           }
         });
       }
@@ -129,15 +135,17 @@ window.addEventListener("DOMContentLoaded", () => {
           let listIndex = checkboxArray.indexOf(inputElement);
 
           if (isChecked) {
-            listDataSelected[`${listIndex}`] = listData[position].searchQueryList[listIndex];
+            selectedListDataMap[`${listIndex}`] = listData[position].searchQueryList[listIndex];
             actionButtons[1].removeAttribute("disabled");
             headerCheckBox.checked = true;
           } else {
-            console.log(Object.keys(listDataSelected).length);
-
-            delete listDataSelected[`${listIndex}`];
-            if (Object.keys(listDataSelected).length === 0) {
+            delete selectedListDataMap[`${listIndex}`];
+            if (Object.keys(selectedListDataMap).length === 0) {
               actionButtons[1].setAttribute("disabled", true);
+              /*
+               * @Todo Remove or fix this next line. Make it work or just remove it. 
+               * The feature already works somewhere else in the code
+               */
               headerCheckBox.checked = false;
             }
           }
@@ -175,7 +183,7 @@ window.addEventListener("DOMContentLoaded", () => {
         selectionCheckbox.setAttribute("type", "checkbox");
         selectionCheckbox.setAttribute("name", "select");
         selectionCheckbox.className = "cbx-select-header";
-        selectionCheckbox.id = `select-${position}`;
+        selectionCheckbox.id = `select-header-${position}`;
 
         labelElement.appendChild(selectionCheckbox);
 

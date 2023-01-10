@@ -16,7 +16,6 @@
   --primary-color-dark-alt-2: hsl(144, 82%, 38%);
   --primary-color-dark-alt: hsl(143, 63%, 10%);
   --spotify-green: #22cc5db2;
-  --soundcloud-orange: #fe5000;
   --yt-red: red;
   --btn-disabled: #6fc48db2;
   --solid-blue: hsl(225, 76%, 10%);
@@ -28,8 +27,8 @@
   --button-negative-clr: rgb(199, 28, 28);
   --window-actions-elevation: 2;
   --progress-anim-time: 0.7s;
-  --progress-timin-funct: linear;
-  --progress-timin-funct-2: ease-in-out;
+  --progress-timing-function: linear;
+  --progress-timing-function-2: ease-in-out;
   color: var(--grey-solid);
   font-family: 'Montserrat-SB', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
 }
@@ -94,7 +93,7 @@ a:active {
   right: 50%;
   align-self: center;
   justify-self: center;
-  animation: var(--progress-anim-time) rotate var(--progress-timin-funct) infinite forwards;
+  animation: var(--progress-anim-time) rotate var(--progress-timing-function) infinite forwards;
 }
 
 .indeterminate-progress::before {
@@ -106,7 +105,7 @@ a:active {
   border-radius: 50%;
   position: absolute;
   bottom: 100%;
-  animation: var(--progress-anim-time) down-up var(--progress-timin-funct-2) infinite forwards;
+  animation: var(--progress-anim-time) down-up var(--progress-timing-function-2) infinite forwards;
 }
 
 .indeterminate-progress::after {
@@ -118,7 +117,7 @@ a:active {
   border-radius: 50%;
   position: absolute;
   bottom: -100%;
-  animation: var(--progress-anim-time) up-down var(--progress-timin-funct-2) infinite forwards;
+  animation: var(--progress-anim-time) up-down var(--progress-timing-function-2) infinite forwards;
 }
 
 .normal-progress {

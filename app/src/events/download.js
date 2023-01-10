@@ -84,8 +84,8 @@ module.exports = function (settings, browsers, database) {
   // download click events
   ipcMain.on("download-click-event", async (_event, args) => {
     downloadQuery = args[1];
-
     searchWindow.getWindow()?.close();
+    
     if (args[0] === "proceed-download") {
       const searchQueryResults = args[1];
       downloadTasks = fileDownloader.enqueueTasks(searchQueryResults);
