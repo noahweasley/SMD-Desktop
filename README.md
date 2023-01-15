@@ -16,7 +16,7 @@ An Open-Sourced Cross-Platform desktop application to search and download songs 
 </p>
 
 
-**Please note**: This application is still in development, send your email to www.iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
+**Please note**: This application is still in development, ping me @ www.iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
 
 ## About S.M.D
 
