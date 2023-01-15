@@ -1,6 +1,6 @@
 <h1 align="center" style="border-bottom: none">
     <div>
-        <a href="https://www.nocodb.com">
+        <a href="https://noahweasley.github.io/SMD-Desktop">
             <img src="docs/assets/app_icon.png" width="80" />
         </a>
     </div>
