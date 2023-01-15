@@ -8,7 +8,7 @@
 
 ## About S.M.D
 
-Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in S.M.D's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer. I built S.M.D because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :rocket:
+Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in S.M.D's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer, lol. I built S.M.D because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :rocket:
 
 ## Getting Started
 
