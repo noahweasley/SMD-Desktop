@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-  // deactive link default actions
+  // deactivate link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
@@ -10,14 +10,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const header = document.getElementById("app-name");
   const names = document.querySelectorAll(".name");
-  const inderminateProgres = document.querySelector(".indeterminate-progress");
+  const indeterminateProgress = document.querySelector(".indeterminate-progress");
   const windowContent = document.getElementById("content");
 
   window.bridgeApis.invoke("app-details").then((content) => {
-    header.innerHTML = `${content[0]}&nbsp&nbsp - &nbsp&nbspversion ${content[1]}`;
+    header.innerHTML = `${content[0]}&nbsp&nbsp - &nbsp version ${content[1]}`;
     names.forEach((name) => (name.innerText = content[0]));
-    
-    inderminateProgres.classList.add("gone");
+
+    indeterminateProgress.classList.add("gone");
     windowContent.classList.remove("gone");
   });
 });

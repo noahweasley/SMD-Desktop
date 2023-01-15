@@ -149,7 +149,7 @@ module.exports = function (settings) {
         "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
       );
 
-      return error.message;
+      throw new Error(error.message);
     }
 
     let [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
@@ -164,34 +164,29 @@ module.exports = function (settings) {
     spotifyApi.setAccessToken(spotifyAccessToken);
     spotifyApi.setRefreshToken(spotifyRefreshToken);
 
-    try {
-      if (clipboardContent.match(/[https://open.spotify.com]/)) {
-        // then ...
-        switch (spotifyURLType) {
-          case SpotifyURLType.TRACK:
-            data = performTrackDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.ALBUM:
-            data = performAlbumDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.ARTIST:
-            data = performArtistDownloadAction(clipboardContent);
-            break;
-          case SpotifyURLType.PLAYLIST:
-            data = performPlaylistDownloadAction(clipboardContent);
-            break;
-          default:
-            throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
-        }
-      } else {
-        // display modal dialog with details of error
-        dialog.showErrorBox(
-          "Clipboard content not a Spotify link",
-          "Clipboard content has changed, go to Spotify and copy link, then click 'Paste URL'"
-        );
+    if (clipboardContent.match(/[https://open.spotify.com]/)) {
+      switch (spotifyURLType) {
+        case SpotifyURLType.TRACK:
+          data = performTrackDownloadAction(clipboardContent);
+          break;
+        case SpotifyURLType.ALBUM:
+          data = performAlbumDownloadAction(clipboardContent);
+          break;
+        case SpotifyURLType.ARTIST:
+          data = performArtistDownloadAction(clipboardContent);
+          break;
+        case SpotifyURLType.PLAYLIST:
+          data = performPlaylistDownloadAction(clipboardContent);
+          break;
+        default:
+          throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
       }
-    } catch (err) {
-      return err.message;
+    } else {
+      // display modal dialog with details of error
+      dialog.showErrorBox(
+        "Clipboard content not a Spotify link",
+        "Clipboard content has changed, go to Spotify and copy link, then click 'Paste URL'"
+      );
     }
 
     return data;

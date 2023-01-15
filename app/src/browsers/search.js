@@ -23,7 +23,7 @@ module.exports.init = function () {
     }
   });
 
-  search_window.setMenu(require("../main/menu"));
+  search_window.setMenu(null);
   search_window.loadFile(join("app", "src", "views", "pages", "search.html"));
   search_window.once("ready-to-show", search_window.show);
   // listening for close event on download window helped to solve quick window flash issue.

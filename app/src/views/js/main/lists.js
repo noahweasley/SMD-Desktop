@@ -9,12 +9,12 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
     if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
-      data[0] ? addListItemDownloaded(data[0]) : displayDecorById("info_decor__downloaded", true);
-      data[1] ? addListItemDownloading(data[1]) : displayDecorById("info_decor__downloading", true);
+      data[0] ? addListItemDownloaded(data[0]) : displayDecorationById("info_decor__downloaded", true);
+      data[1] ? addListItemDownloading(data[1]) : displayDecorationById("info_decor__downloading", true);
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
-      displayAllDecors(true);
+      displayAllDecorations(true);
     }
 
     // display any indeterminate progress bar that exists inside main-pain's tab content
@@ -32,31 +32,32 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    displayDecorById("info_decor__downloading", false);
-    displayDecorById("info_decor__downloaded", true);
-
+    displayDecorationById("info_decor__downloading", false);
+    displayDecorationById("info_decor__downloaded", false);
     // append new data into current data
     addListItemDownloading(args, true);
     registerEventListeners();
   });
 
-  function displayAllDecors(shouldShow) {
-    const decors = document.querySelectorAll(".info-decor");
-
-    decors.forEach((decor) =>
-      shouldShow ? decor.style.setProperty("display", "flex") : decor.style.setProperty("display", "none")
+  function displayAllDecorations(shouldShow) {
+    const info_decorations = document.querySelectorAll(".info-decor");
+ 
+    info_decorations.forEach((info_decoration) =>
+      shouldShow
+        ? info_decoration.style.setProperty("display", "flex")
+        : info_decoration.style.setProperty("display", "none")
     );
   }
 
-  function displayDecorById(decorId, shouldShow) {
-    const decor = document.getElementById(decorId);
+  function displayDecorationById(decorationId, shouldShow) {
+    const decoration = document.getElementById(decorationId);
     if (shouldShow) {
-      decor.style.setProperty("display", "flex");
+      decoration.style.setProperty("display", "flex");
     } else {
       // remove .gone class if it is present
-      decor.classList.remove("gone");
-      decor.style.setProperty("display", "gone");
-    }
+      decoration.classList.remove("gone");
+      decoration.style.setProperty("display", "none");
+     }
   }
 
   // populate the 'downloading' - list with item fetched from database
@@ -71,9 +72,15 @@ window.addEventListener("DOMContentLoaded", () => {
       const oldDataSize = listData.length;
       const newDataSize = oldDataSize + item.length;
       // create list, append data
+      console.log("old data size: " + oldDataSize + ", new data size: " + newDataSize);
+      
       for (let position = oldDataSize; position < newDataSize; position++) createList(position);
     } else {
       // create list, don't care to append
+      const oldDataSize = listData.length;
+      const newDataSize = oldDataSize + item.length;
+      // create list, append data
+      console.log("(Appending) old data size: " + oldDataSize + ", new data size: " + newDataSize);
       for (let position = 0; position < item.length; position++) createList(position);
     }
 
@@ -182,7 +189,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             listGroup.removeChild(listItem);
             if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
-            displayDecorById("info_decor__downloaded", false);
+            displayDecorationById("info_decor__downloaded", false);
           }
         });
       });
@@ -250,7 +257,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // actions related to file downloads
   function setProgress(elementId, progress) {
     // use cached version of progress or search for it to initialize it, if it hasn't been cached yet
-    const progressBar = progressMap["elementId"] || (progressMap["elementId"] = document.getElementById(elementId));
+    const progressBar = progressMap[`${elementId}`] || (progressMap[`${elementId}`] = document.getElementById(elementId));
 
     progressBar.style.setProperty("--progress-width", `${progress}%`);
     progressBar.style.setProperty("--progress-anim", "none");

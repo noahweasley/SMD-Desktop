@@ -2,19 +2,17 @@
   "name": "smd-desktop",
   "productName": "S.M.D Desktop",
   "version": "1.0.0",
-  "description": " An Open-Sourced Cross-Platform desktop application to search and download songs for free, spotify tracks are also searchable",
+  "description": "An Open-Sourced Cross-Platform desktop application to search and download songs for free, spotify tracks are also searchable",
   "main": "app/src/main/index.js",
   "scripts": {
     "start": "electron .",
     "debug": "electron . --trace-warnings",
-    "pack:osx": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/osx --platform=darwin --arch=x64 --icon=app/resources/build/osx/app_icon.icns && npm run code-sign",
+    "clear-debug-database": "del /q %userprofile%\\Desktop\\Database\\*",
     "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/resources/build/win/app_icon.ico",
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/resources/build/win/app_icon.ico",
     "build": "npm run pack:win32 && npm run pack:win64",
     "package": "npm run build && npm run start",
-    "code-sign": "",
-    "generate": "node package/electron-windows-installer.js",
-    "test": "jest"
+    "generate": "node package/electron-windows-installer.js"
   },
   "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
   "repository": {
@@ -41,8 +39,7 @@
   "devDependencies": {
     "electron": "^21.3.1",
     "electron-packager": "^17.1.1",
-    "electron-winstaller": "^5.1.0",
-    "jest": "^29.3.1"
+    "electron-winstaller": "^5.1.0"
   },
   "dependencies": {
     "dotenv": "^16.0.3",

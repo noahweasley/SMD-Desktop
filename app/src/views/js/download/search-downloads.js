@@ -4,6 +4,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;
   let selectedListDataMap = {};
+  // @Todo searchQueryList shouldn't exist as a separate array, it should be inside listData
+  let searchQueryList = [];
   const selectAll = document.getElementById("select-all");
   const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
@@ -18,10 +20,11 @@ window.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
       if (button.id == "proceed-download") {
-        // useless conversion when cancel button is clicked
-        listData.searchQueryList = Object.values(selectedListDataMap);
+        // @Todo searchQueryList shouldn't exist as a separate array, it should be inside listData
+        searchQueryList = Object.values(selectedListDataMap);
       }
-      window.bridgeApis.send("download-click-event", [button.id, listData]);
+
+      window.bridgeApis.send("download-click-event", [button.id, searchQueryList]);
     });
   });
 
@@ -51,7 +54,7 @@ window.addEventListener("DOMContentLoaded", () => {
       } else {
         list.classList.add("gone");
         errorDecoration.style.setProperty("display", "flex");
-        message.innerText = data instanceof String ? data : "No results found for now";
+        message.innerText = data;
       }
 
       // initialize checkboxes for use after populating data on the list
@@ -143,7 +146,7 @@ window.addEventListener("DOMContentLoaded", () => {
             if (Object.keys(selectedListDataMap).length === 0) {
               actionButtons[1].setAttribute("disabled", true);
               /*
-               * @Todo Remove or fix this next line. Make it work or just remove it. 
+               * @Todo Remove or fix this next line. Make it work or just remove it.
                * The feature already works somewhere else in the code
                */
               headerCheckBox.checked = false;

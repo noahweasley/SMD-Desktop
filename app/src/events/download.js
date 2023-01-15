@@ -42,8 +42,6 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("search-tracks", async (_event) => {
     const error_message = "Uh-oh!! We couldn't find any tracks";
 
-    return dummy.getMockDownloadList();
-    
     if (downloadQuery.type == "search") {
       let searchResults;
       try {
@@ -54,13 +52,13 @@ module.exports = function (settings, browsers, database) {
         return err.message;
       }
     } else if (downloadQuery.type == "track") {
-      const spotifyLinkData = await getSpotifyLinkData();
-      // description: { songTitle, artistNames: [] }
-      let trackDescription = spotifyLinkData.description;
-      let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
-      // Wrap the search results in an array, because the list requires an array as result
-      let searchResults;
       try {
+        const spotifyLinkData = await getSpotifyLinkData();
+        // description: { songTitle, artistNames: [] }
+        let trackDescription = spotifyLinkData.description;
+        let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
+        // Wrap the search results in an array, because the list requires an array as result
+        let searchResults;
         searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
@@ -85,7 +83,7 @@ module.exports = function (settings, browsers, database) {
   ipcMain.on("download-click-event", async (_event, args) => {
     downloadQuery = args[1];
     searchWindow.getWindow()?.close();
-    
+
     if (args[0] === "proceed-download") {
       const searchQueryResults = args[1];
       downloadTasks = fileDownloader.enqueueTasks(searchQueryResults);
@@ -94,21 +92,18 @@ module.exports = function (settings, browsers, database) {
       // map the data from search results into required database format
 
       const downloadData = searchQueryResults
-        .map((searchQueryResult) => searchQueryResult.searchQueryList)
-        .map((searchQueryListItems) =>
-          searchQueryListItems.map((item) => ({
-            Error_Occurred: false,
-            Download_State: States.ACTIVE,
-            Track_Playlist_Title: "-",
-            Track_Title: item.videoTitle,
-            Track_Url: item.videoUrl,
-            Track_Artists: "-",
-            Downloaded_Size: "Unknown",
-            Download_Progress: 0,
-            Track_Download_Size: 0,
-            Message: "Downloading: 0 MB / NILL" /* A default message to init downloads */
-          }))
-        )
+        .map((searchQueryResult) => ({
+          Error_Occurred: false,
+          Download_State: States.ACTIVE,
+          Track_Playlist_Title: "-",
+          Track_Title: searchQueryResult.videoTitle,
+          Track_Url: searchQueryResult.videoUrl,
+          Track_Artists: "-",
+          Downloaded_Size: "Unknown",
+          Download_Progress: 0,
+          Track_Download_Size: 0,
+          Message: "Downloading: 0 MB / NILL" /* A default message to init downloads */
+        }))
         .flat();
 
       //  then add the search results the pending downloads database
