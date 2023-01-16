@@ -19,8 +19,8 @@
   --solid-darker: #000;
   --sand-solid: #ecebe8;
   --window-actions-elevation: 2;
+  font-size: 14px;
   color: white;
-  font-size: 12px;
   font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
