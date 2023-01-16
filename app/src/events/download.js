@@ -5,7 +5,6 @@ const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
 const downloader = require("../main/downloads/downloader");
 const { Type, States } = require("../main/database/constants");
-const dummy = require("../main/util/dummy");
 
 module.exports = function (settings, browsers, database) {
   let downloadQuery;

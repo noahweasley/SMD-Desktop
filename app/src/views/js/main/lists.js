@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
     displayDecorationById("info_decor__downloading", false);
-    displayDecorationById("info_decor__downloaded", false);
+    displayDecorationById("info_decor__downloaded", true);
     // append new data into current data
     addListItemDownloading(args, true);
     registerEventListeners();
@@ -72,15 +72,9 @@ window.addEventListener("DOMContentLoaded", () => {
       const oldDataSize = listData.length;
       const newDataSize = oldDataSize + item.length;
       // create list, append data
-      console.log("old data size: " + oldDataSize + ", new data size: " + newDataSize);
-
       for (let position = oldDataSize; position < newDataSize; position++) createList(position);
     } else {
       // create list, don't care to append
-      const oldDataSize = listData.length;
-      const newDataSize = oldDataSize + item.length;
-      // create list, append data
-      console.log("(Appending) old data size: " + oldDataSize + ", new data size: " + newDataSize);
       for (let position = 0; position < item.length; position++) createList(position);
     }
 
@@ -96,6 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
       listElement.append(createMediaBody(position + 1, item[position]));
       // append list item to list
       uLElement.append(listElement);
+      listElement.classList.remove("gone");
     }
 
     // creates a media body element

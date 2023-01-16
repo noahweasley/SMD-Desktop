@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     errorDecoration.style.setProperty("display", "none");
     loader.classList.remove("gone");
-    buttons.forEach((button) => button.setAttribute("disabled", true));
+    actionButtons.forEach((button) => button.setAttribute("disabled", true));
   }
 
   function dataReveal() {
@@ -49,7 +49,7 @@ window.addEventListener("DOMContentLoaded", () => {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
         errorDecoration.style.setProperty("display", "none");
-        buttons.forEach((button) => button.removeAttribute("disabled"));
+        actionButtons[0].removeAttribute("disabled");
       } else {
         list.classList.add("gone");
         errorDecoration.style.setProperty("display", "flex");
@@ -64,8 +64,14 @@ window.addEventListener("DOMContentLoaded", () => {
         for (let x = 0; x < selectCheckboxes.length; x++) {
           // select all the check-boxes in the list if the select-all check-box is checked or not
           selectCheckboxes[x].checked = sa_IsChecked;
-          // add all the selected data to an object map, if the select-all check-box is checked or not
-          sa_IsChecked ? (selectedListDataMap[`${x}`] = collection[x]) : delete selectedListDataMap[`${x}`];
+
+          if (sa_IsChecked) {
+            selectedListDataMap[`${x}`] = collection[x];
+            actionButtons[1].removeAttribute("disabled");
+          } else {
+            delete selectedListDataMap[`${x}`];
+            actionButtons[1].setAttribute("disabled", true);
+          }
         }
       });
 
@@ -79,9 +85,13 @@ window.addEventListener("DOMContentLoaded", () => {
           if (s_cbx.checked) {
             // add track at selected index to object map
             selectedListDataMap[`${index}`] = collection[index];
+            actionButtons[1].removeAttribute("disabled");
           } else {
             // remove / delete track at selected index to object map
             delete selectedListDataMap[`${index}`];
+            if (Object.keys(selectedListDataMap).length === 0) {
+              actionButtons[1].setAttribute("disabled", true);
+            }
           }
         });
       }
