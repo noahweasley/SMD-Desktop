@@ -1,18 +1,24 @@
 <h1 align="center" style="border-bottom: none">
-    <div>
-        <a href="https://noahweasley.github.io/SMD-Desktop">
-            <img src="docs/assets/app_icon.png" width="80" />
-        </a>
-    </div>
-    Spotify Music Downloader<br>
+  <div>
+    <a href="https://noahweasley.github.io/SMD-Desktop">
+      <img src="docs/assets/app_icon.png" width="80" />
+    </a>
+  </div>
+  Spotify Music Downloader
 </h1>
 
 <p align="center">
-An Open-Sourced Cross-Platform desktop application to search and download songs for free, single tracks are also searchable
+  An Open-Sourced Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API
 </p>
 
-<p align="center"> 
-<a href="https://www.buymeacoffee.com/noahweasley" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Noah A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
+<p align="center">
+  <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"
+    ><img
+      src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+      alt="Buy Noah A Coffee"
+      style="height: 50px !important; width: 207px !important"
+    />
+  </a>
 </p>
 
 **Please note**: This application is still in development, ping me @ www.iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
