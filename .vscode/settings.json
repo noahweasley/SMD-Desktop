@@ -3,4 +3,20 @@
     "liveServer.settings.port": 5501,
     "git.ignoreLimitWarning": true,
     "explorer.excludeGitIgnore": true,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.rulers": [
+            125
+        ],
+        "editor.tabSize": 5,
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    }
 }
