@@ -38,6 +38,16 @@ Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify 
 
 - Run `npm run build` to build for all supported platforms
 
+### Installing the tools
+
+There are a few VS Code extensions used in the development of S.M.D namely:
+
+- Prettier formatter (esbenp.prettier-vscode)
+
+- Community Material Theme Darker High Contrast (I love this theme :grin:)
+
+You need to install Prettier code formatter or install prettier as a Node JS dependency. I use the VS Code Extension, it's much more easier for me. Prettier is the default code formatter.
+
 ## Contributing
 
 There are many ways in which you can participate in this project, for example:
