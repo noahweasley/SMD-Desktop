@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function displayAllDecorations(shouldShow) {
     const info_decorations = document.querySelectorAll(".info-decor");
- 
+
     info_decorations.forEach((info_decoration) =>
       shouldShow
         ? info_decoration.style.setProperty("display", "flex")
@@ -57,7 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // remove .gone class if it is present
       decoration.classList.remove("gone");
       decoration.style.setProperty("display", "none");
-     }
+    }
   }
 
   // populate the 'downloading' - list with item fetched from database
@@ -73,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const newDataSize = oldDataSize + item.length;
       // create list, append data
       console.log("old data size: " + oldDataSize + ", new data size: " + newDataSize);
-      
+
       for (let position = oldDataSize; position < newDataSize; position++) createList(position);
     } else {
       // create list, don't care to append

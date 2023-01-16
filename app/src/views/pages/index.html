@@ -1,265 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>S.M.D Desktop</title>
-    <link rel="stylesheet" type="text/css" href="../styles/photon.css">
-    <link rel="stylesheet" type="text/css" href="../styles/main-styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/photon.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/main-styles.css" />
+  </head>
 
-</head>
-
-<body>
-
+  <body>
     <header class="toolbar toolbar-header toolbar-borderless draggable gone">
-        <div class="online-stat"></div>
-        <h1 class="title draggable"></h1>
-        <img class="draggable" src="../../../resources/build/graphics/app_icon.png" alt="Spotify music downloader icon">
+      <div class="online-stat"></div>
+      <h1 class="title draggable"></h1>
+      <img class="draggable" src="../../../resources/build/graphics/app_icon.png" alt="Spotify music downloader icon" />
 
-        <!-- window action buttons -->
-        <div class="window-action-group non-draggable">
-
-            <div class="window-action window-action-minimize" id="window-action-minimize">
-                <img src="../../../resources/build/graphics/minimize.svg" alt="minimize icon">
-            </div>
-
-            <div class="window-action window-action-maximize" id="window-action-maximize">
-                <img src="../../../resources/build/graphics/restore.svg" alt="resize icon">
-            </div>
-
-            <div class="window-action window-action-close" id="window-action-close">
-                <img src="../../../resources/build/graphics/close.svg" alt="close icon">
-            </div>
-
+      <!-- window action buttons -->
+      <div class="window-action-group non-draggable">
+        <div class="window-action window-action-minimize" id="window-action-minimize">
+          <img src="../../../resources/build/graphics/minimize.svg" alt="minimize icon" />
         </div>
 
+        <div class="window-action window-action-maximize" id="window-action-maximize">
+          <img src="../../../resources/build/graphics/restore.svg" alt="resize icon" />
+        </div>
+
+        <div class="window-action window-action-close" id="window-action-close">
+          <img src="../../../resources/build/graphics/close.svg" alt="close icon" />
+        </div>
+      </div>
     </header>
 
     <div class="window gone">
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane-sm sidebar">
+            <nav class="nav-group">
+              <span class="nav-group-item active"> <span class="icon icon-home"></span> Home </span>
 
-        <div class="window-content">
+              <span class="nav-group-item click" id="files"> <span class="icon icon-folder click click"></span> Files </span>
 
-            <div class="pane-group">
+              <span class="nav-group-item"> <span class="icon icon-cog icon-x2"></span> Settings </span>
 
-                <div class="pane-sm sidebar">
+              <span class="nav-group-item click" id="about">
+                <span class="icon icon-info-circled icon-x2 click"></span> About
+              </span>
 
-                    <nav class="nav-group">
+              <button class="btn btn-large abs-bottom donate bounce">Buy me a coffee</button>
+            </nav>
+          </div>
 
-                        <span class="nav-group-item active">
-                            <span class="icon icon-home"></span> Home
-                        </span>
+          <div class="pane pane-main">
+            <div class="downloads-operation">
+              <div class="paste not-draggable">Paste URL</div>
 
-                        <a href="#music" class="nav-group-item click">
-                            <span class="icon icon-folder click"></span> Files
-                        </a>
+              <div class="refresh not-draggable" disabled="true">
+                <span class="icon icon-ccw icon-x2"></span>
+              </div>
 
-                        <span class="nav-group-item">
-                            <span class="icon icon-cog icon-x2"></span> Settings
-                        </span>
+              <div class="pause not-draggable" disabled="true">
+                <span class="icon icon-pause icon-x2"></span>
+              </div>
 
-                        <span class="nav-group-item click" id="about">
-                            <span class="icon icon-info-circled icon-x2 click"></span> About
-                        </span>
+              <div class="delete not-draggable">
+                <span class="icon icon-trash icon-x2"></span>
+              </div>
 
-                        <button class="btn btn-large abs-bottom donate bounce">
-                            Buy me a coffee
-                        </button>
-                    </nav>
+              <input
+                type="text"
+                class="form-control form-control__search"
+                placeholder="Search track here"
+                id="input-search"
+                spellcheck="false"
+              />
 
-                </div>
-
-                <div class="pane pane-main">
-                    <div class="downloads-operation">
-
-                        <div class="paste not-draggable">Paste URL</div>
-
-                        <div class="refresh not-draggable" disabled="true">
-                            <span class="icon icon-ccw icon-x2"></span>
-                        </div>
-
-                        <div class="pause not-draggable" disabled="true">
-                            <span class="icon icon-pause icon-x2"></span>
-                        </div>
-
-                        <div class="delete not-draggable">
-                            <span class="icon icon-trash icon-x2"></span>
-                        </div>
-
-                        <input type="text" class="form-control form-control__search" placeholder="Search track here"
-                            id="input-search" spellcheck="false">
-
-                        <div class="btn-search not-draggable">
-                            <span class="icon icon-search icon-x2"></span>
-                        </div>
-
-                    </div>
-
-                    <div class="tab-group tab-group__border">
-
-                        <div class="__tab-item __tab-item__rounded" id="__tab-item__downloading">
-                            Downloading
-                        </div>
-
-                        <div class="__tab-item __tab-item__rounded active" id="__tab-item__downloaded">
-                            Downloaded
-                        </div>
-                    </div>
-
-                    <!--  tab contents -->
-
-                    <div class="tab-content scroll">
-
-                        <div class="tab-content__downloading invisible" id="tab-content__downloading">
-
-                            <div class="indeterminate-progress normal-progress"></div>
-
-                            <div class="info-decor" id="info_decor__downloading">
-                                <img src="../../../resources/build/graphics/musical.png" alt="decorations">
-                                <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet ??
-                                    &nbsp Try performing some actions, and you would see the results here <span
-                                        class="icon icon-dot icon-x2"></span></p>
-                            </div>
-
-                            <ul class="list-group list-group__downloading gone">
-                            </ul>
-
-                        </div>
-
-                        <div class="tab-content__downloaded" id="tab-content__downloaded">
-
-                            <div class="indeterminate-progress normal-progress"></div>
-
-                            <div class="info-decor" id="info_decor__downloaded">
-                                <img src="../../../resources/build/graphics/musical.png" alt="decorations">
-                                <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet ??
-                                    &nbsp Try performing some actions, and you would see the results here <span
-                                        class="icon icon-dot icon-x2"></span></p>
-                            </div>
-
-                            <ul class="list-group list-group__downloaded gone">
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="pane pane-settings gone">
-                    <h1 class="title draggable">User Settings</h1>
-
-                    <div class="list-group-container">
-                        <p class="text-center"><span class="icon icon-dot icon-x2"></span>Nothing here yet. In a future
-                            version, user settings would be implemented <span class="icon icon-dot icon-x2"></span></p>
-
-                         <ul class="list-group scroll gone">
-
-                            <!-- <li class="list-group-item">
-                                <h1 class="settings-title">Download Location</h1>
-                               <div class="state">
-                                   <p class="preference-state">%Music/SMD Desktop/downloads</p>
-                                   <button class="action">CHOOSE</button>
-                               </div>
-                            </li>
-
-                            <li class="list-group-item"></li> -->
-
-                        </ul> 
-
-                    </div>
-
-                    <div class="indeterminate-progress normal-progress" id="settings-loader"></div>
-                </div>
-
+              <div class="btn-search not-draggable">
+                <span class="icon icon-search icon-x2"></span>
+              </div>
             </div>
 
+            <div class="tab-group tab-group__border">
+              <div class="__tab-item __tab-item__rounded" id="__tab-item__downloading">Downloading</div>
+
+              <div class="__tab-item __tab-item__rounded active" id="__tab-item__downloaded">Downloaded</div>
+            </div>
+
+            <!--  tab contents -->
+
+            <div class="tab-content scroll">
+              <div class="tab-content__downloading invisible" id="tab-content__downloading">
+                <div class="indeterminate-progress normal-progress"></div>
+
+                <div class="info-decor" id="info_decor__downloading">
+                  <img src="../../../resources/build/graphics/musical.png" alt="decorations" />
+                  <p class="text-center">
+                    <span class="icon icon-dot icon-x2"></span>Nothing here yet ?? &nbsp Try performing some actions, and you
+                    would see the results here <span class="icon icon-dot icon-x2"></span>
+                  </p>
+                </div>
+
+                <ul class="list-group list-group__downloading gone"></ul>
+              </div>
+
+              <div class="tab-content__downloaded" id="tab-content__downloaded">
+                <div class="indeterminate-progress normal-progress"></div>
+
+                <div class="info-decor" id="info_decor__downloaded">
+                  <img src="../../../resources/build/graphics/musical.png" alt="decorations" />
+                  <p class="text-center">
+                    <span class="icon icon-dot icon-x2"></span>Nothing here yet ?? &nbsp Try performing some actions, and you
+                    would see the results here <span class="icon icon-dot icon-x2"></span>
+                  </p>
+                </div>
+
+                <ul class="list-group list-group__downloaded gone"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane pane-settings gone">
+            <h1 class="title draggable">User Settings</h1>
+
+            <div class="list-group-container">
+              <p class="text-center">
+                <span class="icon icon-dot icon-x2"></span>Nothing here yet. In a future version, user settings would be
+                implemented <span class="icon icon-dot icon-x2"></span>
+              </p>
+
+              <ul class="list-group scroll gone"></ul>
+            </div>
+
+            <div class="indeterminate-progress normal-progress" id="settings-loader"></div>
+          </div>
         </div>
+      </div>
 
-        <footer class="toolbar toolbar-footer">
-        </footer>
-
+      <footer class="toolbar toolbar-footer"></footer>
     </div>
 
     <div class="modal">
-        <div class="modal__login">
-            <div class="split-pane split-pane__left">
-                <h5>Just a few more steps</h5>
-                <ol class="steps">
-                    <li class="step"><a href="https://developer.spotify.com/dashboard/login">Get a CLIENT ID and CLIENT
-                            SECRET from Spotify</a></li>
-                    <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into <span class="name"></span></li>
-                    <li class="step">Set Redirect URL as <b class="selectable-text">http://localhost:8888/callback</b>
-                    </li>
-                    <li class="step"><a href="https://youtube.com/">Get a YouTube API key from YouTube (optional)</a>
-                    </li>
-                    <li class="step">Copy and Paste the API Key into <span class="name"></span> (optional)</li>
-                    <li class="step">Start Vibin' <span class="icon icon-megaphone"></span></li>
-                </ol>
+      <div class="modal__login">
+        <div class="split-pane split-pane__left">
+          <h5>Just a few more steps</h5>
+          <ol class="steps">
+            <li class="step">
+              <a href="https://developer.spotify.com/dashboard/login">Get a CLIENT ID and CLIENT SECRET from Spotify</a>
+            </li>
+            <li class="step">Copy and Paste the CLIENT ID and CLIENT SECRET into <span class="name"></span></li>
+            <li class="step">Set Redirect URL as <b class="selectable-text">http://localhost:8888/callback</b></li>
+            <li class="step"><a href="https://youtube.com/">Get a YouTube API key from YouTube (optional)</a></li>
+            <li class="step">Copy and Paste the API Key into <span class="name"></span> (optional)</li>
+            <li class="step">Start Vibin' <span class="icon icon-megaphone"></span></li>
+          </ol>
 
-                <a class="info" href="https://noahweasley.github.io/SMD-Desktop/faq">Why do I need these things ?</a>
-
-            </div>
-
-            <div class="split-pane split-pane__right">
-                <h5>Get Started</h5>
-
-                <div class="tab-group tab-group__form eleme-centered">
-                    <div class="__tab-item tab-item__form active">
-                        <span class="icon icon-spotify icon-x2"></span> Spotify
-                    </div>
-                    <div class="__tab-item tab-item__form">
-                        <span class="icon icon-video icon-x2"></span> YouTube
-                    </div>
-                </div>
-
-                <div class="tab-content__form">
-
-                    <div id="tab-content__form__spotify">
-
-                        <form>
-                            <div class="form-group">
-                                <label>Spotify Client ID</label>
-                                <input type="text" class="form-control" placeholder="Client ID" id="spcid" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Spotify Client Secret</label>
-                                <input type="text" class="form-control" placeholder="Client Secret" id="spcs" required>
-                            </div>
-                        </form>
-                        <div class="form-actions">
-                            <button class="btn btn-form" id="auth-spotify">Authorize</button>
-                            <span class="icon icon-check padded-less gone"></span>
-                        </div>
-
-                    </div>
-
-                    <div class="invisible" id="tab-content__form__youtube">
-
-                        <form>
-                            <div class="form-group">
-                                <label>Optional Youtube API Key</label>
-                                <input type="text" class="form-control" placeholder="API Key" id="ytak" required>
-                            </div>
-                        </form>
-                        <div class="form-actions">
-                            <button class="btn btn-form" id="auth-youtube">Save</button>
-                        </div>
-
-                    </div>
-
-                    </di>
-
-                </div>
-
-            </div>
-
+          <a class="info" href="https://noahweasley.github.io/SMD-Desktop/pages/faq">Why do I need these things ?</a>
         </div>
+
+        <div class="split-pane split-pane__right">
+          <h5>Get Started</h5>
+
+          <div class="tab-group tab-group__form eleme-centered">
+            <div class="__tab-item tab-item__form active"><span class="icon icon-spotify icon-x2"></span> Spotify</div>
+            <div class="__tab-item tab-item__form"><span class="icon icon-video icon-x2"></span> YouTube</div>
+          </div>
+
+          <div class="tab-content__form">
+            <div id="tab-content__form__spotify">
+              <form>
+                <div class="form-group">
+                  <label>Spotify Client ID</label>
+                  <input type="text" class="form-control" placeholder="Client ID" id="spcid" spellcheck="false" required />
+                </div>
+                <div class="form-group">
+                  <label>Spotify Client Secret</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Client Secret"
+                    id="spcs"
+                    spellcheck="false"
+                    required
+                  />
+                </div>
+              </form>
+              <div class="form-actions">
+                <button class="btn btn-form" id="auth-spotify">Authorize</button>
+                <span class="icon icon-check padded-less gone"></span>
+              </div>
+            </div>
+
+            <div class="invisible" id="tab-content__form__youtube">
+              <form>
+                <div class="form-group">
+                  <label>Optional Youtube API Key</label>
+                  <input type="text" class="form-control" placeholder="API Key" id="ytak" spellcheck="false" required />
+                </div>
+              </form>
+              <div class="form-actions">
+                <button class="btn btn-form" id="auth-youtube">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="indeterminate-progress normal-progress" id="window-data-loader"></div>
@@ -272,7 +218,5 @@
     <script src="../js/main/lists.js"></script>
     <script src="../js/main/settings.js"></script>
     <script src="../js/main/jobs.js"></script>
-
-</body>
-
+  </body>
 </html>

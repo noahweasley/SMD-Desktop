@@ -1,12 +1,6 @@
 "use-strict";
 
 window.addEventListener("DOMContentLoaded", () => {
-  const about = document.getElementById("about");
-
-  about.addEventListener("click", (_event) => {
-    window.bridgeApis.send("show-app-info");
-  });
-
   // active link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -21,6 +15,15 @@ window.addEventListener("DOMContentLoaded", () => {
     action.addEventListener("click", (_event) => {
       window.bridgeApis.send("action-click-event", action.id);
     });
+  });
+
+  document.getElementById("about").addEventListener("click", (_event) => {
+    window.bridgeApis.send("show-app-info");
+  });
+
+  document.getElementById("files").addEventListener("click", () => {
+    event.preventDefault();
+    window.bridgeApis.send("navigate-link", "#music");
   });
 
   // donate button click. Navigate to sponsorship page
@@ -48,7 +51,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("input-search");
   const searchButton = document.querySelector(".btn-search");
   let isFocused = false;
-  
+
   searchInput.addEventListener("focus", () => (isFocused = true));
   searchInput.addEventListener("blur", () => (isFocused = false));
 
@@ -139,31 +142,27 @@ function switchAuthorizationTabs(authId) {
 
   if (authId == "auth-spotify") {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
-    window.bridgeApis
-      .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
-      .then((value) => {
-        if (value[0] == "true") {
-          window.bridgeApis.send("reload-current-window");
-        } else {
-          authTabContent1.classList.add("invisible");
-          authTabContent2.classList.remove("invisible");
-          authTabItems[0].classList.remove("active");
-          authTabItems[1].classList.add("active");
-        }
-      });
+    window.bridgeApis.invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"]).then((value) => {
+      if (value[0] == "true") {
+        window.bridgeApis.send("reload-current-window");
+      } else {
+        authTabContent1.classList.add("invisible");
+        authTabContent2.classList.remove("invisible");
+        authTabItems[0].classList.remove("active");
+        authTabItems[1].classList.add("active");
+      }
+    });
   } else {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
-    window.bridgeApis
-      .invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"])
-      .then((value) => {
-        if (value[0] == "true" && value[1] == "true") {
-          window.bridgeApis.send("reload-current-window");
-        } else {
-          authTabContent2.classList.add("invisible");
-          authTabContent1.classList.remove("invisible");
-          authTabItems[1].classList.remove("active");
-          authTabItems[0].classList.add("active");
-        }
-      });
+    window.bridgeApis.invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"]).then((value) => {
+      if (value[0] == "true" && value[1] == "true") {
+        window.bridgeApis.send("reload-current-window");
+      } else {
+        authTabContent2.classList.add("invisible");
+        authTabContent1.classList.remove("invisible");
+        authTabItems[1].classList.remove("active");
+        authTabItems[0].classList.add("active");
+      }
+    });
   }
 }

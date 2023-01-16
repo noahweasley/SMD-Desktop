@@ -1,122 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SMD - Frequently asked questions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/faq.css">
-    <link rel="stylesheet" href="../css/extras.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
-    <link rel="manifest" href="../favicon/site.webmanifest">
-    <link rel="mask-icon" href="../favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/faq.css" />
+    <link rel="stylesheet" href="../css/extras.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png" />
+    <link rel="manifest" href="../favicon/site.webmanifest" />
+    <link rel="mask-icon" href="../favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
 
-</head>
-
-<body>
+  <body>
     <nav>
-        <ul class="topnav" id="top-nav">
-            <div class="logo">
-                <a href="../index.html">
-                    <img src="../assets/app_icon.png" alt="Homepage" width="45px" height="40px">
-                    </img>
-                </a>
-                <p class="app-name">S.M.D</p>
-            </div>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../pages/downloads/get-smd.html">Downloads</a></li>
-            <li><a href="../pages/terms.html">Term of use</a></li>
-            <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
-            <li><a href="#" class="active">FAQ</a></li>
-            <li><a href="../pages/about.html">About</a></li>
-            <li><a href="http://www.buymeacoffee.com/noahweasley/" target="_blank" id="donate">Donate</a></li>
-            <li class="icon">
-                <a href="javascript:void(0);" onclick="toggleNav()">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </li>
-        </ul>
+      <ul class="topnav" id="top-nav">
+        <div class="logo">
+          <a href="../index.html">
+            <img src="../assets/app_icon.png" alt="Homepage" width="45px" height="40px" />
+          </a>
+          <p class="app-name">S.M.D</p>
+        </div>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/downloads/get-smd.html">Downloads</a></li>
+        <li><a href="../pages/terms.html">Term of use</a></li>
+        <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="#" class="active">FAQ</a></li>
+        <li><a href="../pages/about.html">About</a></li>
+        <li><a href="http://www.buymeacoffee.com/noahweasley/" target="_blank" id="donate">Donate</a></li>
+        <li class="icon">
+          <a href="javascript:void(0);" onclick="toggleNav()">
+            <i class="fa fa-bars"></i>
+          </a>
+        </li>
+      </ul>
     </nav>
 
     <main style="padding: calc(1vw + 8px)">
+      <h1>Frequently asked questions</h1>
 
-        <h1>Frequently asked questions</h1>
+      <div class="container">
+        <button class="accordion">
+          How do I create a Spotify app (Client ID and Client Secret) to start using S.M.D
+          <i class="fa fa-plus"></i>
+        </button>
 
-        <div class="container">
+        <div class="panel">
+          <p>
+            You can learn how to create a Spotify app from this
+            <a
+              target="_blank"
+              href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard"
+              >link</a
+            >
+          </p>
+          <p>
+            Please also replace
+            <b>Redirect URL with http://localhost:8888/callback for the authorization to work with S.M.D</b>
+          </p>
+          <>Click on the video below to learn more on how to create a Spotify App (<b>i.e A Client Id and A Client Secret</b
+          >)<br />
 
-
-            <button class="accordion">How do I create a Spotify App to start using S.M.D
-                <i class="fa fa-plus"></i>
-            </button>
-
-            <div class="panel">
-
-                <p>You can learn how to create a Spotify App from this <a target="_blank"
-                        href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard">link</a>
-                </p>
-                <p>Please also replace <b>Redirect URL with http://localhost:8888/callback for the authorization to work with S.M.D</b></p>
-                <p>Click on the video below to learn more on how to create a Spotify App.<br />
-                    
-                <p><a target="_blank"
-                    href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard?wvideo=q9l6635y5f"><img
-                        src="https://embed-ssl.wistia.com/deliveries/30c2fdecae919d48dd0e62ee1f2032a959781a99.jpg?image_play_button_size=2x&amp;image_crop_resized=960x540&amp;image_play_button=1&amp;image_play_button_color=c475dee0"
-                        style="width: 400px; height: 225px;" width="400" height="225">
-                </a>
-            </p>
-                    <b>Please Note</b>: The Spotify App created on your dashboard is private to you, we
-                    have no access to it</p>
-                <br />
-            </div>
-
-
-            <button class="accordion">Why do I need a Client ID and Secret from Spotify
-                <i class="fa fa-plus"></i>
-            </button>
-            <div class="panel">
-                <p>S.M.D fetches data from spotify, hence the need to register an app in which S.M.D would use. S.M.D is
-                    an open-source application, so you actually need to create your own keys. <br>
-                    You can register an app <a target="_blank" href="https://developer.spotify.com/dashboard/login">* here * </a>
-                </p>
-            </div>
-
-            <button class="accordion"> Is the YouTube API-Key even required
-                <i class="fa fa-plus"></i>
-            </button>
-            <div class="panel">
-                <p>No, it's not, at least for now! It was added there in-case something changes and breaks the app,
-                    hence needing an API-Key</p>
-            </div>
-
-            <button class="accordion">How do I search for a single track
-                <i class="fa fa-plus"></i>
-            </button>
-            <div class="panel">
-                <p>After input-ing the data required after installing the S.M.D, it reloads and displays the main page.
-                    Close to the top-right corner, you'll find a search input, input the search parameter and then click
-                    the  <i class="fa-brands fa-sistrix">search</i> icon</p>
-            </div>
-
+          <p>
+            <a
+              target="_blank"
+              href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard?wvideo=q9l6635y5f"
+              ><img
+                src="https://embed-ssl.wistia.com/deliveries/30c2fdecae919d48dd0e62ee1f2032a959781a99.jpg?image_play_button_size=2x&amp;image_crop_resized=960x540&amp;image_play_button=1&amp;image_play_button_color=c475dee0"
+                style="width: 400px; height: 225px"
+                width="400"
+                height="225"
+              />
+            </a>
+          </p>
+          <b>Please Note</b>: The Spotify app created on your dashboard is private to you, we have no access to it
+          <br />
         </div>
 
+        <button class="accordion">
+          Why do I need a Client ID and Secret from Spotify
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="panel">
+          <p>
+            S.M.D fetches data from spotify, hence the need to register a Spotify app in which S.M.D would use. S.M.D is an
+            open-source application, so you actually need to create your own keys. <br />
+            You can register an app <a target="_blank" href="https://developer.spotify.com/dashboard/login">here</a>
+          </p>
+        </div>
+
+        <button class="accordion">
+          Is the YouTube API-Key even required
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="panel">
+          <p>
+            No, it's not, at least for now! It was added there in-case something changes and breaks the app, hence needing an
+            API-Key
+          </p>
+        </div>
+
+        <button class="accordion">
+          How do I search for a single track
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="panel">
+          <p>
+            After providing the extra data required after installing the S.M.D, it reloads and displays the main page. Close
+            to the top-right corner, you'll find a search input, input the search parameter and then click the
+            <i class="fa-brands fa-sistrix">search</i> icon
+          </p>
+        </div>
+      </div>
     </main>
 
     <script src="../js/faq.js"></script>
 
     <script>
-        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-        function toggleNav() {
-            const nav = document.getElementById("top-nav");
-            nav.classList.toggle("responsive");
-        }
+      /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+      function toggleNav() {
+        const nav = document.getElementById("top-nav");
+        nav.classList.toggle("responsive");
+      }
     </script>
-</body>
-
+  </body>
 </html>

@@ -45,7 +45,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "knex": "^2.3.0",
-    "node-user-settings": "^1.4.1",
+    "node-user-settings": "^1.5.1",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.1.2",
     "youtube-search-without-api-key": "^1.0.7",

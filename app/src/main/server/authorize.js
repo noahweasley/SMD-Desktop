@@ -4,6 +4,9 @@ const server = express();
 const path = require("path");
 const spotifyWebApi = require("spotify-web-api-node");
 
+const publicFilePath = path.resolve(__dirname, "../../public");
+server.use(express.static(publicFilePath));
+
 module.exports = function (settings) {
   const REDIRECT_URL = "http://localhost:8888/callback";
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
@@ -30,8 +33,17 @@ module.exports = function (settings) {
 
   const spotifyApi = new spotifyWebApi({ redirectUri: REDIRECT_URL });
 
-  server.get("/authorize", (_req, res) => {
-    res.redirect(spotifyApi.createAuthorizeURL(scopes));
+  server.get("/authorize", async (_req, res) => {
+    // @Todo fix issue with spotifyApi.getClientId() returning null when it was already set
+    if (!spotifyApi.getClientId() || !spotifyApi.getClientSecret()) {
+      const [clientId, clientSecret] = await settings.getStates(["spotify-user-client-id", "spotify-user-client-secret"]);
+      spotifyApi.setClientId(clientId);
+      spotifyApi.setClientSecret(clientSecret);
+    }
+
+    const authURL = spotifyApi.createAuthorizeURL(scopes);
+
+    res.redirect(authURL);
     timeout = setTimeout(() => {
       connection && connection.close();
       connection = null;
@@ -43,7 +55,7 @@ module.exports = function (settings) {
     const code = req.query.code;
 
     if (error) {
-      res.sendFile(path.join(__dirname, "../../pages/failed.html"));
+      res.sendFile(path.resolve(__dirname, "../../public/failed.html"));
       connection.close();
       clearTimeout(timeout);
       clearTimeout(refreshTimer);
@@ -59,8 +71,8 @@ module.exports = function (settings) {
 
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
-
-      res.sendFile(path.join(__dirname, "../../pages/success.html"));
+      // C:\Users\NOAH\Archive\Node JS\SMD-Desktop\app\src\views\pages\success.html
+      res.sendFile(path.resolve(__dirname, "../../public/success.html"));
 
       let states = await settings.setStates({
         "spotify-access-token": access_token,
@@ -70,8 +82,10 @@ module.exports = function (settings) {
       });
 
       if (states.length === 4) {
-        authorizationCallback();
-        authorizationCallback = null;
+        if (authorizationCallback != null && authorizationCallback instanceof Function) {
+          authorizationCallback();
+          authorizationCallback = null;
+        }
       }
 
       if (connection) connection.close();
@@ -141,7 +155,7 @@ module.exports = function (settings) {
   /**
    * A simple wrapper to refresh access token and still handle errors
    */
-  async function __refreshAuthToken() {
+  async function refreshSpotifyAccessTokenWithErrorHandler() {
     try {
       await refreshSpotifyAccessToken();
     } catch (err) {
@@ -149,5 +163,5 @@ module.exports = function (settings) {
     }
   }
 
-  return { authorizeApp, refreshSpotifyAccessToken, __refreshAuthToken };
+  return { authorizeApp, refreshSpotifyAccessToken, refreshSpotifyAccessTokenWithErrorHandler };
 };

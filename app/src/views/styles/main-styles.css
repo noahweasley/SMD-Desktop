@@ -64,7 +64,7 @@ a:active {
 
 .pane-settings>.title,
 .pane-settings .settings-title {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -283,6 +283,7 @@ a:active {
   width: 100%;
   height: 60px;
   background-color: var(--solid-darker);
+  font-size: 1rem;
 }
 
 .tab-group__border {
@@ -356,7 +357,7 @@ a:active {
 .tab-content>*>.info-decor>p,
 .list-group-container p {
   display: flex;
-  font-size: 1.1em;
+  font-size: 1.1rem;
   align-items: center;
 }
 
@@ -485,6 +486,10 @@ a:active {
   width: 110px;
 }
 
+.form-control {
+  font-size: 1rem;
+}
+
 .form-control.form-control__search {
   left: 276px;
   background-color: inherit;
@@ -581,6 +586,7 @@ a:active {
   cursor: pointer;
   transition: 0.3s;
   letter-spacing: 0.2em;
+  font-size: 0.9rem;
 }
 
 .donate:hover {
@@ -633,8 +639,7 @@ a:active {
 
 .modal__login>.split-pane>h5 {
   position: relative;
-  font-size: 1.5em;
-  letter-spacing: 0.1em;
+  font-size: 1.5rem;
   text-align: center;
   margin-bottom: 8px;
 }
@@ -670,7 +675,7 @@ a:active {
 }
 
 .modal__login>.split-pane>ol>* {
-  font-size: 1em;
+  font-size: 1rem;
   position: relative;
   padding: 8px;
 }
@@ -721,7 +726,7 @@ form {
 .btn-form {
   background-color: var(--spotify-green);
   padding: 8px 24px;
-  font-size: 1.1em;
+  font-size: 1.1rem;
 }
 
 .btn-form:disabled {

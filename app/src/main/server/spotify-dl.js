@@ -8,6 +8,7 @@ const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util")
 module.exports = function (settings) {
   let auth = authorize(settings);
   let spotifyApi = new SpotifyWebApi();
+  const MAX_NUMBER_OF_RETRIES = 3;
 
   /**
    * starts album download
@@ -25,7 +26,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.__refreshAuthToken();
+        await auth.refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 
@@ -54,10 +55,10 @@ module.exports = function (settings) {
   /**
    * starts artist download
    *
-   * @param artistUrl the artist identifier to be used in download
+   * @param _artistUrl the artist identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performArtistDownloadAction(artistUrl) {
+  async function performArtistDownloadAction(_artistUrl) {
     return "Artist URL support coming soon, try again later";
   }
 
@@ -71,13 +72,13 @@ module.exports = function (settings) {
     let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
 
-    for (let x = 0; x <= 3; x++) {
+    for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
       try {
         data = await spotifyApi.getPlaylist(playlist);
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.__refreshAuthToken();
+        await auth.refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 
@@ -108,13 +109,13 @@ module.exports = function (settings) {
     let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
     let data, dataReceived;
 
-    for (let x = 0; x <= 3; x++) {
+    for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
       try {
         data = await spotifyApi.getTrack(track);
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.__refreshAuthToken();
+        await auth.refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 

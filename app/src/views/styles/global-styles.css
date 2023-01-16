@@ -30,6 +30,7 @@
   --progress-timing-function: linear;
   --progress-timing-function-2: ease-in-out;
   color: var(--grey-solid);
+  font-size: 11.5px;
   font-family: 'Montserrat-SB', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
 }
 
@@ -39,7 +40,6 @@
   font-weight: normal;
 }
 
-
 body {
   background-color: var(--solid-darker);
   font-family: 'Montserrat', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
@@ -47,6 +47,35 @@ body {
 
 * {
   outline: none;
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 1.6rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+label {
+  font-size: 1.1rem;
 }
 
 .invisible {
@@ -66,11 +95,11 @@ body {
 }
 
 .icon-x2 {
-  font-size: 1.8em;
+  font-size: 1.8rem;
 }
 
 .icon-x4 {
-  font-size: 4em;
+  font-size: 4rem;
 }
 
 a {
@@ -240,6 +269,6 @@ a:active {
 
 @keyframes grow {
   to {
-    transform: scale(1.3, 1.3);
+    transform: scale(1.4, 1.4);
   }
 }
