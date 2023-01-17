@@ -2,7 +2,7 @@
 
 const { clipboard } = require("electron");
 
-module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
+module.exports.SpotifyURLType = Object.freeze({
   TRACK: "track",
   PLAYLIST: "playlist",
   ALBUM: "album",
@@ -15,7 +15,7 @@ module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
  * @returns the type of url it is
  */
 module.exports.getSpotifyURLType = function (url = "") {
-  const spotifyLinkRegex = new RegExp("https://open.spotify.com");
+  const spotifyLinkRegex = /[https://open.spotify.com]/;
 
   let clipboardContent = url || clipboard.readText();
 
