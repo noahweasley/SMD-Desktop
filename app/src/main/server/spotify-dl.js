@@ -16,7 +16,7 @@ module.exports = function (settings) {
    * @param albumUrl the album identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performAlbumDownloadAction(albumUrl, limit = 50) {
+  async function performAlbumSearchAction(albumUrl, limit = 50) {
     let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
 
@@ -58,7 +58,7 @@ module.exports = function (settings) {
    * @param _artistUrl the artist identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performArtistDownloadAction(_artistUrl) {
+  async function performArtistSearchAction(_artistUrl) {
     return "Artist URL support coming soon, try again later";
   }
 
@@ -68,7 +68,7 @@ module.exports = function (settings) {
    * @param playlistUrl the playlist identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performPlaylistDownloadAction(playlistUrl) {
+  async function performPlaylistSearchAction(playlistUrl) {
     let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
 
@@ -105,7 +105,7 @@ module.exports = function (settings) {
    * @param track the track identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performTrackDownloadAction(trackUrl) {
+  async function performTrackSearchAction(trackUrl) {
     let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
     let data, dataReceived;
 
@@ -168,16 +168,16 @@ module.exports = function (settings) {
     if (clipboardContent.match(/[https://open.spotify.com]/)) {
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
-          data = performTrackDownloadAction(clipboardContent);
+          data = performTrackSearchAction(clipboardContent);
           break;
         case SpotifyURLType.ALBUM:
-          data = performAlbumDownloadAction(clipboardContent);
+          data = performAlbumSearchAction(clipboardContent);
           break;
         case SpotifyURLType.ARTIST:
-          data = performArtistDownloadAction(clipboardContent);
+          data = performArtistSearchAction(clipboardContent);
           break;
         case SpotifyURLType.PLAYLIST:
-          data = performPlaylistDownloadAction(clipboardContent);
+          data = performPlaylistSearchAction(clipboardContent);
           break;
         default:
           throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
@@ -195,10 +195,10 @@ module.exports = function (settings) {
 
   return {
     spotifyApi,
-    performAlbumDownloadAction,
-    performArtistDownloadAction,
-    performPlaylistDownloadAction,
-    performTrackDownloadAction,
+    performAlbumSearchAction,
+    performArtistSearchAction,
+    performPlaylistSearchAction,
+    performTrackSearchAction,
     getSpotifyLinkData
   };
 };
