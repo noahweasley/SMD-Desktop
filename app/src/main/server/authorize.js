@@ -1,4 +1,4 @@
-const { shell } = require("electron");
+const { shell, dialog, BrowserWindow } = require("electron");
 const express = require("express");
 const server = express();
 const path = require("path");
@@ -42,8 +42,8 @@ module.exports = function (settings) {
     }
 
     const authURL = spotifyApi.createAuthorizeURL(scopes);
-
     res.redirect(authURL);
+
     timeout = setTimeout(() => {
       connection && connection.close();
       connection = null;
@@ -71,7 +71,7 @@ module.exports = function (settings) {
 
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
-      // C:\Users\NOAH\Archive\Node JS\SMD-Desktop\app\src\views\pages\success.html
+
       res.sendFile(path.resolve(__dirname, "../../public/success.html"));
 
       let states = await settings.setStates({
@@ -86,6 +86,11 @@ module.exports = function (settings) {
           authorizationCallback();
           authorizationCallback = null;
         }
+      } else {
+        dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+          title: "Some server responses were not received",
+          message: "Some data were not persisted, we might need to send another request and collect the data in the future"
+        });
       }
 
       if (connection) connection.close();
