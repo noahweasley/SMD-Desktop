@@ -397,7 +397,8 @@ a:active {
 .media-body {
   position: relative;
   height: 100%;
-  padding: 10px;
+  /* an hack to force overflow on the media body title; the STRONG element */
+  padding: 10px 60px 10px 10px;
 }
 
 .media-body>.op-icon {
@@ -442,7 +443,7 @@ a:active {
   --progress-width: 20px;
   --progress-anim: 2s move linear infinite forwards;
   position: relative;
-  width: 80%;
+  width: 90%;
   height: 10px;
   background-color: var(--normal-scrolbar-clr);
   border-radius: 8px;
