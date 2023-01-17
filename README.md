@@ -27,16 +27,24 @@
 
 Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in S.M.D's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer, lol. I built S.M.D because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use!! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :rocket:
 
-## Getting Started
+## Contributing
 
-### Initializations
+There are many ways in which you can participate in this project, for example:
+
+- [Submit bugs and feature requests](https://github.com/noahweasley/SMD-Desktop/issues), and help us verify as they are checked in
+- Review [source code changes](https://github.com/noahweasley/SMD-desktop/pulls)
+- Review the project and make pull requests for anything from typos to additional and new content
+
+### Getting Started
+
+#### Initializations
 
 - Clone the repository using `git clone https://github.com/noahweasley/SMD-Desktop.git`
 - Enter the project directory using `cd SMD-Desktop` on Windows, in case you are not in the project directory
 - Run npm install to install all the project dependencies
 - Run `$ npm run start` to run the application
 
-### Building the application
+#### Building the application
 
 - Run `npm run pack:win32` to build for Windows x32
 
@@ -44,7 +52,7 @@ Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify 
 
 - Run `npm run build` to build for all supported platforms
 
-### Installing the tools
+#### Installing the tools
 
 There are a few VS Code extensions used in the development of S.M.D namely:
 
@@ -53,14 +61,6 @@ There are a few VS Code extensions used in the development of S.M.D namely:
 - Community Material Theme Darker High Contrast (I love this theme :grin:)
 
 You need to install Prettier code formatter or install prettier as a Node JS dependency. I use the VS Code Extension, it's much more easier for me. Prettier is the default code formatter.
-
-## Contributing
-
-There are many ways in which you can participate in this project, for example:
-
-- [Submit bugs and feature requests](https://github.com/noahweasley/SMD-Desktop/issues), and help us verify as they are checked in
-- Review [source code changes](https://github.com/noahweasley/SMD-desktop/pulls)
-- Review the project and make pull requests for anything from typos to additional and new content
 
 ## Download
 
