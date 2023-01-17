@@ -759,11 +759,11 @@ form {
 
 .online-stat {
   position: absolute;
-  top: 35%;
+  top: 45%;
   left: 160px;
-  width: 15px;
   transition: 1s;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   background-color: hsla(0, 100%, 50%, 0.5);
   border-radius: 50%;
 }
