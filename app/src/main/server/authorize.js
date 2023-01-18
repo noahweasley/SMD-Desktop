@@ -11,6 +11,8 @@ module.exports = function (settings) {
   const REDIRECT_URL = "http://localhost:8888/callback";
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
 
+  // @TODO remove unused scopes
+
   const scopes = [
     "user-read-playback-state",
     "user-modify-playback-state",
@@ -64,10 +66,10 @@ module.exports = function (settings) {
       return;
     }
 
-    spotifyApi.authorizationCodeGrant(code).then(async (data) => {
-      const access_token = data.body["access_token"];
-      const refresh_token = data.body["refresh_token"];
-      const expires_in = data.body["expires_in"];
+    spotifyApi.authorizationCodeGrant(code).then(async (response) => {
+      const access_token = response.body["access_token"];
+      const refresh_token = response.body["refresh_token"];
+      const expires_in = response.body["expires_in"];
 
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
@@ -88,7 +90,7 @@ module.exports = function (settings) {
         }
       } else {
         dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-          title: "Some server responses were not received",
+          title: "Server response incomplete",
           message: "Some data were not persisted, we might need to send another request and collect the data in the future"
         });
       }

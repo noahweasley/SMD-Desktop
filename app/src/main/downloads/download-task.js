@@ -51,6 +51,8 @@ module.exports = function (options) {
       console.error(err);
       downloadCallbackQueue.forEach((callback) => callback(err));
     });
+    
+    return stream;
   }
 
   function wait() {
