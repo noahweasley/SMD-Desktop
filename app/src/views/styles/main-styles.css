@@ -495,8 +495,6 @@ a:active {
   left: 276px;
   background-color: inherit;
   width: 40%;
-  color: var(--white-solid);
-  border-width: 2px;
 }
 
 .paste,
@@ -510,8 +508,10 @@ a:active {
   align-items: center;
 }
 
-.form-control.form-control__search {
+.form-control {
   border: 1px solid rgb(70, 70, 70);
+  color: var(--white-solid);
+  border-width: 1px;
 }
 
 .paste:hover {
@@ -706,22 +706,16 @@ form {
 }
 
 .form-control {
-  background-color: white;
+  background-color: var(--grey-solid_5);
   padding: 8px;
-  color: black;
+  color: white;
   transition: 0.2s;
 }
 
 .form-control:focus {
-  border-color: var(--spotify-green);
-  box-shadow: 3px 3px 0 var(--spotify-green), -3px -3px 0 var(--spotify-green), -3px 3px 0 var(--spotify-green),
-    3px -3px 0 var(--spotify-green);
-}
-
-.form-control.form-control__search:focus {
   border-color: var(--primary-color-dark);
   box-shadow: 1px 1px 0 var(--primary-color-dark), -1px -1px 0 var(--primary-color-dark),
-    -1px 1px 0 var(--primary-color-dark), 1px -1px 0 var(--primary-color-dark);
+  -1px 1px 0 var(--primary-color-dark), 1px -1px 0 var(--primary-color-dark);
 }
 
 .btn-form {
