@@ -6,9 +6,12 @@
   "main": "app/src/main/index.js",
   "scripts": {
     "start": "electron .",
+    "start-no-database": "npm run clear-debug-database && npm run start",
+    "start-no-preference": "npm run clear-preference && npm run start",
     "debug": "electron . --trace-warnings",
     "clear-debug-database": "del /q %userprofile%\\Desktop\\Database\\*",
     "clear-preference": "del /q \"%userprofile%\\AppData\\Roaming\\S.M.D Desktop\\User\\Preferences\"",
+    "clear-cache": "npm run clear-preference && npm run clear-debug-database",
     "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/resources/build/win/app_icon.ico",
     "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/resources/build/win/app_icon.ico",
     "build": "npm run pack:win32 && npm run pack:win64",
