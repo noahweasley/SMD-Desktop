@@ -57,6 +57,7 @@ module.exports = function (settings, browsers, database) {
       return getSpotifyURLType(clipboard.readText());
     } catch (err) {
       // display modal dialog with details of error
+      // Todo remove or fix this dialog code. Code is never executed, therefore, this dialog is never shown
       dialog.showErrorBox(
         "Clipboard content not a Spotify link",
         "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
@@ -64,6 +65,14 @@ module.exports = function (settings, browsers, database) {
 
       return err.message;
     }
+  });
+
+  ipcMain.on("show-error-unknown-dialog", () => {
+    // display modal dialog with details of error
+    dialog.showErrorBox(
+      "Uh ohh !! That was a malformed Spotify URL",
+      "Re-copy playlist or song link, then click 'Paste URL' again"
+    );
   });
 
   // link navigate

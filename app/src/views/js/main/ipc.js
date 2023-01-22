@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", () => {
         window.bridgeApis.send("show-download-window");
       } else {
         // no-op; some errors were not handled
-        return;
+        window.bridgeApis.send("show-error-unknown-dialog");
       }
     });
   });
