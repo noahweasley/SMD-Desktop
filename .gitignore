@@ -1,6 +1,6 @@
 /node_modules
 /dist
-/app/config.json
+/config.json
 /package
 .env
 /sample-images
