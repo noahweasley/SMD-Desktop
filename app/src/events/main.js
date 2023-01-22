@@ -93,7 +93,7 @@ module.exports = function (settings, browsers, database) {
     shell.openExternal(linkByType);
   });
 
-  // @Todo fix getDownloadData() retrieving strange data
+  // Todo fix getDownloadData() retrieving strange data
   // request to fetch and display list data
   ipcMain.handle("get-list-data", async () => {
     try {

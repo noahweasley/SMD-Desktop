@@ -11,7 +11,7 @@ module.exports = function (settings) {
   const REDIRECT_URL = "http://localhost:8888/callback";
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
 
-  // @TODO remove unused scopes
+  // TODO remove unused scopes
 
   const scopes = [
     "user-read-playback-state",
@@ -36,7 +36,7 @@ module.exports = function (settings) {
   const spotifyApi = new spotifyWebApi({ redirectUri: REDIRECT_URL });
 
   server.get("/authorize", async (_req, res) => {
-    // @Todo fix issue with spotifyApi.getClientId() returning null when it was already set
+    // Todo fix issue with spotifyApi.getClientId() returning null when it was already set
     if (!spotifyApi.getClientId() || !spotifyApi.getClientSecret()) {
       const [clientId, clientSecret] = await settings.getStates(["spotify-user-client-id", "spotify-user-client-secret"]);
       spotifyApi.setClientId(clientId);

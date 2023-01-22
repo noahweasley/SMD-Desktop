@@ -66,7 +66,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
 
-    // @Todo fix duplicate code introduced while trying to fix bug in 'add to downloading list'
+    // Todo fix duplicate code introduced while trying to fix bug in 'add to downloading list'
 
     if (shouldAppend) {
       const oldDataSize = listData.length;
