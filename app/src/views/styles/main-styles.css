@@ -37,7 +37,7 @@ a:active {
   color: var(--primary-color-dark);
 }
 
-.eleme-centered {
+.centred {
   display: flex;
   align-items: center;
   justify-content: center;
