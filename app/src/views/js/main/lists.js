@@ -84,7 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody(position + 1, item[position]));
@@ -137,7 +137,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody(i, item[i]));
@@ -244,7 +244,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // fallback image on thumbnail load error
     document.querySelectorAll(".media-object").forEach((image) => {
       image.addEventListener("error", () => {
-        image.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+        image.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       });
     });
   }

@@ -124,7 +124,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
 
-      thumbnailElement.setAttribute("src", "app/../../../../resources/build/graphics/musical_2.png");
+      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
 
       const mediaBodyElement = document.createElement("div");
       const mediaBodyTitle = document.createElement("strong");

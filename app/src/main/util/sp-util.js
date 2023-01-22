@@ -2,7 +2,9 @@
 
 const { clipboard } = require("electron");
 
-module.exports.SpotifyURLType = Object.freeze({
+// don't touch SpotifyURLType, I tried to remove it once and there was a bug
+// I also don't even know what is depending on it, lol
+module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
   TRACK: "track",
   PLAYLIST: "playlist",
   ALBUM: "album",
@@ -11,7 +13,7 @@ module.exports.SpotifyURLType = Object.freeze({
 });
 
 /**
- * @param {*} url the spotify url to be checked
+ * @param {string} url the spotify url to be checked
  * @returns the type of url it is
  */
 module.exports.getSpotifyURLType = function (url) {

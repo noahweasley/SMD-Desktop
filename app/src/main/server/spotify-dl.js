@@ -13,14 +13,15 @@ module.exports = function (settings) {
   /**
    * starts album download
    *
-   * @param albumUrl the album identifier to be used in download
+   * @param  {string} albumUrl the album identifier to be used in download
+   * @param {number} limit the maximum number of items to fetch
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performAlbumSearchAction(albumUrl, limit = 50) {
     let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
 
-    for (let x = 0; x <= 3; x++) {
+    for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
       try {
         data = await spotifyApi.getAlbumTracks(album, { limit });
         dataReceived = true;
@@ -32,9 +33,10 @@ module.exports = function (settings) {
 
     if (!dataReceived) return "An error occurred while retrieving album data";
 
-    const tracks = data.body["tracks"].items;
-    const name = data.body["name"];
-    const thumbnails = data.body["images"].map((thumb) => thumb.url);
+    const body = data.body;
+    const tracks = body["tracks"].items;
+    const name = body["name"];
+    const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
 
     let trackCollection = [];
 
@@ -45,7 +47,7 @@ module.exports = function (settings) {
       let thumbnails = track["images"];
       trackCollection.push({ thumbnails, songTitle, artistNames });
     });
-
+    
     return {
       type: SpotifyURLType.ALBUM,
       description: { thumbnails, name, trackCollection }
@@ -55,7 +57,7 @@ module.exports = function (settings) {
   /**
    * starts artist download
    *
-   * @param _artistUrl the artist identifier to be used in download
+   * @param {string} _artistUrl the artist identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performArtistSearchAction(_artistUrl) {
@@ -65,7 +67,7 @@ module.exports = function (settings) {
   /**
    * starts playlist download
    *
-   * @param playlistUrl the playlist identifier to be used in download
+   * @param {string} playlistUrl the playlist identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performPlaylistSearchAction(playlistUrl) {
@@ -87,7 +89,7 @@ module.exports = function (settings) {
     const body = data.body;
     const name = body["name"];
     const tracks = body["tracks"];
-    const thumbnails = data.body["images"].map((thumb) => thumb.url);
+    const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
 
     let trackCollection = tracks["items"]
       .map((i) => i.track)
@@ -102,7 +104,7 @@ module.exports = function (settings) {
   /**
    * starts track download
    *
-   * @param track the track identifier to be used in download
+   * @param {string} track the track identifier to be used in download
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performTrackSearchAction(trackUrl) {
@@ -135,6 +137,8 @@ module.exports = function (settings) {
   }
 
   /**
+   * @param {string} urlType the url type as specified by `SpotifyURLType`
+   *
    * @returns an object with the requested Spotify data
    */
   async function getSpotifyLinkData(urlType) {
@@ -150,7 +154,7 @@ module.exports = function (settings) {
         "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
       );
 
-      throw new Error(error.message);
+      return error.message;
     }
 
     let [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([

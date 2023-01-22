@@ -40,10 +40,11 @@ window.addEventListener("DOMContentLoaded", () => {
           type: "track",
           description: undefined
         });
-      } else {
-        // a funny error message would be emitted to the renderer process, hence the 'Uh'
-        if (content.startsWith("Uh")) return;
+      } else if (content == "playlist" || content == "album" || content == "artist") {
         window.bridgeApis.send("show-download-window");
+      } else {
+        // no-op; some errors were not handled
+        return;
       }
     });
   });
