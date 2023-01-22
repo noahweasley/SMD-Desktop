@@ -290,11 +290,6 @@ a:active {
   border: 1px solid var(--grey-solid_5);
 }
 
-.__tab-item,
-.__tab-item > * {
-  cursor: pointer;
-}
-
 .__tab-item {
   letter-spacing: 0.1em;
   height: 60%;
@@ -315,6 +310,11 @@ a:active {
 .__tab-item:hover {
   color: var(--white-solid);
   background-color: var(--grey-solid_10);
+}
+
+.__tab-item:hover:not(.active),
+.tab-item__form:hover:not(.active) > * {
+  cursor: pointer;
 }
 
 .tab-content {
@@ -715,7 +715,7 @@ form {
 .form-control:focus {
   border-color: var(--primary-color-dark);
   box-shadow: 1px 1px 0 var(--primary-color-dark), -1px -1px 0 var(--primary-color-dark),
-  -1px 1px 0 var(--primary-color-dark), 1px -1px 0 var(--primary-color-dark);
+    -1px 1px 0 var(--primary-color-dark), 1px -1px 0 var(--primary-color-dark);
 }
 
 .btn-form {
