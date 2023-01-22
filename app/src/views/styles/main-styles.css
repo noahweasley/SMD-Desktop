@@ -466,11 +466,16 @@ a:active {
 }
 
 .list-group > * {
-  /* background-color: blue; */
   height: 100px;
   width: 100%;
   transition: 0.1s;
 }
+
+/** I might use this in the future to add variation to the list items */
+
+/* .list-group-item:nth-of-type(odd) {
+  background-color: var(--list-item-color-alt);
+} */
 
 .pane-main .list-group > *:hover {
   background-color: var(--grey-solid_5);
@@ -617,7 +622,7 @@ a:active {
   display: flex;
   border-radius: 8px;
   overflow: hidden;
-  background-color: var(--solid-dark-alt);
+  background-color: var(--list-item-color-alt);
   top: calc(10% + 5vh);
 }
 

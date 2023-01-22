@@ -69,6 +69,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Todo fix duplicate code introduced while trying to fix bug in 'add to downloading list'
 
     if (shouldAppend) {
+      // Todo make listData.length return the previous size instead of 0 and use position on list
       const oldDataSize = listData.length;
       const newDataSize = oldDataSize + item.length;
       // create list, append data
@@ -94,12 +95,12 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // creates a media body element
-    function createMediaBody(position, db_data) {
+    function createMediaBody(_position, db_data) {
       const mediaBody = document.createElement("div");
       mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerHTML = `${position}.&nbsp&nbsp${db_data["Track_Title"]}`;
+      trackTitleElement.innerHTML = `${db_data["Track_Title"]}`;
       // create the message element
       const messageElement = document.createElement("p");
       messageElement.innerText = db_data["Message"];
