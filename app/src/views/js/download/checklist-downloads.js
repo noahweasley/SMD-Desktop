@@ -91,6 +91,7 @@ window.addEventListener("DOMContentLoaded", () => {
             delete selectedListDataMap[`${index}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               actionButtons[1].setAttribute("disabled", true);
+              selectAll.checked = false;
             }
           }
         });
