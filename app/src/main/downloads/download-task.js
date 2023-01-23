@@ -11,10 +11,6 @@ module.exports = function (options) {
   let progress;
   let downloadStream;
 
-  function addDownloadCallback(callback) {
-    downloadCallbackQueue.push(callback); // (error, pos, progress)
-  }
-
   const getListPosition = () => downloadListPos;
 
   function pause() {
@@ -51,7 +47,7 @@ module.exports = function (options) {
       console.error(err);
       downloadCallbackQueue.forEach((callback) => callback(err));
     });
-    
+
     return stream;
   }
 
@@ -59,5 +55,5 @@ module.exports = function (options) {
     state = States.PENDING;
   }
 
-  return { addDownloadCallback, pause, resume, wait, cancel, start, getListPosition };
+  return { pause, resume, wait, cancel, start, getListPosition };
 };

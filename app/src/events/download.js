@@ -86,8 +86,6 @@ module.exports = function (settings, browsers, database) {
     if (args[0] === "proceed-download") {
       const searchQueryResults = args[1];
       downloadTasks = fileDownloader.enqueueTasks(searchQueryResults);
-      addDownloadCallbacks(downloadTasks);
-
       // map the data from search results into required database format
 
       const downloadData = searchQueryResults
@@ -124,18 +122,8 @@ module.exports = function (settings, browsers, database) {
           );
         }
       } catch (err) {
-        // i also don't understand this error too. What were you expecting ??
+        // ? i also don't understand this error too. What were you expecting ?
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
-      }
-    }
-
-    function addDownloadCallbacks(downloadTasks) {
-      for (const downloadTask of downloadTasks) {
-        downloadTask.addDownloadCallback(callback);
-      }
-
-      function callback(_err, _pos, _progress) {
-        // logic to send to renderer
       }
     }
   });

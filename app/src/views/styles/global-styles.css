@@ -26,7 +26,7 @@
   --sand-solid: #ecebe8;
   --button-negative-clr: rgb(199, 28, 28);
   --window-actions-elevation: 2;
-  --progress-anim-time: 0.7s;
+  --progress-anim-time: 0.5s;
   --progress-timing-function: linear;
   --progress-timing-function-2: ease-in-out;
   color: var(--grey-solid);

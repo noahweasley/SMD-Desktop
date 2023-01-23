@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
+    // ? I don't know what these conditions mean anymore, lol
     if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
       data[0] ? addListItemDownloaded(data[0]) : displayDecorationById("info_decor__downloaded", true);
       data[1] ? addListItemDownloading(data[1]) : displayDecorationById("info_decor__downloading", true);
@@ -37,6 +38,8 @@ window.addEventListener("DOMContentLoaded", () => {
     // append new data into current data
     addListItemDownloading(args, true);
     registerEventListeners();
+    // after changing UI states, start file downloads
+    window.bridgeApis.send("initiate-downloads");
   });
 
   function displayAllDecorations(shouldShow) {

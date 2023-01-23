@@ -71,7 +71,7 @@ module.exports = function (settings, browsers, database) {
     // display modal dialog with details of error
     dialog.showErrorBox(
       "Uh ohh !! That was a malformed Spotify URL",
-      "Re-copy playlist or song link, then click 'Paste URL' again"
+      "Re-copy playlist or track url, then click 'Paste URL' again"
     );
   });
 
