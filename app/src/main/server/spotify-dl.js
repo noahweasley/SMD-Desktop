@@ -11,9 +11,9 @@ module.exports = function (settings) {
   const MAX_NUMBER_OF_RETRIES = 3;
 
   /**
-   * starts album download
+   * starts album metadata query
    *
-   * @param  {string} albumUrl the album identifier to be used in download
+   * @param  {string} albumUrl the album identifier to be used in the metadata query
    * @param {number} limit the maximum number of items to fetch
    * @throws error if error occurred while fetching data, this can be caused by network
    */
@@ -47,7 +47,7 @@ module.exports = function (settings) {
       let thumbnails = track["images"];
       trackCollection.push({ thumbnails, songTitle, artistNames });
     });
-    
+
     return {
       type: SpotifyURLType.ALBUM,
       description: { thumbnails, name, trackCollection }
@@ -55,9 +55,9 @@ module.exports = function (settings) {
   }
 
   /**
-   * starts artist download
+   * starts artist metadata query
    *
-   * @param {string} _artistUrl the artist identifier to be used in download
+   * @param {string} _artistUrl the artist identifier to be used in the metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performArtistSearchAction(_artistUrl) {
@@ -65,9 +65,9 @@ module.exports = function (settings) {
   }
 
   /**
-   * starts playlist download
+   * starts playlist metadata query
    *
-   * @param {string} playlistUrl the playlist identifier to be used in download
+   * @param {string} playlistUrl the playlist identifier to be used in metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performPlaylistSearchAction(playlistUrl) {
@@ -102,9 +102,9 @@ module.exports = function (settings) {
   }
 
   /**
-   * starts track download
+   * starts track metadata query
    *
-   * @param {string} track the track identifier to be used in download
+   * @param {string} track the track identifier to be used in metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function performTrackSearchAction(trackUrl) {
@@ -169,7 +169,7 @@ module.exports = function (settings) {
     spotifyApi.setAccessToken(spotifyAccessToken);
     spotifyApi.setRefreshToken(spotifyRefreshToken);
 
-    if (clipboardContent.match(/[https://open.spotify.com]/)) {
+    if (clipboardContent.includes("https://open.spotify.com")) {
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
           data = performTrackSearchAction(clipboardContent);

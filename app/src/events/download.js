@@ -103,7 +103,7 @@ module.exports = function (settings, browsers, database) {
         }))
         .flat();
 
-      //  then add the search results the pending downloads database
+      // then add the search results the pending downloads database
 
       try {
         const isAdded = await database.addDownloadData({
