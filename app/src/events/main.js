@@ -67,12 +67,11 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  ipcMain.on("show-error-unknown-dialog", () => {
+  ipcMain.on("show-error-unknown-dialog", (_event, error) => {
     // display modal dialog with details of error
-    dialog.showErrorBox(
-      "Uh ohh !! That was a malformed Spotify URL",
-      "Re-copy playlist or track url, then click 'Paste URL' again"
-    );
+    const defaultTitle = "Uh ohh !! That was a malformed Spotify URL";
+    const defaultMessage = "Re-copy playlist or track url, then click 'Paste URL' again";
+    dialog.showErrorBox(error.title || defaultTitle, error.message || defaultMessage);
   });
 
   // link navigate

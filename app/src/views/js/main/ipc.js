@@ -42,9 +42,15 @@ window.addEventListener("DOMContentLoaded", () => {
         });
       } else if (content == "playlist" || content == "album" || content == "artist") {
         window.bridgeApis.send("show-download-window");
-      } else {
+      } else {      
         // no-op; some errors were not handled
-        window.bridgeApis.send("show-error-unknown-dialog");
+        //? next line was commented-out because somehow a bug was fixed and I don't know how
+        if (content === "Unknown") {
+          window.bridgeApis.send("show-error-unknown-dialog", {
+            title: "Unsupported Spotify URL link",
+            message: "Please be patient, we will implement this in the future"
+          });
+        }
       }
     });
   });
