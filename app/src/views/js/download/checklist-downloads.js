@@ -133,7 +133,7 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBodyDescription.className = "message";
       mediaBodyTitle.innerHTML = `${position + 1}. &nbsp&nbsp&nbsp${listItem[position].songTitle}`;
 
-      mediaBodyDescription.innerHTML = `<b>Artists</b>: ${listItem[position].artistNames}`;
+      mediaBodyDescription.innerHTML = `<b>Artists</b>: ${listItem[position].artistNames.join(", ").toString()}`;
 
       mediaBodyElement.appendChild(mediaBodyTitle);
       mediaBodyElement.appendChild(mediaBodyDescription);
