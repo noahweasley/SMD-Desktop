@@ -58,6 +58,7 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateDownloads() {
+    return;
     for (let x = 0; x < downloadTaskQueue.length; x++) {
       if (acquireLock()) {
         downloadTaskQueue[x].start();

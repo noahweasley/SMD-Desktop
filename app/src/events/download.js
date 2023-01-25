@@ -56,9 +56,7 @@ module.exports = function (settings, browsers, database) {
         // description: { songTitle, artistNames: [] }
         let trackDescription = spotifyLinkData.description;
         let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
-        // Wrap the search results in an array, because the list requires an array as result
-        let searchResults;
-        searchResults = await ytdl.searchMatchingTracks(searchQuery);
+        let searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
         return err.message;

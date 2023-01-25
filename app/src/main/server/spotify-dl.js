@@ -6,8 +6,10 @@ const { dialog, clipboard } = require("electron");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
 
 module.exports = function (settings) {
-  let auth = authorize(settings);
-  let spotifyApi = new SpotifyWebApi();
+  const REDIRECT_URL = "http://localhost:8888/callback";
+  let spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
+
+  let auth = authorize(settings, spotifyApi);
   const MAX_NUMBER_OF_RETRIES = 3;
 
   /**

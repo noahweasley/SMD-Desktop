@@ -28,7 +28,7 @@ module.exports.searchMatchingTracks = async function (query) {
       searchQueryList: m_sarr
     };
   } catch (err) {
-    return Promise.reject(new Error("Network error occurred"));
+    throw new Error("Network error occurred");
   }
 };
 

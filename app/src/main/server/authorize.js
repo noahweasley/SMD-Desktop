@@ -2,38 +2,27 @@ const { shell, dialog, BrowserWindow } = require("electron");
 const express = require("express");
 const server = express();
 const path = require("path");
-const spotifyWebApi = require("spotify-web-api-node");
 
 const publicFilePath = path.resolve(__dirname, "../../public");
 server.use(express.static(publicFilePath));
 
-module.exports = function (settings) {
-  const REDIRECT_URL = "http://localhost:8888/callback";
+module.exports = function (settings, spotifyApi) {
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
-
-  // TODO remove unused scopes
 
   const scopes = [
     "user-read-playback-state",
     "user-modify-playback-state",
     "user-read-currently-playing",
-    "app-remote-control",
+    "user-read-playback-position",
     "user-read-email",
-    "user-read-private",
     "playlist-read-collaborative",
-    "playlist-modify-public",
-    "playlist-read-private",
-    "playlist-modify-private",
     "user-library-read",
     "user-top-read",
-    "user-read-playback-position",
     "user-read-recently-played"
   ];
 
   const TIMEOUT = 60000;
   let timeout, connection, refreshTimer, authorizationCallback;
-
-  const spotifyApi = new spotifyWebApi({ redirectUri: REDIRECT_URL });
 
   server.get("/authorize", async (_req, res) => {
     // Todo fix issue with spotifyApi.getClientId() returning null when it was already set
