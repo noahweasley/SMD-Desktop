@@ -21,6 +21,16 @@
   </a>
 </p>
 
+</br>
+
+<p align="center">
+  <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+    ><img src="assets/screenshots/SMD.png" alt="Buy Noah A Coffee" />
+  </a>
+</p>
+
+</br>
+
 **Please note**: This application is still in development, ping me mailto:iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
 
 ## About S.M.D
