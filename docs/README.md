@@ -1,0 +1,1 @@
+This repository contains the product website of S.M.D and you can view the website at this URL -> https://noahweasley.github.io/SMD-Desktop
