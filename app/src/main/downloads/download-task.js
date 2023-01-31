@@ -3,15 +3,23 @@
 const { downloadMatchingTrack } = require("../server/youtube-dl");
 const { States } = require("../database/constants");
 
+/**
+ * A single Download Task
+ *
+ * @param {JSON} options { link, title }
+ */
 module.exports = function (options) {
   let state = States.PENDING;
-  let downloadCallbackQueue = [];
+  let downloadEventQueue = [];
   let { win, request, listPos } = options;
   let requestUrl = request.url;
-  let progress;
   let downloadStream;
 
   const getListPosition = () => downloadListPos;
+
+  function wait() {
+    state = States.PENDING;
+  }
 
   function pause() {
     state = States.PAUSED;
@@ -33,7 +41,8 @@ module.exports = function (options) {
       throw new Error("Download task is already active");
     } else {
       state = States.ACTIVE;
-      let options = {};
+      let options = { link: "", title: "" };
+
       registerDownloadOp(options);
     }
   }
@@ -45,14 +54,10 @@ module.exports = function (options) {
     stream.on("binaries-downloaded", () => win.webContents.send("close-binary-download-dialog"));
     stream.on("error", (err) => {
       console.error(err);
-      downloadCallbackQueue.forEach((callback) => callback(err));
+      downloadEventQueue.forEach((callback) => callback(err));
     });
 
     return stream;
-  }
-
-  function wait() {
-    state = States.PENDING;
   }
 
   return { pause, resume, wait, cancel, start, getListPosition };

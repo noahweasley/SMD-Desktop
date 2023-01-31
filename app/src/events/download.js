@@ -7,19 +7,18 @@ const downloader = require("../main/downloads/downloader");
 const { Type, States } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, database) {
-  let downloadQuery;
-  const CONCURRENCY = 2;
-  const WHITE_SPACE = " ";
-
   const { downloadWindow, searchWindow, mainWindow } = browsers;
+  let { getSpotifyLinkData } = spotifyDl(settings);
+
+  let downloadQuery;
+  const DEFAULT_CONCURRENCY = 2;
+  const WHITE_SPACE = " ";
+  let downloadTasks = [];
 
   const fileDownloader = downloader({
     win: mainWindow,
-    maxParallelDownloads: CONCURRENCY
+    maxParallelDownloads: settings.getState("max-parallel-download", DEFAULT_CONCURRENCY)
   });
-
-  let { getSpotifyLinkData } = spotifyDl(settings);
-  let downloadTasks = [];
 
   // search download details window
   ipcMain.on("show-search-download-window", (_event, searchQuery) => {
@@ -127,6 +126,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
+    setupTaskQueueMessaging();
     // start file download process
     return fileDownloader.initiateDownloads();
   });
@@ -154,4 +154,10 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("cancel-all", async () => {
     downloadTasks.forEach((task) => task.cancel());
   });
+  
+  function setupTaskQueueMessaging() {
+    downloadTasks.forEach(task => {
+      
+    });
+  }
 };

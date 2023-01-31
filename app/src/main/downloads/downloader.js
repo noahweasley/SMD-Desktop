@@ -1,33 +1,14 @@
 "use-strict";
 
 const downloadTask = require("./download-task");
+const lock = require("./lock");
 
 module.exports = function (config) {
-  const { maxParallelDownloads, win } = config;
-  let CONCURRENCY = maxParallelDownloads;
+  const { win, maxParallelDownloads } = config;
+  const locker = lock(maxParallelDownloads);
 
-  let downloadTaskQueue = [],
-    activeDownloadTasks = [];
-
-  const getMaxParallelDownloads = () => maxParallelDownloads;
-
-  function acquireLock() {
-    if (CONCURRENCY) {
-      --CONCURRENCY;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function releaseLock() {
-    if (CONCURRENCY < maxParallelDownloads) {
-      ++CONCURRENCY;
-      return true;
-    } else {
-      return false;
-    }
-  }
+  let downloadTaskQueue = [];
+  let activeDownloadTasks = [];
 
   /**
    * Enqueue a download task
@@ -53,20 +34,15 @@ module.exports = function (config) {
     return downloadTaskQueue;
   }
 
-  /**
-   * puts all the download tasks in their active state. If maxParallelDownloads is higher that the
-   * number of download task on the download queue, then the remaining tasks enter their pending states
-   */
-  function initiateDownloads() {
-    return;
-    for (let x = 0; x < downloadTaskQueue.length; x++) {
-      if (acquireLock()) {
-        downloadTaskQueue[x].start();
-        activeDownloadTasks.push(downloadTaskQueue[x]);
-      } else {
-        downloadTaskQueue[x].wait();
-      }
+  function runNextDownloadEvent() {
+    if (downloadTaskQueue.length && locker.acquireLock()) {
+      const downloadTask = downloadTaskQueue.unshift();
+      downloadTask.start();
+    } else {
+      downloadTask.wait();
     }
+    
+    runNextDownloadEvent();
   }
 
   function pauseAll() {
@@ -75,7 +51,7 @@ module.exports = function (config) {
 
   function resumeAll() {
     for (let x = 0; x < downloadTaskQueue.length; x++) {
-      if (acquireLock()) {
+      if (locker.acquireLock()) {
         downloadTaskQueue[x].resume();
         activeDownloadTasks.push(downloadTaskQueue[x]);
       } else {
@@ -86,16 +62,23 @@ module.exports = function (config) {
 
   async function cancelAll() {
     downloadTaskQueue.forEach((task) => {
-      if (releaseLock()) task.cancel();
+      if (locker.releaseLock()) task.cancel();
     });
 
     activeDownloadTasks = [];
   }
 
   const activeTasks = () => activeDownloadTasks;
+  
+  /**
+   * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
+   * number of download task on the download queue, then the remaining tasks enter their pending states
+   */
+  function initiateDownloads() {
+    runNextDownloadEvent();
+  }
 
   return {
-    getMaxParallelDownloads,
     initiateDownloads,
     enqueueTask,
     enqueueTasks,

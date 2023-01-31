@@ -1,17 +1,17 @@
+require("dotenv").config();
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
 const { open } = require("fs/promises");
 const { pipeline } = require("stream/promises");
-require("dotenv").config();
 
 const BINARY_LOCATION = !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
 
 /**
  * Searches YouTube for a list of matching videos specified by `query`
  *
- * @param {*} query the search query
+ * @param {string} query the search query
  */
 module.exports.searchMatchingTracks = async function (query) {
   try {
@@ -35,17 +35,17 @@ module.exports.searchMatchingTracks = async function (query) {
 /**
  * Downloads track specified by `options`
  *
- * @param {*} options an object describing the video. `{videoLink : ... , videoId : ...}`
+ * @param {JSON} options an object describing the video. `{videoLink : ... , videoId : ...}`
  * @returns a YTDLP event emitter instance
  */
 module.exports.downloadMatchingTrack = async function (options) {
   let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
   // 140 here means that the audio would be extracted
-  let downloadStream = ytdlpWrapper.execStream([options.videoLink, "-f", "140"]);
+  let downloadStream = ytdlpWrapper.execStream([options.link, "-f", "140"]);
 
   try {
     downloadStream.emit("binaries-downloading");
-    let isDownloaded = await this.downloadYTDLPBinaries();
+    let isDownloaded = await downloadYTDLPBinaries();
 
     if (isDownloaded) {
       downloadStream.emit("binaries-downloaded");
@@ -53,7 +53,7 @@ module.exports.downloadMatchingTrack = async function (options) {
         console.log(progress.percent);
       });
       // pipe results to file
-      pipeline(downloadStream, fs.createWriteStream(`${options.videoTitle}.m4a`));
+      pipeline(downloadStream, fs.createWriteStream(`${options.title}.m4a`));
     } else {
       downloadStream.emit("error", "Download Failed");
     }
@@ -69,21 +69,15 @@ module.exports.downloadMatchingTrack = async function (options) {
 /**
  * Download YTDLP binaries
  *
- * @returns a promise that would be fulfilled when the binaries are downloaded
+ * @returns  a promise that would be fulfilled when the binaries are downloaded
  */
-module.exports.downloadYTDLPBinaries = async function () {
-  return new Promise((resolve, reject) => {
-    open(BINARY_LOCATION, "r+", async (err, _fd) => {
-      if (err && err.code == "ENOENT") {
-        try {
-          await ytdlp.downloadFromGithub(BINARY_LOCATION);
-          resolve(true);
-        } catch (err) {
-          reject(false);
-        }
-      } else {
-        resolve(true);
-      }
-    });
-  });
-};
+async function downloadYTDLPBinaries() {
+  let fileHandle;
+  try {
+    fileHandle = await open(BINARY_LOCATION, "r+");
+  } catch (err) {
+    await ytdlp.downloadFromGithub(BINARY_LOCATION);
+  } finally {
+    fileHandle?.close();
+  }
+}
