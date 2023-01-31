@@ -119,11 +119,11 @@ module.exports.database = knex({
 
 let __database = this.database;
 
-// ======================================================================= //
-//                                                                         //
-//                         MAIN DATABASE CODE                              //
-//                                                                         //
-// ======================================================================= //
+// - --------------------------------------------------------------------- - //
+// -                                                                       - //
+// -                       MAIN DATABASE CODE                              - //
+// -                                                                       - //
+// - --------------------------------------------------------------------- - //
 
 /**
  * Called in database lifecycle when the database is about to be created.
@@ -219,22 +219,18 @@ module.exports.addDownloadData = async function (arg) {
     await createDatabaseSchema();
 
     if (arg["type"] == Type.DOWNLOADED) {
-      let result = await __database.insert(arg["data"]).into(DOWNLOADED_TABLE);
-      // the value at result[0] would return the number of data inserted
-      if (result[0]) return true;
+      let result = await __database.insert(arg["data"]).into(DOWNLOADED_TABLE).returning("id");
+      return result[0]; // the column id
     } else if (arg["type"] == Type.DOWNLOADING) {
       // data property is the main db data in the object
-      let result = await __database.insert(arg["data"]).into(DOWNLOADING_TABLE);
-      // the value at result[0] would return the number os data inserted
-      if (result[0]) return true;
+      let result = await __database.insert(arg["data"]).into(DOWNLOADING_TABLE).returning("id");
+      return result[0]; // the column id
     } else {
       throw new Error(`${arg["type"]} is not supported`);
     }
-
-    return false;
   } catch (err) {
     console.error(err);
-    return false;
+    return -1;
   }
 };
 
