@@ -9,9 +9,14 @@ module.exports = function (concurrency) {
   let CONCURRENCY = concurrency || 2;
 
   /**
-   * @returns the maximum lock countZ
+   * @returns {number} the maximum lock count
    */
-  const getMaxLockCount = () => CONCURRENCY;
+  const getMaxLockCount = () => concurrency;
+
+  /**
+   * @returns {number} the remaining number of locks that can be acquired
+   */
+  const getRemainingNumberOfLocks = () => CONCURRENCY;
 
   /**
    * Acquires a lock and decrement the max number of locks
@@ -25,7 +30,7 @@ module.exports = function (concurrency) {
    *
    * @returns true if a lock was released
    */
-  const releaseLock = () => (++CONCURRENCY <= maxParallelDownloads);
+  const releaseLock = () => ++CONCURRENCY <= maxParallelDownloads;
 
-  return { acquireLock, releaseLock, getMaxLockCount };
+  return { acquireLock, releaseLock, getMaxLockCount, getRemainingNumberOfLocks };
 };

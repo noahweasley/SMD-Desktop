@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((data) => {
     // display data to user
-    // ? I don't know what these conditions mean anymore, lol
+    //? I don't know what these conditions mean anymore, lol
     if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
       data[0] ? addListItemDownloaded(data[0]) : displayDecorationById("info_decor__downloaded", true);
       data[1] ? addListItemDownloading(data[1]) : displayDecorationById("info_decor__downloading", true);
@@ -181,6 +181,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // delete local database entry and file on disk
       opIconContainer2.addEventListener("click", () => {
         let args = { data: item, type: Type.DOWNLOADED, mode: Mode.SINGLE };
+        
         window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
           if (isFileDeleted) {
             let listItem = opIconContainer1.parentElement.parentElement;
@@ -258,7 +259,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // use cached version of progress or search for it to initialize it, if it hasn't been cached yet
     const progressBar = progressMap[`${elementId}`] || (progressMap[`${elementId}`] = document.getElementById(elementId));
 
-    progressBar.style.setProperty("--progress-width", `${progress}%`);
     progressBar.style.setProperty("--progress-anim", "none");
+    progressBar.style.setProperty("--progress-width", `${progress}%`);
   }
 });

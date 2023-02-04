@@ -22,6 +22,13 @@ module.exports = function (config) {
   }
 
   /**
+   * Clears the task queue
+   */
+  function clearTaskQueue() {
+    downloadTaskQueue = [];
+  }
+
+  /**
    * Enqueue a download task
    *
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
@@ -32,17 +39,6 @@ module.exports = function (config) {
     }
 
     return downloadTaskQueue;
-  }
-
-  function runNextDownloadEvent() {
-    if (downloadTaskQueue.length && locker.acquireLock()) {
-      const downloadTask = downloadTaskQueue.unshift();
-      downloadTask.start();
-    } else {
-      downloadTask.wait();
-    }
-    
-    runNextDownloadEvent();
   }
 
   function pauseAll() {
@@ -62,24 +58,36 @@ module.exports = function (config) {
 
   async function cancelAll() {
     downloadTaskQueue.forEach((task) => {
-      if (locker.releaseLock()) task.cancel();
+      if (locker.releaseLock()) {
+        activeDownloadTasks.unshift();
+        task.cancel();
+      }
     });
-
-    activeDownloadTasks = [];
   }
 
   const activeTasks = () => activeDownloadTasks;
-  
+
   /**
    * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateDownloads() {
-    runNextDownloadEvent();
+    let downloadStreams = [];
+
+    downloadTaskQueue.forEach((downloadTask) => {
+      if (locker.acquireLock()) {
+        downloadStreams.push(downloadTask.start());
+      } else {
+        downloadStreams.push(downloadTask.wait());
+      }
+    });
+
+    return downloadStreams;
   }
 
   return {
     initiateDownloads,
+    clearTaskQueue,
     enqueueTask,
     enqueueTasks,
     pauseAll,

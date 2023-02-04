@@ -103,12 +103,12 @@ module.exports = function (settings, browsers, database) {
       // then add the search results the pending downloads database
 
       try {
-        const isAdded = await database.addDownloadData({
+        const insertedDataColumnId = await database.addDownloadData({
           type: Type.DOWNLOADING,
           data: downloadData
         });
 
-        if (isAdded) {
+        if (insertedDataColumnId && insertedDataColumnId != -1) {
           // update download list UI, with current pending download data]
           mainWindow.getWindow()?.send("download-list-update", downloadData);
         } else {
@@ -126,9 +126,16 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    setupTaskQueueMessaging();
     // start file download process
-    return fileDownloader.initiateDownloads();
+    let downloadStreams = fileDownloader.initiateDownloads();
+    setupTaskQueueMessaging();
+    fileDownloader.clearTaskQueue(); // clear task queue, downloads are now active
+
+    function setupTaskQueueMessaging() {
+      downloadStreams.forEach((stream) => {
+        // set up messenger
+      });
+    }
   });
 
   ipcMain.handle("pause", async (_event, _args) => {});
@@ -154,10 +161,4 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("cancel-all", async () => {
     downloadTasks.forEach((task) => task.cancel());
   });
-  
-  function setupTaskQueueMessaging() {
-    downloadTasks.forEach(task => {
-      
-    });
-  }
 };

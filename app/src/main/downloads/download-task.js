@@ -43,7 +43,7 @@ module.exports = function (options) {
       state = States.ACTIVE;
       let options = { link: "", title: "" };
 
-      registerDownloadOp(options);
+      return registerDownloadOp(options);
     }
   }
 
