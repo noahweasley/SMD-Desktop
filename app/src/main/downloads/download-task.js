@@ -19,6 +19,8 @@ module.exports = function (options) {
 
   function wait() {
     state = States.PENDING;
+    let options = { link: "", title: "" };
+    return registerDownloadOp(options);
   }
 
   function pause() {

@@ -71,7 +71,7 @@ module.exports = function (config) {
    * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
-  function initiateDownloads() {
+  function initiateQueuedDownloads() {
     let downloadStreams = [];
 
     downloadTaskQueue.forEach((downloadTask) => {
@@ -86,7 +86,7 @@ module.exports = function (config) {
   }
 
   return {
-    initiateDownloads,
+    initiateQueuedDownloads,
     clearTaskQueue,
     enqueueTask,
     enqueueTasks,

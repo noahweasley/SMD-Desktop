@@ -127,14 +127,14 @@ module.exports = function (settings, browsers, database) {
 
   ipcMain.on("initiate-downloads", async () => {
     // start file download process
-    let downloadStreams = fileDownloader.initiateDownloads();
+    let downloadStreams = fileDownloader.initiateQueuedDownloads();
     setupTaskQueueMessaging();
-    fileDownloader.clearTaskQueue(); // clear task queue, downloads are now active
 
     function setupTaskQueueMessaging() {
-      downloadStreams.forEach((stream) => {
+      downloadStreams.forEach((_stream) => {
         // set up messenger
       });
+      fileDownloader.clearTaskQueue(); // clear task queue, downloads are now active
     }
   });
 
