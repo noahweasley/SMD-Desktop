@@ -2,11 +2,11 @@
 
 const { join } = require("path");
 const { app } = require("electron");
-const { createAppFiles } = require("./util");
+const { createAppFilesDirectory } = require("./util");
 const settings = require("node-user-settings").defaults;
 
 const preferenceFilePath = join(app.getPath("userData"), "User", "Preferences", "Settings.json");
-settings.setDefaultPreferenceFilePath(preferenceFilePath)
+settings.setDefaultPreferenceFilePath(preferenceFilePath);
 
 const browsers = require("../browsers")(settings);
 const { mainWindow } = browsers;
@@ -15,7 +15,7 @@ const database = require("./database");
 require("../events")(settings, browsers, database);
 
 app.whenReady().then(function () {
-  createAppFiles();
+  createAppFilesDirectory();
   mainWindow.init();
 
   app.on("activate", function () {

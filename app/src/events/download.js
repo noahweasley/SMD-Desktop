@@ -15,9 +15,10 @@ module.exports = function (settings, browsers, database) {
   const WHITE_SPACE = " ";
   let downloadTasks = [];
 
+  // Todo: change settings.getStateSync to use promises
   const fileDownloader = downloader({
     win: mainWindow,
-    maxParallelDownloads: settings.getState("max-parallel-download", DEFAULT_CONCURRENCY)
+    maxParallelDownloads: settings.getStateSync("max-parallel-download", DEFAULT_CONCURRENCY)
   });
 
   // search download details window
@@ -126,7 +127,6 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    // start file download process
     let downloadStreams = fileDownloader.initiateQueuedDownloads();
     setupTaskQueueMessaging();
 
@@ -134,7 +134,8 @@ module.exports = function (settings, browsers, database) {
       downloadStreams.forEach((_stream) => {
         // set up messenger
       });
-      fileDownloader.clearTaskQueue(); // clear task queue, downloads are now active
+      // clear task queue, downloads are now active
+      fileDownloader.clearTaskQueue();
     }
   });
 

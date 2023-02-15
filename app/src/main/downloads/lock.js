@@ -3,34 +3,34 @@
 /**
  * A locker to track the amount of task that is running
  *
- * @param {number} concurrency the total number of locks to hold
+ * @param {number} maxLockCount the total number of locks to hold
  */
-module.exports = function (concurrency) {
-  let CONCURRENCY = concurrency || 2;
+module.exports = function (maxLockCount) {
+  let concurrency = maxLockCount || 2;
 
   /**
    * @returns {number} the maximum lock count
    */
-  const getMaxLockCount = () => concurrency;
+  const getMaxLockCount = () => maxLockCount;
 
   /**
    * @returns {number} the remaining number of locks that can be acquired
    */
-  const getRemainingNumberOfLocks = () => CONCURRENCY;
+  const getRemainingNumberOfLocks = () => concurrency;
 
   /**
-   * Acquires a lock and decrement the max number of locks
+   * Acquires a lock and decrement the max number of locks. Decrements never decrement below 0
    *
    * @returns true if a lock was acquired
    */
-  const acquireLock = () => (CONCURRENCY && --CONCURRENCY) !== 0;
+  const acquireLock = () => (concurrency && --concurrency) !== 0;
 
   /**
-   * Releases a lock and increments the max number of locks
+   * Releases a lock and increments the max number of locks. Increments never exceed the max number of locks
    *
    * @returns true if a lock was released
    */
-  const releaseLock = () => ++CONCURRENCY <= maxParallelDownloads;
+  const releaseLock = () => concurrency < maxLockCount && ++concurrency <= maxLockCount;
 
   return { acquireLock, releaseLock, getMaxLockCount, getRemainingNumberOfLocks };
 };

@@ -2,7 +2,7 @@
     "workbench.colorTheme": "Community Material Theme Darker High Contrast",
     "liveServer.settings.port": 5501,
     "git.ignoreLimitWarning": true,
-    "explorer.excludeGitIgnore": true,
+    "explorer.excludeGitIgnore": false,
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },

@@ -17,16 +17,16 @@ const DB_FILEPATH = !app.isPackaged ? process.env.DB_FILEPATH : path.join(app.ge
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
 const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
 
-// ======================================================================= //
-//                                                                         //
-//                   DATABASE INITIALIZATION CODE                          //
-//                                                                         //
-// ======================================================================= //
+// ======================================================================== //
+// =                                                                      = //
+//                   DATABASE INITIALIZATION CODE                           //
+// =                                                                      = //
+// ======================================================================== //
 
 // vs file is used to manage database versions
 async function createVSFile() {
   // the initial data in the vs file, when the database is created
-  const vsObj = { DATABASE_VERSION: "1.0.0" };
+  const vsObj = { DATABASE_VERSION };
   try {
     await fsp.mkdir(DB_FILEPATH, { recursive: true });
     await fsp.writeFile(DB_CONFIG_FILE, JSON.stringify(vsObj));

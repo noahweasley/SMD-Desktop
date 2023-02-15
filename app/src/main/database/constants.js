@@ -17,5 +17,5 @@ module.exports.States = Object.freeze({
   ACTIVE: "Active",
   PAUSED: "Paused",
   COMPLETED: "Completed",
-  FAILED: "Failed"
+  INACTIVE: "Inactive"
 });

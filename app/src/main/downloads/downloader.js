@@ -9,14 +9,15 @@ module.exports = function (config) {
 
   let downloadTaskQueue = [];
   let activeDownloadTasks = [];
+  let inactiveDownloadTasks = [];
 
   /**
    * Enqueue a download task
    *
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
    */
-  function enqueueTask(request = {}, listPos = 0) {
-    let task = downloadTask({ win, request, listPos });
+  function enqueueTask(request = {}) {
+    let task = downloadTask({ win, request });
     downloadTaskQueue.push(task);
     return task;
   }
@@ -34,10 +35,7 @@ module.exports = function (config) {
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
    */
   function enqueueTasks(requests = []) {
-    for (let listPos = 0; listPos < requests.length; listPos++) {
-      enqueueTask(requests[listPos], listPos);
-    }
-
+    requests.forEach((request) => enqueueTask(request));
     return downloadTaskQueue;
   }
 
@@ -46,14 +44,15 @@ module.exports = function (config) {
   }
 
   function resumeAll() {
-    for (let x = 0; x < downloadTaskQueue.length; x++) {
+    downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        downloadTaskQueue[x].resume();
-        activeDownloadTasks.push(downloadTaskQueue[x]);
+        let downloadStream1 = downloadTask.resume();
+        activeDownloadTasks.push(downloadStream1);
       } else {
-        downloadTaskQueue[x].wait();
+        let downloadStream2 = downloadTask.wait();
+        inactiveDownloadTasks.push(downloadStream2);
       }
-    }
+    });
   }
 
   async function cancelAll() {
@@ -77,8 +76,10 @@ module.exports = function (config) {
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
         downloadStreams.push(downloadTask.start());
+        activeDownloadTasks.push();
       } else {
         downloadStreams.push(downloadTask.wait());
+        inactiveDownloadTasks.push();
       }
     });
 

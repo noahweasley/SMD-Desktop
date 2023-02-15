@@ -9,18 +9,12 @@ const { States } = require("../database/constants");
  * @param {JSON} options { link, title }
  */
 module.exports = function (options) {
-  let state = States.PENDING;
-  let downloadEventQueue = [];
-  let { win, request, listPos } = options;
-  let requestUrl = request.url;
-  let downloadStream;
-
-  const getListPosition = () => downloadListPos;
+  let state = States.INACTIVE;
+  let { win } = options;
 
   function wait() {
     state = States.PENDING;
-    let options = { link: "", title: "" };
-    return registerDownloadOp(options);
+    return registerDownloadOp();
   }
 
   function pause() {
@@ -29,12 +23,15 @@ module.exports = function (options) {
   }
 
   function resume() {
+    // if (state !== States.PENDING || state !== States.PAUSED) {
+    //   throw new Error("Illegal download state, cannot resume a download that wasn't previously running");
+    // }
     state = States.ACTIVE;
     downloadStream?.resume();
   }
 
   function cancel() {
-    state = States.FAILED;
+    state = States.INACTIVE;
     downloadStream?.destroy();
   }
 
@@ -43,24 +40,22 @@ module.exports = function (options) {
       throw new Error("Download task is already active");
     } else {
       state = States.ACTIVE;
-      let options = { link: "", title: "" };
-
-      return registerDownloadOp(options);
+      return registerDownloadOp();
     }
   }
 
-  async function registerDownloadOp(options) {
-    let stream = await downloadMatchingTrack(options);
-    downloadStream = stream;
-    stream.on("binaries-downloading", () => win.webContents.send("show-binary-download-dialog"));
-    stream.on("binaries-downloaded", () => win.webContents.send("close-binary-download-dialog"));
-    stream.on("error", (err) => {
+  async function registerDownloadOp() {
+    let downloadStream = await downloadMatchingTrack(options.request);
+
+    downloadStream.on("binaries-downloading", () => win.webContents.send("show-binary-download-dialog"));
+    downloadStream.on("binaries-downloaded", () => win.webContents.send("close-binary-download-dialog"));
+
+    downloadStream.on("error", (err) => {
       console.error(err);
-      downloadEventQueue.forEach((callback) => callback(err));
     });
 
-    return stream;
+    return downloadStream;
   }
 
-  return { pause, resume, wait, cancel, start, getListPosition };
+  return { pause, resume, wait, cancel, start };
 };
