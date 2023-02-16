@@ -224,6 +224,7 @@ module.exports.addDownloadData = async function (arg) {
     } else if (arg["type"] == Type.DOWNLOADING) {
       // data property is the main db data in the object
       let result = await __database.insert(arg["data"]).into(DOWNLOADING_TABLE).returning("id");
+      console.log(result);
       return result[0]; // the column id
     } else {
       throw new Error(`${arg["type"]} is not supported`);

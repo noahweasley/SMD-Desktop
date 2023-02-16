@@ -5,6 +5,7 @@ const lock = require("./lock");
 
 module.exports = function (config) {
   const { targetWindow, maxParallelDownloads } = config;
+  
   const locker = lock(maxParallelDownloads);
 
   let downloadTaskQueue = [];

@@ -1,6 +1,7 @@
 "use-strict";
 
 window.addEventListener("DOMContentLoaded", () => {
+  
   // active link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {

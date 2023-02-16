@@ -31,7 +31,8 @@
   --progress-timing-function-2: ease-in-out;
   color: var(--grey-solid);
   font-size: 11.5px;
-  font-family: 'Montserrat-SB', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif
+  font-family: "Montserrat-SB", system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI",
+    sans-serif;
 }
 
 @font-face {
@@ -42,7 +43,8 @@
 
 body {
   background-color: var(--solid-darker);
-  font-family: 'Montserrat', system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+  font-family: "Montserrat", system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI",
+    sans-serif;
 }
 
 * {
@@ -79,7 +81,11 @@ label {
 }
 
 .invisible {
-  display: none;
+  opacity: 0;
+}
+
+.visible {
+  opacity: 1;
 }
 
 .op-0 {
@@ -185,7 +191,6 @@ a:active {
 /* ------------------ Animation Key Frames ----------------- */
 
 @keyframes scale-bounce {
-
   0%,
   10% {
     transform: scale(1);

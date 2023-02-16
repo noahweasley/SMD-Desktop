@@ -706,6 +706,27 @@ a:active {
   margin: 100px 24px;
 }
 
+.modal-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  border: 1px solid var(--grey-solid_10);
+  border-radius: 8px;
+  width: 300px;
+  height: 120px;
+  background-color: var(--solid-darker);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 form {
   border-color: var(--spotify-green);
 }

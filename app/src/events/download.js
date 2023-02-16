@@ -104,14 +104,14 @@ module.exports = function (settings, browsers, database) {
       // then add the search results the pending downloads database
 
       try {
-        const insertedDataColumnId = await database.addDownloadData({
+        const insertedDataColumnIds = await database.addDownloadData({
           type: Type.DOWNLOADING,
           data: downloadData
         });
 
-        if (insertedDataColumnId && insertedDataColumnId != -1) {
+        if (insertedDataColumnIds) {
           // update download list UI, with current pending download data]
-          mainWindow.getWindow()?.send("download-list-update", downloadData);
+          mainWindow.getWindow()?.send("download-list-update", [downloadData, insertedDataColumnIds]);
         } else {
           // probably some write error to the database
           dialog.showErrorBox(

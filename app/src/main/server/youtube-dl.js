@@ -73,7 +73,9 @@ function __exports() {
    * @param {JSON} options an object describing the video. `{videoLink : ... , videoId : ...}`
    * @returns a YTDLP event emitter instance
    */
-  async function downloadMatchingTrack(request) {
+  async function downloadMatchingTrack(options) {
+    const request = options.request;
+    const target = options.targetWindow.getWindow();
     const ytdlpBinaryFileLocation = await getYtdlpBinaryFilepath();
     const dirname = path.dirname(ytdlpBinaryFileLocation);
     const fileName = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
@@ -86,11 +88,20 @@ function __exports() {
 
     try {
       progressEmitter.emit("binaries-downloading");
-      let isBinaryDownloaded = await downloadYTDLPBinaries();
+      let isBinaryDownloaded = await downloadYtdlpBinaries();
 
       if (isBinaryDownloaded) {
         progressEmitter.emit("binaries-downloaded");
-        _downloadStream.on("progress", (progress) => progressEmitter.emit("progress", progress));
+        _downloadStream.on("progress", (progress) => {
+          console.log(progress.percent);
+
+          target.webContents.send("download-progress-update", {
+            id: 0,
+            progress: progress.percent,
+            totalSize: progress.totalSize
+          });
+        });
+
         const requestVideoTitle = request.videoTitle.replace(/\s+/g, "_"); // replace whitespace with underscore
         let fileToStoreData = path.join(getDownloadsDirectory(), `${requestVideoTitle}.m4a`);
         await pipeline(_downloadStream, createWriteStream(fileToStoreData));
@@ -111,7 +122,7 @@ function __exports() {
    *
    * @returns  a promise that would be fulfilled when the binaries are downloaded
    */
-  async function downloadYTDLPBinaries() {
+  async function downloadYtdlpBinaries() {
     let fileHandle;
     const binaryFileDirectory = getYtdlpBinaryFileDirectory();
 
@@ -136,7 +147,7 @@ function __exports() {
 
   return {
     downloadMatchingTrack,
-    downloadYTDLPBinaries,
+    downloadYtdlpBinaries,
     searchMatchingTracks,
     getYtdlpBinaryFileDirectory,
     getYtdlpBinaryFilepath

@@ -10,8 +10,7 @@ const { States } = require("../database/constants");
  */
 module.exports = function (options) {
   let state = States.INACTIVE;
-  let { targetWindow } = options;
-
+  
   async function wait() {
     state = States.PENDING;
     return await registerDownloadOp();
@@ -45,26 +44,12 @@ module.exports = function (options) {
   }
 
   async function registerDownloadOp() {
-    let progressEmitter = await downloadMatchingTrack(options.request);
-
-    console.log(progressEmitter);
+    let { targetWindow } = options;
+    let target = targetWindow.getWindow();
     
-    progressEmitter.on("binaries-downloading", () => targetWindow.webContents.send("show-binary-download-dialog"));
-    progressEmitter.on("binaries-downloaded", () => targetWindow.webContents.send("close-binary-download-dialog"));
-    progressEmitter.on("progress", (progress) => {
-      console.log(progress.percent);
-
-      targetWindow.webContents.send("download-progress-update", {
-        id: 0,
-        progress: progress.percent,
-        totalSize: progress.totalSize
-      });
-    });
-
-    progressEmitter.on("error", (err) => {
-      console.error(err);
-    });
-
+    let progressEmitter = await downloadMatchingTrack(options);
+    progressEmitter.on("binaries-downloading", () => target.webContents.send("show-binary-download-dialog", true));
+    progressEmitter.on("binaries-downloaded", () => target.webContents.send("show-binary-download-dialog", false));
     return progressEmitter;
   }
 

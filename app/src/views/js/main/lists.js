@@ -65,7 +65,10 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // populate the 'downloading' - list with item fetched from database
-  function addListItemDownloading(item, shouldAppend) {
+  function addListItemDownloading(data, shouldAppend) {
+    const item = data[0]; // type => object
+    const itemIds = data[1]; // type => array of objects
+
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
@@ -77,13 +80,14 @@ window.addEventListener("DOMContentLoaded", () => {
       const oldDataSize = listData.length;
       const newDataSize = oldDataSize + item.length;
       // create list, append data
-      for (let position = oldDataSize; position < newDataSize; position++) createList(position);
+      for (let position = oldDataSize; position < newDataSize; position++) createList(position, itemIds);
     } else {
       // create list, don't care to append
       for (let position = 0; position < item.length; position++) createList(position);
     }
 
-    function createList(position) {
+    function createList(position, itemIds) {
+      const itemId = itemIds[position].id;
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
@@ -92,14 +96,14 @@ window.addEventListener("DOMContentLoaded", () => {
       thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
-      listElement.append(createMediaBody(position + 1, item[position]));
+      listElement.append(createMediaBody(itemId, item[position]));
       // append list item to list
       uLElement.append(listElement);
       listElement.classList.remove("gone");
     }
 
     // creates a media body element
-    function createMediaBody(_position, db_data) {
+    function createMediaBody(itemId, db_data) {
       const mediaBody = document.createElement("div");
       mediaBody.className = "media-body";
       // create the track title
@@ -120,7 +124,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
       downloadProgressElement.classList.add("horizontal-progress");
-      downloadProgressElement.id = `download-progress${db_data["id"]}`;
+      downloadProgressElement.id = `download-progress-${itemId}`;
       // finally append the created element nodes as children to the parent media body node
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
@@ -254,6 +258,16 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  window.bridgeApis.on("show-binary-download-dialog", (_event, shouldShow) => {
+    let progressModal = document.querySelector(".modal-container");
+
+    if (shouldShow) {
+      progressModal.style.setProperty("display", "flex");
+    } else {
+      progressModal.style.setProperty("display", "none");
+    }
+  });
 
   // actions related to file downloads
   function setProgress(elementId, progress) {
