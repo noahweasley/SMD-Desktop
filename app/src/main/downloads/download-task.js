@@ -53,7 +53,7 @@ module.exports = function (options) {
     downloadStream.on("error", (err) => {
       console.error(err);
     });
-
+    
     return downloadStream;
   }
 

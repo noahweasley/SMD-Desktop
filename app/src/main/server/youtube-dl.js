@@ -3,13 +3,44 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
-const { open } = require("fs/promises");
+const { open, readdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { getDownloadsDirectory } = require("../util");
-
-const BINARY_LOCATION = !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
-
+const { createWriteStream } = require("fs");
 function __exports() {
+  /**
+   * @returns the directory where the the ytdlp binary file was downloaded
+   */
+  function getYtdlpBinaryFileDirectory() {
+    return !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
+  }
+
+  /**
+   * @returns the full file path to the ytdlp binary file
+   */
+  async function getYtdlpBinaryFilepath() {
+    const binaryFileDirectory = getYtdlpBinaryFileDirectory();
+    const fileName = "yt-dlp";
+
+    try {
+      let files = await readdir(binaryFileDirectory);
+
+      const filePath = files.find(
+        (file) => path.basename(file, path.extname(file)).toLowerCase() === fileName.toLowerCase()
+      );
+
+      if (filePath) {
+        const fullBinaryFilepath = path.join(binaryFileDirectory, filePath);
+        return fullBinaryFilepath;
+      } else {
+        throw new Error(`File '${fileName}' not found in directory '${binaryFileDirectory}'`);
+      }
+    } catch (err) {
+      console.error(err);
+      return "";
+    }
+  }
+
   /**
    * Searches YouTube for a list of matching videos specified by `query`
    *
@@ -41,22 +72,27 @@ function __exports() {
    * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(request) {
-    let ytdlpWrapper = new ytdlp(BINARY_LOCATION);
+    const ytdlpBinaryFileLocation = await getYtdlpBinaryFilepath();
+    const dirname = path.dirname(ytdlpBinaryFileLocation);
+    const fileName = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
+
+    let ytdlpWrapper = new ytdlp(fileName);
     // 140 here means that the audio would be extracted
-    let downloadStream = ytdlpWrapper.execStream([request.link, "-f", "140"]);
+    let downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
 
     try {
       downloadStream.emit("binaries-downloading");
-      let isDownloaded = await downloadYTDLPBinaries();
+      let isBinaryDownloaded = await downloadYTDLPBinaries();
 
-      if (isDownloaded) {
+      if (isBinaryDownloaded) {
         downloadStream.emit("binaries-downloaded");
         downloadStream.on("progress", (progress) => {
           console.log(progress.percent);
         });
         // pipe results to file
-        let pathToStoreFile = path.join(getDownloadsDirectory(), `${request.title}.m4a`);
-        pipeline(downloadStream, fs.createWriteStream(pathToStoreFile));
+        const requestVideoTitle = request.videoTitle.replace(/\s+/g, "_"); // replace whitespace with underscore
+        let pathToStoreFile = path.join(getDownloadsDirectory(), `${requestVideoTitle}.m4a`);
+        await pipeline(downloadStream, createWriteStream(pathToStoreFile));
       } else {
         downloadStream.emit("error", "Download Failed");
       }
@@ -76,16 +112,34 @@ function __exports() {
    */
   async function downloadYTDLPBinaries() {
     let fileHandle;
+    const binaryFileDirectory = getYtdlpBinaryFileDirectory();
+
     try {
-      fileHandle = await open(BINARY_LOCATION, "r+");
+      fileHandle = await open(binaryFileDirectory, "r+");
+      return true;
     } catch (err) {
-      await ytdlp.downloadFromGithub(BINARY_LOCATION);
+      return downloadFromGithubAndHandleErrors();
     } finally {
       fileHandle?.close();
     }
+
+    async function downloadFromGithubAndHandleErrors() {
+      try {
+        await ytdlp.downloadFromGithub(binaryFileDirectory);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
   }
 
-  return { downloadMatchingTrack, downloadYTDLPBinaries, searchMatchingTracks };
+  return {
+    downloadMatchingTrack,
+    downloadYTDLPBinaries,
+    searchMatchingTracks,
+    getYtdlpBinaryFileDirectory,
+    getYtdlpBinaryFilepath
+  };
 }
 
 module.exports = __exports();

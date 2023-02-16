@@ -10,23 +10,28 @@ module.exports = function (config) {
   let downloadTaskQueue = [];
   let activeDownloadTasks = [];
   let inactiveDownloadTasks = [];
-
+  
+  /**
+   * Clears the task queue
+   */
+  function clearTaskQueue() {
+    downloadTaskQueue = [];
+  }
+  
   /**
    * Enqueue a download task
    *
    * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
    */
   function enqueueTask(request = {}) {
+        // request = {
+    //   videoId: '-qBzKpsRJqo',
+    //   videoUrl: 'https://www.youtube.com/watch?v=-qBzKpsRJqo',
+    //   videoTitle: 'Adele   Hello'
+    // }
     let task = downloadTask({ win, request });
     downloadTaskQueue.push(task);
     return task;
-  }
-
-  /**
-   * Clears the task queue
-   */
-  function clearTaskQueue() {
-    downloadTaskQueue = [];
   }
 
   /**
@@ -71,15 +76,17 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateQueuedDownloads() {
-    let downloadStreams = [];
+    let downloadStreams = []; // contains both active and inactive downloads
 
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        downloadStreams.push(downloadTask.start());
-        activeDownloadTasks.push();
+        let activeStream = downloadTask.start();
+        downloadStreams.push(activeStream);
+        activeDownloadTasks.push(activeStream);
       } else {
-        downloadStreams.push(downloadTask.wait());
-        inactiveDownloadTasks.push();
+        let inactiveStream = downloadTask.wait();
+        downloadStreams.push(inactiveStream);
+        inactiveDownloadTasks.push(inactiveStream);
       }
     });
 
