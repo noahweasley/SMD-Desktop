@@ -17,7 +17,7 @@ module.exports = function (settings, browsers, database) {
 
   // Todo: change settings.getStateSync to use promises
   const fileDownloader = downloader({
-    win: mainWindow,
+    targetWindow: mainWindow,
     maxParallelDownloads: settings.getStateSync("max-parallel-download", DEFAULT_CONCURRENCY)
   });
 
@@ -127,11 +127,11 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    let downloadStreams = fileDownloader.initiateQueuedDownloads();
+    let progressEmitters = fileDownloader.initiateQueuedDownloads();
     setupTaskQueueMessaging();
 
     function setupTaskQueueMessaging() {
-      downloadStreams.forEach((_stream) => {
+      progressEmitters.forEach((_progressEmitter) => {
         // set up messenger
       });
       // clear task queue, downloads are now active

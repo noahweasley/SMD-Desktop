@@ -10,11 +10,11 @@ const { States } = require("../database/constants");
  */
 module.exports = function (options) {
   let state = States.INACTIVE;
-  let { win } = options;
+  let { targetWindow } = options;
 
-  function wait() {
+  async function wait() {
     state = States.PENDING;
-    return registerDownloadOp();
+    return await registerDownloadOp();
   }
 
   function pause() {
@@ -35,26 +35,37 @@ module.exports = function (options) {
     downloadStream?.destroy();
   }
 
-  function start() {
+  async function start() {
     if (state == States.ACTIVE) {
       throw new Error("Download task is already active");
     } else {
       state = States.ACTIVE;
-      return registerDownloadOp();
+      return await registerDownloadOp();
     }
   }
 
   async function registerDownloadOp() {
-    let downloadStream = await downloadMatchingTrack(options.request);
+    let progressEmitter = await downloadMatchingTrack(options.request);
 
-    downloadStream.on("binaries-downloading", () => win.webContents.send("show-binary-download-dialog"));
-    downloadStream.on("binaries-downloaded", () => win.webContents.send("close-binary-download-dialog"));
+    console.log(progressEmitter);
+    
+    progressEmitter.on("binaries-downloading", () => targetWindow.webContents.send("show-binary-download-dialog"));
+    progressEmitter.on("binaries-downloaded", () => targetWindow.webContents.send("close-binary-download-dialog"));
+    progressEmitter.on("progress", (progress) => {
+      console.log(progress.percent);
 
-    downloadStream.on("error", (err) => {
+      targetWindow.webContents.send("download-progress-update", {
+        id: 0,
+        progress: progress.percent,
+        totalSize: progress.totalSize
+      });
+    });
+
+    progressEmitter.on("error", (err) => {
       console.error(err);
     });
-    
-    return downloadStream;
+
+    return progressEmitter;
   }
 
   return { pause, resume, wait, cancel, start };

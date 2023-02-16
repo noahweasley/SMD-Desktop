@@ -7,6 +7,8 @@ const { open, readdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { getDownloadsDirectory } = require("../util");
 const { createWriteStream } = require("fs");
+const { EventEmitter } = require("events");
+
 function __exports() {
   /**
    * @returns the directory where the the ytdlp binary file was downloaded
@@ -77,32 +79,31 @@ function __exports() {
     const fileName = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
 
     let ytdlpWrapper = new ytdlp(fileName);
+    // Create a new event emitter to observe progress
+    const progressEmitter = new EventEmitter();
     // 140 here means that the audio would be extracted
-    let downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+    let _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
 
     try {
-      downloadStream.emit("binaries-downloading");
+      progressEmitter.emit("binaries-downloading");
       let isBinaryDownloaded = await downloadYTDLPBinaries();
 
       if (isBinaryDownloaded) {
-        downloadStream.emit("binaries-downloaded");
-        downloadStream.on("progress", (progress) => {
-          console.log(progress.percent);
-        });
-        // pipe results to file
+        progressEmitter.emit("binaries-downloaded");
+        _downloadStream.on("progress", (progress) => progressEmitter.emit("progress", progress));
         const requestVideoTitle = request.videoTitle.replace(/\s+/g, "_"); // replace whitespace with underscore
-        let pathToStoreFile = path.join(getDownloadsDirectory(), `${requestVideoTitle}.m4a`);
-        await pipeline(downloadStream, createWriteStream(pathToStoreFile));
+        let fileToStoreData = path.join(getDownloadsDirectory(), `${requestVideoTitle}.m4a`);
+        await pipeline(_downloadStream, createWriteStream(fileToStoreData));
       } else {
-        downloadStream.emit("error", "Download Failed");
+        progressEmitter.emit("error", "Download Failed");
       }
     } catch (err) {
-      downloadStream.emit("error", err.message);
+      progressEmitter.emit("error", err.message);
     } finally {
-      downloadStream.destroy();
+      _downloadStream.destroy();
     }
 
-    return downloadStream;
+    return progressEmitter;
   }
 
   /**

@@ -4,32 +4,28 @@ const downloadTask = require("./download-task");
 const lock = require("./lock");
 
 module.exports = function (config) {
-  const { win, maxParallelDownloads } = config;
+  const { targetWindow, maxParallelDownloads } = config;
   const locker = lock(maxParallelDownloads);
 
   let downloadTaskQueue = [];
+  // tasks => Emitter
   let activeDownloadTasks = [];
   let inactiveDownloadTasks = [];
-  
+
   /**
    * Clears the task queue
    */
   function clearTaskQueue() {
     downloadTaskQueue = [];
   }
-  
+
   /**
    * Enqueue a download task
    *
-   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
+   * @param {JSON} request a download request in the format; `{ sourceUrl, destPath }`
    */
   function enqueueTask(request = {}) {
-        // request = {
-    //   videoId: '-qBzKpsRJqo',
-    //   videoUrl: 'https://www.youtube.com/watch?v=-qBzKpsRJqo',
-    //   videoTitle: 'Adele   Hello'
-    // }
-    let task = downloadTask({ win, request });
+    let task = downloadTask({ targetWindow, request });
     downloadTaskQueue.push(task);
     return task;
   }
@@ -37,7 +33,7 @@ module.exports = function (config) {
   /**
    * Enqueue a download task
    *
-   * @param {*} request a download request in the format; `{ sourceUrl, destPath }`
+   * @param {array} request a download request in the format; `{ sourceUrl, destPath }`
    */
   function enqueueTasks(requests = []) {
     requests.forEach((request) => enqueueTask(request));
@@ -76,21 +72,21 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateQueuedDownloads() {
-    let downloadStreams = []; // contains both active and inactive downloads
+    let progressEmitters = []; // contains both active and inactive downloads
 
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        let activeStream = downloadTask.start();
-        downloadStreams.push(activeStream);
-        activeDownloadTasks.push(activeStream);
+        let activeProgressEmitter = downloadTask.start();
+        progressEmitters.push(activeProgressEmitter);
+        activeDownloadTasks.push(activeProgressEmitter);
       } else {
-        let inactiveStream = downloadTask.wait();
-        downloadStreams.push(inactiveStream);
-        inactiveDownloadTasks.push(inactiveStream);
+        let inactiveProgressEmitter = downloadTask.wait();
+        progressEmitters.push(inactiveProgressEmitter);
+        inactiveDownloadTasks.push(inactiveProgressEmitter);
       }
     });
 
-    return downloadStreams;
+    return progressEmitters;
   }
 
   return {

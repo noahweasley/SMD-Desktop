@@ -28,8 +28,9 @@ window.addEventListener("DOMContentLoaded", () => {
   registerEventListeners();
   // actions related to file downloads
   window.bridgeApis.on("download-progress-update", (_event, args) => {
-    let [listPos, progress] = args;
-    setProgress(`download-progress-${listPos}`, progress);
+    let { id, progress, totalSize } = args;
+    console.log(`Progress at: " ${progress}`);
+    setProgress(`download-progress-${id}`, progress);
   });
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
@@ -181,7 +182,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // delete local database entry and file on disk
       opIconContainer2.addEventListener("click", () => {
         let args = { data: item, type: Type.DOWNLOADED, mode: Mode.SINGLE };
-        
+
         window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
           if (isFileDeleted) {
             let listItem = opIconContainer1.parentElement.parentElement;
