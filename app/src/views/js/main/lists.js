@@ -27,13 +27,9 @@ window.addEventListener("DOMContentLoaded", () => {
   // listen for event after populating the list
   registerEventListeners();
   // actions related to file downloads
-  window.bridgeApis.on("download-progress-update", (_event, args) => {
-    let { id, progress, totalSize } = args;
-    console.log(`Progress at: " ${progress}`);
-    setProgress(`download-progress-${id}`, progress);
-  });
+  window.bridgeApis.on("download-progress-update", setProgress);
 
-  window.bridgeApis.on("download-list-update", (_event, args) => {
+  window.bridgeApis.on("`download`-list-update", (_event, args) => {
     displayDecorationById("info_decor__downloading", false);
     displayDecorationById("info_decor__downloaded", true);
     // append new data into current data
@@ -69,6 +65,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const item = data[0]; // type => object
     const itemIds = data[1]; // type => array of objects
 
+    return console.log(itemIds);
+
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
@@ -83,7 +81,7 @@ window.addEventListener("DOMContentLoaded", () => {
       for (let position = oldDataSize; position < newDataSize; position++) createList(position, itemIds);
     } else {
       // create list, don't care to append
-      for (let position = 0; position < item.length; position++) createList(position);
+      for (let position = 0; position < item.length; position++) createList(position, itemIds);
     }
 
     function createList(position, itemIds) {
@@ -270,7 +268,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // actions related to file downloads
-  function setProgress(elementId, progress) {
+  function setProgress(_event, args) {
+    const elementId = `download-progress-${args.id}`;
+    const progress = args.progress;
+    const totalSize = args.totalSize;
     // use cached version of progress or search for it to initialize it, if it hasn't been cached yet
     const progressBar = progressMap[`${elementId}`] || (progressMap[`${elementId}`] = document.getElementById(elementId));
 

@@ -76,11 +76,11 @@ function __exports() {
   async function downloadMatchingTrack(options) {
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    const ytdlpBinaryFileLocation = await getYtdlpBinaryFilepath();
-    const dirname = path.dirname(ytdlpBinaryFileLocation);
-    const fileName = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
+    const ytdlpBinaryFilepath = await getYtdlpBinaryFilepath();
+    const dirname = path.dirname(ytdlpBinaryFilepath);
+    const filename = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
 
-    let ytdlpWrapper = new ytdlp(fileName);
+    let ytdlpWrapper = new ytdlp(filename);
     // Create a new event emitter to observe progress
     const progressEmitter = new EventEmitter();
     // 140 here means that the audio would be extracted
