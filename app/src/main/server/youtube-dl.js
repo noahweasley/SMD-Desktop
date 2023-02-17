@@ -3,9 +3,9 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
-const { open, readdir } = require("fs/promises");
+const { open, readdir, access, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
-const { getDownloadsDirectory } = require("../util");
+const { getDownloadsDirectory, delay } = require("../util");
 const { createWriteStream } = require("fs");
 const { EventEmitter } = require("events");
 
@@ -20,8 +20,37 @@ function __exports() {
   /**
    * @returns the full file path to the ytdlp binary file
    */
-  async function getYtdlpBinaryFilepath() {
-    const binaryFileDirectory = getYtdlpBinaryFileDirectory();
+  function getYtdlpBinaryFilepath(parentDirectory) {
+    const dirname = parentDirectory || getYtdlpBinaryFileDirectory();
+    const fullBinaryFilepath = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
+
+    return fullBinaryFilepath;
+  }
+
+  /**
+   * @returns the directory where the the ytdlp binary file was downloaded
+   */
+  async function getYtdlpBinaryFileDirectoryOrCreateIfNotExist() {
+    const directoryPath = getYtdlpBinaryFileDirectory();
+
+    try {
+      await access(directoryPath);
+    } catch (err) {
+      if (err.code === "ENOENT") {
+        await mkdir(directoryPath, { recursive: true });
+      } else {
+        throw err;
+      }
+    }
+
+    return directoryPath;
+  }
+
+  /**
+   * @returns the full file path to the ytdlp binary file
+   */
+  async function getYtdlpBinaryFilepathThrowingError() {
+    const binaryFileDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
     const fileName = "yt-dlp";
 
     try {
@@ -74,23 +103,38 @@ function __exports() {
    * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
+    let _downloadStream;
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    const ytdlpBinaryFilepath = await getYtdlpBinaryFilepath();
-    const dirname = path.dirname(ytdlpBinaryFilepath);
-    const filename = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
-
-    let ytdlpWrapper = new ytdlp(filename);
+    let remainingNumberOfRetriesTillEBUSY = 3;
     // Create a new event emitter to observe progress
     const progressEmitter = new EventEmitter();
-    // 140 here means that the audio would be extracted
-    let _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
 
     try {
       progressEmitter.emit("binaries-downloading");
       let isBinaryDownloaded = await downloadYtdlpBinaries();
 
       if (isBinaryDownloaded) {
+        const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
+        const dirname = path.dirname(ytdlpBinaryFilepath);
+        const filename = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
+
+        let ytdlpWrapper = new ytdlp(filename);
+        // 140 here means that the audio would be extracted
+        // EBUSY error, file might still be locked, wait for at most 3 seconds
+        await (async function executeCommand() {
+          try {
+            _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+          } catch (err) {
+            if (err.code === "EBUSY") {
+              if (remainingNumberOfRetriesTillEBUSY-- != 0) {
+                await delay(1000);
+                executeCommand();
+              }
+            }
+          }
+        })();
+
         progressEmitter.emit("binaries-downloaded");
         _downloadStream.on("progress", (progress) => {
           console.log(progress.percent);
@@ -102,16 +146,15 @@ function __exports() {
           });
         });
 
-        const requestVideoTitle = request.videoTitle.replace(/\s+/g, "_"); // replace whitespace with underscore
-        let fileToStoreData = path.join(getDownloadsDirectory(), `${requestVideoTitle}.m4a`);
+        let fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
         await pipeline(_downloadStream, createWriteStream(fileToStoreData));
       } else {
         progressEmitter.emit("error", "Download Failed");
       }
     } catch (err) {
-      progressEmitter.emit("error", err.message);
+      progressEmitter.emit("error", err);
     } finally {
-      _downloadStream.destroy();
+      _downloadStream?.destroy();
     }
 
     return progressEmitter;
@@ -124,10 +167,11 @@ function __exports() {
    */
   async function downloadYtdlpBinaries() {
     let fileHandle;
-    const binaryFileDirectory = getYtdlpBinaryFileDirectory();
+    let ytdlpBinaryFilepath;
 
     try {
-      fileHandle = await open(binaryFileDirectory, "r+");
+      ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
+      fileHandle = await open(ytdlpBinaryFilepath, "r+");
       return true;
     } catch (err) {
       return downloadFromGithubAndHandleErrors();
@@ -136,8 +180,10 @@ function __exports() {
     }
 
     async function downloadFromGithubAndHandleErrors() {
+      const parentDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
+      const ytdlpBinaryFilepath = getYtdlpBinaryFilepath(parentDirectory);
       try {
-        await ytdlp.downloadFromGithub(binaryFileDirectory);
+        await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         return true;
       } catch (err) {
         return false;
@@ -150,7 +196,9 @@ function __exports() {
     downloadYtdlpBinaries,
     searchMatchingTracks,
     getYtdlpBinaryFileDirectory,
-    getYtdlpBinaryFilepath
+    getYtdlpBinaryFileDirectoryOrCreateIfNotExist,
+    getYtdlpBinaryFilepath,
+    getYtdlpBinaryFilepathThrowingError
   };
 }
 

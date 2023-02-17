@@ -51,7 +51,19 @@ function __exports() {
     return join(parentDirectory || getDownloadsDirectory(), ".temp", ".thumb");
   }
 
-  return { createAppFilesDirectory, getDownloadsDirectory, getTempThumbDirectory, getThumbnailDirectory };
+  /**
+   * Delays program
+   * @param {number} timeout delay period in milliseconds
+   * @returns a Promise that resolves after `timeout` milliseconds
+   */
+  function delay(timeout) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, timeout);
+    });
+  }
+  return { createAppFilesDirectory, getDownloadsDirectory, getTempThumbDirectory, getThumbnailDirectory, delay };
 }
 
 module.exports = __exports();
