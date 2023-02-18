@@ -707,7 +707,6 @@ a:active {
 }
 
 .modal-container {
-  transition: 0.5s;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -721,7 +720,7 @@ a:active {
   border: 1px solid var(--grey-solid_10);
   background-color: var(--solid-darker);
   border-radius: 8px;
-  width: 300px;
+  width: 310px;
   height: 120px;
   display: flex;
   align-items: center;
