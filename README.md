@@ -64,7 +64,7 @@ There are many ways in which you can participate in this project, for example:
 
 #### Installing the tools
 
-There are a few VS Code extensions used in the development of S.M.D namely:
+In the development of S.M.D, a few VS Code extensions are used, namely:
 
 - Prettier formatter (esbenp.prettier-vscode)
 
