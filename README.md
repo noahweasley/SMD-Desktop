@@ -35,7 +35,15 @@
 
 ## About S.M.D
 
-Well, I had a deep thought for like... 2 seconds, and I named this app, Spotify Music Downloader. It really is not a very complex application, the only thing I had to do was use Spotify API to search for songs to download and then use YouTube's API to download the actual songs. It was that simple (easier said than done). I actually used less open-source libraries in S.M.D's creation and used open-sourced libraries when it was really necessary, because I am a newbie Node js Developer, lol. I built S.M.D because I couldn't find a real app that was Cross-platform and at the same time Free and Open-source to use! I searched for weeks for apps like this one because I wanted to use it, myself. So yes, you are using this application because I needed it :eyes:
+> This is a desktop
+> application that seamlessly integrates with the Spotify API to help you discover, download, and enjoy your favorite
+> songs from a single platform! With this powerful and user-friendly application, you can easily search for any song
+> and instantly download high-quality audio files directly to your desktop. Whether you're a music enthusiast or just
+> looking to build your personal music library, this app provides you with the exact music to download and enjoy.
+> Thanks to the integration with the Spotify API, you can easily download entire albums or playlist with just a few
+> clicks. The app features a sleek and modern interface that makes it easy to navigate and use, even for those with
+> little to no technical knowledge. With its advanced search capabilities and intuitive download manager, you can
+> find and download your favorite songs in seconds.
 
 ## Contributing
 
