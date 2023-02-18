@@ -2,7 +2,6 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   let WINDOW_CONTENT_STATE = State.MAIN;
-  let progressMap;
   let listData = [];
 
   // retrieve user downloads
@@ -27,7 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // listen for event after populating the list
   registerEventListeners();
   // actions related to file downloads
-  window.bridgeApis.on("download-progress-update", setProgress);
+  window.bridgeApis.on("download-progress-update", displayProgress);
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
     displayDecorationById("info_decor__downloading", false);
@@ -269,17 +268,30 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // actions related to file downloads
-  function setProgress(_event, args) {
-    const elementId = `download-progress-${args.id}`;
+  function displayProgress(_event, args) {
     const progress = args.progress;
 
+    const elementId = `download-progress-${args.id}`;
     const progressBar = document.getElementById(elementId);
     const mediaBodyElement = progressBar.parentNode;
+    // get the second child element
     // get the second child element
     const messageElement = mediaBodyElement.children[1];
     messageElement.innerText = `${progress}% downloaded`;
 
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);
+
+    // download finished, remove child
+    if (progress === 100) {
+      const listItem = mediaBodyElement.parentElement;
+      const listGroup = listItem.parentElement;
+
+      listGroup.removeChild(listItem);
+      if (listGroup.childNodes.length == 0) {
+        listGroup.classList.add("gone");
+        displayDecorationById("info_decor__downloading", true);
+      }
+    }
   }
 });

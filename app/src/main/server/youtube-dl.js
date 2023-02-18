@@ -142,7 +142,8 @@ function __exports() {
           // ignored this error for now because the songs are downloaded but stream somehow contains data
         }
       } else {
-        console.log(`Fatal error occurred, cannot download, cause: ${error}`);
+        console.log("Could not download binary");
+        progressEmitter?.emit("err", new Error(`Fatal error occurred, cannot download binaries`));
       }
     } catch (err) {
       progressEmitter?.emit("error", err);
