@@ -10,8 +10,8 @@ const { Type } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
-  const { authorizeApp } = auth(settings);
-  const { getSpotifyLinkData } = spotifyDl(settings);
+  const { getSpotifyLinkData, spotifyApi } = spotifyDl(settings);
+  const { authorizeApp } = auth(settings, spotifyApi);
 
   // dummy data query for testing
   ipcMain.handle("get-dummy-list-data", () => [dummy.getDummyTrack(10), dummy.getDummyTrack(2)]);

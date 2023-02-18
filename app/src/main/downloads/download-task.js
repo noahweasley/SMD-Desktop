@@ -44,12 +44,7 @@ module.exports = function (options) {
   }
 
   async function registerDownloadOp() {
-    let { targetWindow } = options;
-    let target = targetWindow.getWindow();
-
     let progressEmitter = await downloadMatchingTrack(options);
-    progressEmitter.on("binaries-downloading", () => target.webContents.send("show-binary-download-dialog", true));
-    progressEmitter.on("binaries-downloaded", () => target.webContents.send("show-binary-download-dialog", false));
     progressEmitter.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
     return progressEmitter;
   }

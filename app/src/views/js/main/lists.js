@@ -29,7 +29,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // actions related to file downloads
   window.bridgeApis.on("download-progress-update", setProgress);
 
-  window.bridgeApis.on("`download`-list-update", (_event, args) => {
+  window.bridgeApis.on("download-list-update", (_event, args) => {
     displayDecorationById("info_decor__downloading", false);
     displayDecorationById("info_decor__downloaded", true);
     // append new data into current data
@@ -62,10 +62,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function addListItemDownloading(data, shouldAppend) {
+    console.log("Data 1:", data[0]);
+    console.log("Data 2:", data[1]);
+
     const item = data[0]; // type => object
     const itemIds = data[1]; // type => array of objects
-
-    return console.log(itemIds);
 
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
@@ -85,7 +86,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function createList(position, itemIds) {
-      const itemId = itemIds[position].id;
+      const itemId = itemIds.id;
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
@@ -271,9 +272,12 @@ window.addEventListener("DOMContentLoaded", () => {
   function setProgress(_event, args) {
     const elementId = `download-progress-${args.id}`;
     const progress = args.progress;
-    const totalSize = args.totalSize;
-    // use cached version of progress or search for it to initialize it, if it hasn't been cached yet
-    const progressBar = progressMap[`${elementId}`] || (progressMap[`${elementId}`] = document.getElementById(elementId));
+
+    const progressBar = document.getElementById(elementId);
+    const mediaBodyElement = progressBar.parentNode;
+    // get the second child element
+    const messageElement = mediaBodyElement.children[1];
+    messageElement.innerText = `${progress}% downloaded`;
 
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);

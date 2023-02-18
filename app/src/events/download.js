@@ -97,7 +97,7 @@ module.exports = function (settings, browsers, database) {
           Downloaded_Size: "Unknown",
           Download_Progress: 0,
           Track_Download_Size: 0,
-          Message: "Downloading: 0 MB / NILL" /* A default message to init downloads */
+          Message: "Download in progress..." /* A default message to init downloads */
         }))
         .flat();
 

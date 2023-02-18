@@ -11,6 +11,15 @@ const { EventEmitter } = require("events");
 
 function __exports() {
   /**
+   *
+   * @param {string} parentDirectory
+   * @returns
+   */
+  function _getYtdlpBinaryFilepath(parentDirectory) {
+    return process.platform == "win32" ? path.join(parentDirectory, "yt-dlp.exe") : path.join(parentDirectory, "yt-dlp");
+  }
+
+  /**
    * @returns the directory where the the ytdlp binary file was downloaded
    */
   function getYtdlpBinaryFileDirectory() {
@@ -21,10 +30,8 @@ function __exports() {
    * @returns the full file path to the ytdlp binary file
    */
   function getYtdlpBinaryFilepath(parentDirectory) {
-    const dirname = parentDirectory || getYtdlpBinaryFileDirectory();
-    const fullBinaryFilepath = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
-
-    return fullBinaryFilepath;
+    const ytdlpBinaryFileDirectory = parentDirectory || getYtdlpBinaryFileDirectory();
+    return _getYtdlpBinaryFilepath(ytdlpBinaryFileDirectory);
   }
 
   /**
@@ -103,21 +110,20 @@ function __exports() {
    * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
+    let progressEmitter = new EventEmitter();
     let _downloadStream;
     const request = options.request;
     const target = options.targetWindow.getWindow();
     let remainingNumberOfRetriesTillEBUSY = 3;
-    // Create a new event emitter to observe progress
-    const progressEmitter = new EventEmitter();
 
     try {
-      progressEmitter.emit("binaries-downloading");
+      target.webContents.send("show-binary-download-dialog", true);
       let isBinaryDownloaded = await downloadYtdlpBinaries();
 
       if (isBinaryDownloaded) {
         const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
         const dirname = path.dirname(ytdlpBinaryFilepath);
-        const filename = process.platform == "win32" ? path.join(dirname, "yt-dlp.exe") : path.join(dirname, "yt-dlp");
+        const filename = _getYtdlpBinaryFilepath(dirname);
 
         let ytdlpWrapper = new ytdlp(filename);
         // 140 here means that the audio would be extracted
@@ -135,24 +141,26 @@ function __exports() {
           }
         })();
 
-        progressEmitter.emit("binaries-downloaded");
-        _downloadStream.on("progress", (progress) => {
-          console.log(progress.percent);
+        target.webContents.send("show-binary-download-dialog", false);
 
+        _downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
-            id: 0,
-            progress: progress.percent,
-            totalSize: progress.totalSize
+            id: 1,
+            progress: progress.percent
           });
         });
 
         let fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
-        await pipeline(_downloadStream, createWriteStream(fileToStoreData));
+        try {
+          await pipeline(_downloadStream, createWriteStream(fileToStoreData));
+        } catch (ignored) {
+          // ignored this error for now because the songs are downloaded but stream somehow contains data
+        }
       } else {
-        progressEmitter.emit("error", "Download Failed");
+        console.log(`Fatal error occurred, cannot download, cause: ${error}`);
       }
     } catch (err) {
-      progressEmitter.emit("error", err);
+      progressEmitter?.emit("error", err);
     } finally {
       _downloadStream?.destroy();
     }
