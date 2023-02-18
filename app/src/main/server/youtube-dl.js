@@ -5,7 +5,7 @@ const { app } = require("electron");
 const path = require("path");
 const { open, readdir, access, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
-const { getDownloadsDirectory, watchFileForChanges } = require("../util");
+const { getDownloadsDirectory, delay } = require("../util");
 const { createWriteStream } = require("fs");
 const { EventEmitter } = require("events");
 
@@ -85,9 +85,9 @@ function __exports() {
    */
   async function searchMatchingTracks(query) {
     try {
-      let searchResults = await ytSearch.search(query);
+      let sarr = await ytSearch.search(query);
 
-      let m_searchResults = searchResults.map((vob) => ({
+      let m_sarr = sarr.map((vob) => ({
         videoId: vob.id.videoId,
         videoUrl: vob.url,
         videoTitle: vob.title
@@ -95,7 +95,7 @@ function __exports() {
 
       return {
         searchQuery: query,
-        searchQueryList: m_searchResults
+        searchQueryList: m_sarr
       };
     } catch (err) {
       throw new Error("Network error occurred");
@@ -113,11 +113,11 @@ function __exports() {
     let _downloadStream;
     const request = options.request;
     const target = options.targetWindow.getWindow();
+    let remainingNumberOfRetriesTillEBUSY = 3;
 
     try {
       target.webContents.send("show-binary-download-dialog", true);
       let isBinaryDownloaded = await downloadYtdlpBinaries();
-      target.webContents.send("show-binary-download-dialog", false);
 
       if (isBinaryDownloaded) {
         const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
@@ -125,8 +125,23 @@ function __exports() {
         const filename = _getYtdlpBinaryFilepath(dirname);
 
         let ytdlpWrapper = new ytdlp(filename);
-        // 140 here means that the audio would be extracted
-        _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+        // Todo: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
+        // EBUSY error, file might still be locked, wait for at most 3 seconds
+        await (async function executeCommand() {
+          try {
+            // 140 here means that the audio would be extracted
+            _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+          } catch (err) {
+            if (err.code === "EBUSY") {
+              if (remainingNumberOfRetriesTillEBUSY-- != 0) {
+                await delay(1000);
+                executeCommand();
+              }
+            }
+          }
+        })();
+
+        target.webContents.send("show-binary-download-dialog", false);
 
         _downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
@@ -142,8 +157,7 @@ function __exports() {
           // ignored this error for now because the songs are downloaded but stream somehow contains data
         }
       } else {
-        console.log("Could not download binary");
-        progressEmitter?.emit("err", new Error(`Fatal error occurred, cannot download binaries`));
+        console.log(`Fatal error occurred, cannot download, cause: ${error}`);
       }
     } catch (err) {
       progressEmitter?.emit("error", err);
@@ -168,7 +182,7 @@ function __exports() {
       fileHandle = await open(ytdlpBinaryFilepath, "r+");
       return true;
     } catch (err) {
-      return await downloadFromGithubAndHandleErrors();
+      return downloadFromGithubAndHandleErrors();
     } finally {
       fileHandle?.close();
     }
@@ -177,10 +191,7 @@ function __exports() {
       const parentDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
       const ytdlpBinaryFilepath = getYtdlpBinaryFilepath(parentDirectory);
       try {
-        await Promise.all([
-          watchFileForChanges(ytdlpBinaryFilepath) /* await file creation */,
-          ytdlp.downloadFromGithub(ytdlpBinaryFilepath)
-        ]);
+        await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         return true;
       } catch (err) {
         return false;

@@ -1,8 +1,7 @@
 "use-strict";
 
 const { app } = require("electron");
-const { mkdir, open } = require("fs");
-const { watch } = require("fs/promises");
+const { mkdir, open, watch } = require("fs");
 const { join } = require("path");
 
 function __exports() {
@@ -73,18 +72,10 @@ function __exports() {
    */
   function watchFileForChanges(filePath) {
     return new Promise((resolve, reject) => {
-      let signal = new AbortController();
-      let watcher = watch(filePath, { signal });
-
-      watcher.on("change", (eventType, filename) => {
+      watch(filePath, (eventType, filename) => {
         if (filename && eventType === "change") {
-          signal.abort();
           resolve(filename);
         }
-      });
-
-      watcher.on("error", (err) => {
-        reject(err);
       });
     });
   }
