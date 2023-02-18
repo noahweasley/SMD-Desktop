@@ -5,16 +5,11 @@ const { app } = require("electron");
 const path = require("path");
 const { open, readdir, access, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
-const { getDownloadsDirectory, delay } = require("../util");
+const { getDownloadsDirectory, watchFileForChanges } = require("../util");
 const { createWriteStream } = require("fs");
 const { EventEmitter } = require("events");
 
 function __exports() {
-  /**
-   *
-   * @param {string} parentDirectory
-   * @returns
-   */
   function _getYtdlpBinaryFilepath(parentDirectory) {
     return process.platform == "win32" ? path.join(parentDirectory, "yt-dlp.exe") : path.join(parentDirectory, "yt-dlp");
   }
@@ -35,7 +30,9 @@ function __exports() {
   }
 
   /**
-   * @returns the directory where the the ytdlp binary file was downloaded
+   * Checks if the binary file directory has been created, if not, it creates it and returns the directory path
+   *
+   * @returns a Promise that resolves to the directory where the the ytdlp binary file was downloaded
    */
   async function getYtdlpBinaryFileDirectoryOrCreateIfNotExist() {
     const directoryPath = getYtdlpBinaryFileDirectory();
@@ -54,9 +51,11 @@ function __exports() {
   }
 
   /**
+   * Checks if the binary file has been downloaded and/or exists then return the file path, if not, it throws an error
+   *
    * @returns the full file path to the ytdlp binary file
    */
-  async function getYtdlpBinaryFilepathThrowingError() {
+  async function getYtdlpBinaryFilepathThrowingErrorIfNotExist() {
     const binaryFileDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
     const fileName = "yt-dlp";
 
@@ -86,9 +85,9 @@ function __exports() {
    */
   async function searchMatchingTracks(query) {
     try {
-      let sarr = await ytSearch.search(query);
+      let searchResults = await ytSearch.search(query);
 
-      let m_sarr = sarr.map((vob) => ({
+      let m_searchResults = searchResults.map((vob) => ({
         videoId: vob.id.videoId,
         videoUrl: vob.url,
         videoTitle: vob.title
@@ -96,7 +95,7 @@ function __exports() {
 
       return {
         searchQuery: query,
-        searchQueryList: m_sarr
+        searchQueryList: m_searchResults
       };
     } catch (err) {
       throw new Error("Network error occurred");
@@ -114,11 +113,11 @@ function __exports() {
     let _downloadStream;
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    let remainingNumberOfRetriesTillEBUSY = 3;
 
     try {
       target.webContents.send("show-binary-download-dialog", true);
       let isBinaryDownloaded = await downloadYtdlpBinaries();
+      target.webContents.send("show-binary-download-dialog", false);
 
       if (isBinaryDownloaded) {
         const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
@@ -127,21 +126,7 @@ function __exports() {
 
         let ytdlpWrapper = new ytdlp(filename);
         // 140 here means that the audio would be extracted
-        // EBUSY error, file might still be locked, wait for at most 3 seconds
-        await (async function executeCommand() {
-          try {
-            _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
-          } catch (err) {
-            if (err.code === "EBUSY") {
-              if (remainingNumberOfRetriesTillEBUSY-- != 0) {
-                await delay(1000);
-                executeCommand();
-              }
-            }
-          }
-        })();
-
-        target.webContents.send("show-binary-download-dialog", false);
+        _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
 
         _downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
@@ -182,7 +167,7 @@ function __exports() {
       fileHandle = await open(ytdlpBinaryFilepath, "r+");
       return true;
     } catch (err) {
-      return downloadFromGithubAndHandleErrors();
+      return await downloadFromGithubAndHandleErrors();
     } finally {
       fileHandle?.close();
     }
@@ -191,7 +176,10 @@ function __exports() {
       const parentDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
       const ytdlpBinaryFilepath = getYtdlpBinaryFilepath(parentDirectory);
       try {
-        await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
+        await Promise.all([
+          watchFileForChanges(ytdlpBinaryFilepath) /* await file creation */,
+          ytdlp.downloadFromGithub(ytdlpBinaryFilepath)
+        ]);
         return true;
       } catch (err) {
         return false;
@@ -206,7 +194,7 @@ function __exports() {
     getYtdlpBinaryFileDirectory,
     getYtdlpBinaryFileDirectoryOrCreateIfNotExist,
     getYtdlpBinaryFilepath,
-    getYtdlpBinaryFilepathThrowingError
+    getYtdlpBinaryFilepathThrowingErrorIfNotExist
   };
 }
 

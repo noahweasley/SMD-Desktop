@@ -2,6 +2,7 @@
 
 const { app } = require("electron");
 const { mkdir, open } = require("fs");
+const { watch } = require("fs/promises");
 const { join } = require("path");
 
 function __exports() {
@@ -63,7 +64,39 @@ function __exports() {
       }, timeout);
     });
   }
-  return { createAppFilesDirectory, getDownloadsDirectory, getTempThumbDirectory, getThumbnailDirectory, delay };
+
+  /**
+   * Watch a file and detect file changes
+   *
+   * @param {string} filePath
+   * @returns a Promise that resolves when there is a detected file change
+   */
+  function watchFileForChanges(filePath) {
+    return new Promise((resolve, reject) => {
+      let signal = new AbortController();
+      let watcher = watch(filePath, { signal });
+
+      watcher.on("change", (eventType, filename) => {
+        if (filename && eventType === "change") {
+          signal.abort();
+          resolve(filename);
+        }
+      });
+
+      watcher.on("error", (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  return {
+    createAppFilesDirectory,
+    getDownloadsDirectory,
+    getTempThumbDirectory,
+    getThumbnailDirectory,
+    delay,
+    watchFileForChanges
+  };
 }
 
 module.exports = __exports();
