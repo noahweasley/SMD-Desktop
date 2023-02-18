@@ -21,8 +21,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
         // toggle tab content visibility
         if (getElementIndex(tabItem) === 0) {
-          if (!tabContent_1.classList.contains("invisible")) {
-            tabContent_1.classList.add("invisible");
+          if (!tabContent_1.classList.contains("gone")) {
+            tabContent_1.classList.add("gone");
           }
 
           if (isDownloadTabs) {
@@ -30,10 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
             refreshButton.setAttribute("disabled", "false");
           }
 
-          tabContent_0.classList.remove("invisible");
+          tabContent_0.classList.remove("gone");
         } else {
-          if (!tabContent_0.classList.contains("invisible")) {
-            tabContent_0.classList.add("invisible");
+          if (!tabContent_0.classList.contains("gone")) {
+            tabContent_0.classList.add("gone");
           }
 
           if (isDownloadTabs) {
@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
             refreshButton.setAttribute("disabled", "true");
           }
 
-          tabContent_1.classList.remove("invisible");
+          tabContent_1.classList.remove("gone");
         }
       });
     });
