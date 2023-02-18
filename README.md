@@ -31,7 +31,7 @@
 
 </br>
 
-**Please note**: This application is still in development, ping me mailto:iebenmelu@gmail.com to join the waiting list. I will tell you when I have released the first version and also send you a link to download it. Thank you
+**Please note**: This application is still in development, ping me @ mailto:iebenmelu@gmail.com, I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.
 
 ## About S.M.D
 
