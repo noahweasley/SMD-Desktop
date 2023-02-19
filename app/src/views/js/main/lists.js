@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 "use-strict";
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -61,9 +62,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function addListItemDownloading(data, shouldAppend) {
-    console.log("Data 1:", data[0]);
-    console.log("Data 2:", data[1]);
-
     const item = data[0]; // type => object
     const itemIds = data[1]; // type => array of objects
 
@@ -71,10 +69,10 @@ window.addEventListener("DOMContentLoaded", () => {
     if (item.length > 0) uLElement.classList.remove("gone");
     // create the list items populating it with the fetched data from database
 
-    // Todo fix duplicate code introduced while trying to fix bug in 'add to downloading list'
+    // TODO: fix duplicate code introduced while trying to fix bug in 'add to downloading list'
 
     if (shouldAppend) {
-      // Todo make listData.length return the previous size instead of 0 and use position on list
+      // TODO: make listData.length return the previous size instead of 0 and use position on list
       const oldDataSize = listData.length;
       const newDataSize = oldDataSize + item.length;
       // create list, append data
@@ -222,7 +220,7 @@ window.addEventListener("DOMContentLoaded", () => {
     navItems.forEach((navItem) => {
       const navItemChildren = Array.from(navItem.parentElement.children);
 
-      navItem.addEventListener("click", (_event) => {
+      navItem.addEventListener("click", () => {
         // don't change active state of the nav item that have the 'click' class as attribute
         if (navItemChildren.indexOf(navItem) === 1 || navItemChildren.indexOf(navItem) === navItemChildren.length - 2) {
           return;
@@ -282,16 +280,24 @@ window.addEventListener("DOMContentLoaded", () => {
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);
 
-    // download finished, remove child
-    if (progress === 100) {
+    if (progress === 100) finishDownloading();
+
+    function finishDownloading() {
       const listItem = mediaBodyElement.parentElement;
       const listGroup = listItem.parentElement;
 
-      listGroup.removeChild(listItem);
-      if (listGroup.childNodes.length == 0) {
-        listGroup.classList.add("gone");
-        displayDecorationById("info_decor__downloading", true);
-      }
+      let data = { data: { id: args.id }, type: Type.DOWNLOADING };
+
+      window.bridgeApis.invoke("finish-downloading", data).then((isFileDeleted) => {
+        if (isFileDeleted) {
+          listGroup.removeChild(listItem);
+          if (listGroup.childNodes.length == 0) {
+            // no downloads are pending, display decorations
+            listGroup.classList.add("gone");
+            displayDecorationById("info_decor__downloading", true);
+          }
+        }
+      });
     }
   }
 });

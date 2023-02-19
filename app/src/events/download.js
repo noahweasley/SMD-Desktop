@@ -15,7 +15,7 @@ module.exports = function (settings, browsers, database) {
   const WHITE_SPACE = " ";
   let downloadTasks = [];
 
-  // Todo: change settings.getStateSync to use promises
+  // TODO: change settings.getStateSync to use promises
   const fileDownloader = downloader({
     targetWindow: mainWindow,
     maxParallelDownloads: settings.getStateSync("max-parallel-download", DEFAULT_CONCURRENCY)

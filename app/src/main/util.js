@@ -71,7 +71,7 @@ function __exports() {
    * @returns a Promise that resolves when there is a detected file change
    */
   function watchFileForChanges(filePath) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       watch(filePath, (eventType, filename) => {
         if (filename && eventType === "change") {
           resolve(filename);

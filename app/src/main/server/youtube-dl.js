@@ -10,6 +10,12 @@ const { createWriteStream } = require("fs");
 const { EventEmitter } = require("events");
 
 function __exports() {
+  const Signal = Object.freeze({
+    EXISTS_NOT_DOWNLOADED: "SIG_EXISTS_NOT_DOWNLOADED",
+    NOT_EXISTS_DOWNLOADED: "SIG_NOT_EXISTS_DOWNLOADED",
+    NOT_EXISTS_NOT_DOWNLOADED: "SIG_NOT_EXISTS_NOT_DOWNLOADED"
+  });
+
   function _getYtdlpBinaryFilepath(parentDirectory) {
     return process.platform == "win32" ? path.join(parentDirectory, "yt-dlp.exe") : path.join(parentDirectory, "yt-dlp");
   }
@@ -117,15 +123,16 @@ function __exports() {
 
     try {
       target.webContents.send("show-binary-download-dialog", true);
-      let isBinaryDownloaded = await downloadYtdlpBinaries();
+      let downloadSignal = await downloadYtdlpBinaries();
+      target.webContents.send("show-binary-download-dialog", false);
 
-      if (isBinaryDownloaded) {
+      if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
         const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
         const dirname = path.dirname(ytdlpBinaryFilepath);
         const filename = _getYtdlpBinaryFilepath(dirname);
 
         let ytdlpWrapper = new ytdlp(filename);
-        // Todo: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
+        // TODO: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
         // EBUSY error, file might still be locked, wait for at most 3 seconds
         await (async function executeCommand() {
           try {
@@ -141,8 +148,6 @@ function __exports() {
           }
         })();
 
-        target.webContents.send("show-binary-download-dialog", false);
-
         _downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
             id: 1,
@@ -157,7 +162,7 @@ function __exports() {
           // ignored this error for now because the songs are downloaded but stream somehow contains data
         }
       } else {
-        console.log(`Fatal error occurred, cannot download, cause: ${error}`);
+        console.log("Fatal error occurred, cannot download, cause");
       }
     } catch (err) {
       progressEmitter?.emit("error", err);
@@ -171,7 +176,7 @@ function __exports() {
   /**
    * Download YTDLP binaries
    *
-   * @returns  a promise that would be fulfilled when the binaries are downloaded
+   * @returns {Promise<string>} promise that would be fulfilled when the binaries are downloaded
    */
   async function downloadYtdlpBinaries() {
     let fileHandle;
@@ -180,7 +185,7 @@ function __exports() {
     try {
       ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
       fileHandle = await open(ytdlpBinaryFilepath, "r+");
-      return true;
+      return Signal.EXISTS_NOT_DOWNLOADED; // file exist
     } catch (err) {
       return downloadFromGithubAndHandleErrors();
     } finally {
@@ -192,14 +197,15 @@ function __exports() {
       const ytdlpBinaryFilepath = getYtdlpBinaryFilepath(parentDirectory);
       try {
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
-        return true;
+        return Signal.NOT_EXISTS_DOWNLOADED; // File downloaded
       } catch (err) {
-        return false;
+        return Signal.NOT_EXISTS_NOT_DOWNLOADED; // file does not exist and couldn't be downloaded
       }
     }
   }
 
   return {
+    Signal,
     downloadMatchingTrack,
     downloadYtdlpBinaries,
     searchMatchingTracks,

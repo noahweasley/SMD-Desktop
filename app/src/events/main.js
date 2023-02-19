@@ -23,7 +23,17 @@ module.exports = function (settings, browsers, database) {
   ipcMain.on("play-music", (_event, arg) => shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg)));
 
   // delete file in database
-  ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg, arg.mode));
+  ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg));
+
+  // file downloaded, delete downloading data and move to downloaded data
+  ipcMain.handle("finish-downloading", async (_event, arg) => {
+    let isDeleted = await database.deleteDownloadData(arg);
+    if (isDeleted) {
+      /* empty */
+    }
+
+    return isDeleted;
+  });
 
   // after pasting url and download window is about to display it's content
   ipcMain.handle("download-data", () => getSpotifyLinkData());
@@ -57,7 +67,7 @@ module.exports = function (settings, browsers, database) {
       return getSpotifyURLType(clipboard.readText());
     } catch (err) {
       // display modal dialog with details of error
-      // Todo remove or fix this dialog code. Code is never executed, therefore, this dialog is never shown
+      // TODO: remove or fix this dialog code. Code is never executed, therefore, this dialog is never shown
       dialog.showErrorBox(
         "Clipboard content not a Spotify link",
         "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
@@ -92,15 +102,23 @@ module.exports = function (settings, browsers, database) {
     shell.openExternal(linkByType);
   });
 
-  // Todo fix getDownloadData() retrieving strange data
+  // TODO: fix getDownloadData() retrieving strange data
   // request to fetch and display list data
-  ipcMain.handle("get-list-data", async () => {
+  ipcMain.handle("get-list-data", async (_event, returning) => {
+    let d1, d2;
+
     try {
-      let d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
-      let d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
+      if (returning == Type.DOWNLOADED) {
+        d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
+      } else if (returning == Type.DOWNLOADING) {
+        d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
+      } else {
+        d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
+        d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
+      }
       return [d1, d2];
     } catch (error) {
-      // Todo add proper visual representation of this database data retrieval error
+      // TODO: add proper visual representation of this database data retrieval error
       return console.error("Error occurred while fetching list data: ", error.message);
     }
   });

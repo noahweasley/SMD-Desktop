@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.bridgeApis.send("show-app-info");
   });
 
-  document.getElementById("files").addEventListener("click", () => {
+  document.getElementById("files").addEventListener("click", (event) => {
     event.preventDefault();
     window.bridgeApis.send("navigate-link", "#music");
   });

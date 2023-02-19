@@ -62,7 +62,7 @@ module.exports = function (settings) {
    * @param {string} _artistUrl the artist identifier to be used in the metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performArtistSearchAction(_artistUrl) {
+  async function performArtistSearchAction() {
     return "Artist URL support coming soon, try again later";
   }
 

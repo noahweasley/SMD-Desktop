@@ -31,7 +31,7 @@
   --progress-timing-function-2: ease-in-out;
   color: var(--grey-solid);
   font-size: 11.5px;
-  font-family: "Montserrat-SB", system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI",
+  font-family: "Montserrat", system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI",
     sans-serif;
 }
 
@@ -275,5 +275,15 @@ a:active {
 @keyframes grow {
   to {
     transform: scale(1.4, 1.4);
+  }
+}
+
+@keyframes horizontal-text-scroll-reveal {
+  from {
+    transform: translateX(100%);
+  }
+  
+  to {
+    transform: -100%;
   }
 }

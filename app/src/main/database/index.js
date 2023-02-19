@@ -264,9 +264,8 @@ module.exports.updateDownloadData = async function (arg) {
  * @param arg an object in format {query: {}}, as an additional query parameter
  */
 module.exports.deleteDownloadData = async function (arg) {
-  this.checkMode(mode);
-
   let data = arg["data"];
+
   try {
     // only create database when the data is about to be used
     await createDatabaseSchema();

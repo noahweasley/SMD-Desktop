@@ -4,7 +4,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;
   let selectedListDataMap = {};
-  // Todo searchQueryList shouldn't exist as a separate array, it should be inside listData
+  // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
   let searchQueryList = [];
   const selectAll = document.getElementById("select-all");
   const actionButtons = document.querySelectorAll(".btn");
@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
       if (button.id == "proceed-download") {
-        // @Todo searchQueryList shouldn't exist as a separate array, it should be inside listData
+        // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
         searchQueryList = Object.values(selectedListDataMap);
       }
 
@@ -145,8 +145,8 @@ window.addEventListener("DOMContentLoaded", () => {
             delete selectedListDataMap[`${listIndex}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               actionButtons[1].setAttribute("disabled", true);
-              // Todo Remove or fix this next line. Make it work or just remove it. 
-              // Todo The feature already works somewhere else in the code
+              // TODO: Remove or fix this next line. Make it work or just remove it. 
+              // TODO: The feature already works somewhere else in the code
               headerCheckBox.checked = false;
             }
           }

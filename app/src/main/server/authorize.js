@@ -25,7 +25,7 @@ module.exports = function (settings, spotifyApi) {
   let timeout, connection, refreshTimer, authorizationCallback;
 
   server.get("/authorize", async (_req, res) => {
-    // Todo fix issue with spotifyApi.getClientId() returning null when it was already set
+    // TODO: fix issue with spotifyApi.getClientId() returning null when it was already set
     if (!spotifyApi.getClientId() || !spotifyApi.getClientSecret()) {
       const [clientId, clientSecret] = await settings.getStates(["spotify-user-client-id", "spotify-user-client-secret"]);
       spotifyApi.setClientId(clientId);
@@ -73,7 +73,7 @@ module.exports = function (settings, spotifyApi) {
       });
 
       if (states.length === 4) {
-        if (authorizationCallback != null && authorizationCallback instanceof Function) {
+        if (authorizationCallback != null) {
           authorizationCallback();
           authorizationCallback = null;
         }
@@ -89,9 +89,13 @@ module.exports = function (settings, spotifyApi) {
       refreshTimer = null;
 
       refreshTimer = setInterval(async () => {
-        const data = await spotifyApi.refreshAccessToken();
-        const access_token = data.body["access_token"];
-        spotifyApi.setAccessToken(access_token);
+        try {
+          const data = await spotifyApi.refreshAccessToken();
+          const access_token = data.body["access_token"];
+          spotifyApi.setAccessToken(access_token);
+        } catch (error) {
+          console.error("Refresh failed", error);
+        }
       }, (expires_in / 2) * 1000);
     });
   });
