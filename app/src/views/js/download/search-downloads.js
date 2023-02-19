@@ -145,7 +145,7 @@ window.addEventListener("DOMContentLoaded", () => {
             delete selectedListDataMap[`${listIndex}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               actionButtons[1].setAttribute("disabled", true);
-              // TODO: Remove or fix this next line. Make it work or just remove it. 
+              // TODO: Remove or fix this next line. Make it work or just remove it.
               // TODO: The feature already works somewhere else in the code
               headerCheckBox.checked = false;
             }

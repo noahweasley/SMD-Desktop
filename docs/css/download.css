@@ -1,24 +1,24 @@
 a.download {
-    /* margin: 16px; */
-    border-radius: 8px;
-    padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
-    border: 1px solid var(--solid-green);
-    text-decoration: none;
-    color: white;
-    transition: 0.2s;
-    padding: 1em 2em;
-    margin-top: 30px;
+  /* margin: 16px; */
+  border-radius: 8px;
+  padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
+  border: 1px solid var(--solid-green);
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
+  padding: 1em 2em;
+  margin-top: 30px;
 }
 
-a.download>i {
-    margin-inline: 16px;
+a.download > i {
+  margin-inline: 16px;
 }
 
 a.download:hover {
-    background-color: var(--solid-green);
+  background-color: var(--solid-green);
 }
 
 .container {
-    display: flex;
-    background-color: black;
+  display: flex;
+  background-color: black;
 }

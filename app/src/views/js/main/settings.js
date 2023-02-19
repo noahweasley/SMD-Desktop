@@ -1,4 +1,4 @@
-'use-strict'
+"use-strict";
 
 window.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("settings-loader");

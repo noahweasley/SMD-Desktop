@@ -1,3 +1,3 @@
-"use-strict" 
+"use-strict";
 
-module.exports = function (_settings, _browsers, _database) {}
+module.exports = function (_settings, _browsers, _database) {};

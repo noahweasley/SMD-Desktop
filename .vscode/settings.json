@@ -1,22 +1,24 @@
 {
-    "workbench.colorTheme": "Community Material Theme Darker High Contrast",
-    "liveServer.settings.port": 5501,
-    "git.ignoreLimitWarning": true,
-    "explorer.excludeGitIgnore": false,
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[css]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.rulers": [
-            125
-        ],
-        "editor.tabSize": 5,
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
+  "workbench.colorTheme": "Community Material Theme Darker High Contrast",
+  "liveServer.settings.port": 5501,
+  "git.ignoreLimitWarning": true,
+  "explorer.excludeGitIgnore": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [125],
+    "editor.tabSize": 5
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

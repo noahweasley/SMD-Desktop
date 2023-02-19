@@ -282,7 +282,7 @@ a:active {
   from {
     transform: translateX(100%);
   }
-  
+
   to {
     transform: -100%;
   }
