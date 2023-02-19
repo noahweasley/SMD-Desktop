@@ -11,7 +11,9 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.rulers": [125],
+    "editor.rulers": [
+      125
+    ],
     "editor.tabSize": 5
   },
   "[markdown]": {
@@ -20,5 +22,9 @@
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "eslint.options": {
+    "configFile": ".eslintrc.yml",
+    "ignorePath": ".gitignore"
   }
 }
