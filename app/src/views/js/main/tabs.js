@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
     tabItems.forEach((tabItem) => {
       tabItem.addEventListener("click", (_event) => {
         // remove nav-item active state
-        for (x = 0; x < tabItems.length; x++) {
+        for (let x = 0; x < tabItems.length; x++) {
           tabItems[x].classList.remove("active");
         }
         tabItem.classList.add("active");
