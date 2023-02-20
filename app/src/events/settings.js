@@ -2,7 +2,7 @@
 
 const { ipcMain } = require("electron");
 
-module.exports = function (settings, _browsers, _database) {
+module.exports = function (settings) {
   // settings; get a single state entry
   ipcMain.handle("get-states", async (_event, args) => await settings.getState(args[0], args[1]));
 

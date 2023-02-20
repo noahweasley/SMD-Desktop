@@ -13,12 +13,12 @@ function __exports() {
     const thumbnailDirectory = getThumbnailDirectory(downloadDirectory);
     const tempThumbDirectory = getTempThumbDirectory(downloadDirectory);
 
-    open(downloadDirectory, "r+", (err, _fd) => {
+    open(downloadDirectory, "r+", (err) => {
       if (err) {
         if (err.code === "EEXIST") return;
         else if (err.code === "ENOENT") {
-          mkdir(thumbnailDirectory, { recursive: true }, (_err) => {});
-          mkdir(tempThumbDirectory, { recursive: true }, (_err) => {});
+          mkdir(thumbnailDirectory, { recursive: true }, () => {});
+          mkdir(tempThumbDirectory, { recursive: true }, () => {});
         } else console.log(err.code);
       }
     });

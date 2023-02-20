@@ -12,12 +12,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // window action button clicked
   document.querySelectorAll(".window-action").forEach((action) => {
-    action.addEventListener("click", (_event) => {
+    action.addEventListener("click", () => {
       window.bridgeApis.send("action-click-event", action.id);
     });
   });
 
-  document.getElementById("about").addEventListener("click", (_event) => {
+  document.getElementById("about").addEventListener("click", () => {
     window.bridgeApis.send("show-app-info");
   });
 
@@ -27,8 +27,8 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // donate button click. Navigate to sponsorship page
-  document.querySelector(".donate").addEventListener("click", (_event) => {
-    window.bridgeApis.send("navigate-link", "https://www.buymeacoffee.com/noahweasley");
+  document.querySelector(".donate").addEventListener("click", () => {
+    window.bridgeApis.send("navigate-link", "https://ko-fi.com/noahweasley");
   });
 
   // Paste URL button click

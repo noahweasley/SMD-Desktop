@@ -38,7 +38,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   // request to search for tracks to download
-  ipcMain.handle("search-tracks", async (_event) => {
+  ipcMain.handle("search-tracks", async () => {
     const error_message = "Uh-oh!! We couldn't find any tracks";
 
     if (downloadQuery.type == "search") {
@@ -131,6 +131,7 @@ module.exports = function (settings, browsers, database) {
     setupTaskQueueMessaging();
 
     function setupTaskQueueMessaging() {
+      // eslint-disable-next-line no-unused-vars
       progressEmitters.forEach((_progressEmitter) => {
         // set up messenger
       });
@@ -139,6 +140,7 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
+  // eslint-disable-next-line no-unused-vars
   ipcMain.handle("pause", async (_event, _args) => {});
 
   ipcMain.handle("pause-all", async () => {

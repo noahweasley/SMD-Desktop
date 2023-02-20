@@ -15,13 +15,10 @@ module.exports = function (settings, browsers, database) {
 
   // dummy data query for testing
   ipcMain.handle("get-dummy-list-data", () => [dummy.getDummyTrack(10), dummy.getDummyTrack(2)]);
-
   // get app info
   ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
-
   // play music
   ipcMain.on("play-music", (_event, arg) => shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg)));
-
   // delete file in database
   ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg));
 

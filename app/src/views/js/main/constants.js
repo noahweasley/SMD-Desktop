@@ -1,4 +1,5 @@
 "use-strict";
+/* eslint-disable no-unused-vars */
 
 const State = Object.freeze({
   MAIN: "main-pane",

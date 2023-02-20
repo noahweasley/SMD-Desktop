@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
     let tabItems = document.querySelectorAll(tabItem);
 
     tabItems.forEach((tabItem) => {
-      tabItem.addEventListener("click", (_event) => {
+      tabItem.addEventListener("click", () => {
         // remove nav-item active state
         for (let x = 0; x < tabItems.length; x++) {
           tabItems[x].classList.remove("active");

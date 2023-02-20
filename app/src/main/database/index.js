@@ -13,6 +13,7 @@ const DATABASE_NAME = "UserDB.sqlite";
 const DOWNLOADED_TABLE = "Downloaded";
 const DOWNLOADING_TABLE = "Downloading";
 
+// eslint-disable-next-line no-undef
 const DB_FILEPATH = !app.isPackaged ? process.env.DB_FILEPATH : path.join(app.getPath("userData"), "User", "Database");
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
 const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");

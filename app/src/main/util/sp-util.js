@@ -4,6 +4,8 @@ const { clipboard } = require("electron");
 
 //! don't touch SpotifyURLType, I tried to remove it once and there was a bug
 // I also don't even know what is depending on it, lol
+
+// eslint-disable-next-line no-undef
 module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
   TRACK: "track",
   PLAYLIST: "playlist",
@@ -26,6 +28,6 @@ module.exports.getSpotifyURLType = function (url) {
     else if (clipboardContent.search(this.SpotifyURLType.ARTIST) != -1) return this.SpotifyURLType.ARTIST;
     else return this.SpotifyURLType.UNKNOWN;
   } else {
-    throw new Error(`Uh ohh !! That wasn't a spotify url`);
+    throw new Error("Uh ohh !! That wasn't a spotify url");
   }
 };

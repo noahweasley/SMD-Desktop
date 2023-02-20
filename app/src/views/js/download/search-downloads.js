@@ -112,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
             delete selectedListDataMap[`${index}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               // very crazy, but I had to search for the header checkbox :)
-              parentHeaderCheckbox =
+              const parentHeaderCheckbox =
                 s_cbx.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.firstElementChild;
 
               parentHeaderCheckbox.checked = false;

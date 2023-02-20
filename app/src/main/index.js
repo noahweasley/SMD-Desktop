@@ -1,7 +1,7 @@
 "use-strict";
 
 const { join } = require("path");
-const { app } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const { createAppFilesDirectory } = require("./util");
 const settings = require("node-user-settings").defaults;
 
@@ -19,7 +19,7 @@ app.whenReady().then(function () {
   mainWindow.init();
 
   app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) mainWindow.init(windowState);
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow.init();
   });
 });
 
