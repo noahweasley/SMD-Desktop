@@ -26,6 +26,6 @@ module.exports.getSpotifyURLType = function (url) {
     else if (clipboardContent.search(this.SpotifyURLType.ARTIST) != -1) return this.SpotifyURLType.ARTIST;
     else return this.SpotifyURLType.UNKNOWN;
   } else {
-    throw new Error(`Uh ohh !! That wasn't a spotify url`);
+    throw new Error("Uh ohh !! That wasn't a spotify url");
   }
 };

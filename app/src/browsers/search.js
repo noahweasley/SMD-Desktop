@@ -1,4 +1,5 @@
 "use-strict";
+/* eslint-disable no-undef */
 
 const { BrowserWindow } = require("electron");
 const { join } = require("path");
@@ -32,7 +33,6 @@ module.exports.init = function () {
   search_window.on("close", (event) => {
     event.preventDefault();
     search_window.hide();
-    queryDownloadData = null;
     search_window.destroy();
     search_window = null;
   });
