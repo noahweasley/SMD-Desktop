@@ -6,12 +6,21 @@ window.addEventListener("DOMContentLoaded", () => {
   let listData = [];
 
   // retrieve user downloads
-  window.bridgeApis.invoke("get-list-data").then((data) => {
-    // display data to user
-    //? I don't know what these conditions mean anymore, lol
-    if ((data && data[0] && data[0].length > 0) || (data && data[1] && data[1].length > 0)) {
-      data[0] ? addListItemDownloaded(data[0]) : displayDecorationById("info_decor__downloaded", true);
-      data[1] ? addListItemDownloading(data[1]) : displayDecorationById("info_decor__downloading", true);
+  window.bridgeApis.invoke("get-list-data").then((listData) => {
+    const listDataDownloaded = listData[0];
+    const listDataDownloading = listData[1];
+    const isListDataDownloadedNotEmpty = listData && listDataDownloaded && listDataDownloaded.length > 0;
+    const isListDataDownloadingNotEmpty = listData && listDataDownloading && listDataDownloading.length > 0;
+
+    if (isListDataDownloadedNotEmpty || isListDataDownloadingNotEmpty) {
+      listDataDownloaded
+        ? addListItemDownloaded(listDataDownloaded)
+        : displayEmptyListPlaceholderById("info_decor__downloaded", true);
+        
+      listDataDownloading
+        ? addListItemDownloading(listDataDownloaded)
+        : displayEmptyListPlaceholderById("info_decor__downloading", true);
+        
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
@@ -30,8 +39,8 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.on("download-progress-update", displayProgress);
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    displayDecorationById("info_decor__downloading", false);
-    displayDecorationById("info_decor__downloaded", true);
+    displayEmptyListPlaceholderById("info_decor__downloading", false);
+    displayEmptyListPlaceholderById("info_decor__downloaded", true);
     // append new data into current data
     addListItemDownloading(args, true);
     registerEventListeners();
@@ -49,7 +58,7 @@ window.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function displayDecorationById(decorationId, shouldShow) {
+  function displayEmptyListPlaceholderById(decorationId, shouldShow) {
     const decoration = document.getElementById(decorationId);
     if (shouldShow) {
       decoration.style.setProperty("display", "flex");
@@ -62,8 +71,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function addListItemDownloading(data, shouldAppend) {
-    const item = data[0]; // type => object
-    const itemIds = data[1]; // type => array of objects
+    const item = data[0]; // type => object (main data)
+    const itemIds = data[data.length - 1]; // type => array of objects (ids)
 
     const uLElement = document.querySelector(".list-group__downloading");
     if (item.length > 0) uLElement.classList.remove("gone");
@@ -190,7 +199,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             listGroup.removeChild(listItem);
             if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
-            displayDecorationById("info_decor__downloaded", false);
+            displayEmptyListPlaceholderById("info_decor__downloaded", false);
           }
         });
       });
@@ -273,7 +282,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.getElementById(elementId);
     const mediaBodyElement = progressBar.parentNode;
     // get the second child element
-    // get the second child element
     const messageElement = mediaBodyElement.children[1];
     messageElement.innerText = `${progress}% downloaded`;
 
@@ -294,7 +302,7 @@ window.addEventListener("DOMContentLoaded", () => {
           if (listGroup.childNodes.length == 0) {
             // no downloads are pending, display decorations
             listGroup.classList.add("gone");
-            displayDecorationById("info_decor__downloading", true);
+            displayEmptyListPlaceholderById("info_decor__downloading", true);
           }
         }
       });
