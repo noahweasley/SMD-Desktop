@@ -12,13 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"
-    ><img
-      src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-      alt="Buy Noah A Coffee"
-      style="height: 50px !important; width: 207px !important"
-    />
-  </a>
+<a href='https://ko-fi.com/L3L6IVTAD' target='_blank'><img height='50' style='border:0px;height:50px;width:207px' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 </p>
 
 </br>
