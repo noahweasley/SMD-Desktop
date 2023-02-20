@@ -13,9 +13,9 @@
 
 <div align="center">
     <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"><img src="https://img.shields.io/github/license/noahweasley/smd-desktop" alt="License" /></a>  
-     <a href=" https://github.com/noahweasley/smd-desktop/releases"><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest server version" /></a>
     <a href="https://noahweasley.github.io/SMD-Desktop"><img src="https://img.shields.io/badge/docs-website-brightgreen.svg" alt="SMD Product Website" /></a>
-    <a href="https://www.patreon.com/noahweasley"><img src="https://img.shields.io/badge/sponsor-patreon-red" alt="Patreon" /></a>
+     <a href=" https://github.com/noahweasley/smd-desktop/releases"><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest server version" /></a>
+    <a href="https://www.patreon.com/noahweasley"><img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon" /></a>
 </div>
 
 </br>
