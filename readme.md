@@ -14,7 +14,7 @@
 <div align="center">
     <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"><img src="https://img.shields.io/github/license/noahweasley/smd-desktop" alt="License" /></a>  
     <a href="https://noahweasley.github.io/SMD-Desktop"><img src="https://img.shields.io/badge/docs-website-brightgreen.svg" alt="SMD Product Website" /></a>
-     <a href=" https://github.com/noahweasley/smd-desktop/releases"><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest server version" /></a>
+     <a href=" https://github.com/noahweasley/smd-desktop/releases"><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest release" /></a>
     <a href="https://www.patreon.com/noahweasley"><img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon" /></a>
 </div>
 
@@ -47,7 +47,9 @@
 There are many ways in which you can participate in this project, for example:
 
 - [Submit bugs and feature requests](https://github.com/noahweasley/SMD-Desktop/issues), and help us verify as they are checked in
+
 - Review [source code changes](https://github.com/noahweasley/SMD-desktop/pulls)
+
 - Review the project and make pull requests for anything from typos to additional and new content
 
 ### Getting Started
@@ -55,11 +57,22 @@ There are many ways in which you can participate in this project, for example:
 #### Initializations
 
 - Clone the repository using `git clone https://github.com/noahweasley/SMD-Desktop.git`
+
 - Enter the project directory using `cd SMD-Desktop` on Windows, in case you are not in the project directory
-- Run npm install to install all the project dependencies
+
+- Run `$ npm install` to install all the project dependencies
+
 - Run `$ npm run start` to run the application
 
-#### Building the application
+#### Configurations
+
+- To check your code for errors and enforce code formatting, run `$ npm run lint`
+
+- To automatically format your code according to the Prettier configuration, run `npm run format`
+
+This will ensure that your code is consistent and error-free, according to the rules and settings specified in the project's ESLint and Prettier configurations.
+
+### Building the application
 
 - Run `npm run pack:win32` to build for Windows x32
 
@@ -67,19 +80,26 @@ There are many ways in which you can participate in this project, for example:
 
 - Run `npm run build` to build for all supported platforms
 
-#### Installing the tools
+### Installing the tools
 
-In the development of S.M.D, a few VS Code extensions are used, namely:
+There are a few VS Code extensions used in the development of S.M.D namely:
+
+#### Recommended
 
 - Prettier formatter (esbenp.prettier-vscode)
 
-- Community Material Theme Darker High Contrast (I love this theme :grin:)
+- Code Spell Checker (streetsidesoftware.code-spell-checker)
 
-You need to install Prettier code formatter or install prettier as a Node JS dependency. I use the VS Code Extension, it's much more easier for me. Prettier is the default code formatter.
+- ES Lint (dbaeumer.vscode-eslint)
+
+#### Optional
+
+- Community Material Theme Darker High Contrast (Equinusocio.vsc-community-material-theme)
 
 ## Download
 
 - Most recent packages are available at Releases page: https://github.com/noahweasley/smd-desktop/releases
+
 - Product website is also available for easy download at: https://noahweasley.github.io/SMD-Desktop
 
 ## License
