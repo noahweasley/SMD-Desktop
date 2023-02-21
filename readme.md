@@ -68,7 +68,7 @@ There are many ways in which you can participate in this project, for example:
 
 - To check your code for errors and enforce code formatting, run `$ npm run lint`
 
-- To automatically format your code according to the Prettier configuration, run `npm run format`
+- To automatically format your code according to the Prettier configuration, run `$ npm run format`
 
 This will ensure that your code is consistent and error-free, according to the rules and settings specified in the project's ESLint and Prettier configurations.
 
