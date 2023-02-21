@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // donate button click. Navigate to sponsorship page
   document.querySelector(".donate").addEventListener("click", () => {
-    window.bridgeApis.send("navigate-link", "https://ko-fi.com/noahweasley");
+    window.bridgeApis.send("navigate-link", "https://www.patreon.com/noahweasley");
   });
 
   // Paste URL button click
@@ -87,9 +87,9 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // ..
-  const s = document.getElementById("spcid");
-  const s1 = document.getElementById("spcs");
-  const s2 = document.getElementById("ytak");
+  const spcid = document.getElementById("spcid");
+  const spcs = document.getElementById("spcs");
+  const ytak = document.getElementById("ytak");
 
   document.querySelectorAll(".btn-form").forEach((auth) => {
     auth.addEventListener("click", () => {
@@ -97,24 +97,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
       switch (auth.id) {
         case "auth-spotify":
-          data = [s.value, s1.value];
+          data = [spcid.value, spcs.value];
           break;
         case "auth-youtube":
-          data = [s2.value];
+          data = [ytak.value];
           break;
       }
 
       // if text areas are empty, don't try to authorize values
-      if (auth.id == "auth-spotify" && s.value == "" && s1.value == "") {
-        s.setAttribute("placeholder", "Client ID can't be empty");
-        s1.setAttribute("placeholder", "Client Secret can't be empty");
+      if (auth.id == "auth-spotify" && spcid.value == "" && spcs.value == "") {
+        spcid.setAttribute("placeholder", "Client ID can't be empty");
+        spcs.setAttribute("placeholder", "Client Secret can't be empty");
         return;
-      } else if (auth.id == "auth-spotify" && s.value == "") {
-        return s.setAttribute("placeholder", "Client ID can't be empty");
-      } else if (auth.id == "auth-spotify" && s1.value == "") {
-        return s1.setAttribute("placeholder", "Client Secret can't be empty");
-      } else if (auth.id == "auth-youtube" && s2.value == "") {
-        return s2.setAttribute("placeholder", "API Key can't be empty");
+      } else if (auth.id == "auth-spotify" && spcid.value == "") {
+        return spcid.setAttribute("placeholder", "Client ID can't be empty");
+      } else if (auth.id == "auth-spotify" && spcs.value == "") {
+        return spcs.setAttribute("placeholder", "Client Secret can't be empty");
+      } else if (auth.id == "auth-youtube" && ytak.value == "") {
+        return ytak.setAttribute("placeholder", "API Key can't be empty");
       } else {
         // authorize application with parameters provided by user
         data.push(auth.id);

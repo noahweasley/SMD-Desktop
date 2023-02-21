@@ -14,7 +14,7 @@
 .abs-bottom {
   position: absolute;
   bottom: 10px;
-  left: 15%;
+  left: 20%;
 }
 
 .bounce {
@@ -41,10 +41,6 @@ a:active {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.eleme-columns {
-  flex-direction: column;
 }
 
 .bounce:hover {
@@ -829,6 +825,10 @@ form {
 
 .icon-spotify {
   color: var(--spotify-green);
+}
+
+.icon.icon-heart {
+  color: hotpink;
 }
 
 #auth-youtube {
