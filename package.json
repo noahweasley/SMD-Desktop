@@ -4,6 +4,28 @@
   "version": "1.0.0",
   "description": "An Open-Sourced Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API",
   "main": "app/src/main/index.js",
+  "author": "Noah Wesley",
+  "license": "GPL-3.0",
+  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/noahweasley/SMD-desktop"
+  },
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/noahweasley"
+  },
+  "keywords": [
+    "javascript",
+    "electron",
+    "music",
+    "spotify",
+    "youtube",
+    "downloader",
+    "music-downloader",
+    "youtube-downloader",
+    "spotify-downloader"
+  ],
   "scripts": {
     "start": "electron .",
     "debug": "electron . --trace-warnings",
@@ -26,28 +48,6 @@
     "format:prettier": "npm run prettier:base -- --write \"**/*.{js,ts,tsx,json,md,mdx}\"",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx,mdx}\"",
     "format": "npm run format:eslint && npm run format:prettier"
-  },
-  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
-  "repository": {
-    "type": "git",
-    "url": "www.github.com/noahweasley/SMD-desktop"
-  },
-  "keywords": [
-    "javascript",
-    "electron",
-    "music",
-    "spotify",
-    "youtube",
-    "downloader",
-    "music-downloader",
-    "youtube-downloader",
-    "spotify-downloader"
-  ],
-  "author": "Noah Wesley",
-  "license": "GPL-3.0",
-  "funding": {
-    "type": "patreon",
-    "url": "https://www.patreon.com/noahweasley"
   },
   "devDependencies": {
     "electron": "^21.3.1",
