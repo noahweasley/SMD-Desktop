@@ -46,8 +46,8 @@
   "author": "Noah Wesley",
   "license": "GPL-3.0",
   "funding": {
-    "type": "buymeacoffee",
-    "url": "https://www.buymeacofee.com/noahweasley"
+    "type": "patreon",
+    "url": "https://www.patreon.com/noahweasley"
   },
   "devDependencies": {
     "electron": "^21.3.1",
