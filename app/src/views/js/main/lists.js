@@ -7,20 +7,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((listData) => {
-    const listDataDownloaded = listData[0];
-    const listDataDownloading = listData[1];
-    const isListDataDownloadedNotEmpty = listData && listDataDownloaded && listDataDownloaded.length > 0;
-    const isListDataDownloadingNotEmpty = listData && listDataDownloading && listDataDownloading.length > 0;
+    const listDownloadedData = listData[0];
+    const listDownloadingData = listData[1];
+    const hasListDownloadedData = listData && listDownloadedData && listDownloadedData.length > 0;
+    const hasListDownloadingData = listData && listDownloadingData && listDownloadingData.length > 0;
 
-    if (isListDataDownloadedNotEmpty || isListDataDownloadingNotEmpty) {
-      listDataDownloaded
-        ? addListItemDownloaded(listDataDownloaded)
+    if (hasListDownloadedData || hasListDownloadingData) {
+      listDownloadedData
+        ? addListItemDownloaded(listDownloadedData)
         : displayEmptyListPlaceholderById("info_decor__downloaded", true);
-        
-      listDataDownloading
-        ? addListItemDownloading(listDataDownloaded)
+
+      listDownloadingData
+        ? addListItemDownloading(listDownloadedData)
         : displayEmptyListPlaceholderById("info_decor__downloading", true);
-        
+
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
@@ -231,13 +231,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
       navItem.addEventListener("click", () => {
         // don't change active state of the nav item that have the 'click' class as attribute
-        if (navItemChildren.indexOf(navItem) === 1 || navItemChildren.indexOf(navItem) === navItemChildren.length - 2) {
-          return;
-        }
-        // remove nav-item active state
+        const filesNavItemIndex = 1;
+        const aboutNavItemIndex = navItemChildren.length - 2;
+        const isFilesNavItemIndex = navItemChildren.indexOf(navItem) === filesNavItemIndex;
+        const isAboutNavItemIndex = navItemChildren.indexOf(navItem) === aboutNavItemIndex;
+
+        if (isFilesNavItemIndex || isAboutNavItemIndex) return;
+
         for (let x = 0; x < navItems.length; x++) {
           navItems[x].classList.remove("active");
         }
+
         navItem.classList.add("active");
 
         // toggle main and settings pane's visibility

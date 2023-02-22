@@ -10,6 +10,7 @@ const { States } = require("../database/constants");
  */
 module.exports = function (options) {
   let state = States.INACTIVE;
+  let downloadStream;
 
   async function wait() {
     state = States.PENDING;
@@ -44,9 +45,9 @@ module.exports = function (options) {
   }
 
   async function registerDownloadOp() {
-    let progressEmitter = await downloadMatchingTrack(options);
-    progressEmitter.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
-    return progressEmitter;
+    downloadStream = await downloadMatchingTrack(options);
+    downloadStream.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
+    return downloadStream;
   }
 
   return { pause, resume, wait, cancel, start };

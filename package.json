@@ -6,9 +6,10 @@
   "main": "app/src/main/index.js",
   "scripts": {
     "start": "electron .",
-    "start-no-database": "npm run clear-debug-database && npm run start",
-    "start-no-preference": "npm run clear-preference && npm run start",
     "debug": "electron . --trace-warnings",
+    "lint:start": "npm run lint && npm run start",
+    "start-no-database": "npm run clear-debug-database && npm run lint:start ",
+    "start-no-preference": "npm run clear-preference && npm run lint:start",
     "clear-debug-database": "del /q %userprofile%\\Desktop\\Database\\*",
     "clear-preference": "del /q \"%userprofile%\\AppData\\Roaming\\S.M.D Desktop\\User\\Preferences\"",
     "clear-cache": "npm run clear-preference && npm run clear-debug-database",

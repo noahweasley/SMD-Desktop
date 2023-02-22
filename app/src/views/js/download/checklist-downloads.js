@@ -156,7 +156,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function persistDataOnList(list, description) {
       const listItems = description["trackCollection"];
-      console.log(listItems);
 
       for (let pos = 0; pos < listItems.length; pos++) {
         appendListItem(pos, list, listItems);

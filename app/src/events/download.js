@@ -48,7 +48,8 @@ module.exports = function (settings, browsers, database) {
         searchResults = await ytdl.searchMatchingTracks(downloadQuery.value);
         return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
-        return err.message;
+        console.error(err);
+        return "An Unknown Error Occurred";
       }
     } else if (downloadQuery.type == "track") {
       try {
@@ -59,7 +60,8 @@ module.exports = function (settings, browsers, database) {
         let searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : error_message;
       } catch (err) {
-        return err.message;
+        console.error(err);
+        return "An Unknown Error Occurred";
       }
     } else {
       let tracks = downloadQuery.description.trackCollection;
@@ -71,7 +73,8 @@ module.exports = function (settings, browsers, database) {
       try {
         return await Promise.all(queryPromises);
       } catch (err) {
-        return err.message;
+        console.error(err);
+        return "An Unknown Error Occurred";
       }
     }
   });
@@ -88,15 +91,15 @@ module.exports = function (settings, browsers, database) {
 
       const downloadData = searchQueryResults
         .map((searchQueryResult) => ({
+          Track_Playlist_Title: "-",
+          Track_Artists: "-",
           Error_Occurred: false,
           Download_State: States.ACTIVE,
-          Track_Playlist_Title: "-",
+          Download_Progress: 0,
           Track_Title: searchQueryResult.videoTitle,
           Track_Url: searchQueryResult.videoUrl,
-          Track_Artists: "-",
           Downloaded_Size: "Unknown",
-          Download_Progress: 0,
-          Track_Download_Size: 0,
+          Track_Download_Size: "Unknown",
           Message: "Download in progress..." /* A default message to init downloads */
         }))
         .flat();
@@ -127,12 +130,12 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    let progressEmitters = fileDownloader.initiateQueuedDownloads();
+    let downloadStream = fileDownloader.initiateQueuedDownloads();
     setupTaskQueueMessaging();
 
     function setupTaskQueueMessaging() {
       // eslint-disable-next-line no-unused-vars
-      progressEmitters.forEach((_progressEmitter) => {
+      downloadStream.forEach((_progressEmitter) => {
         // set up messenger
       });
       // clear task queue, downloads are now active

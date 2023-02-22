@@ -73,21 +73,21 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateQueuedDownloads() {
-    let progressEmitters = []; // contains both active and inactive downloads
+    let downloadStreams = []; // contains both active and inactive downloads
 
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        let activeProgressEmitter = downloadTask.start();
-        progressEmitters.push(activeProgressEmitter);
-        activeDownloadTasks.push(activeProgressEmitter);
+        let activeDownloadStream = downloadTask.start();
+        downloadStreams.push(activeDownloadStream);
+        activeDownloadTasks.push(activeDownloadStream);
       } else {
-        let inactiveProgressEmitter = downloadTask.wait();
-        progressEmitters.push(inactiveProgressEmitter);
-        inactiveDownloadTasks.push(inactiveProgressEmitter);
+        let inactiveDownloadStream = downloadTask.wait();
+        downloadStreams.push(inactiveDownloadStream);
+        inactiveDownloadTasks.push(inactiveDownloadStream);
       }
     });
 
-    return progressEmitters;
+    return downloadStreams;
   }
 
   return {

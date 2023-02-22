@@ -19,7 +19,7 @@ module.exports = function (settings) {
    * @param {number} limit the maximum number of items to fetch
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performAlbumSearchAction(albumUrl, limit = 50) {
+  async function searchSpotifyAlbum(albumUrl, limit = 50) {
     let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
 
@@ -62,17 +62,17 @@ module.exports = function (settings) {
    * @param {string} _artistUrl the artist identifier to be used in the metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performArtistSearchAction() {
+  async function searchSpotifyArtist() {
     return "Artist URL support coming soon, try again later";
   }
 
   /**
    * starts playlist metadata query
-   *
+   * 
    * @param {string} playlistUrl the playlist identifier to be used in metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performPlaylistSearchAction(playlistUrl) {
+  async function searchSpotifyPlaylist(playlistUrl) {
     let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
 
@@ -87,7 +87,7 @@ module.exports = function (settings) {
     }
 
     if (!dataReceived) return "An error occurred while retrieving playlist data";
-
+                          
     const body = data.body;
     const name = body["name"];
     const tracks = body["tracks"];
@@ -109,7 +109,7 @@ module.exports = function (settings) {
    * @param {string} track the track identifier to be used in metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
-  async function performTrackSearchAction(trackUrl) {
+  async function searchSpotifyTrack(trackUrl) {
     let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
     let data, dataReceived;
 
@@ -174,16 +174,16 @@ module.exports = function (settings) {
     if (clipboardContent.includes("https://open.spotify.com")) {
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
-          data = performTrackSearchAction(clipboardContent);
+          data = searchSpotifyTrack(clipboardContent);
           break;
         case SpotifyURLType.ALBUM:
-          data = performAlbumSearchAction(clipboardContent);
+          data = searchSpotifyAlbum(clipboardContent);
           break;
         case SpotifyURLType.ARTIST:
-          data = performArtistSearchAction(clipboardContent);
+          data = searchSpotifyArtist(clipboardContent);
           break;
         case SpotifyURLType.PLAYLIST:
-          data = performPlaylistSearchAction(clipboardContent);
+          data = searchSpotifyPlaylist(clipboardContent);
           break;
         default:
           throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);
@@ -201,10 +201,10 @@ module.exports = function (settings) {
 
   return {
     spotifyApi,
-    performAlbumSearchAction,
-    performArtistSearchAction,
-    performPlaylistSearchAction,
-    performTrackSearchAction,
+    searchSpotifyAlbum,
+    searchSpotifyArtist,
+    searchSpotifyPlaylist,
+    searchSpotifyTrack,
     getSpotifyLinkData
   };
 };

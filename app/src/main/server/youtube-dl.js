@@ -16,23 +16,23 @@ function __exports() {
     NOT_EXISTS_NOT_DOWNLOADED: "SIG_NOT_EXISTS_NOT_DOWNLOADED"
   });
 
-  function _getYtdlpBinaryFilepath(parentDirectory) {
+  function _getBinaryFilepath(parentDirectory) {
     return process.platform == "win32" ? path.join(parentDirectory, "yt-dlp.exe") : path.join(parentDirectory, "yt-dlp");
   }
 
   /**
    * @returns the directory where the the ytdlp binary file was downloaded
    */
-  function getYtdlpBinaryFileDirectory() {
+  function getBinaryFileDirectory() {
     return !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
   }
 
   /**
    * @returns the full file path to the ytdlp binary file
    */
-  function getYtdlpBinaryFilepath(parentDirectory) {
-    const ytdlpBinaryFileDirectory = parentDirectory || getYtdlpBinaryFileDirectory();
-    return _getYtdlpBinaryFilepath(ytdlpBinaryFileDirectory);
+  function getBinaryFilepath(parentDirectory) {
+    const ytdlpBinaryFileDirectory = parentDirectory || getBinaryFileDirectory();
+    return _getBinaryFilepath(ytdlpBinaryFileDirectory);
   }
 
   /**
@@ -40,8 +40,8 @@ function __exports() {
    *
    * @returns a Promise that resolves to the directory where the the ytdlp binary file was downloaded
    */
-  async function getYtdlpBinaryFileDirectoryOrCreateIfNotExist() {
-    const directoryPath = getYtdlpBinaryFileDirectory();
+  async function getOrCreateBinaryFileDirectory() {
+    const directoryPath = getBinaryFileDirectory();
 
     try {
       await access(directoryPath);
@@ -61,8 +61,8 @@ function __exports() {
    *
    * @returns the full file path to the ytdlp binary file
    */
-  async function getYtdlpBinaryFilepathThrowingErrorIfNotExist() {
-    const binaryFileDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
+  async function getBinaryFilepathOrThrowError() {
+    const binaryFileDirectory = await getOrCreateBinaryFileDirectory();
     const fileName = "yt-dlp";
 
     try {
@@ -112,7 +112,7 @@ function __exports() {
    * Downloads track specified by `options`
    *
    * @param {JSON} options an object describing the video. `{videoLink : ... , videoId : ...}`
-   * @returns a YTDLP event emitter instance
+   * @returns {YTDlpReadable} a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
     let progressEmitter = new EventEmitter();
@@ -123,13 +123,13 @@ function __exports() {
 
     try {
       target.webContents.send("show-binary-download-dialog", true);
-      let downloadSignal = await downloadYtdlpBinaries();
+      let downloadSignal = await downloadBinaries();
       target.webContents.send("show-binary-download-dialog", false);
 
       if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
-        const ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
+        const ytdlpBinaryFilepath = getBinaryFilepath();
         const dirname = path.dirname(ytdlpBinaryFilepath);
-        const filename = _getYtdlpBinaryFilepath(dirname);
+        const filename = _getBinaryFilepath(dirname);
 
         let ytdlpWrapper = new ytdlp(filename);
         // TODO: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
@@ -170,7 +170,7 @@ function __exports() {
       _downloadStream?.destroy();
     }
 
-    return progressEmitter;
+    return _downloadStream;
   }
 
   /**
@@ -178,12 +178,12 @@ function __exports() {
    *
    * @returns {Promise<string>} promise that would be fulfilled when the binaries are downloaded
    */
-  async function downloadYtdlpBinaries() {
+  async function downloadBinaries() {
     let fileHandle;
     let ytdlpBinaryFilepath;
 
     try {
-      ytdlpBinaryFilepath = getYtdlpBinaryFilepath();
+      ytdlpBinaryFilepath = getBinaryFilepath();
       fileHandle = await open(ytdlpBinaryFilepath, "r+");
       return Signal.EXISTS_NOT_DOWNLOADED; // file exist
     } catch (err) {
@@ -193,8 +193,8 @@ function __exports() {
     }
 
     async function downloadFromGithubAndHandleErrors() {
-      const parentDirectory = await getYtdlpBinaryFileDirectoryOrCreateIfNotExist();
-      const ytdlpBinaryFilepath = getYtdlpBinaryFilepath(parentDirectory);
+      const parentDirectory = await getOrCreateBinaryFileDirectory();
+      const ytdlpBinaryFilepath = getBinaryFilepath(parentDirectory);
       try {
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         return Signal.NOT_EXISTS_DOWNLOADED; // File downloaded
@@ -207,12 +207,12 @@ function __exports() {
   return {
     Signal,
     downloadMatchingTrack,
-    downloadYtdlpBinaries,
+    downloadBinaries,
     searchMatchingTracks,
-    getYtdlpBinaryFileDirectory,
-    getYtdlpBinaryFileDirectoryOrCreateIfNotExist,
-    getYtdlpBinaryFilepath,
-    getYtdlpBinaryFilepathThrowingErrorIfNotExist
+    getBinaryFileDirectory,
+    getOrCreateBinaryFileDirectory,
+    getBinaryFilepath,
+    getBinaryFilepathOrThrowError
   };
 }
 
