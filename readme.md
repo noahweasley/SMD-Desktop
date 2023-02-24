@@ -82,7 +82,7 @@ This will ensure that your code is consistent and error-free, according to the r
 
 ### Installing the tools
 
-There are a few VS Code extensions used in the development of S.M.D namely:
+There are the VS Code extensions used in the development of S.M.D:
 
 #### Recommended
 
@@ -101,6 +101,10 @@ There are a few VS Code extensions used in the development of S.M.D namely:
 - Most recent packages are available at Releases page: https://github.com/noahweasley/smd-desktop/releases
 
 - Product website is also available for easy download at: https://noahweasley.github.io/SMD-Desktop
+
+## Support and Donations
+
+If you wish to support the project you could just star the project, it is not necessary that you donate to the project, I am actively maintaining it, for now. Donations are all sent to my patreon page and also, I know that I should have used something better, but the in my country, other platforms are not available. If you have a better suggestion you could send me an E-Mail.
 
 ## License
 
