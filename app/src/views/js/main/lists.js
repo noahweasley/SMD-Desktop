@@ -7,18 +7,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((listData) => {
-    const listDownloadedData = listData[0];
-    const listDownloadingData = listData[1];
-    const hasListDownloadedData = listData && listDownloadedData && listDownloadedData.length > 0;
-    const hasListDownloadingData = listData && listDownloadingData && listDownloadingData.length > 0;
+    const downloadedData = listData[0];
+    const downloadingData = listData[1];
+    const hasDownloadedData = listData && downloadedData && downloadedData.length > 0;
+    const hasDownloadingData = listData && downloadingData && downloadingData.length > 0;
 
-    if (hasListDownloadedData || hasListDownloadingData) {
-      listDownloadedData
-        ? addListItemDownloaded(listDownloadedData)
+    if (hasDownloadedData || hasDownloadingData) {
+      downloadedData
+        ? addListItemDownloaded(downloadedData)
         : displayEmptyListPlaceholderById("info_decor__downloaded", true);
 
-      listDownloadingData
-        ? addListItemDownloading(listDownloadedData)
+      downloadingData
+        ? addListItemDownloading(downloadedData)
         : displayEmptyListPlaceholderById("info_decor__downloading", true);
 
       // Now display the populated list items
@@ -92,7 +92,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function createList(position, itemIds) {
-      const itemId = itemIds.id;
+      const itemId = itemIds[position].id;
+      const db_data = item[position];
+
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
       // create the thumbnail element
@@ -101,7 +103,7 @@ window.addEventListener("DOMContentLoaded", () => {
       thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
-      listElement.append(createMediaBody(itemId, item[position]));
+      listElement.append(createMediaBody(itemId, db_data));
       // append list item to list
       uLElement.append(listElement);
       listElement.classList.remove("gone");

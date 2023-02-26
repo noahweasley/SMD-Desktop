@@ -57,6 +57,22 @@ function __exports() {
   }
 
   /**
+   * @returns {boolean} a flag indicating if the binary file exists or not
+   */
+  async function checkIfBinaryExists() {
+    const ytdlpBinaryFilepath = getBinaryFilepath();
+    let fileHandle;
+
+    try {
+      fileHandle = await open(ytdlpBinaryFilepath, "r+");
+    } catch (error) {
+      return false;
+    } finally {
+      fileHandle?.close();
+    }
+  }
+
+  /**
    * Checks if the binary file has been downloaded and/or exists then return the file path, if not, it throws an error
    *
    * @returns the full file path to the ytdlp binary file
@@ -112,19 +128,23 @@ function __exports() {
    * Downloads track specified by `options`
    *
    * @param {JSON} options an object describing the video. `{videoLink : ... , videoId : ...}`
-   * @returns {YTDlpReadable} a YTDLP event emitter instance
+   * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
     let progressEmitter = new EventEmitter();
-    let _downloadStream;
+    let downloadStream;
     const request = options.request;
     const target = options.targetWindow.getWindow();
     let remainingNumberOfRetriesTillEBUSY = 3;
 
     try {
-      target.webContents.send("show-binary-download-dialog", true);
+      const binaryFileExists = checkIfBinaryExists();
+
+      if (binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
+
       let downloadSignal = await downloadBinaries();
-      target.webContents.send("show-binary-download-dialog", false);
+
+      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 
       if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
         const ytdlpBinaryFilepath = getBinaryFilepath();
@@ -137,18 +157,19 @@ function __exports() {
         await (async function executeCommand() {
           try {
             // 140 here means that the audio would be extracted
-            _downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+            downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
           } catch (err) {
             if (err.code === "EBUSY") {
               if (remainingNumberOfRetriesTillEBUSY-- != 0) {
                 await delay(1000);
                 executeCommand();
               }
+              throw err; // rethrow error if cannot execute a stream
             }
           }
         })();
 
-        _downloadStream.on("progress", (progress) => {
+        downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
             id: 1,
             progress: progress.percent
@@ -157,7 +178,7 @@ function __exports() {
 
         let fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
         try {
-          await pipeline(_downloadStream, createWriteStream(fileToStoreData));
+          await pipeline(downloadStream, createWriteStream(fileToStoreData));
         } catch (ignored) {
           // ignored this error for now because the songs are downloaded but stream somehow contains data
         }
@@ -167,10 +188,10 @@ function __exports() {
     } catch (err) {
       progressEmitter?.emit("error", err);
     } finally {
-      _downloadStream?.destroy();
+      downloadStream?.destroy();
     }
 
-    return _downloadStream;
+    return downloadStream;
   }
 
   /**
@@ -179,33 +200,23 @@ function __exports() {
    * @returns {Promise<string>} promise that would be fulfilled when the binaries are downloaded
    */
   async function downloadBinaries() {
-    let fileHandle;
-    let ytdlpBinaryFilepath;
-
-    try {
-      ytdlpBinaryFilepath = getBinaryFilepath();
-      fileHandle = await open(ytdlpBinaryFilepath, "r+");
-      return Signal.EXISTS_NOT_DOWNLOADED; // file exist
-    } catch (err) {
-      return downloadFromGithubAndHandleErrors();
-    } finally {
-      fileHandle?.close();
-    }
-
-    async function downloadFromGithubAndHandleErrors() {
+    if (checkIfBinaryExists()) {
+      return Signal.EXISTS_NOT_DOWNLOADED;
+    } else {
       const parentDirectory = await getOrCreateBinaryFileDirectory();
       const ytdlpBinaryFilepath = getBinaryFilepath(parentDirectory);
       try {
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
-        return Signal.NOT_EXISTS_DOWNLOADED; // File downloaded
+        return Signal.NOT_EXISTS_DOWNLOADED;
       } catch (err) {
-        return Signal.NOT_EXISTS_NOT_DOWNLOADED; // file does not exist and couldn't be downloaded
+        return Signal.NOT_EXISTS_NOT_DOWNLOADED;
       }
     }
   }
 
   return {
     Signal,
+    checkIfBinaryExists,
     downloadMatchingTrack,
     downloadBinaries,
     searchMatchingTracks,

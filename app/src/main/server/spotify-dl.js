@@ -68,7 +68,7 @@ module.exports = function (settings) {
 
   /**
    * starts playlist metadata query
-   * 
+   *
    * @param {string} playlistUrl the playlist identifier to be used in metadata query
    * @throws error if error occurred while fetching data, this can be caused by network
    */
@@ -87,7 +87,7 @@ module.exports = function (settings) {
     }
 
     if (!dataReceived) return "An error occurred while retrieving playlist data";
-                          
+
     const body = data.body;
     const name = body["name"];
     const tracks = body["tracks"];

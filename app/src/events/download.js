@@ -86,8 +86,6 @@ module.exports = function (settings, browsers, database) {
 
     if (args[0] === "proceed-download") {
       const searchQueryResults = args[1];
-      downloadTasks = fileDownloader.enqueueTasks(searchQueryResults);
-      // map the data from search results into required database format
 
       const downloadData = searchQueryResults
         .map((searchQueryResult) => ({
@@ -100,17 +98,17 @@ module.exports = function (settings, browsers, database) {
           Track_Url: searchQueryResult.videoUrl,
           Downloaded_Size: "Unknown",
           Track_Download_Size: "Unknown",
-          Message: "Download in progress..." /* A default message to init downloads */
+          Message: "Download in progress..."
         }))
         .flat();
-
-      // then add the search results the pending downloads database
 
       try {
         const insertedDataColumnIds = await database.addDownloadData({
           type: Type.DOWNLOADING,
           data: downloadData
         });
+
+        downloadTasks = fileDownloader.enqueueTasks(insertedDataColumnIds, searchQueryResults);
 
         if (insertedDataColumnIds) {
           // update download list UI, with current pending download data]
@@ -123,7 +121,6 @@ module.exports = function (settings, browsers, database) {
           );
         }
       } catch (err) {
-        // ? i also don't understand this error too. What were you expecting ?
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }

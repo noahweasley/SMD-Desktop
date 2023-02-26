@@ -24,12 +24,12 @@ module.exports = function (settings, browsers, database) {
 
   // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, arg) => {
-    let isDeleted = await database.deleteDownloadData(arg);
-    if (isDeleted) {
+    let isEntryDeleted = await database.deleteDownloadData(arg);
+    if (isEntryDeleted) {
       /* empty */
     }
 
-    return isDeleted;
+    return isEntryDeleted;
   });
 
   // after pasting url and download window is about to display it's content

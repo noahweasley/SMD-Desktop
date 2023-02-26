@@ -100,7 +100,7 @@ async function createDatabaseSchema() {
         await createDirectory();
       } else {
         // unknown bug
-        console.error(`An unknown error occurred: ${err.code}: ${err.message}`);
+        console.error("An unknown error occurred", err.message);
       }
     } finally {
       fileHandle?.close();
@@ -125,6 +125,11 @@ let __database = this.database;
 // -                       MAIN DATABASE CODE                              - //
 // -                                                                       - //
 // - --------------------------------------------------------------------- - //
+
+async function getRWDatabase() {
+  await createDatabaseSchema();
+  return __database;
+}
 
 /**
  * Called in database lifecycle when the database is about to be created.
@@ -188,21 +193,20 @@ function onUpgradeDatabase(oldVersion, newVersion) {
  * @returns the list data as stored in the application's database
  */
 module.exports.getDownloadData = async function (arg) {
-  // only create database when the data is about to be used
-  try {
-    await createDatabaseSchema();
+  const database = await getRWDatabase();
 
+  try {
     if (arg["type"] == Type.DOWNLOADED) {
-      let data = await __database.select("*").from(DOWNLOADED_TABLE);
+      let data = await database.select("*").from(DOWNLOADED_TABLE);
       return data.length > 0 ? data : null;
     } else if (arg["type"] == Type.DOWNLOADING) {
-      let data = await __database.select("*").from(DOWNLOADING_TABLE);
+      let data = await database.select("*").from(DOWNLOADING_TABLE);
       return data.length > 0 ? data : null;
     } else {
       throw new Error(`${arg["type"]} is not supported`);
     }
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    console.error(error);
     return [];
   }
 };
@@ -215,16 +219,15 @@ module.exports.getDownloadData = async function (arg) {
  * @returns true if the data was added
  */
 module.exports.addDownloadData = async function (arg) {
-  try {
-    // only create database when the data is about to be used
-    await createDatabaseSchema();
+  const database = await getRWDatabase();
 
+  try {
     if (arg["type"] == Type.DOWNLOADED) {
-      let result = await __database.insert(arg["data"]).into(DOWNLOADED_TABLE).returning("id");
+      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE).returning("id");
       return result[0]; // the column id
     } else if (arg["type"] == Type.DOWNLOADING) {
       // data property is the main db data in the object
-      let result = await __database.insert(arg["data"]).into(DOWNLOADING_TABLE).returning("id");
+      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE).returning("id");
       return result[0]; // the column id
     } else {
       throw new Error(`${arg["type"]} is not supported`);
@@ -244,9 +247,6 @@ module.exports.addDownloadData = async function (arg) {
  */
 module.exports.updateDownloadData = async function (arg) {
   try {
-    // only create database when the data is about to be used
-    await createDatabaseSchema();
-
     if (arg["type"] == Type.DOWNLOADED) {
       throw new Error("Update is not yet supported");
     } else if (arg["type"] == Type.DOWNLOADING) {
@@ -266,20 +266,18 @@ module.exports.updateDownloadData = async function (arg) {
  */
 module.exports.deleteDownloadData = async function (arg) {
   let data = arg["data"];
+  const database = await getRWDatabase();
 
   try {
-    // only create database when the data is about to be used
-    await createDatabaseSchema();
-
     if (arg["type"] == Type.DOWNLOADED) {
-      let result = await __database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
       return result > 0;
     } else if (arg["type"] == Type.DOWNLOADING) {
-      let result = await __database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
       return result > 0;
     } else throw new Error(`${arg["type"]} is not supported`);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error);
     return false;
   }
 };

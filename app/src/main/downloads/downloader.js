@@ -9,7 +9,7 @@ module.exports = function (config) {
   const locker = lock(maxParallelDownloads);
 
   let downloadTaskQueue = [];
-  // tasks => Emitter
+  // tasks => streams[]
   let activeDownloadTasks = [];
   let inactiveDownloadTasks = [];
 
