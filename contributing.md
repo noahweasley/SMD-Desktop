@@ -22,6 +22,15 @@ There are many ways in which you can participate in this project, for example:
 
 ### Configurations
 
+- Add a `.env` file (optional) at the root of the project with these keys:
+
+```dotenv
+BINARY_LOCATION="folder/to/ytdlp/binary"
+DB_FILEPATH="folder/to/sqlite/database"
+```
+
+This will enable you to test the test and view the contents of files created by the application properly. Set `DB_FILEPATH` to a custom folder of your choice and also edit the path to the database folder in `clear-debug-database` script if you want it to run successfully. Any changes made to this script should be changed to the default before opening a pull request.
+
 - To check your code for errors and enforce code formatting, run `$ npm run lint`
 
 - To automatically format your code according to the Prettier configuration, run `$ npm run format`
