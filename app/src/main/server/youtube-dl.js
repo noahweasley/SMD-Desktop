@@ -3,7 +3,7 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
-const { open, readdir, access, mkdir } = require("fs/promises");
+const { open, readdir, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { getDownloadsDirectory, delay } = require("../util");
 const { createWriteStream } = require("fs");
@@ -43,7 +43,7 @@ function __exports() {
     const directoryPath = getBinaryFileDirectory();
 
     try {
-      await access(directoryPath);
+      await open(directoryPath, "r");
     } catch (err) {
       if (err.code === "ENOENT") {
         await mkdir(directoryPath, { recursive: true });
@@ -56,7 +56,7 @@ function __exports() {
   }
 
   /**
-   * @returns {boolean} a flag indicating if the binary file exists or not
+   * @returns {Promise<boolean>} a flag indicating if the binary file exists or not
    */
   async function checkIfBinaryExists() {
     const ytdlpBinaryFilepath = getBinaryFilepath();
@@ -137,7 +137,7 @@ function __exports() {
     let numberOfRetriesTillEBUSY = 3;
 
     try {
-      const binaryFileExists = checkIfBinaryExists();
+      const binaryFileExists = await checkIfBinaryExists();
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
 
@@ -199,7 +199,9 @@ function __exports() {
    * @returns {Promise<string>} promise that would be fulfilled when the binaries are downloaded
    */
   async function downloadBinaries() {
-    if (checkIfBinaryExists()) {
+    const binaryFileExists = await checkIfBinaryExists();
+
+    if (binaryFileExists) {
       return Signal.EXISTS_NOT_DOWNLOADED;
     } else {
       const parentDirectory = await getOrCreateBinaryFileDirectory();
