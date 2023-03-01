@@ -139,24 +139,24 @@ function onCreateDatabase() {
     try {
       await __database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
         tableBuilder.increments();
-        tableBuilder.integer("Track_Download_Size");
-        tableBuilder.string("Track_Playlist_Title");
-        tableBuilder.string("Track_Title");
-        tableBuilder.string("Track_Artists");
-        tableBuilder.string("Track_Url");
+        tableBuilder.integer("TrackDownloadSize");
+        tableBuilder.string("TrackPlaylistTitle");
+        tableBuilder.string("TrackTitle");
+        tableBuilder.string("TrackArtists");
+        tableBuilder.string("TrackUrl");
       });
 
       await __database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
         tableBuilder.increments();
-        tableBuilder.boolean("Error_Occurred");
-        tableBuilder.string("Download_State");
-        tableBuilder.string("Track_Playlist_Title");
-        tableBuilder.string("Track_Title");
-        tableBuilder.string("Track_Artists");
-        tableBuilder.integer("Downloaded_Size");
-        tableBuilder.integer("Track_Download_Size");
-        tableBuilder.integer("Download_Progress");
-        tableBuilder.string("Track_Url");
+        tableBuilder.boolean("ErrorOccurred");
+        tableBuilder.string("DownloadState");
+        tableBuilder.string("TrackPlaylistTitle");
+        tableBuilder.string("TrackTitle");
+        tableBuilder.string("TrackArtists");
+        tableBuilder.integer("DownloadedSize");
+        tableBuilder.integer("TrackDownloadSize");
+        tableBuilder.integer("DownloadProgress");
+        tableBuilder.string("TrackUrl");
         tableBuilder.string("Message");
       });
       return true;
