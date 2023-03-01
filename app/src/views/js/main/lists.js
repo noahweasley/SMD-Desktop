@@ -49,12 +49,12 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   function displayAllDecorations(shouldShow) {
-    const info_decorations = document.querySelectorAll(".info-decor");
+    const infoDecorations = document.querySelectorAll(".info-decor");
 
-    info_decorations.forEach((info_decoration) =>
+    infoDecorations.forEach((infoDecoration) =>
       shouldShow
-        ? info_decoration.style.setProperty("display", "flex")
-        : info_decoration.style.setProperty("display", "none")
+        ? infoDecoration.style.setProperty("display", "flex")
+        : infoDecoration.style.setProperty("display", "none")
     );
   }
 
@@ -92,8 +92,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function createList(position, itemIds) {
+      console.log(itemIds);
       const itemId = itemIds[position].id;
-      const db_data = item[position];
+      const dbData = item[position];
 
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
@@ -103,22 +104,22 @@ window.addEventListener("DOMContentLoaded", () => {
       thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
-      listElement.append(createMediaBody(itemId, db_data));
+      listElement.append(createMediaBody(itemId, dbData));
       // append list item to list
       uLElement.append(listElement);
       listElement.classList.remove("gone");
     }
 
     // creates a media body element
-    function createMediaBody(itemId, db_data) {
+    function createMediaBody(itemId, dbData) {
       const mediaBody = document.createElement("div");
       mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerHTML = `${db_data["Track_Title"]}`;
+      trackTitleElement.innerHTML = `${dbData["TrackTitle"]}`;
       // create the message element
       const messageElement = document.createElement("p");
-      messageElement.innerText = db_data["Message"];
+      messageElement.innerText = dbData["Message"];
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer = document.createElement("div");
@@ -167,10 +168,10 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerText = `${position + 1}. ${item["Track_Title"]} - ${item["Track_Artists"]}`;
+      trackTitleElement.innerText = `${position + 1}. ${item["TrackTitle"]} - ${item["TrackArtists"]}`;
       // create the message element
       const messageElement = document.createElement("p");
-      messageElement.innerText = item["Track_Download_Size"];
+      messageElement.innerText = item["TrackDownloadSize"];
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer1 = document.createElement("div");
@@ -192,7 +193,7 @@ window.addEventListener("DOMContentLoaded", () => {
       opIconContainer1.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
       // delete local database entry and file on disk
       opIconContainer2.addEventListener("click", () => {
-        let args = { data: item, type: Type.DOWNLOADED, mode: Mode.SINGLE };
+        let args = { data: item, type: Type.DOWNLOADED };
 
         window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
           if (isFileDeleted) {
@@ -233,28 +234,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
       navItem.addEventListener("click", () => {
         // don't change active state of the nav item that have the 'click' class as attribute
+        const homeNavItemIndex = 0;
         const filesNavItemIndex = 1;
         const aboutNavItemIndex = navItemChildren.length - 2;
+        const settingsNavItemIndex = navItemChildren.length - 3;
+        const isHomeNavItemIndex = navItemChildren.indexOf(navItem) == homeNavItemIndex;
         const isFilesNavItemIndex = navItemChildren.indexOf(navItem) === filesNavItemIndex;
         const isAboutNavItemIndex = navItemChildren.indexOf(navItem) === aboutNavItemIndex;
+        const isSettingsNavItemIndex = navItemChildren.indexOf(navItem) === settingsNavItemIndex;
 
         if (isFilesNavItemIndex || isAboutNavItemIndex) return;
-
-        for (let x = 0; x < navItems.length; x++) {
-          navItems[x].classList.remove("active");
-        }
-
+        navItems.forEach((navItem) => navItem.classList.remove("active"));
         navItem.classList.add("active");
 
         // toggle main and settings pane's visibility
-        if (WINDOW_CONTENT_STATE != State.MAIN && navItemChildren.indexOf(navItem) == 0) {
+        if (WINDOW_CONTENT_STATE != State.MAIN && isHomeNavItemIndex) {
           mainPane.classList.remove("gone");
           settingsPane.classList.add("gone");
           WINDOW_CONTENT_STATE = State.MAIN;
-        } else if (
-          WINDOW_CONTENT_STATE != State.SETTINGS &&
-          navItemChildren.indexOf(navItem) === navItemChildren.length - 3
-        ) {
+        } else if (WINDOW_CONTENT_STATE != State.SETTINGS && isSettingsNavItemIndex) {
           mainPane.classList.add("gone");
           settingsPane.classList.remove("gone");
           WINDOW_CONTENT_STATE = State.SETTINGS;

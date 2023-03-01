@@ -56,19 +56,19 @@ module.exports = function (settings, spotifyApi) {
     }
 
     spotifyApi.authorizationCodeGrant(code).then(async (response) => {
-      const access_token = response.body["access_token"];
-      const refresh_token = response.body["refresh_token"];
-      const expires_in = response.body["expires_in"];
+      const accessToken = response.body["access_token"];
+      const refreshToken = response.body["refresh_token"];
+      const expireIn = response.body["expires_in"];
 
-      spotifyApi.setAccessToken(access_token);
-      spotifyApi.setRefreshToken(refresh_token);
+      spotifyApi.setAccessToken(accessToken);
+      spotifyApi.setRefreshToken(refreshToken);
 
       res.sendFile(path.resolve(__dirname, "../../public/success.html"));
 
       let states = await settings.setStates({
-        "spotify-access-token": access_token,
-        "spotify-refresh-token": refresh_token,
-        "spotify-token-expiration": expires_in,
+        "spotify-access-token": accessToken,
+        "spotify-refresh-token": refreshToken,
+        "spotify-token-expiration": expireIn,
         "spotify-secrets-received": true
       });
 
@@ -91,12 +91,12 @@ module.exports = function (settings, spotifyApi) {
       refreshTimer = setInterval(async () => {
         try {
           const data = await spotifyApi.refreshAccessToken();
-          const access_token = data.body["access_token"];
-          spotifyApi.setAccessToken(access_token);
+          const accessToken = data.body["access_token"];
+          spotifyApi.setAccessToken(accessToken);
         } catch (error) {
           console.error("Refresh failed", error);
         }
-      }, (expires_in / 2) * 1000);
+      }, (expireIn / 2) * 1000);
     });
   });
 

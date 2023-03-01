@@ -10,8 +10,8 @@ module.exports = function (config) {
 
   let downloadTaskQueue = [];
   // tasks => streams[]
-  let activeDownloadTasks = [];
-  let inactiveDownloadTasks = [];
+  let activeDownloadTasksStream = [];
+  let inactiveDownloadTasksStream = [];
 
   /**
    * Clears the task queue
@@ -25,8 +25,8 @@ module.exports = function (config) {
    *
    * @param {JSON} request a download request in the format; `{ sourceUrl, destPath }`
    */
-  function enqueueTask(request = {}) {
-    let task = downloadTask({ targetWindow, request });
+  function enqueueTask(taskId, request = {}) {
+    let task = downloadTask({ taskId, targetWindow, request });
     downloadTaskQueue.push(task);
     return task;
   }
@@ -34,39 +34,55 @@ module.exports = function (config) {
   /**
    * Enqueue a download task
    *
-   * @param {array} request a download request in the format; `{ sourceUrl, destPath }`
+   * @param {array} request  a download request in the format; `{ sourceUrl, destPath }`
+   * @param {array} insertedColumnIds an array of objects with task id as keys
    */
-  function enqueueTasks(requests = []) {
-    requests.forEach((request) => enqueueTask(request));
+  function enqueueTasks(insertedColumnIds = [], requests = []) {
+    for (let x = 0; x < requests.length; x++) {
+      enqueueTask(insertedColumnIds[x], requests[x]);
+    }
     return downloadTaskQueue;
   }
 
+  /**
+   * Pause all active downloads
+   */
   function pauseAll() {
     downloadTaskQueue.forEach((task) => task.pause());
   }
 
+  /**
+   * Resumes all downloads. If the number of active downloads are more than the max parallel download count,
+   * automatically waits till a lock is released
+   */
   function resumeAll() {
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
         let downloadStream1 = downloadTask.resume();
-        activeDownloadTasks.push(downloadStream1);
+        activeDownloadTasksStream.push(downloadStream1);
       } else {
         let downloadStream2 = downloadTask.wait();
-        inactiveDownloadTasks.push(downloadStream2);
+        inactiveDownloadTasksStream.push(downloadStream2);
       }
     });
   }
 
+  /**
+   * Cancels all active downloads
+   */
   async function cancelAll() {
     downloadTaskQueue.forEach((task) => {
       if (locker.releaseLock()) {
-        activeDownloadTasks.unshift();
+        activeDownloadTasksStream.unshift();
         task.cancel();
       }
     });
   }
 
-  const activeTasks = () => activeDownloadTasks;
+  /**
+   * @returns the number of active downloads
+   */
+  const activeTasks = () => activeDownloadTasksStream;
 
   /**
    * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
@@ -79,11 +95,11 @@ module.exports = function (config) {
       if (locker.acquireLock()) {
         let activeDownloadStream = downloadTask.start();
         downloadStreams.push(activeDownloadStream);
-        activeDownloadTasks.push(activeDownloadStream);
+        activeDownloadTasksStream.push(activeDownloadStream);
       } else {
         let inactiveDownloadStream = downloadTask.wait();
         downloadStreams.push(inactiveDownloadStream);
-        inactiveDownloadTasks.push(inactiveDownloadStream);
+        inactiveDownloadTasksStream.push(inactiveDownloadStream);
       }
     });
 

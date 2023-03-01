@@ -22,16 +22,6 @@ module.exports = function (settings, browsers, database) {
   // delete file in database
   ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg));
 
-  // file downloaded, delete downloading data and move to downloaded data
-  ipcMain.handle("finish-downloading", async (_event, arg) => {
-    let isEntryDeleted = await database.deleteDownloadData(arg);
-    if (isEntryDeleted) {
-      /* empty */
-    }
-
-    return isEntryDeleted;
-  });
-
   // after pasting url and download window is about to display it's content
   ipcMain.handle("download-data", () => getSpotifyLinkData());
 
@@ -43,6 +33,16 @@ module.exports = function (settings, browsers, database) {
 
   // request to reload current focused window
   ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
+
+  // file downloaded, delete downloading data and move to downloaded data
+  ipcMain.handle("finish-downloading", async (_event, arg) => {
+    let isEntryDeleted = await database.deleteDownloadData(arg);
+    if (isEntryDeleted) {
+      /* empty */
+    }
+
+    return isEntryDeleted;
+  });
 
   // application authorization
   ipcMain.handle("authorize-app", async (_event, args) => {

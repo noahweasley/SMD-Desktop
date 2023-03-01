@@ -14,7 +14,7 @@ const DOWNLOADED_TABLE = "Downloaded";
 const DOWNLOADING_TABLE = "Downloading";
 
 // eslint-disable-next-line no-undef
-const DB_FILEPATH = !app.isPackaged ? process.env.DB_FILEPATH : path.join(app.getPath("userData"), "User", "Database");
+const DB_FILEPATH = process.env.DB_FILEPATH || path.join(app.getPath("userData"), "User", "Database");
 const DB_FILENAME = path.join(DB_FILEPATH, DATABASE_NAME);
 const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
 
@@ -24,9 +24,7 @@ const DB_CONFIG_FILE = path.join(DB_FILEPATH, "metadata.json");
 // =                                                                      = //
 // ======================================================================== //
 
-// vs file is used to manage database versions
 async function createVSFile() {
-  // the initial data in the vs file, when the database is created
   const vsObj = { DATABASE_VERSION };
   try {
     await fsp.mkdir(DB_FILEPATH, { recursive: true });
@@ -45,7 +43,7 @@ async function createDatabaseSchema() {
   async function upgradeDatabaseVersion() {
     let vsf = await fsp.readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
     // replace with new database version
-    vsf["DATABASE_VERSION"] = DATABASE_VERSION;
+    vsf.DATABASE_VERSION = DATABASE_VERSION;
     await fsp.writeFile(DB_CONFIG_FILE, JSON.stringify(vsf));
     return DATABASE_VERSION;
   }
@@ -56,12 +54,12 @@ async function createDatabaseSchema() {
 
     try {
       const data = await readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
-      dbVersion = JSON.parse(data)["DATABASE_VERSION"];
+      dbVersion = JSON.parse(data).DATABASE_VERSION;
     } catch (err) {
       try {
         dbVersion = await createVSFile();
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.error(error);
         return "1.0.0";
       }
     }
@@ -76,8 +74,8 @@ async function createDatabaseSchema() {
       try {
         await createVSFile();
         return await onCreateDatabase();
-      } catch (err) {
-        return console.error(err);
+      } catch (error) {
+        return console.error(error);
       }
     }
 
@@ -85,8 +83,8 @@ async function createDatabaseSchema() {
     let fileHandle;
     try {
       fileHandle = await fsp.open(DB_FILENAME, "r+");
-    } catch (err) {
-      if (err.code === "EEXIST") {
+    } catch (error) {
+      if (error.code === "EEXIST") {
         let dbVersion = await checkDatabaseVersion();
         if (dbVersion !== DATABASE_VERSION) {
           // call onUpgradeDatabase() when the database schema needs to be altered or updated
@@ -95,12 +93,12 @@ async function createDatabaseSchema() {
         } else {
           return true; // same version was returned
         }
-      } else if (err.code === "ENOENT") {
+      } else if (error.code === "ENOENT") {
         // create the database directory if file db file doesn't exist.
         await createDirectory();
       } else {
         // unknown bug
-        console.error("An unknown error occurred", err.message);
+        console.error("An unknown error occurred", error.message);
       }
     } finally {
       fileHandle?.close();
@@ -162,8 +160,8 @@ function onCreateDatabase() {
         tableBuilder.string("Message");
       });
       return true;
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error);
       return false;
     }
   }
@@ -185,25 +183,21 @@ function onUpgradeDatabase(oldVersion, newVersion) {
 }
 
 /**
- * @param {*} type the type of download data to be retrieved, if null or empty all the
- * download data would be appended together, with downloading being the first and downloaded being the last
- *
  * @param arg an object in format {query: {}}, as an additional query parameter
- * @param mode the mode used in fetching the data from database
  * @returns the list data as stored in the application's database
  */
 module.exports.getDownloadData = async function (arg) {
   const database = await getRWDatabase();
 
   try {
-    if (arg["type"] == Type.DOWNLOADED) {
+    if (arg.type == Type.DOWNLOADED) {
       let data = await database.select("*").from(DOWNLOADED_TABLE);
       return data.length > 0 ? data : null;
-    } else if (arg["type"] == Type.DOWNLOADING) {
+    } else if (arg.type == Type.DOWNLOADING) {
       let data = await database.select("*").from(DOWNLOADING_TABLE);
       return data.length > 0 ? data : null;
     } else {
-      throw new Error(`${arg["type"]} is not supported`);
+      throw new Error(`${arg.type} is not supported`);
     }
   } catch (error) {
     console.error(error);
@@ -222,12 +216,12 @@ module.exports.addDownloadData = async function (arg) {
   const database = await getRWDatabase();
 
   try {
-    if (arg["type"] == Type.DOWNLOADED) {
-      let result = await database.insert(arg["data"]).into(DOWNLOADED_TABLE).returning("id");
+    if (arg.type == Type.DOWNLOADED) {
+      let result = await database.insert(arg.data).into(DOWNLOADED_TABLE).returning("id");
       return result[0]; // the column id
-    } else if (arg["type"] == Type.DOWNLOADING) {
+    } else if (arg.type == Type.DOWNLOADING) {
       // data property is the main db data in the object
-      let result = await database.insert(arg["data"]).into(DOWNLOADING_TABLE).returning("id");
+      let result = await database.insert(arg.data).into(DOWNLOADING_TABLE).returning("id");
       return result[0]; // the column id
     } else {
       throw new Error(`${arg["type"]} is not supported`);
@@ -247,12 +241,12 @@ module.exports.addDownloadData = async function (arg) {
  */
 module.exports.updateDownloadData = async function (arg) {
   try {
-    if (arg["type"] == Type.DOWNLOADED) {
+    if (arg.type == Type.DOWNLOADED) {
       throw new Error("Update is not yet supported");
-    } else if (arg["type"] == Type.DOWNLOADING) {
+    } else if (arg.type == Type.DOWNLOADING) {
       throw new Error("Update is not yet supported");
     } else {
-      throw new Error(`${arg["type"]} is not supported`);
+      throw new Error(`${arg.type} is not supported`);
     }
   } catch (err) {
     console.log(err.message);
@@ -265,17 +259,16 @@ module.exports.updateDownloadData = async function (arg) {
  * @param arg an object in format {query: {}}, as an additional query parameter
  */
 module.exports.deleteDownloadData = async function (arg) {
-  let data = arg["data"];
   const database = await getRWDatabase();
 
   try {
-    if (arg["type"] == Type.DOWNLOADED) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADED_TABLE);
+    if (arg.type == Type.DOWNLOADED) {
+      let result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
       return result > 0;
-    } else if (arg["type"] == Type.DOWNLOADING) {
-      let result = await database.del().where({ id: data["id"] }).from(DOWNLOADING_TABLE);
+    } else if (arg.type == Type.DOWNLOADING) {
+      let result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
       return result > 0;
-    } else throw new Error(`${arg["type"]} is not supported`);
+    } else throw new Error(`${arg.type} is not supported`);
   } catch (error) {
     console.error(error);
     return false;

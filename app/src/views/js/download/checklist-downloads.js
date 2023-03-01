@@ -58,14 +58,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
       selectAll.addEventListener("click", () => {
         let collection = listData.description.trackCollection;
-        const sa_IsChecked = selectAll.checked;
+        const saIsChecked = selectAll.checked;
         const selectCheckboxes = document.querySelectorAll(".cbx-select");
 
         for (let x = 0; x < selectCheckboxes.length; x++) {
           // select all the check-boxes in the list if the select-all check-box is checked or not
-          selectCheckboxes[x].checked = sa_IsChecked;
+          selectCheckboxes[x].checked = saIsChecked;
 
-          if (sa_IsChecked) {
+          if (saIsChecked) {
             selectedListDataMap[`${x}`] = collection[x];
             actionButtons[1].removeAttribute("disabled");
           } else {
@@ -75,14 +75,14 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      const cbx_list = document.querySelectorAll(".cbx-select");
+      const cbxList = document.querySelectorAll(".cbx-select");
 
-      for (let index = 0; index < cbx_list.length; index++) {
-        let s_cbx = cbx_list[index];
+      for (let index = 0; index < cbxList.length; index++) {
+        let sCbx = cbxList[index];
         // register click events for all check boxes on the list
-        s_cbx.addEventListener("click", () => {
+        sCbx.addEventListener("click", () => {
           let collection = listData.description.trackCollection;
-          if (s_cbx.checked) {
+          if (sCbx.checked) {
             // add track at selected index to object map
             selectedListDataMap[`${index}`] = collection[index];
             actionButtons[1].removeAttribute("disabled");

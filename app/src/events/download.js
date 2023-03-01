@@ -39,14 +39,14 @@ module.exports = function (settings, browsers, database) {
 
   // request to search for tracks to download
   ipcMain.handle("search-tracks", async () => {
-    const error_message = "Uh-oh!! We couldn't find any tracks";
+    const errorMessage = "Uh-oh!! We couldn't find any tracks";
 
     if (downloadQuery.type == "search") {
       let searchResults;
       try {
         // Wrap the search results in an array, because the list requires an array as result
         searchResults = await ytdl.searchMatchingTracks(downloadQuery.value);
-        return searchResults ? Array.of(searchResults) : error_message;
+        return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
         console.error(err);
         return "An Unknown Error Occurred";
@@ -58,7 +58,7 @@ module.exports = function (settings, browsers, database) {
         let trackDescription = spotifyLinkData.description;
         let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
         let searchResults = await ytdl.searchMatchingTracks(searchQuery);
-        return searchResults ? Array.of(searchResults) : error_message;
+        return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
         console.error(err);
         return "An Unknown Error Occurred";
@@ -89,15 +89,15 @@ module.exports = function (settings, browsers, database) {
 
       const downloadData = searchQueryResults
         .map((searchQueryResult) => ({
-          Track_Playlist_Title: "-",
-          Track_Artists: "-",
-          Error_Occurred: false,
-          Download_State: States.ACTIVE,
-          Download_Progress: 0,
-          Track_Title: searchQueryResult.videoTitle,
-          Track_Url: searchQueryResult.videoUrl,
-          Downloaded_Size: "Unknown",
-          Track_Download_Size: "Unknown",
+          TrackPlaylistTitle: "-",
+          TrackArtists: "-",
+          ErrorOccurred: false,
+          DownloadState: States.ACTIVE,
+          DownloadProgress: 0,
+          TrackTitle: searchQueryResult.videoTitle,
+          TrackUrl: searchQueryResult.videoUrl,
+          DownloadedSize: "Unknown",
+          TrackDownloadSize: "Unknown",
           Message: "Download in progress..."
         }))
         .flat();
@@ -120,7 +120,8 @@ module.exports = function (settings, browsers, database) {
             "Check if there is enough space on disk, which is required to save data"
           );
         }
-      } catch (err) {
+      } catch (error) {
+        console.log(error);
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }

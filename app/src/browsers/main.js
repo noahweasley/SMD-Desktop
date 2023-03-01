@@ -5,12 +5,12 @@ const { join } = require("path");
 const menu = require("../main/menu");
 
 module.exports = function (settings) {
-  let smd_window;
+  let smdWindow;
 
   async function init() {
     // only 1 window is allowed to be spawned
 
-    if (smd_window) return smd_window.focus();
+    if (smdWindow) return smdWindow.focus();
 
     let winState = await settings.getState("window-state", {});
 
@@ -20,7 +20,7 @@ module.exports = function (settings) {
       winState = {};
     }
 
-    smd_window = new BrowserWindow({
+    smdWindow = new BrowserWindow({
       x: winState.x,
       y: winState.y,
       show: false,
@@ -37,39 +37,39 @@ module.exports = function (settings) {
     });
 
     Menu.setApplicationMenu(menu);
-    smd_window.loadFile(join("app", "src", "views", "pages", "index.html"));
+    smdWindow.loadFile(join("app", "src", "views", "pages", "index.html"));
 
-    smd_window.once("ready-to-show", () => {
-      smd_window.show();
+    smdWindow.once("ready-to-show", () => {
+      smdWindow.show();
       // to prevent glitch on window maximize, after displaying the window, then maximize it
-      if (winState.isMaximized) smd_window.maximize();
+      if (winState.isMaximized) smdWindow.maximize();
     });
 
-    smd_window.on("close", async (event) => {
+    smdWindow.on("close", async (event) => {
       event.preventDefault();
-      let [x, y] = smd_window.getPosition();
-      let [width, height] = smd_window.getSize();
+      let [x, y] = smdWindow.getPosition();
+      let [width, height] = smdWindow.getSize();
       let isCompleted = await settings.setState(
         "window-state",
-        JSON.stringify({ x, y, width, height, isMaximized: smd_window.isMaximized() })
+        JSON.stringify({ x, y, width, height, isMaximized: smdWindow.isMaximized() })
       );
-      if (isCompleted) smd_window.destroy();
-      smd_window = null;
+      if (isCompleted) smdWindow.destroy();
+      smdWindow = null;
     });
 
     // window acton click
     ipcMain.on("action-click-event", (_event, id) => {
       if (id === "window-action-close") {
-        smd_window?.close();
+        smdWindow?.close();
       } else if (id === "window-action-minimize") {
-        smd_window?.minimize();
+        smdWindow?.minimize();
       } else {
-        smd_window.isNormal() ? smd_window.maximize() : smd_window.restore();
+        smdWindow.isNormal() ? smdWindow.maximize() : smdWindow.restore();
       }
     });
   }
 
-  const getWindow = () => smd_window;
+  const getWindow = () => smdWindow;
 
   return { init, getWindow };
 };

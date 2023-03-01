@@ -6,9 +6,9 @@ const { States } = require("../database/constants");
 /**
  * A single Download Task
  *
- * @param {JSON} options { link, title }
+ * @param {JSON} configOptions { link, title }
  */
-module.exports = function (options) {
+module.exports = function (configOptions) {
   let state = States.INACTIVE;
   let downloadStream;
 
@@ -45,7 +45,7 @@ module.exports = function (options) {
   }
 
   async function registerDownloadOp() {
-    downloadStream = await downloadMatchingTrack(options);
+    downloadStream = await downloadMatchingTrack(configOptions);
     downloadStream.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
     return downloadStream;
   }

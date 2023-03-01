@@ -7,7 +7,6 @@ const { open, readdir, access, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { getDownloadsDirectory, delay } = require("../util");
 const { createWriteStream } = require("fs");
-const { EventEmitter } = require("events");
 
 function __exports() {
   const Signal = Object.freeze({
@@ -24,7 +23,7 @@ function __exports() {
    * @returns the directory where the the ytdlp binary file was downloaded
    */
   function getBinaryFileDirectory() {
-    return !app.isPackaged ? process.env.BINARY_LOCATION : path.join(app.getPath("appData"), "ytdlp");
+    return process.env.BINARY_LOCATION || path.join(app.getPath("appData"), "ytdlp");
   }
 
   /**
@@ -107,9 +106,9 @@ function __exports() {
    */
   async function searchMatchingTracks(query) {
     try {
-      let sarr = await ytSearch.search(query);
+      let queryResults = await ytSearch.search(query);
 
-      let m_sarr = sarr.map((vob) => ({
+      let queryResultsMap = queryResults.map((vob) => ({
         videoId: vob.id.videoId,
         videoUrl: vob.url,
         videoTitle: vob.title
@@ -117,7 +116,7 @@ function __exports() {
 
       return {
         searchQuery: query,
-        searchQueryList: m_sarr
+        searchQueryList: queryResultsMap
       };
     } catch (err) {
       throw new Error("Network error occurred");
@@ -131,11 +130,11 @@ function __exports() {
    * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
-    let progressEmitter = new EventEmitter();
     let downloadStream;
+    const taskId = options.taskId;
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    let remainingNumberOfRetriesTillEBUSY = 3;
+    let numberOfRetriesTillEBUSY = 3;
 
     try {
       const binaryFileExists = checkIfBinaryExists();
@@ -160,18 +159,18 @@ function __exports() {
             downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
           } catch (err) {
             if (err.code === "EBUSY") {
-              if (remainingNumberOfRetriesTillEBUSY-- != 0) {
+              if (numberOfRetriesTillEBUSY-- != 0) {
                 await delay(1000);
                 executeCommand();
               }
-              throw err; // rethrow error if cannot execute a stream
+              downloadStream.emit("error", err);
             }
           }
         })();
 
         downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
-            id: 1,
+            id: taskId,
             progress: progress.percent
           });
         });
@@ -186,10 +185,11 @@ function __exports() {
         console.log("Fatal error occurred, cannot download, cause");
       }
     } catch (err) {
-      progressEmitter?.emit("error", err);
+      downloadStream?.emit("error", err);
     } finally {
       downloadStream?.destroy();
     }
+    
 
     return downloadStream;
   }

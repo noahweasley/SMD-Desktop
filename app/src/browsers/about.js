@@ -3,13 +3,13 @@
 const { BrowserWindow, app } = require("electron");
 const { join } = require("path");
 
-let about_window;
+let aboutWindow;
 
 module.exports.init = function () {
   // only 1 window is allowed to be spawned
-  if (about_window) return about_window.focus();
+  if (aboutWindow) return aboutWindow.focus();
 
-  about_window = new BrowserWindow({
+  aboutWindow = new BrowserWindow({
     title: `About ${app.getName()}`,
     show: false,
     width: 700,
@@ -22,10 +22,10 @@ module.exports.init = function () {
     }
   });
 
-  about_window.setMenu(null);
-  about_window.loadFile(join("app", "src", "views", "pages", "about.html"));
-  about_window.once("ready-to-show", about_window.show);
-  about_window.on("closed", () => (about_window = null));
+  aboutWindow.setMenu(null);
+  aboutWindow.loadFile(join("app", "src", "views", "pages", "about.html"));
+  aboutWindow.once("ready-to-show", aboutWindow.show);
+  aboutWindow.on("closed", () => (aboutWindow = null));
 };
 
-module.exports.getWindow = () => about_window;
+module.exports.getWindow = () => aboutWindow;

@@ -64,27 +64,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
       let headerCheckboxArray = Array.from(headerSelectCheckboxes);
 
-      headerSelectCheckboxes.forEach((header_cbx) => {
-        header_cbx.addEventListener("click", () => {
-          let listGroupItemContainer = header_cbx.parentElement.parentElement.parentElement;
-          let headerSelectIndex = headerCheckboxArray.indexOf(header_cbx);
-          changeChildElementCheckboxStateOf(listGroupItemContainer, header_cbx, headerSelectIndex);
+      headerSelectCheckboxes.forEach((headerCbx) => {
+        headerCbx.addEventListener("click", () => {
+          let listGroupItemContainer = headerCbx.parentElement.parentElement.parentElement;
+          let headerSelectIndex = headerCheckboxArray.indexOf(headerCbx);
+          changeChildElementCheckboxStateOf(listGroupItemContainer, headerCbx, headerSelectIndex);
         });
       });
 
       // start select-all listener
       selectAll.addEventListener("click", () => {
-        const sa_IsChecked = selectAll.checked;
+        const saIsChecked = selectAll.checked;
 
         for (let i = 0; i < headerSelectCheckboxes.length; i++) {
           let headerSelectCheckbox = headerSelectCheckboxes[i];
-          headerSelectCheckbox.checked = sa_IsChecked;
+          headerSelectCheckbox.checked = saIsChecked;
 
           for (let x = 0; x < selectCheckboxes.length; x++) {
             // select all the check-boxes in the list if the select-all check-box is checked or not
-            selectCheckboxes[x].checked = sa_IsChecked;
+            selectCheckboxes[x].checked = saIsChecked;
 
-            if (sa_IsChecked) {
+            if (saIsChecked) {
               selectedListDataMap[`${x}`] = listData[i].searchQueryList[x];
               actionButtons[1].removeAttribute("disabled");
             } else {
@@ -97,13 +97,13 @@ window.addEventListener("DOMContentLoaded", () => {
       // end select-all listener
 
       // start cbx-select listener
-      let cbx_list = document.querySelectorAll(".cbx-select");
+      let cbxList = document.querySelectorAll(".cbx-select");
 
-      for (let index = 0; index < cbx_list.length; index++) {
-        let s_cbx = cbx_list[index];
+      for (let index = 0; index < cbxList.length; index++) {
+        let sCbx = cbxList[index];
         // register click events for all check boxes on the list
-        s_cbx.addEventListener("click", () => {
-          if (s_cbx.checked) {
+        sCbx.addEventListener("click", () => {
+          if (sCbx.checked) {
             // add track at selected index to object map
             selectedListDataMap[`${index}`] = listData[0].searchQueryList[index];
             actionButtons[1].removeAttribute("disabled");
@@ -113,7 +113,7 @@ window.addEventListener("DOMContentLoaded", () => {
             if (Object.keys(selectedListDataMap).length === 0) {
               // very crazy, but I had to search for the header checkbox :)
               const parentHeaderCheckbox =
-                s_cbx.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.firstElementChild;
+                sCbx.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.firstElementChild;
 
               parentHeaderCheckbox.checked = false;
               actionButtons[1].setAttribute("disabled", true);

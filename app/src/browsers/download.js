@@ -3,12 +3,12 @@
 const { BrowserWindow } = require("electron");
 const { join } = require("path");
 
-let download_window;
+let downloadWindow;
 
 module.exports.init = function () {
-  if (download_window) return download_window.focus();
+  if (downloadWindow) return downloadWindow.focus();
 
-  download_window = new BrowserWindow({
+  downloadWindow = new BrowserWindow({
     title: "Confirm Search List",
     parent: BrowserWindow.getFocusedWindow(),
     show: false,
@@ -23,18 +23,18 @@ module.exports.init = function () {
     }
   });
 
-  download_window.setMenu(null);
-  download_window.loadFile(join("app", "src", "views", "pages", "downloads.html"));
-  download_window.once("ready-to-show", download_window.show);
+  downloadWindow.setMenu(null);
+  downloadWindow.loadFile(join("app", "src", "views", "pages", "downloads.html"));
+  downloadWindow.once("ready-to-show", downloadWindow.show);
   // listening for close event on download window helped to solve quick window flash issue.
   // Adding hide() on window was the key to solve this issue, but I don't have an idea why
   // the quick flash issue occurs.
-  download_window.on("close", (event) => {
+  downloadWindow.on("close", (event) => {
     event.preventDefault();
-    download_window.hide();
-    download_window.destroy();
-    download_window = null;
+    downloadWindow.hide();
+    downloadWindow.destroy();
+    downloadWindow = null;
   });
 };
 
-module.exports.getWindow = () => download_window;
+module.exports.getWindow = () => downloadWindow;

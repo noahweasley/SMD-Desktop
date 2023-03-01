@@ -4,8 +4,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const getElementIndex = (element) => Array.from(element.parentNode.children).indexOf(element);
 
   function registerTabEvents(tabItem, ...tabContent) {
-    let tabContent_0 = document.getElementById(tabContent[0]);
-    let tabContent_1 = document.getElementById(tabContent[1]);
+    let tabContent0 = document.getElementById(tabContent[0]);
+    let tabContent1 = document.getElementById(tabContent[1]);
     let isDownloadTabs = tabContent[0] === "tab-content__downloading" && tabContent[1] === "tab-content__downloaded";
     let pauseButton = document.querySelector(".pause");
     let refreshButton = document.querySelector(".refresh");
@@ -21,8 +21,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
         // toggle tab content visibility
         if (getElementIndex(tabItem) === 0) {
-          if (!tabContent_1.classList.contains("gone")) {
-            tabContent_1.classList.add("gone");
+          if (!tabContent1.classList.contains("gone")) {
+            tabContent1.classList.add("gone");
           }
 
           if (isDownloadTabs) {
@@ -30,10 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
             refreshButton.setAttribute("disabled", "false");
           }
 
-          tabContent_0.classList.remove("gone");
+          tabContent0.classList.remove("gone");
         } else {
-          if (!tabContent_0.classList.contains("gone")) {
-            tabContent_0.classList.add("gone");
+          if (!tabContent0.classList.contains("gone")) {
+            tabContent0.classList.add("gone");
           }
 
           if (isDownloadTabs) {
@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
             refreshButton.setAttribute("disabled", "true");
           }
 
-          tabContent_1.classList.remove("gone");
+          tabContent1.classList.remove("gone");
         }
       });
     });
