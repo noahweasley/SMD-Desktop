@@ -2,15 +2,15 @@
 const mockData = require("./mock-data");
 
 module.exports.getRandomClipboardText = function () {
-  let random = Math.random();
-  let albumUrl = "https://open.spotify.com/album/21jF5jlMtzo94wbxmJ18aa?si=ed91578d41954092";
-  let playlistUrl = "https://open.spotify.com/playlist/1SDUSy4TAtzB9HnFmvD6yJ?si=2907d6141b2b43d8";
+  const random = Math.random();
+  const albumUrl = "https://open.spotify.com/album/21jF5jlMtzo94wbxmJ18aa?si=ed91578d41954092";
+  const playlistUrl = "https://open.spotify.com/playlist/1SDUSy4TAtzB9HnFmvD6yJ?si=2907d6141b2b43d8";
 
   return random > 0.5 ? albumUrl : playlistUrl;
 };
 
 module.exports.getDummyPlayList = function () {
-  let trackCollection = [
+  const trackCollection = [
     { songTitle: "Pretty Girl", artistNames: ["Thomas Rivera"] },
     { songTitle: "In Your Eyes", artistNames: ["Ray-X"] },
     {
@@ -163,7 +163,7 @@ module.exports.getDummyPlayList = function () {
 };
 
 module.exports.getDummyAlbum = function () {
-  let trackCollection = [
+  const trackCollection = [
     {
       thumbnails: undefined,
       songTitle: "Strangers By Nature",
@@ -292,7 +292,7 @@ module.exports.getDummyTrack = function (size) {
   const songs = this.getDummySongTitles(size);
   const artists = this.getDummyArtists(size);
 
-  let dummy = [];
+  const dummy = [];
 
   for (let i = 0; i < size; i++) {
     dummy.push({ song: songs[i], artist: artists[i] });

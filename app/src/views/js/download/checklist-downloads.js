@@ -2,7 +2,7 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   let listData;
-  let selectedListDataMap = {};
+  const selectedListDataMap = {};
   const selectAll = document.getElementById("select-all");
   const actionButtons = document.querySelectorAll(".btn");
   const retryButton = document.getElementById("retry");
@@ -57,7 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       selectAll.addEventListener("click", () => {
-        let collection = listData.description.trackCollection;
+        const collection = listData.description.trackCollection;
         const saIsChecked = selectAll.checked;
         const selectCheckboxes = document.querySelectorAll(".cbx-select");
 
@@ -78,10 +78,10 @@ window.addEventListener("DOMContentLoaded", () => {
       const cbxList = document.querySelectorAll(".cbx-select");
 
       for (let index = 0; index < cbxList.length; index++) {
-        let sCbx = cbxList[index];
+        const sCbx = cbxList[index];
         // register click events for all check boxes on the list
         sCbx.addEventListener("click", () => {
-          let collection = listData.description.trackCollection;
+          const collection = listData.description.trackCollection;
           if (sCbx.checked) {
             // add track at selected index to object map
             selectedListDataMap[`${index}`] = collection[index];

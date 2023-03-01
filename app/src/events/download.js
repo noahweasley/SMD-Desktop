@@ -8,7 +8,7 @@ const { Type, States } = require("../main/database/constants");
 
 module.exports = function (settings, browsers, database) {
   const { downloadWindow, searchWindow, mainWindow } = browsers;
-  let { getSpotifyLinkData } = spotifyDl(settings);
+  const { getSpotifyLinkData } = spotifyDl(settings);
 
   let downloadQuery;
   const DEFAULT_CONCURRENCY = 2;
@@ -55,20 +55,20 @@ module.exports = function (settings, browsers, database) {
       try {
         const spotifyLinkData = await getSpotifyLinkData();
         // description: { songTitle, artistNames: [] }
-        let trackDescription = spotifyLinkData.description;
-        let searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
-        let searchResults = await ytdl.searchMatchingTracks(searchQuery);
+        const trackDescription = spotifyLinkData.description;
+        const searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
+        const searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
         console.error(err);
         return "An Unknown Error Occurred";
       }
     } else {
-      let tracks = downloadQuery.description.trackCollection;
+      const tracks = downloadQuery.description.trackCollection;
       // map track object to reasonable search query ([Song title] [Artist name])
       const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(WHITE_SPACE)}`);
       // transform search queries to search promise
-      let queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
+      const queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
       // resolve and return search queries
       try {
         return await Promise.all(queryPromises);
@@ -128,7 +128,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    let downloadStream = fileDownloader.initiateQueuedDownloads();
+    const downloadStream = fileDownloader.initiateQueuedDownloads();
     setupTaskQueueMessaging();
 
     function setupTaskQueueMessaging() {
@@ -149,7 +149,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.handle("resume", async (_event, args) => {
-    let { listPos } = args;
+    const { listPos } = args;
     downloadTasks[listPos].resume();
   });
 
@@ -158,7 +158,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.handle("cancel", async (_event, args) => {
-    let { listPos } = args;
+    const { listPos } = args;
     downloadTasks[listPos].cancel();
   });
 

@@ -19,7 +19,7 @@ module.exports.SpotifyURLType = SpotifyURLType = Object.freeze({
  * @returns the type of url it is
  */
 module.exports.getSpotifyURLType = function (url) {
-  let clipboardContent = url || clipboard.readText();
+  const clipboardContent = url || clipboard.readText();
 
   if (clipboardContent.includes("https://open.spotify.com")) {
     if (clipboardContent.search(this.SpotifyURLType.TRACK) != -1) return this.SpotifyURLType.TRACK;

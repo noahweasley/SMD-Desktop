@@ -10,8 +10,8 @@ module.exports = function (config) {
 
   let downloadTaskQueue = [];
   // tasks => streams[]
-  let activeDownloadTasksStream = [];
-  let inactiveDownloadTasksStream = [];
+  const activeDownloadTasksStream = [];
+  const inactiveDownloadTasksStream = [];
 
   /**
    * Clears the task queue
@@ -26,7 +26,7 @@ module.exports = function (config) {
    * @param {JSON} request a download request in the format; `{ sourceUrl, destPath }`
    */
   function enqueueTask(taskId, request = {}) {
-    let task = downloadTask({ taskId, targetWindow, request });
+    const task = downloadTask({ taskId, targetWindow, request });
     downloadTaskQueue.push(task);
     return task;
   }
@@ -58,10 +58,10 @@ module.exports = function (config) {
   function resumeAll() {
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        let downloadStream1 = downloadTask.resume();
+        const downloadStream1 = downloadTask.resume();
         activeDownloadTasksStream.push(downloadStream1);
       } else {
-        let downloadStream2 = downloadTask.wait();
+        const downloadStream2 = downloadTask.wait();
         inactiveDownloadTasksStream.push(downloadStream2);
       }
     });
@@ -89,15 +89,15 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   function initiateQueuedDownloads() {
-    let downloadStreams = []; // contains both active and inactive downloads
+    const downloadStreams = []; // contains both active and inactive downloads
 
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        let activeDownloadStream = downloadTask.start();
+        const activeDownloadStream = downloadTask.start();
         downloadStreams.push(activeDownloadStream);
         activeDownloadTasksStream.push(activeDownloadStream);
       } else {
-        let inactiveDownloadStream = downloadTask.wait();
+        const inactiveDownloadStream = downloadTask.wait();
         downloadStreams.push(inactiveDownloadStream);
         inactiveDownloadTasksStream.push(inactiveDownloadStream);
       }

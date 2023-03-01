@@ -3,7 +3,7 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   let WINDOW_CONTENT_STATE = State.MAIN;
-  let listData = [];
+  const listData = [];
 
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((listData) => {
@@ -52,9 +52,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const infoDecorations = document.querySelectorAll(".info-decor");
 
     infoDecorations.forEach((infoDecoration) =>
-      shouldShow
-        ? infoDecoration.style.setProperty("display", "flex")
-        : infoDecoration.style.setProperty("display", "none")
+      shouldShow ? infoDecoration.style.setProperty("display", "flex") : infoDecoration.style.setProperty("display", "none")
     );
   }
 
@@ -92,7 +90,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function createList(position, itemIds) {
-      console.log(itemIds);
       const itemId = itemIds[position].id;
       const dbData = item[position];
 
@@ -193,12 +190,12 @@ window.addEventListener("DOMContentLoaded", () => {
       opIconContainer1.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
       // delete local database entry and file on disk
       opIconContainer2.addEventListener("click", () => {
-        let args = { data: item, type: Type.DOWNLOADED };
+        const args = { data: item, type: Type.DOWNLOADED };
 
         window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
           if (isFileDeleted) {
-            let listItem = opIconContainer1.parentElement.parentElement;
-            let listGroup = listItem.parentElement;
+            const listItem = opIconContainer1.parentElement.parentElement;
+            const listGroup = listItem.parentElement;
 
             listGroup.removeChild(listItem);
             if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
@@ -225,7 +222,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Register all event listeners on the list section UI in here
   function registerEventListeners() {
-    let navItems = document.querySelectorAll(".nav-group-item");
+    const navItems = document.querySelectorAll(".nav-group-item");
     const settingsPane = document.querySelector(".pane-settings");
     const mainPane = document.querySelector(".pane-main");
 
@@ -269,7 +266,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   window.bridgeApis.on("show-binary-download-dialog", (_event, shouldShow) => {
-    let progressModal = document.querySelector(".modal-container");
+    const progressModal = document.querySelector(".modal-container");
 
     if (shouldShow) {
       progressModal.style.setProperty("display", "flex");
@@ -298,7 +295,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const listItem = mediaBodyElement.parentElement;
       const listGroup = listItem.parentElement;
 
-      let data = { data: { id: args.id }, type: Type.DOWNLOADING };
+      const data = { data: { id: args.id }, type: Type.DOWNLOADING };
 
       window.bridgeApis.invoke("finish-downloading", data).then((isFileDeleted) => {
         if (isFileDeleted) {

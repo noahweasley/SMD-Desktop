@@ -81,7 +81,7 @@ function __exports() {
     const fileName = "yt-dlp";
 
     try {
-      let files = await readdir(binaryFileDirectory);
+      const files = await readdir(binaryFileDirectory);
 
       const filePath = files.find(
         (file) => path.basename(file, path.extname(file)).toLowerCase() === fileName.toLowerCase()
@@ -106,9 +106,9 @@ function __exports() {
    */
   async function searchMatchingTracks(query) {
     try {
-      let queryResults = await ytSearch.search(query);
+      const queryResults = await ytSearch.search(query);
 
-      let queryResultsMap = queryResults.map((vob) => ({
+      const queryResultsMap = queryResults.map((vob) => ({
         videoId: vob.id.videoId,
         videoUrl: vob.url,
         videoTitle: vob.title
@@ -139,9 +139,9 @@ function __exports() {
     try {
       const binaryFileExists = checkIfBinaryExists();
 
-      if (binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
+      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
 
-      let downloadSignal = await downloadBinaries();
+      const downloadSignal = await downloadBinaries();
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 
@@ -150,7 +150,7 @@ function __exports() {
         const dirname = path.dirname(ytdlpBinaryFilepath);
         const filename = _getBinaryFilepath(dirname);
 
-        let ytdlpWrapper = new ytdlp(filename);
+        const ytdlpWrapper = new ytdlp(filename);
         // TODO: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
         // EBUSY error, file might still be locked, wait for at most 3 seconds
         await (async function executeCommand() {
@@ -175,7 +175,7 @@ function __exports() {
           });
         });
 
-        let fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
+        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
         try {
           await pipeline(downloadStream, createWriteStream(fileToStoreData));
         } catch (ignored) {
@@ -189,7 +189,6 @@ function __exports() {
     } finally {
       downloadStream?.destroy();
     }
-    
 
     return downloadStream;
   }

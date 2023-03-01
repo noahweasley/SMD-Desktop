@@ -2,7 +2,7 @@
 const date = document.querySelector(".date");
 const dateBegin = document.getElementById("begin");
 
-let thisYear = new Date(Date.now()).getFullYear();
+const thisYear = new Date(Date.now()).getFullYear();
 
 if (thisYear == dateBegin.innerText) {
   dateBegin.classList.add("gone");

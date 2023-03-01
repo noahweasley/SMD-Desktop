@@ -3,7 +3,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;
-  let selectedListDataMap = {};
+  const selectedListDataMap = {};
   // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
   let searchQueryList = [];
   const selectAll = document.getElementById("select-all");
@@ -62,12 +62,12 @@ window.addEventListener("DOMContentLoaded", () => {
       const headerSelectCheckboxes = document.querySelectorAll(".cbx-select-header");
       const selectCheckboxes = document.querySelectorAll(".cbx-select");
 
-      let headerCheckboxArray = Array.from(headerSelectCheckboxes);
+      const headerCheckboxArray = Array.from(headerSelectCheckboxes);
 
       headerSelectCheckboxes.forEach((headerCbx) => {
         headerCbx.addEventListener("click", () => {
-          let listGroupItemContainer = headerCbx.parentElement.parentElement.parentElement;
-          let headerSelectIndex = headerCheckboxArray.indexOf(headerCbx);
+          const listGroupItemContainer = headerCbx.parentElement.parentElement.parentElement;
+          const headerSelectIndex = headerCheckboxArray.indexOf(headerCbx);
           changeChildElementCheckboxStateOf(listGroupItemContainer, headerCbx, headerSelectIndex);
         });
       });
@@ -77,7 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const saIsChecked = selectAll.checked;
 
         for (let i = 0; i < headerSelectCheckboxes.length; i++) {
-          let headerSelectCheckbox = headerSelectCheckboxes[i];
+          const headerSelectCheckbox = headerSelectCheckboxes[i];
           headerSelectCheckbox.checked = saIsChecked;
 
           for (let x = 0; x < selectCheckboxes.length; x++) {
@@ -97,10 +97,10 @@ window.addEventListener("DOMContentLoaded", () => {
       // end select-all listener
 
       // start cbx-select listener
-      let cbxList = document.querySelectorAll(".cbx-select");
+      const cbxList = document.querySelectorAll(".cbx-select");
 
       for (let index = 0; index < cbxList.length; index++) {
-        let sCbx = cbxList[index];
+        const sCbx = cbxList[index];
         // register click events for all check boxes on the list
         sCbx.addEventListener("click", () => {
           if (sCbx.checked) {
@@ -126,16 +126,16 @@ window.addEventListener("DOMContentLoaded", () => {
       // looping through all child nodes of this list element and change the states of
       // every checkbox according to isChecked parameter
       function changeChildElementCheckboxStateOf(listItemContainer, headerCheckBox, position) {
-        let listItemContainerChildNodes = listItemContainer.childNodes;
-        let checkboxArray = Array.from(selectCheckboxes);
-        let isChecked = headerCheckBox.checked;
+        const listItemContainerChildNodes = listItemContainer.childNodes;
+        const checkboxArray = Array.from(selectCheckboxes);
+        const isChecked = headerCheckBox.checked;
 
         for (let x = 1; x < listItemContainer.childElementCount; x++) {
-          let listItems = listItemContainerChildNodes[x];
-          let inputElement = listItems.lastElementChild.firstElementChild;
+          const listItems = listItemContainerChildNodes[x];
+          const inputElement = listItems.lastElementChild.firstElementChild;
           inputElement.checked = isChecked;
 
-          let listIndex = checkboxArray.indexOf(inputElement);
+          const listIndex = checkboxArray.indexOf(inputElement);
 
           if (isChecked) {
             selectedListDataMap[`${listIndex}`] = listData[position].searchQueryList[listIndex];
@@ -194,8 +194,8 @@ window.addEventListener("DOMContentLoaded", () => {
         listGroupItemContainer.appendChild(listGroupItemHeader);
 
         for (let x = 0; x < listData.searchQueryList.length; x++) {
-          let searchQueryList = listData.searchQueryList;
-          let searchQueryTitle = searchQueryList[x].videoTitle;
+          const searchQueryList = listData.searchQueryList;
+          const searchQueryTitle = searchQueryList[x].videoTitle;
 
           const listGroupItem = document.createElement("div");
           listGroupItem.className = "list-group-item";

@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
-      let li = link.getAttribute("href");
+      const li = link.getAttribute("href");
       window.bridgeApis.send("navigate-link", li);
     });
   });

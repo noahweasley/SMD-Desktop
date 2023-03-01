@@ -19,3 +19,5 @@ rules:
     - always
   camelcase: 
     - error
+  prefer-const:
+    - warn

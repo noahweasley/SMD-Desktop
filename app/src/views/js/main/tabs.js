@@ -4,12 +4,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const getElementIndex = (element) => Array.from(element.parentNode.children).indexOf(element);
 
   function registerTabEvents(tabItem, ...tabContent) {
-    let tabContent0 = document.getElementById(tabContent[0]);
-    let tabContent1 = document.getElementById(tabContent[1]);
-    let isDownloadTabs = tabContent[0] === "tab-content__downloading" && tabContent[1] === "tab-content__downloaded";
-    let pauseButton = document.querySelector(".pause");
-    let refreshButton = document.querySelector(".refresh");
-    let tabItems = document.querySelectorAll(tabItem);
+    const tabContent0 = document.getElementById(tabContent[0]);
+    const tabContent1 = document.getElementById(tabContent[1]);
+    const isDownloadTabs = tabContent[0] === "tab-content__downloading" && tabContent[1] === "tab-content__downloaded";
+    const pauseButton = document.querySelector(".pause");
+    const refreshButton = document.querySelector(".refresh");
+    const tabItems = document.querySelectorAll(tabItem);
 
     tabItems.forEach((tabItem) => {
       tabItem.addEventListener("click", () => {

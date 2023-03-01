@@ -41,7 +41,7 @@ async function createDatabaseSchema() {
 
   // upgrade database version
   async function upgradeDatabaseVersion() {
-    let vsf = await fsp.readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
+    const vsf = await fsp.readFile(DB_CONFIG_FILE, { encoding: "utf-8" });
     // replace with new database version
     vsf.DATABASE_VERSION = DATABASE_VERSION;
     await fsp.writeFile(DB_CONFIG_FILE, JSON.stringify(vsf));
@@ -85,7 +85,7 @@ async function createDatabaseSchema() {
       fileHandle = await fsp.open(DB_FILENAME, "r+");
     } catch (error) {
       if (error.code === "EEXIST") {
-        let dbVersion = await checkDatabaseVersion();
+        const dbVersion = await checkDatabaseVersion();
         if (dbVersion !== DATABASE_VERSION) {
           // call onUpgradeDatabase() when the database schema needs to be altered or updated
           await upgradeDatabaseVersion();
@@ -116,7 +116,7 @@ module.exports.database = knex({
   connection: { filename: DB_FILENAME }
 });
 
-let __database = this.database;
+const __database = this.database;
 
 // - --------------------------------------------------------------------- - //
 // -                                                                       - //
@@ -191,10 +191,10 @@ module.exports.getDownloadData = async function (arg) {
 
   try {
     if (arg.type == Type.DOWNLOADED) {
-      let data = await database.select("*").from(DOWNLOADED_TABLE);
+      const data = await database.select("*").from(DOWNLOADED_TABLE);
       return data.length > 0 ? data : null;
     } else if (arg.type == Type.DOWNLOADING) {
-      let data = await database.select("*").from(DOWNLOADING_TABLE);
+      const data = await database.select("*").from(DOWNLOADING_TABLE);
       return data.length > 0 ? data : null;
     } else {
       throw new Error(`${arg.type} is not supported`);
@@ -217,11 +217,11 @@ module.exports.addDownloadData = async function (arg) {
 
   try {
     if (arg.type == Type.DOWNLOADED) {
-      let result = await database.insert(arg.data).into(DOWNLOADED_TABLE).returning("id");
+      const result = await database.insert(arg.data).into(DOWNLOADED_TABLE).returning("id");
       return result[0]; // the column id
     } else if (arg.type == Type.DOWNLOADING) {
       // data property is the main db data in the object
-      let result = await database.insert(arg.data).into(DOWNLOADING_TABLE).returning("id");
+      const result = await database.insert(arg.data).into(DOWNLOADING_TABLE).returning("id");
       return result[0]; // the column id
     } else {
       throw new Error(`${arg["type"]} is not supported`);
@@ -263,10 +263,10 @@ module.exports.deleteDownloadData = async function (arg) {
 
   try {
     if (arg.type == Type.DOWNLOADED) {
-      let result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
+      const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
       return result > 0;
     } else if (arg.type == Type.DOWNLOADING) {
-      let result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
+      const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
       return result > 0;
     } else throw new Error(`${arg.type} is not supported`);
   } catch (error) {

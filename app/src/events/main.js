@@ -36,7 +36,7 @@ module.exports = function (settings, browsers, database) {
 
   // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, arg) => {
-    let isEntryDeleted = await database.deleteDownloadData(arg);
+    const isEntryDeleted = await database.deleteDownloadData(arg);
     if (isEntryDeleted) {
       /* empty */
     }
@@ -47,7 +47,7 @@ module.exports = function (settings, browsers, database) {
   // application authorization
   ipcMain.handle("authorize-app", async (_event, args) => {
     if (args[1] == "auth-youtube") {
-      let states = await settings.setStates({
+      const states = await settings.setStates({
         "yt-api-key-received": true,
         "yt-api-key": args[0]
       });

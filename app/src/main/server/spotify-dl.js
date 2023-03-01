@@ -7,9 +7,9 @@ const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util")
 
 module.exports = function (settings) {
   const REDIRECT_URL = "http://localhost:8888/callback";
-  let spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
+  const spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
 
-  let auth = authorize(settings, spotifyApi);
+  const auth = authorize(settings, spotifyApi);
   const MAX_NUMBER_OF_RETRIES = 3;
 
   /**
@@ -20,7 +20,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function searchSpotifyAlbum(albumUrl, limit = 50) {
-    let album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
+    const album = albumUrl.substring("https://open.spotify.com/album/".length, albumUrl.length);
     let data, dataReceived;
 
     for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
@@ -40,13 +40,13 @@ module.exports = function (settings) {
     const name = body["name"];
     const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
 
-    let trackCollection = [];
+    const trackCollection = [];
 
     tracks.forEach((track) => {
-      let songTitle = track["name"];
-      let artists = track["artists"];
-      let artistNames = artists.map((artist) => artist["name"]);
-      let thumbnails = track["images"];
+      const songTitle = track["name"];
+      const artists = track["artists"];
+      const artistNames = artists.map((artist) => artist["name"]);
+      const thumbnails = track["images"];
       trackCollection.push({ thumbnails, songTitle, artistNames });
     });
 
@@ -73,7 +73,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function searchSpotifyPlaylist(playlistUrl) {
-    let playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
+    const playlist = playlistUrl.substring("https://open.spotify.com/playlist/".length, playlistUrl.length);
     let data, dataReceived;
 
     for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
@@ -93,7 +93,7 @@ module.exports = function (settings) {
     const tracks = body["tracks"];
     const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
 
-    let trackCollection = tracks["items"]
+    const trackCollection = tracks["items"]
       .map((i) => i.track)
       .map((tr) => ({ songTitle: tr["name"], artistNames: tr["artists"].map((artist) => artist.name) }));
 
@@ -110,7 +110,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function searchSpotifyTrack(trackUrl) {
-    let track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
+    const track = trackUrl.substring("https://open.spotify.com/track/".length, trackUrl.length);
     let data, dataReceived;
 
     for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
@@ -126,8 +126,8 @@ module.exports = function (settings) {
     if (!dataReceived) return "An Error occurred while retrieving track data";
 
     const body = data.body;
-    let songTitle = body["name"];
-    let artists = body["artists"];
+    const songTitle = body["name"];
+    const artists = body["artists"];
     let artistNames = [];
 
     artistNames = artists.map((artist) => artist["name"]);
@@ -145,7 +145,7 @@ module.exports = function (settings) {
    */
   async function getSpotifyLinkData(urlType) {
     let data, spotifyURLType;
-    let clipboardContent = clipboard.readText();
+    const clipboardContent = clipboard.readText();
 
     try {
       spotifyURLType = urlType || getSpotifyURLType(clipboardContent);
@@ -159,7 +159,7 @@ module.exports = function (settings) {
       return error.message;
     }
 
-    let [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
+    const [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
       "spotify-user-client-id",
       "spotify-user-client-secret",
       "spotify-access-token",
