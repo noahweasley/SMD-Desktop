@@ -218,11 +218,11 @@ module.exports.addDownloadData = async function (arg) {
   try {
     if (arg.type == Type.DOWNLOADED) {
       const result = await database.insert(arg.data).into(DOWNLOADED_TABLE).returning("id");
-      return result[0]; // the column id
+      return result; // the column ids
     } else if (arg.type == Type.DOWNLOADING) {
       // data property is the main db data in the object
       const result = await database.insert(arg.data).into(DOWNLOADING_TABLE).returning("id");
-      return result[0]; // the column id
+      return result; // the column ids
     } else {
       throw new Error(`${arg["type"]} is not supported`);
     }
