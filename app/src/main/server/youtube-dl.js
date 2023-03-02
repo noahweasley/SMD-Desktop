@@ -133,7 +133,7 @@ function __exports() {
    */
   async function downloadMatchingTrack(options) {
     let downloadStream;
-    const taskId = options.taskId;
+    const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
     let numberOfRetriesTillEBUSY = 3;

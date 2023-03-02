@@ -25,9 +25,9 @@ module.exports = function (config) {
    *
    * @param {JSON} request a download request in the format; `{ sourceUrl, destPath }`
    */
-  function enqueueTask(taskId, request = {}) {
-    const task = downloadTask({ taskId, targetWindow, request });
-    downloadTaskQueue.push(task);
+  function enqueueTask(task, request = {}) {
+    const task0 = downloadTask({ task, targetWindow, request });
+    downloadTaskQueue.push(task0);
     return task;
   }
 
