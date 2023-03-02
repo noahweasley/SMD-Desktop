@@ -69,6 +69,8 @@ function __exports() {
     } finally {
       fileHandle?.close();
     }
+
+    return true;
   }
 
   /**
@@ -163,7 +165,7 @@ function __exports() {
                 await delay(1000);
                 executeCommand();
               }
-              downloadStream.emit("error", err);
+              console.error(err);
             }
           }
         })();
