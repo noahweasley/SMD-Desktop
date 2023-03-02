@@ -1,8 +1,8 @@
 /node_modules
-/dist
 /config.json
 .env
 /sample-images
 User Database.session.sql
 /.VSCodeCounter
 /debug
+/build

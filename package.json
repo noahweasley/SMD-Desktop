@@ -16,7 +16,6 @@
     "url": "https://www.patreon.com/noahweasley"
   },
   "keywords": [
-    "javascript",
     "electron",
     "music",
     "spotify",
@@ -45,14 +44,17 @@
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx,mdx}\"",
     "format": "npm run format:eslint && npm run format:prettier",
     "clear-cache": "npm run clear-preference && npm run clear-debug-database",
-    "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=ia32 --icon=app/resources/build/win/app_icon.ico",
-    "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=dist/win --platform=win32 --arch=x64 --icon=app/resources/build/win/app_icon.ico",
-    "build": "npm run pack:win32 && npm run pack:win64",
+    "generate-icons": "electron-icon-maker --input=./app/resources/build/tools/_$app_icon.png --output=./app/resources/build",
+    "pack:win32": "electron-packager . SMD-Desktop --overwrite --prune=true --out=build/dist/win --platform=win32 --arch=ia32 --icon=app/resources/build/icons/win/icon.ico",
+    "pack:win64": "electron-packager . SMD-Desktop --overwrite --prune=true --out=build/dist/win --platform=win32 --arch=x64 --icon=app/resources/build/icons/win/icon.ico",
     "package": "npm run build && npm run start",
-    "generate": "node package/electron-windows-installer.js"
+    "generate-installers": "node package/electron-windows-installer.js",
+    "build:windows": "npm run generate-icons && npm run pack:win32 && npm run pack:win64 && npm run generate-installers",
+    "build": "npm run build:windows"
   },
   "devDependencies": {
     "electron": "^21.3.1",
+    "electron-icon-maker": "^0.0.5",
     "electron-packager": "^17.1.1",
     "electron-winstaller": "^5.1.0",
     "eslint": "^8.34.0",
