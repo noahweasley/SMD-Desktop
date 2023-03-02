@@ -278,13 +278,11 @@ window.addEventListener("DOMContentLoaded", () => {
   // actions related to file downloads
   function displayProgress(_event, args) {
     const progress = args.progress;
-
     const elementId = `download-progress-${args.id}`;
     const progressBar = document.getElementById(elementId);
     const mediaBodyElement = progressBar.parentNode;
-    // get the second child element
     const messageElement = mediaBodyElement.children[1];
-    messageElement.innerText = `${progress}% downloaded`;
+    messageElement.innerText = progress < 100 ? `${progress}% downloaded` : "Download finished";
 
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);

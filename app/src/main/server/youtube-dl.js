@@ -1,4 +1,5 @@
 require("dotenv").config();
+const FILE_EXTENSIONS = require("./file-extensions");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
@@ -177,7 +178,7 @@ function __exports() {
           });
         });
 
-        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.m4a`);
+        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
         try {
           await pipeline(downloadStream, createWriteStream(fileToStoreData));
         } catch (ignored) {

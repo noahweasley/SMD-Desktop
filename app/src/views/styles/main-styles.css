@@ -436,7 +436,8 @@ a:active {
 }
 
 .media-body > .horizontal-progress {
-  --progress-width: 20px;
+  --progress-width: 0px;
+  --i-progress-thumb-width: 20px;
   --progress-anim: 2s move linear infinite forwards;
   position: relative;
   width: 90%;
@@ -446,19 +447,28 @@ a:active {
   margin-top: 8px;
 }
 
-.media-body > .horizontal-progress::before {
+.media-body > .horizontal-progress::before,
+.media-body > .horizontal-progress::after {
   display: block;
   content: "";
-  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
-  width: var(--progress-width);
   height: 100%;
+  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   border-radius: 8px;
-  animation: var(--progress-anim);
   transition: 0.2s;
+}
+
+.media-body > .horizontal-progress::before {
+  width: var(--i-progress-thumb-width);
+  animation: var(--progress-anim);
+}
+
+.media-body > .horizontal-progress::after {
+  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
+  width: var(--progress-width);
 }
 
 .list-group > * {

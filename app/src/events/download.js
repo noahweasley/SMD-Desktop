@@ -81,27 +81,27 @@ module.exports = function (settings, browsers, database) {
 
   // download click events
   ipcMain.on("download-click-event", async (_event, args) => {
-    downloadQuery = args[1];
+    // downloadQuery = args[1];
     searchWindow.getWindow()?.close();
 
     if (args[0] === "proceed-download") {
-      const searchQueryResults = args[1];
+      const searchQueryResults = args;
 
-      const downloadData = searchQueryResults
-        .map((searchQueryResult) => ({
-          TrackPlaylistTitle: "-",
-          TrackArtists: "-",
-          ErrorOccurred: false,
-          DownloadState: States.ACTIVE,
-          DownloadProgress: 0,
-          TrackTitle: searchQueryResult.videoTitle,
-          TrackUrl: searchQueryResult.videoUrl,
-          DownloadedSize: "Unknown",
-          TrackDownloadSize: "Unknown",
-          Message: "Download in progress..."
-        }))
-        .flat();
+      const downloadData = searchQueryResults.map((searchQueryResult) => ({
+        TrackTitle: searchQueryResult.videoTitle,
+        TrackUrl: searchQueryResult.videoUrl,
+        TrackPlaylistTitle: "-",
+        TrackArtists: "-",
+        ErrorOccurred: false,
+        DownloadState: States.ACTIVE,
+        DownloadProgress: 0,
+        DownloadedSize: "Unknown",
+        TrackDownloadSize: "Unknown",
+        Message: "Download in progress..."
+      }));
 
+      // TODO find out the reason why after inserting more that two items in the database, later sends an undefined to the UI
+      
       try {
         const insertedDataColumnIds = await database.addDownloadData({
           type: Type.DOWNLOADING,
