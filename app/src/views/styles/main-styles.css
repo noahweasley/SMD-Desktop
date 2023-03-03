@@ -447,10 +447,9 @@ a:active {
   margin-top: 8px;
 }
 
-.media-body > .horizontal-progress::before,
+.media-body > .horizontal-progress > .load-indicator,
 .media-body > .horizontal-progress::after {
   display: block;
-  content: "";
   height: 100%;
   background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
   position: absolute;
@@ -461,12 +460,18 @@ a:active {
   transition: 0.2s;
 }
 
-.media-body > .horizontal-progress::before {
+.media-body > .horizontal-progress > .load-indicator {
   width: var(--i-progress-thumb-width);
   animation: var(--progress-anim);
 }
 
+/* gone class has lower specificity of (0,1.0), adding this increased it to (0,4,0), overriding the previously (0,3,0) */
+.media-body > .horizontal-progress > .load-indicator.gone {
+  display: none;
+}
+
 .media-body > .horizontal-progress::after {
+  content: "";
   background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
   width: var(--progress-width);
 }

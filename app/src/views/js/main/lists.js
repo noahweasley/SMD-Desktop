@@ -130,6 +130,9 @@ window.addEventListener("DOMContentLoaded", () => {
       const downloadProgressElement = document.createElement("div");
       downloadProgressElement.classList.add("horizontal-progress");
       downloadProgressElement.id = `download-progress-${itemId}`;
+      const loadingIndicatorElement = document.createElement("div");
+      loadingIndicatorElement.classList.add("load-indicator");
+      downloadProgressElement.append(loadingIndicatorElement);
       // finally append the created element nodes as children to the parent media body node
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
@@ -286,6 +289,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);
+    // stop loading animation
+    progressBar.children[0].classList.add("gone");
 
     if (progress === 100) finishDownloading();
 
