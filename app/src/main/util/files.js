@@ -52,19 +52,6 @@ function __exports() {
   }
 
   /**
-   * Delays program
-   * @param {number} timeout delay period in milliseconds
-   * @returns a Promise that resolves after `timeout` milliseconds
-   */
-  function delay(timeout) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, timeout);
-    });
-  }
-
-  /**
    * Watch a file and detect file changes
    *
    * @param {string} filePath
@@ -85,7 +72,6 @@ function __exports() {
     getDownloadsDirectory,
     getTempThumbDirectory,
     getThumbnailDirectory,
-    delay,
     watchFileForChanges
   };
 }

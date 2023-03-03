@@ -7,6 +7,8 @@ const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("elect
 const { join } = require("path");
 const dummy = require("../main/util/dummy");
 const { Type } = require("../main/database/constants");
+const { stat } = require("fs/promises");
+const { getReadableSize } = require("../main/util/math");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
@@ -37,11 +39,15 @@ module.exports = function (settings, browsers, database) {
   // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, arg) => {
     const isEntryDeleted = await database.deleteDownloadData(arg);
-    if (isEntryDeleted) {
-      /* empty */
-    }
+    const filepath = arg.filename;
 
-    return isEntryDeleted;
+    if (isEntryDeleted) {
+      const sizeInBytes = (await stat(filepath)).size;
+      const fileSize = getReadableSize(sizeInBytes);
+      return [isEntryDeleted, fileSize];
+    } else {
+      return [isEntryDeleted, undefined];
+    }
   });
 
   // application authorization

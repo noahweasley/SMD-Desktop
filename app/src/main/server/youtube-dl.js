@@ -1,13 +1,14 @@
 require("dotenv").config();
-const FILE_EXTENSIONS = require("./file-extensions");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
 const path = require("path");
 const { open, readdir, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
-const { getDownloadsDirectory, delay } = require("../util");
 const { createWriteStream } = require("fs");
+const { getDownloadsDirectory } = require("../util/files");
+const { delay } = require("../util/misc");
+const FILE_EXTENSIONS = require("./file-extensions");
 
 function __exports() {
   const Signal = Object.freeze({
@@ -171,14 +172,16 @@ function __exports() {
           }
         })();
 
+        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
+
         downloadStream.on("progress", (progress) => {
           target.webContents.send("download-progress-update", {
             id: taskId,
+            filename: fileToStoreData,
             progress: progress.percent
           });
         });
 
-        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
         try {
           await pipeline(downloadStream, createWriteStream(fileToStoreData));
         } catch (ignored) {

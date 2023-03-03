@@ -116,13 +116,10 @@ module.exports = function (settings) {
     for (let x = 0; x <= MAX_NUMBER_OF_RETRIES; x++) {
       try {
         data = await spotifyApi.getTrack(track);
-        console.log("Data was received successfully");
         dataReceived = true;
         break;
       } catch (err) {
-        console.log("Error occurred, trying to refresh token", err.message);
         await auth.refreshSpotifyAccessTokenWithErrorHandler();
-        console.log("Token refreshed");
       }
     }
 

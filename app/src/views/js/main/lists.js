@@ -298,10 +298,13 @@ window.addEventListener("DOMContentLoaded", () => {
       const listItem = mediaBodyElement.parentElement;
       const listGroup = listItem.parentElement;
 
-      const data = { data: { id: args.id }, type: Type.DOWNLOADING };
+      const metadata = { data: { id: args.id, filename: args.filename }, type: Type.DOWNLOADING };
 
-      window.bridgeApis.invoke("finish-downloading", data).then((isFileDeleted) => {
-        if (isFileDeleted) {
+      window.bridgeApis.invoke("finish-downloading", metadata).then((info) => {
+        const [isEntryDeleted, fileSize] = info;
+        console.log(fileSize);
+
+        if (isEntryDeleted) {
           listGroup.removeChild(listItem);
           if (listGroup.childNodes.length == 0) {
             // no downloads are pending, display decorations

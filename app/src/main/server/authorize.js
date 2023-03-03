@@ -157,7 +157,8 @@ module.exports = function (settings, spotifyApi) {
    */
   async function refreshSpotifyAccessTokenWithErrorHandler() {
     try {
-      await refreshSpotifyAccessToken();
+      const tokenRefreshed = await refreshSpotifyAccessToken();
+      console.info(`Token refreshed: ${tokenRefreshed}`);
     } catch (err) {
       console.error("Access token refresh failed", err);
     }
