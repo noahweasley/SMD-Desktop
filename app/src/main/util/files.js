@@ -59,8 +59,9 @@ function __exports() {
    */
   function watchFileForChanges(filePath) {
     return new Promise((resolve) => {
-      watch(filePath, (eventType, filename) => {
+      const watcher = watch(filePath, (eventType, filename) => {
         if (filename && eventType === "change") {
+          watcher.close();
           resolve(filename);
         }
       });
