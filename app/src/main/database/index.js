@@ -143,7 +143,7 @@ function onCreateDatabase() {
         tableBuilder.string("TrackPlaylistTitle");
         tableBuilder.string("TrackTitle");
         tableBuilder.string("TrackArtists");
-        tableBuilder.string("TrackUrl");
+        tableBuilder.string("TrackUri");
       });
 
       await __database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {

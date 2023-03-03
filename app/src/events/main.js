@@ -40,13 +40,25 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("finish-downloading", async (_event, arg) => {
     const isEntryDeleted = await database.deleteDownloadData(arg);
     const filepath = arg.filename;
+    const title = arg.title;
 
     if (isEntryDeleted) {
       const sizeInBytes = (await stat(filepath)).size;
       const fileSize = getReadableSize(sizeInBytes);
-      return [isEntryDeleted, fileSize];
+
+      const downloadedData = {
+        TrackDownloadSize: fileSize,
+        TrackPlaylistTitle: "-",
+        TrackTitle: title,
+        TrackArtists: "No Artists",
+        TrackUri: filepath
+      };
+
+      const entryId = await database.addDownloadData(downloadedData);
+      const isAdded = entryId != -1;
+      return [isAdded, downloadedData];
     } else {
-      return [isEntryDeleted, undefined];
+      return [false, undefined];
     }
   });
 
@@ -69,8 +81,6 @@ module.exports = function (settings, browsers, database) {
     try {
       return getSpotifyURLType(clipboard.readText());
     } catch (err) {
-      // display modal dialog with details of error
-      // TODO: remove or fix this dialog code. Code is never executed, therefore, this dialog is never shown
       dialog.showErrorBox(
         "Clipboard content not a Spotify link",
         "Go to Spotify and copy playlist or song link, then click 'Paste URL'"
@@ -81,7 +91,6 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("show-error-unknown-dialog", (_event, error) => {
-    // display modal dialog with details of error
     const defaultTitle = "Uh ohh !! That was a malformed Spotify URL";
     const defaultMessage = "Re-copy playlist or track url, then click 'Paste URL' again";
     dialog.showErrorBox(error.title || defaultTitle, error.message || defaultMessage);

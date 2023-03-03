@@ -178,6 +178,7 @@ function __exports() {
           target.webContents.send("download-progress-update", {
             id: taskId,
             filename: fileToStoreData,
+            title: request.videoTitle,
             progress: progress.percent
           });
         });
