@@ -8,7 +8,7 @@
 </h1>
 
 <p align="center">
-  An Open-Sourced Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API
+  A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API
 </p>
 
 <div align="center">
