@@ -175,7 +175,7 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBody.className = "media-body";
       // create the track title
       const trackTitleElement = document.createElement("strong");
-      trackTitleElement.innerText = `${position + 1}. ${item["TrackTitle"]} - ${item["TrackArtists"]}`;
+      trackTitleElement.innerText = `${position + 1}. ${item["TrackTitle"]}`;
       // create the message element
       const messageElement = document.createElement("p");
       messageElement.innerText = item["TrackDownloadSize"];
