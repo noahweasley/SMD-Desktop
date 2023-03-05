@@ -107,9 +107,10 @@ module.exports = function (settings, browsers, database) {
           data: downloadData
         });
 
-        // return console.log(require("util").inspect(searchQueryResults));
-
-        downloadTasks = fileDownloader.enqueueTasks(insertedDataColumnIds, searchQueryResults);
+        downloadTasks = fileDownloader.enqueueTasks({
+          searchResultIds: insertedDataColumnIds,
+          searchResults: searchQueryResults
+        });
 
         if (insertedDataColumnIds) {
           // update download list UI, with current pending download data]

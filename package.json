@@ -26,6 +26,7 @@
     "spotify-downloader"
   ],
   "scripts": {
+    "test": "jest .",
     "start": "electron .",
     "debug": "electron . --trace-warnings",
     "lint:start": "npm run lint && npm run start",

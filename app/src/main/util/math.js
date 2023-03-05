@@ -11,14 +11,14 @@ module.exports.getReadableSize = function (bytes) {
   const _1TB = _1GB * 1024;
 
   if (bytes >= _1KB && bytes < _1MB) {
-    return `${Math.round(bytes / _1KB)} KB`;
+    return `${(bytes / _1KB).toFixed(2)} KB`;
   } else if (bytes >= _1MB && bytes < _1GB) {
-    return `${Math.round(bytes / _1MB)} MB`;
+    return `${(bytes / _1MB).toFixed(2)} MB`;
   } else if (bytes >= _1GB && bytes < _1TB) {
-    return `${Math.round(bytes / _1GB)} GB`;
+    return `${(bytes / _1GB).toFixed(2)} GB`;
   } else if (bytes >= _1TB) {
-    return `${Math.round(bytes / _1TB)} TB`;
+    return `${(bytes / _1TB).toFixed(2)} TB`;
   } else {
-    return `${bytes} bytes`;
+    return `${bytes} BYTE`;
   }
 };

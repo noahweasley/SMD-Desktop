@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (hasDownloadedData || hasDownloadingData) {
       tryAddListItemDownloaded(downloadedData);
-      tryAddListItemDownloading(downloadedData);
+      tryAddListItemDownloading(downloadingData);
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
@@ -33,13 +33,12 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.on("download-progress-update", displayProgress);
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
-    displayEmptyListPlaceholderById("info_decor__downloading", false);
-    displayEmptyListPlaceholderById("info_decor__downloaded", true);
     // append new data into current data
     tryAddListItemDownloading(args, true);
+    displayEmptyListPlaceholderById("info_decor__downloaded", false);
     registerEventListeners();
     // after changing UI states, start file downloads
-    window.bridgeApis.send("initiate-downloads");
+    // window.bridgeApis.send("initiate-downloads");
   });
 
   function displayAllDecorations(shouldShow) {
@@ -63,29 +62,29 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // populate the 'downloading' - list with item fetched from database
   function tryAddListItemDownloading(data, shouldAppend) {
+    const uLElement = document.querySelector(".list-group__downloading");
+
     if (!data) {
       uLElement.classList.add("gone");
-      return displayEmptyListPlaceholderById("info_decor__downloading", true);
-    }
-
-    const item = data[0]; // type => object (main data)
-    const itemIds = data[data.length - 1]; // type => array of objects (ids)
-
-    const uLElement = document.querySelector(".list-group__downloading");
-    if (item.length > 0) uLElement.classList.remove("gone");
-    // create the list items populating it with the fetched data from database
-
-    // TODO: fix duplicate code introduced while trying to fix bug in 'add to downloading list'
-
-    if (shouldAppend) {
-      // TODO: make listData.length return the previous size instead of 0 and use position on list
-      const oldDataSize = listData.length;
-      const newDataSize = oldDataSize + item.length;
-      // create list, append data
-      for (let position = oldDataSize; position < newDataSize; position++) createList(position, itemIds);
+      displayEmptyListPlaceholderById("info_decor__downloading", true);
     } else {
-      // create list, don't care to append
-      for (let position = 0; position < item.length; position++) createList(position, itemIds);
+      const item = data[0]; // type => object (main data)
+      const itemIds = data[data.length - 1]; // type => array of objects (ids)
+
+      uLElement.classList.remove("gone");
+      displayEmptyListPlaceholderById("info_decor__downloading", false);
+      
+      // TODO: fix duplicate code introduced while trying to fix bug in 'add to downloading list'
+      if (shouldAppend) {
+        // TODO: make listData.length return the previous size instead of 0 and use position on list
+        const oldDataSize = listData.length;
+        const newDataSize = oldDataSize + item.length;
+        // create list, append data
+        for (let position = oldDataSize; position < newDataSize; position++) createList(position, itemIds);
+      } else {
+        // create list, don't care to append
+        for (let position = 0; position < item.length; position++) createList(position, itemIds);
+      }
     }
 
     function createList(position, itemIds) {
@@ -142,30 +141,34 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // end function
+
   // populate the 'downloaded' - list with item fetched from database
   function tryAddListItemDownloaded(item) {
+    const uLElement = document.querySelector(".list-group__downloaded");
+
     if (!item) {
       uLElement.classList.add("gone");
-      return displayEmptyListPlaceholderById("info_decor__downloaded", true);
-    }
+      displayEmptyListPlaceholderById("info_decor__downloaded", true);
+    } else {
+      displayEmptyListPlaceholderById("info_decor__downloaded", false);
 
-    const uLElement = document.querySelector(".list-group__downloaded");
-    if (item.length > 0) uLElement.classList.remove("gone");
-    // create the list items populating it with the fetched data from database
-    for (let i = 0; i < item.length; i++) {
-      const listElement = document.createElement("li");
-      listElement.classList.add("list-group-item"); // create but don't display yet
-      // create the thumbnail element
-      const thumbnailElement = document.createElement("img");
-      thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
-      // finally append those element node to the list parent node
-      listElement.append(thumbnailElement);
-      listElement.append(createMediaBody(i, item[i]));
-      // append list item to list
-      uLElement.append(listElement);
+      if (item.length > 0) uLElement.classList.remove("gone");
+      // create the list items populating it with the fetched data from database
+      for (let i = 0; i < item.length; i++) {
+        const listElement = document.createElement("li");
+        listElement.classList.add("list-group-item"); // create but don't display yet
+        // create the thumbnail element
+        const thumbnailElement = document.createElement("img");
+        thumbnailElement.classList.add("media-object", "pull-left");
+        thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
+        // finally append those element node to the list parent node
+        listElement.append(thumbnailElement);
+        listElement.append(createMediaBody(i, item[i]));
+        // append list item to list
+        uLElement.append(listElement);
+      }
     }
-
     // creates a media body element
     function createMediaBody(position, item) {
       const mediaBody = document.createElement("div");
@@ -211,7 +214,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      opIconContainer3.addEventListener("click", () => window.bridgeApis.send("play-music", "default"));
+      opIconContainer3.addEventListener("click", () => window.bridgeApis.send("play-music", item["TrackUri"]));
 
       opIconContainer1.append(opIcon1);
       opIconContainer2.append(opIcon2);
@@ -316,12 +319,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
           if (listGroup.childNodes.length == 0) {
             tryAddListItemDownloading(null); // displays placeholder
-          } else {
-            window.bridgeApis.send("show-error-unknown-dialog", {
-              title: "An unknown error occurred",
-              message: "We were unable to complete some operations"
-            });
           }
+        } else {
+          window.bridgeApis.send("show-error-unknown-dialog", {
+            title: "An unknown error occurred",
+            message: "We were unable to complete some operations"
+          });
         }
       });
     }

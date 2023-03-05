@@ -20,7 +20,7 @@ module.exports = function (settings, browsers, database) {
   // get app info
   ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
   // play music
-  ipcMain.on("play-music", (_event, arg) => shell.openPath(join(`file://${app.getPath("music")}`, app.getName(), arg)));
+  ipcMain.on("play-music", (_event, fileUri) => shell.openPath(fileUri));
   // delete file in database
   ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg));
 
@@ -37,21 +37,24 @@ module.exports = function (settings, browsers, database) {
   ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
 
   // file downloaded, delete downloading data and move to downloaded data
-  ipcMain.handle("finish-downloading", async (_event, arg) => {
-    const isEntryDeleted = await database.deleteDownloadData(arg);
-    const filepath = arg.filename;
-    const title = arg.title;
+  ipcMain.handle("finish-downloading", async (_event, metadata) => {
+    const isEntryDeleted = await database.deleteDownloadData(metadata);
+    const filepath = metadata.data.filename;
+    const title = metadata.data.title;
 
     if (isEntryDeleted) {
       const sizeInBytes = (await stat(filepath)).size;
-      const fileSize = getReadableSize(sizeInBytes);
+      const readableFileSize = getReadableSize(sizeInBytes);
 
       const downloadedData = {
-        TrackDownloadSize: fileSize,
-        TrackPlaylistTitle: "-",
-        TrackTitle: title,
-        TrackArtists: "No Artists",
-        TrackUri: filepath
+        type: Type.DOWNLOADED,
+        data: {
+          TrackDownloadSize: readableFileSize,
+          TrackPlaylistTitle: "-",
+          TrackTitle: title,
+          TrackArtists: "No Artists",
+          TrackUri: filepath
+        }
       };
 
       const entryId = await database.addDownloadData(downloadedData);

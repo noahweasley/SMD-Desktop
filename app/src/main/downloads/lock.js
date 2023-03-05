@@ -5,7 +5,8 @@
  *
  * @param {number} maxLockCount the total number of locks to hold
  */
-module.exports = function (maxLockCount) {
+module.exports = function (config) {
+  const maxLockCount = config.maxLockCount;
   let concurrency = maxLockCount || 2;
 
   /**

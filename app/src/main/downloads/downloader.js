@@ -6,7 +6,7 @@ const lock = require("./lock");
 module.exports = function (config) {
   const { targetWindow, maxParallelDownloads } = config;
 
-  const locker = lock(maxParallelDownloads);
+  const locker = lock({ maxLockCount: maxParallelDownloads });
 
   let downloadTaskQueue = [];
   // tasks => streams[]
@@ -37,7 +37,10 @@ module.exports = function (config) {
    * @param {array} request  a download request in the format; `{ sourceUrl, destPath }`
    * @param {array} insertedColumnIds an array of objects with task id as keys
    */
-  function enqueueTasks(insertedColumnIds = [], requests = []) {
+  function enqueueTasks(taskOptions) {
+    const insertedColumnIds = taskOptions.searchResultIds;
+    const requests = taskOptions.searchResults;
+
     for (let x = 0; x < requests.length; x++) {
       enqueueTask(insertedColumnIds[x], requests[x]);
     }

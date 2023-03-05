@@ -22,7 +22,7 @@
 
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
-    ><img src="assets/screenshots/SMD.png" alt="Buy Noah A Coffee" />
+    ><img src="assets/screenshots/Screenshot 1.png" alt="Buy Noah A Coffee" />
   </a>
 </p>
 
