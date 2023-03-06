@@ -19,13 +19,16 @@
 </div>
 
 </br>
-
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
-    ><img src="assets/screenshots/Screenshot 2.png" alt="Buy Noah A Coffee" />
+    ><img src="assets/screenshots/Screenshot 1.png" alt="Buy Noah A Coffee" />
   </a>
-</p>
 
+<a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+    ><img src="assets/screenshots/Screenshot 2.png" alt="Buy Noah A Coffee" />
+</a>
+
+</p>
 </br>
 
 **Please note**: This application is still in development, ping me - mailto:iebenmelu@gmail.com, I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.

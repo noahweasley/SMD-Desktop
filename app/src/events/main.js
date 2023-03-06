@@ -9,6 +9,7 @@ const dummy = require("../main/util/dummy");
 const { Type } = require("../main/database/constants");
 const { stat } = require("fs/promises");
 const { getReadableSize } = require("../main/util/math");
+const { unlink } = require("fs/promises");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
@@ -22,7 +23,15 @@ module.exports = function (settings, browsers, database) {
   // play music
   ipcMain.on("play-music", (_event, fileUri) => shell.openPath(fileUri));
   // delete file in database
-  ipcMain.handle("delete-file", async (_event, arg) => await database.deleteDownloadData(arg));
+  ipcMain.handle("delete-file", async (_event, metadata) => {
+    try {
+      await unlink(metadata.data.filename);
+      await database.deleteDownloadData(metadata);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  });
 
   // after pasting url and download window is about to display it's content
   ipcMain.handle("download-data", () => getSpotifyLinkData());
@@ -38,30 +47,34 @@ module.exports = function (settings, browsers, database) {
 
   // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, metadata) => {
-    const isEntryDeleted = await database.deleteDownloadData(metadata);
-    const filepath = metadata.data.filename;
-    const title = metadata.data.title;
+    try {
+      const isEntryDeleted = await database.deleteDownloadData(metadata);
+      const filepath = metadata.data.filename;
+      const title = metadata.data.title;
 
-    if (isEntryDeleted) {
-      const sizeInBytes = (await stat(filepath)).size;
-      const readableFileSize = getReadableSize(sizeInBytes);
+      if (isEntryDeleted) {
+        const sizeInBytes = (await stat(filepath)).size;
+        const readableFileSize = getReadableSize(sizeInBytes);
 
-      const downloadedData = {
-        type: Type.DOWNLOADED,
-        data: {
-          TrackDownloadSize: readableFileSize,
-          TrackPlaylistTitle: "-",
-          TrackTitle: title,
-          TrackArtists: "No Artists",
-          TrackUri: filepath
-        }
-      };
+        const downloadedData = {
+          type: Type.DOWNLOADED,
+          data: {
+            TrackDownloadSize: readableFileSize,
+            TrackPlaylistTitle: "-",
+            TrackTitle: title,
+            TrackArtists: "No Artists",
+            TrackUri: filepath
+          }
+        };
 
-      const entryId = await database.addDownloadData(downloadedData);
-      const isAdded = entryId != -1;
-      return [isAdded, downloadedData];
-    } else {
-      return [false, undefined];
+        const entryId = await database.addDownloadData(downloadedData);
+        const isAdded = entryId != -1;
+        return [isAdded, downloadedData];
+      } else {
+        return [false, undefined];
+      }
+    } catch (err) {
+      console.error(err);
     }
   });
 
@@ -102,15 +115,11 @@ module.exports = function (settings, browsers, database) {
   // link navigate
   ipcMain.on("navigate-link", (_event, arg) => {
     let linkByType;
-    switch (arg) {
-      case "#music":
-        linkByType = join(`file://${app.getPath("music")}`, app.getName(), "download");
-        break;
-      case "#video":
-        linkByType = join(`file://${app.getPath("video")}`, app.getName(), "download");
-        break;
-      default:
-        linkByType = arg;
+
+    if (arg == "#music") {
+      linkByType = join(`file://${app.getPath("music")}`, app.getName(), "download");
+    } else {
+      linkByType = arg;
     }
 
     // then open link in default app
@@ -131,6 +140,7 @@ module.exports = function (settings, browsers, database) {
         d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
         d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
       }
+      console.log(d2);
       return [d1, d2];
     } catch (error) {
       // TODO: add proper visual representation of this database data retrieval error

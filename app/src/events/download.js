@@ -1,5 +1,6 @@
 "use-strict";
 
+const { v4: uuidv4 } = require("uuid");
 const { ipcMain, dialog } = require("electron");
 const ytdl = require("../main/server/youtube-dl");
 const spotifyDl = require("../main/server/spotify-dl");
@@ -87,6 +88,7 @@ module.exports = function (settings, browsers, database) {
       const searchQueryResults = args[1];
 
       const downloadData = searchQueryResults.map((searchQueryResult) => ({
+        id: uuidv4(),
         TrackTitle: searchQueryResult.videoTitle,
         TrackUrl: searchQueryResult.videoUrl,
         TrackPlaylistTitle: "-",
@@ -114,7 +116,7 @@ module.exports = function (settings, browsers, database) {
 
         if (insertedDataColumnIds) {
           // update download list UI, with current pending download data]
-          mainWindow.getWindow()?.send("download-list-update", [downloadData, insertedDataColumnIds]);
+          mainWindow.getWindow()?.send("download-list-update", downloadData);
         } else {
           // probably some write error to the database
           dialog.showErrorBox(

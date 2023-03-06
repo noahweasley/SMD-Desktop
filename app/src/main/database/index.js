@@ -147,7 +147,7 @@ function onCreateDatabase() {
       });
 
       await __database.schema.createTable(DOWNLOADING_TABLE, (tableBuilder) => {
-        tableBuilder.increments();
+        tableBuilder.string("id").primary();
         tableBuilder.boolean("ErrorOccurred");
         tableBuilder.string("DownloadState");
         tableBuilder.string("TrackPlaylistTitle");

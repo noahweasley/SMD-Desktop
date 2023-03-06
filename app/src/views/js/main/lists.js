@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
     displayEmptyListPlaceholderById("info_decor__downloaded", false);
     registerEventListeners();
     // after changing UI states, start file downloads
-    // window.bridgeApis.send("initiate-downloads");
+    window.bridgeApis.send("initiate-downloads");
   });
 
   function displayAllDecorations(shouldShow) {
@@ -61,35 +61,36 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // populate the 'downloading' - list with item fetched from database
-  function tryAddListItemDownloading(data, shouldAppend) {
+  function tryAddListItemDownloading(item, shouldAppend) {
     const uLElement = document.querySelector(".list-group__downloading");
 
-    if (!data) {
+    if (!item) {
       uLElement.classList.add("gone");
       displayEmptyListPlaceholderById("info_decor__downloading", true);
     } else {
-      const item = data[0]; // type => object (main data)
-      const itemIds = data[data.length - 1]; // type => array of objects (ids)
-
       uLElement.classList.remove("gone");
       displayEmptyListPlaceholderById("info_decor__downloading", false);
-      
+
       // TODO: fix duplicate code introduced while trying to fix bug in 'add to downloading list'
       if (shouldAppend) {
         // TODO: make listData.length return the previous size instead of 0 and use position on list
         const oldDataSize = listData.length;
         const newDataSize = oldDataSize + item.length;
         // create list, append data
-        for (let position = oldDataSize; position < newDataSize; position++) createList(position, itemIds);
+        for (let position = oldDataSize; position < newDataSize; position++) {
+          uLElement.append(createListItem(position, item));
+        }
       } else {
         // create list, don't care to append
-        for (let position = 0; position < item.length; position++) createList(position, itemIds);
+        for (let position = 0; position < item.length; position++) {
+          uLElement.append(createListItem(position, item));
+        }
       }
     }
 
-    function createList(position, itemIds) {
-      const itemId = itemIds[position].id;
+    function createListItem(position, item) {
       const dbData = item[position];
+      const itemId = dbData.id;
 
       const listElement = document.createElement("li");
       listElement.classList.add("list-group-item", "gone"); // create but don't display yet
@@ -100,9 +101,8 @@ window.addEventListener("DOMContentLoaded", () => {
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
       listElement.append(createMediaBody(itemId, dbData));
-      // append list item to list
-      uLElement.append(listElement);
       listElement.classList.remove("gone");
+      return listElement;
     }
 
     // creates a media body element
@@ -118,11 +118,19 @@ window.addEventListener("DOMContentLoaded", () => {
       messageElement.classList.add("message");
       // create the icons for the media body
       const opIconContainer = document.createElement("div");
+      const opIconContainer2 = document.createElement("div");
+
       const opIcon = document.createElement("span");
-      // ... classes
-      opIcon.classList.add("icon", "icon-pause", "icon-x2");
+      const opIcon2 = document.createElement("span");
+
       opIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      opIconContainer2.classList.add("op-icon", "not-draggable", "pull-right");
+
+      opIcon.classList.add("icon", "icon-pause", "icon-x2");
+      opIcon2.classList.add("icon", "icon-cancel", "icon-x2");
+
       opIconContainer.append(opIcon);
+      opIconContainer2.append(opIcon2);
 
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
@@ -135,6 +143,7 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
       mediaBody.append(opIconContainer);
+      mediaBody.append(opIconContainer2);
       mediaBody.append(downloadProgressElement);
 
       return mediaBody;
@@ -209,7 +218,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             listGroup.removeChild(listItem);
             if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
-            displayEmptyListPlaceholderById("info_decor__downloaded", false);
+            displayEmptyListPlaceholderById("info_decor__downloaded", true);
           }
         });
       });

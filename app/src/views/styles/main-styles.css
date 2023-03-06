@@ -394,7 +394,7 @@ a:active {
   position: relative;
   height: 100%;
   /* an hack to force overflow on the media body title; the STRONG element */
-  padding: 10px 60px 10px 10px;
+  padding: 10px calc(25px + 10vw) 10px 10px;
 }
 
 .media-body > .op-icon {
@@ -440,7 +440,7 @@ a:active {
   --i-progress-thumb-width: 20px;
   --progress-anim: 2s move linear infinite forwards;
   position: relative;
-  width: 90%;
+  width: 80%;
   height: 10px;
   background-color: var(--normal-scrolbar-clr);
   border-radius: 8px;
@@ -474,6 +474,13 @@ a:active {
   content: "";
   background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
   width: var(--progress-width);
+}
+
+.list-group__downloaded  .media-body {
+  position: relative;
+  height: 100%;
+  /* an hack to force overflow on the media body title; the STRONG element */
+  padding: 10px calc(25px + 20vw) 10px 10px;
 }
 
 .list-group > * {
