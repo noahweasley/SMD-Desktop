@@ -45,6 +45,23 @@
 > little to no technical knowledge. With its advanced search capabilities and intuitive download manager, you can
 > find and download your favorite songs in seconds.
 
+## Features
+
+- Single search songs
+- Batch download multiple songs at once
+- Download music from available platforms
+- Integrates with Spotify API to fetch metadata
+- Customize download settings like audio quality and download location (coming soon)
+
+## Technologies Used
+
+- HTML/CSS
+- Photon (CSS Framework)
+- JavaScript
+- Node.js
+- Electron.js
+- SQLite
+
 ## Contributing
 
 [Full step-by-step guide on how to contribute](https://github.com/noahweasley/SMD-desktop/blob/master/contributing.md)
