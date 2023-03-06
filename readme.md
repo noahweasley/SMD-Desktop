@@ -31,7 +31,7 @@
 </p>
 </br>
 
-**Please note**: This application is still in development, ping me - mailto:iebenmelu@gmail.com, I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.
+**Please note**: This application is still in development, ping me - [mailto:iebenmelu@gmail.com], I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.
 
 ## About S.M.D
 
@@ -77,3 +77,7 @@
 S.M.D :copyright: is under the GPL 3.0 license
 
 Please review [license](https://github.com/noahweasley/SMD-desktop/blob/master/license) to get full details.
+
+## Contact
+
+If you have any questions or feedback, please reach out to me at [mailto:iebenmelu@gmail.com].
