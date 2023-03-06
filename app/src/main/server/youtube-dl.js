@@ -1,14 +1,13 @@
 require("dotenv").config();
-const ytdlp = require("yt-dlp-wrap").default;
-const ytSearch = require("youtube-search-without-api-key");
 const { app } = require("electron");
-const path = require("path");
 const { open, readdir, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { createWriteStream } = require("fs");
-const { getDownloadsDirectory } = require("../util/files");
-const { delay } = require("../util/misc");
+const { getDownloadsDirectory, watchFileForChanges } = require("../util/files");
 const FILE_EXTENSIONS = require("./file-extensions");
+const ytdlp = require("yt-dlp-wrap").default;
+const ytSearch = require("youtube-search-without-api-key");
+const path = require("path");
 
 function __exports() {
   const Signal = Object.freeze({
@@ -138,16 +137,15 @@ function __exports() {
     const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    let numberOfRetriesTillEBUSY = 3;
 
     try {
       const binaryFileExists = await checkIfBinaryExists();
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
-
       const downloadSignal = await downloadBinaries();
-
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
+      // wait for binary to finish downloading
+      await watchFileForChanges(getBinaryFilepath());
 
       if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
         const ytdlpBinaryFilepath = getBinaryFilepath();
@@ -155,22 +153,7 @@ function __exports() {
         const filename = _getBinaryFilepath(dirname);
 
         const ytdlpWrapper = new ytdlp(filename);
-        // TODO: delay works on Windows, might not work on other Operating Systems. Use fs.watch instead
-        // EBUSY error, file might still be locked, wait for at most 3 seconds
-        await (async function executeCommand() {
-          try {
-            // 140 here means that the audio would be extracted
-            downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
-          } catch (err) {
-            if (err.code === "EBUSY") {
-              if (numberOfRetriesTillEBUSY-- != 0) {
-                await delay(1000);
-                executeCommand();
-              }
-              console.error(err);
-            }
-          }
-        })();
+        downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
 
         const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
 

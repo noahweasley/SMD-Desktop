@@ -47,34 +47,30 @@ module.exports = function (settings, browsers, database) {
 
   // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, metadata) => {
-    try {
-      const isEntryDeleted = await database.deleteDownloadData(metadata);
-      const filepath = metadata.data.filename;
-      const title = metadata.data.title;
+    const isEntryDeleted = await database.deleteDownloadData(metadata);
+    const filepath = metadata.data.filename;
+    const title = metadata.data.title;
 
-      if (isEntryDeleted) {
-        const sizeInBytes = (await stat(filepath)).size;
-        const readableFileSize = getReadableSize(sizeInBytes);
+    if (isEntryDeleted) {
+      const sizeInBytes = (await stat(filepath)).size;
+      const readableFileSize = getReadableSize(sizeInBytes);
 
-        const downloadedData = {
-          type: Type.DOWNLOADED,
-          data: {
-            TrackDownloadSize: readableFileSize,
-            TrackPlaylistTitle: "-",
-            TrackTitle: title,
-            TrackArtists: "No Artists",
-            TrackUri: filepath
-          }
-        };
+      const downloadedData = {
+        type: Type.DOWNLOADED,
+        data: {
+          TrackDownloadSize: readableFileSize,
+          TrackPlaylistTitle: "-",
+          TrackTitle: title,
+          TrackArtists: "No Artists",
+          TrackUri: filepath
+        }
+      };
 
-        const entryId = await database.addDownloadData(downloadedData);
-        const isAdded = entryId != -1;
-        return [isAdded, downloadedData];
-      } else {
-        return [false, undefined];
-      }
-    } catch (err) {
-      console.error(err);
+      const entryIds = await database.addDownloadData(downloadedData);
+      const isAdded = entryIds.length > 0;
+      return [isAdded, downloadedData];
+    } else {
+      return [false, undefined];
     }
   });
 
