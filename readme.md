@@ -51,7 +51,15 @@
 - Batch download multiple songs at once
 - Download music from available platforms
 - Integrates with Spotify API to fetch metadata
-- Customize download settings like audio quality and download location (coming soon)
+
+## Roadmap
+
+- Customize user settings and theme
+- File conversions; export in different file format
+- Customize download settings like audio quality and download location
+- Advanced search and search music from multiple platforms
+- In-built music player
+
 
 ## Technologies Used
 
