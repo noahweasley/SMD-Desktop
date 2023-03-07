@@ -35,15 +35,7 @@
 
 ## About S.M.D
 
-> This is a desktop
-> application that seamlessly integrates with the Spotify API to help you discover, download, and enjoy your favorite
-> songs from a single platform! With this powerful and user-friendly application, you can easily search for any song
-> and instantly download high-quality audio files directly to your desktop. Whether you're a music enthusiast or just
-> looking to build your personal music library, this app provides you with the exact music to download and enjoy.
-> Thanks to the integration with the Spotify API, you can easily download entire albums or playlist with just a few
-> clicks. The app features a sleek and modern interface that makes it easy to navigate and use, even for those with
-> little to no technical knowledge. With its advanced search capabilities and intuitive download manager, you can
-> find and download your favorite songs in seconds.
+> This is a desktop application that seamlessly integrates with the Spotify API to help you discover, download, and enjoy your favorite songs from a single platform! With this powerful and user-friendly application, you can easily search for any song and instantly download high-quality audio files directly to your desktop. Whether you're a music enthusiast or just looking to build your personal music library, this app provides you with the exact music to download and enjoy. Thanks to the integration with the Spotify API, you can easily download entire albums or playlist with just a few clicks. The app features a sleek and modern interface that makes it easy to navigate and use, even for those with little to no technical knowledge. With its advanced search capabilities and intuitive download manager, you can find and download your favorite songs in seconds.
 
 ## Features
 
