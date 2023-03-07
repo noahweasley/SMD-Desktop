@@ -129,7 +129,7 @@ function __exports() {
   /**
    * Downloads track specified by `options`
    *
-   * @param {JSON} options an object describing the video. `{videoLink : ... , videoId : ...}`
+   * @param {JSON} options an object describing the video. `{ task, request, targetWindow }`
    * @returns a YTDLP event emitter instance
    */
   async function downloadMatchingTrack(options) {
@@ -145,7 +145,7 @@ function __exports() {
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
       // wait for binary to finish downloading
-      await watchFileForChanges(getBinaryFilepath());
+      if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED) await watchFileForChanges(getBinaryFilepath());
 
       if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
         const ytdlpBinaryFilepath = getBinaryFilepath();
@@ -153,18 +153,11 @@ function __exports() {
         const filename = _getBinaryFilepath(dirname);
 
         const ytdlpWrapper = new ytdlp(filename);
-        downloadStream = ytdlpWrapper.execStream([request.videoUrl, "-f", "140"]);
+        downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
 
         const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
 
-        downloadStream.on("progress", (progress) => {
-          target.webContents.send("download-progress-update", {
-            id: taskId,
-            filename: fileToStoreData,
-            title: request.videoTitle,
-            progress: progress.percent
-          });
-        });
+        _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
 
         try {
           await pipeline(downloadStream, createWriteStream(fileToStoreData));
@@ -181,6 +174,42 @@ function __exports() {
     }
 
     return downloadStream;
+  }
+
+  function _registerDownloadEvents(args) {
+    const { downloadStream, fileToStoreData, taskId, target, request } = args;
+
+    downloadStream.on("progress", (progress) => {
+      target.webContents.send("download-progress-update", {
+        id: taskId,
+        filename: fileToStoreData,
+        title: request.videoTitle,
+        progress: progress.percent,
+        event: "download"
+      });
+    });
+    
+    downloadStream.on("end", () => {
+      target.webContents.send("download-progress-update", {
+        id: taskId,
+        filename: fileToStoreData,
+        title: request.videoTitle,
+        progress: 101,
+        event: "end"
+      });
+    });
+
+    downloadStream.on("ytDlpEvent", (event) => {
+      if (event === "info" || event == "youtube") {
+        target.webContents.send("download-progress-update", {
+          id: taskId,
+          filename: fileToStoreData,
+          title: request.videoTitle,
+          progress: 102,
+          event: "info"
+        });
+      }
+    });
   }
 
   /**

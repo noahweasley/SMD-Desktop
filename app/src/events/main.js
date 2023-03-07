@@ -136,7 +136,7 @@ module.exports = function (settings, browsers, database) {
         d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
         d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
       }
-      console.log(d2);
+
       return [d1, d2];
     } catch (error) {
       // TODO: add proper visual representation of this database data retrieval error

@@ -31,6 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
   registerEventListeners();
   // actions related to file downloads
   window.bridgeApis.on("download-progress-update", displayProgress);
+  window.bridgeApis.on("download-progress-finished", displayProgress);
 
   window.bridgeApis.on("download-list-update", (_event, args) => {
     // append new data into current data
@@ -150,23 +151,27 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // end function
-
-  // populate the 'downloaded' - list with item fetched from database
-  function tryAddListItemDownloaded(item) {
+  function tryAddListItemDownloaded(item, appendOnly) {
     const uLElement = document.querySelector(".list-group__downloaded");
 
-    if (!item) {
-      uLElement.classList.add("gone");
-      displayEmptyListPlaceholderById("info_decor__downloaded", true);
+    if (appendOnly && item) {
+      appendListData();
     } else {
-      displayEmptyListPlaceholderById("info_decor__downloaded", false);
+      if (!item) {
+        uLElement.classList.add("gone");
+        displayEmptyListPlaceholderById("info_decor__downloaded", true);
+      } else {
+        displayEmptyListPlaceholderById("info_decor__downloaded", false);
+        if (item.length > 0) uLElement.classList.remove("gone");
+        appendListData();
+      }
+    }
 
-      if (item.length > 0) uLElement.classList.remove("gone");
-      // create the list items populating it with the fetched data from database
+    function appendListData() {
       for (let i = 0; i < item.length; i++) {
         const listElement = document.createElement("li");
         listElement.classList.add("list-group-item"); // create but don't display yet
+
         // create the thumbnail element
         const thumbnailElement = document.createElement("img");
         thumbnailElement.classList.add("media-object", "pull-left");
@@ -178,6 +183,7 @@ window.addEventListener("DOMContentLoaded", () => {
         uLElement.append(listElement);
       }
     }
+
     // creates a media body element
     function createMediaBody(position, item) {
       const mediaBody = document.createElement("div");
@@ -296,23 +302,32 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // actions related to file downloads
   function displayProgress(_event, args) {
+    const downloadEvent = args.event;
     const progress = args.progress;
     const elementId = `download-progress-${args.id}`;
     const progressBar = document.getElementById(elementId);
     const mediaBodyElement = progressBar.parentNode;
     const messageElement = mediaBodyElement.children[1];
-    messageElement.innerText = progress < 100 ? `${progress}% downloaded` : "Download finished";
+
+    if (downloadEvent == "info") {
+      messageElement.innerText = "Extracting info...";
+      return;
+    } else if (downloadEvent == "end") {
+      messageElement.innerText = "Download finished";
+    } else {
+      messageElement.innerText = `${progress}% downloaded`;
+    }
 
     progressBar.style.setProperty("--progress-anim", "none");
     progressBar.style.setProperty("--progress-width", `${progress}%`);
     // stop loading animation
     progressBar.children[0].classList.add("gone");
 
-    if (progress === 100) finishDownloading();
+    if (downloadEvent == "end") finishDownloading();
 
     function finishDownloading() {
       const listItem = mediaBodyElement.parentElement;
-      const listGroup = listItem.parentElement;
+      const downloadingListGroup = listItem.parentElement;
 
       const metadata = {
         data: { id: args.id, filename: args.filename, title: args.title },
@@ -323,10 +338,10 @@ window.addEventListener("DOMContentLoaded", () => {
         const [operationSuccessful, downloadedItemData] = info;
 
         if (operationSuccessful) {
-          listGroup.removeChild(listItem);
-          tryAddListItemDownloaded(downloadedItemData);
+          downloadingListGroup.removeChild(listItem);
+          tryAddListItemDownloaded(downloadedItemData, true);
 
-          if (listGroup.childNodes.length == 0) {
+          if (downloadingListGroup.childNodes.length == 0) {
             tryAddListItemDownloading(null); // displays placeholder
           }
         } else {
