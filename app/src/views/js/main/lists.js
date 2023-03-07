@@ -178,7 +178,7 @@ window.addEventListener("DOMContentLoaded", () => {
         thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
         // finally append those element node to the list parent node
         listElement.append(thumbnailElement);
-        listElement.append(createMediaBody(i, item[i]));
+        listElement.append(createMediaBody(uLElement.children.length, item[i]));
         // append list item to list
         uLElement.append(listElement);
       }

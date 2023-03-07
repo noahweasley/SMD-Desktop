@@ -68,7 +68,7 @@ module.exports = function (settings, browsers, database) {
 
       const entryIds = await database.addDownloadData(downloadedData);
       const isAdded = entryIds.length > 0;
-      return [isAdded, downloadedData];
+      return [isAdded, Array.of(downloadedData.data)];
     } else {
       return [false, undefined];
     }
