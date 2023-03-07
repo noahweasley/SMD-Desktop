@@ -9,7 +9,7 @@
   "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
   "repository": {
     "type": "git",
-    "url": "www.github.com/noahweasley/SMD-desktop"
+    "url": "https://github.com/noahweasley/SMD-Desktop.git"
   },
   "funding": {
     "type": "patreon",
@@ -71,6 +71,7 @@
     "node-user-settings": "^1.5.3",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.1.2",
+    "update-electron-app": "^2.0.1",
     "youtube-search-without-api-key": "^1.0.7",
     "yt-dlp-wrap": "^2.3.11"
   }

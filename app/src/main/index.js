@@ -7,6 +7,8 @@ const settings = require("node-user-settings").defaults;
 const preferenceFilePath = join(app.getPath("userData"), "User", "Preferences", "Settings.json");
 settings.setDefaultPreferenceFilePath(preferenceFilePath);
 
+// startup scripts
+require("update-electron-app")();
 if (require("electron-squirrel-startup")) return;
 
 const browsers = require("../browsers")(settings);
