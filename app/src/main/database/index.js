@@ -125,7 +125,8 @@ const __database = this.database;
 // - --------------------------------------------------------------------- - //
 
 function releaseDatabaseConnectionPool() {
-  __database?.destroy();
+  // TODO: Fix unable to acquire connection after destroy
+  // __database?.destroy();
 }
 
 async function getRWDatabase() {
