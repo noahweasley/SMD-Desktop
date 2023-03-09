@@ -66,11 +66,9 @@ module.exports = function (settings, browsers, database) {
       }
     } else {
       const tracks = downloadQuery.description.trackCollection;
-      // map track object to reasonable search query ([Song title] [Artist name])
       const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(WHITE_SPACE)}`);
-      // transform search queries to search promise
       const queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
-      // resolve and return search queries
+
       try {
         return await Promise.all(queryPromises);
       } catch (err) {
@@ -101,8 +99,6 @@ module.exports = function (settings, browsers, database) {
         Message: "Download in progress..."
       }));
 
-      // TODO find out the reason why after inserting more that two items in the database, later sends an undefined to the UI
-
       try {
         const insertedDataColumnIds = await database.addDownloadData({
           type: Type.DOWNLOADING,
@@ -132,17 +128,10 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
+    // eslint-disable-next-line no-unused-vars
     const downloadStream = fileDownloader.initiateQueuedDownloads();
-    setupTaskQueueMessaging();
-
-    function setupTaskQueueMessaging() {
-      // eslint-disable-next-line no-unused-vars
-      downloadStream.forEach((_progressEmitter) => {
-        // set up messenger
-      });
-      // clear task queue, downloads are now active
-      fileDownloader.clearTaskQueue();
-    }
+    // clear task queue, downloads are now active
+    fileDownloader.clearTaskQueue();
   });
 
   // eslint-disable-next-line no-unused-vars

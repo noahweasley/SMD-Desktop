@@ -2,6 +2,7 @@
 
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
+const { readdir, stat, unlink } = require("fs/promises");
 const { join } = require("path");
 
 function __exports() {
@@ -68,12 +69,30 @@ function __exports() {
     });
   }
 
+  async function deleteFilesInDirectory(dirPath) {
+    let files;
+    try {
+      files = await readdir(dirPath);
+    } catch (error) {
+      return false;
+    }
+
+    for (const file of files) {
+      const filePath = join(dirPath, file);
+      const isFile = (await stat(filePath)).isFile();
+      if (isFile) await unlink(filePath);
+    }
+
+    return true;
+  }
+
   return {
     createAppFilesDirectory,
     getDownloadsDirectory,
     getTempThumbDirectory,
     getThumbnailDirectory,
-    watchFileForChanges
+    watchFileForChanges,
+    deleteFilesInDirectory
   };
 }
 

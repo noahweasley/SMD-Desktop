@@ -5,6 +5,16 @@ window.addEventListener("DOMContentLoaded", () => {
   let WINDOW_CONTENT_STATE = State.MAIN;
   const listData = [];
 
+  window.bridgeApis.on("show-binary-download-dialog", (_event, shouldShow) => {
+    const progressModal = document.querySelector(".modal-container");
+
+    if (shouldShow) {
+      progressModal.style.setProperty("display", "flex");
+    } else {
+      progressModal.style.setProperty("display", "none");
+    }
+  });
+
   // retrieve user downloads
   window.bridgeApis.invoke("get-list-data").then((listData) => {
     const downloadedData = listData[0];
@@ -18,7 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // Now display the populated list items
       Array.from(document.getElementsByTagName("li")).forEach((listElement) => listElement.classList.remove("gone"));
     } else {
-      displayAllDecorations(true);
+      displayAllInfoPlaceholders(true);
     }
 
     // display any indeterminate progress bar that exists inside main-pain's tab content
@@ -36,41 +46,41 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.on("download-list-update", (_event, args) => {
     // append new data into current data
     tryAddListItemDownloading(args, true);
-    displayEmptyListPlaceholderById("info_decor__downloaded", false);
+    displayInfoPlaceholderById("info_decor__downloaded", false);
     registerEventListeners();
     // after changing UI states, start file downloads
     window.bridgeApis.send("initiate-downloads");
   });
 
-  function displayAllDecorations(shouldShow) {
-    const infoDecorations = document.querySelectorAll(".info-decor");
+  function displayAllInfoPlaceholders(shouldShow) {
+    const infoPlaceholders = document.querySelectorAll(".info-decor");
 
-    infoDecorations.forEach((infoDecoration) =>
-      shouldShow ? infoDecoration.style.setProperty("display", "flex") : infoDecoration.style.setProperty("display", "none")
+    infoPlaceholders.forEach((infoPlaceholder) =>
+      shouldShow
+        ? infoPlaceholder.style.setProperty("display", "flex")
+        : infoPlaceholder.style.setProperty("display", "none")
     );
   }
 
-  function displayEmptyListPlaceholderById(decorationId, shouldShow) {
-    const decoration = document.getElementById(decorationId);
+  function displayInfoPlaceholderById(placeholderId, shouldShow) {
+    const infoPlaceholder = document.getElementById(placeholderId);
     if (shouldShow) {
-      decoration.style.setProperty("display", "flex");
+      infoPlaceholder.style.setProperty("display", "flex");
     } else {
-      // remove .gone class if it is present
-      decoration.classList.remove("gone");
-      decoration.style.setProperty("display", "none");
+      infoPlaceholder.classList.remove("gone");
+      infoPlaceholder.style.setProperty("display", "none");
     }
   }
 
-  // populate the 'downloading' - list with item fetched from database
   function tryAddListItemDownloading(item, shouldAppend) {
     const uLElement = document.querySelector(".list-group__downloading");
 
     if (!item) {
       uLElement.classList.add("gone");
-      displayEmptyListPlaceholderById("info_decor__downloading", true);
+      displayInfoPlaceholderById("info_decor__downloading", true);
     } else {
       uLElement.classList.remove("gone");
-      displayEmptyListPlaceholderById("info_decor__downloading", false);
+      displayInfoPlaceholderById("info_decor__downloading", false);
 
       // TODO: fix duplicate code introduced while trying to fix bug in 'add to downloading list'
       if (shouldAppend) {
@@ -98,6 +108,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // create the thumbnail element
       const thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("media-object", "pull-left");
+      thumbnailElement.setAttribute("draggable", "false");
       thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       // finally append those element node to the list parent node
       listElement.append(thumbnailElement);
@@ -118,20 +129,20 @@ window.addEventListener("DOMContentLoaded", () => {
       messageElement.innerText = dbData["Message"];
       messageElement.classList.add("message");
       // create the icons for the media body
-      const opIconContainer = document.createElement("div");
-      const opIconContainer2 = document.createElement("div");
+      const pauseIconContainer = document.createElement("div");
+      const cancelIconContainer = document.createElement("div");
 
-      const opIcon = document.createElement("span");
-      const opIcon2 = document.createElement("span");
+      const iconPause = document.createElement("span");
+      const iconCancel = document.createElement("span");
 
-      opIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
-      opIconContainer2.classList.add("op-icon", "not-draggable", "pull-right");
+      pauseIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      cancelIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
 
-      opIcon.classList.add("icon", "icon-pause", "icon-x2");
-      opIcon2.classList.add("icon", "icon-cancel", "icon-x2");
+      iconPause.classList.add("icon", "icon-pause", "icon-x2");
+      iconCancel.classList.add("icon", "icon-cancel", "icon-x2");
 
-      opIconContainer.append(opIcon);
-      opIconContainer2.append(opIcon2);
+      pauseIconContainer.append(iconPause);
+      cancelIconContainer.append(iconCancel);
 
       // create the progress bar element
       const downloadProgressElement = document.createElement("div");
@@ -143,8 +154,8 @@ window.addEventListener("DOMContentLoaded", () => {
       // finally append the created element nodes as children to the parent media body node
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
-      mediaBody.append(opIconContainer);
-      mediaBody.append(opIconContainer2);
+      mediaBody.append(pauseIconContainer);
+      mediaBody.append(cancelIconContainer);
       mediaBody.append(downloadProgressElement);
 
       return mediaBody;
@@ -159,9 +170,9 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       if (!item) {
         uLElement.classList.add("gone");
-        displayEmptyListPlaceholderById("info_decor__downloaded", true);
+        displayInfoPlaceholderById("info_decor__downloaded", true);
       } else {
-        displayEmptyListPlaceholderById("info_decor__downloaded", false);
+        displayInfoPlaceholderById("info_decor__downloaded", false);
         if (item.length > 0) uLElement.classList.remove("gone");
         appendListData();
       }
@@ -175,6 +186,7 @@ window.addEventListener("DOMContentLoaded", () => {
         // create the thumbnail element
         const thumbnailElement = document.createElement("img");
         thumbnailElement.classList.add("media-object", "pull-left");
+        thumbnailElement.setAttribute("draggable", "false");
         thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
         // finally append those element node to the list parent node
         listElement.append(thumbnailElement);
@@ -196,50 +208,48 @@ window.addEventListener("DOMContentLoaded", () => {
       messageElement.innerText = item["TrackDownloadSize"];
       messageElement.classList.add("message");
       // create the icons for the media body
-      const opIconContainer1 = document.createElement("div");
-      const opIconContainer2 = document.createElement("div");
-      const opIconContainer3 = document.createElement("div");
-      const opIcon1 = document.createElement("span");
-      const opIcon2 = document.createElement("span");
-      const opIcon3 = document.createElement("span");
+      const folderIconContainer = document.createElement("div");
+      const deleteIconContainer = document.createElement("div");
+      const playIconContainer = document.createElement("div");
+      const iconFolder = document.createElement("span");
+      const iconTrash = document.createElement("span");
+      const iconPlay = document.createElement("span");
       // ... classes
-      opIconContainer1.classList.add("op-icon", "not-draggable", "pull-right");
-      opIconContainer2.classList.add("op-icon", "not-draggable", "pull-right");
-      opIconContainer3.classList.add("op-icon", "not-draggable", "pull-right");
+      folderIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      deleteIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      playIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
       // ..
-      opIcon1.classList.add("icon", "icon-folder", "icon-x2");
-      opIcon2.classList.add("icon", "icon-trash", "icon-x2");
-      opIcon3.classList.add("icon", "icon-play", "icon-x2");
+      iconFolder.classList.add("icon", "icon-folder", "icon-x2");
+      iconTrash.classList.add("icon", "icon-trash", "icon-x2");
+      iconPlay.classList.add("icon", "icon-play", "icon-x2");
 
-      // navigate to file
-      opIconContainer1.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
-      // delete local database entry and file on disk
-      opIconContainer2.addEventListener("click", () => {
+      playIconContainer.addEventListener("click", () => window.bridgeApis.send("play-music", item["TrackUri"]));
+      folderIconContainer.addEventListener("click", () => window.bridgeApis.send("navigate-link", "#music"));
+
+      deleteIconContainer.addEventListener("click", () => {
         const args = { data: item, type: Type.DOWNLOADED };
 
         window.bridgeApis.invoke("delete-file", args).then((isFileDeleted) => {
           if (isFileDeleted) {
-            const listItem = opIconContainer1.parentElement.parentElement;
+            const listItem = folderIconContainer.parentElement.parentElement;
             const listGroup = listItem.parentElement;
 
             listGroup.removeChild(listItem);
             if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
-            displayEmptyListPlaceholderById("info_decor__downloaded", true);
+            displayInfoPlaceholderById("info_decor__downloaded", true);
           }
         });
       });
 
-      opIconContainer3.addEventListener("click", () => window.bridgeApis.send("play-music", item["TrackUri"]));
-
-      opIconContainer1.append(opIcon1);
-      opIconContainer2.append(opIcon2);
-      opIconContainer3.append(opIcon3);
+      folderIconContainer.append(iconFolder);
+      deleteIconContainer.append(iconTrash);
+      playIconContainer.append(iconPlay);
 
       mediaBody.append(trackTitleElement);
       mediaBody.append(messageElement);
-      mediaBody.append(opIconContainer1);
-      mediaBody.append(opIconContainer2);
-      mediaBody.append(opIconContainer3);
+      mediaBody.append(folderIconContainer);
+      mediaBody.append(deleteIconContainer);
+      mediaBody.append(playIconContainer);
 
       return mediaBody;
     }
@@ -289,16 +299,6 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-
-  window.bridgeApis.on("show-binary-download-dialog", (_event, shouldShow) => {
-    const progressModal = document.querySelector(".modal-container");
-
-    if (shouldShow) {
-      progressModal.style.setProperty("display", "flex");
-    } else {
-      progressModal.style.setProperty("display", "none");
-    }
-  });
 
   // actions related to file downloads
   function displayProgress(_event, args) {

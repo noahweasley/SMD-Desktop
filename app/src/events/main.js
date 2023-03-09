@@ -10,22 +10,31 @@ const { Type } = require("../main/database/constants");
 const { stat } = require("fs/promises");
 const { getReadableSize } = require("../main/util/math");
 const { unlink } = require("fs/promises");
+const { deleteFilesInDirectory, getDownloadsDirectory } = require("../main/util/files");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { getSpotifyLinkData, spotifyApi } = spotifyDl(settings);
   const { authorizeApp } = auth(settings, spotifyApi);
 
-  // dummy data query for testing
   ipcMain.handle("get-dummy-list-data", () => [dummy.getDummyTrack(10), dummy.getDummyTrack(2)]);
-  // get app info
+
   ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
-  // play music
+
+  ipcMain.handle("download-data", () => getSpotifyLinkData());
+
+  ipcMain.on("show-app-info", () => aboutWindow.init());
+
+  ipcMain.on("show-download-window", () => downloadWindow.init());
+
+  ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
+
   ipcMain.on("play-music", (_event, fileUri) => shell.openPath(fileUri));
-  // delete file in database
+
   ipcMain.handle("delete-file", async (_event, metadata) => {
+    // return console.log(metadata);
     try {
-      await unlink(metadata.data.filename);
+      await unlink(metadata.data.trackUri);
       await database.deleteDownloadData(metadata);
       return true;
     } catch (error) {
@@ -33,19 +42,38 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  // after pasting url and download window is about to display it's content
-  ipcMain.handle("download-data", () => getSpotifyLinkData());
+  ipcMain.handle("delete-all", async (_event, activeTab) => {
+    const Response = Object.freeze({ PROCEED: 1, CANCEL: 0 });
 
-  // show about window
-  ipcMain.on("show-app-info", () => aboutWindow.init());
+    if (activeTab === ".tab-content__downloaded") {
+      const focusedWindow = BrowserWindow.getFocusedWindow();
+      const returnedValue = await dialog.showMessageBox(focusedWindow, {
+        noLink: true,
+        checkboxChecked: false,
+        defaultId: Response.CANCEL,
+        type: "question",
+        title: "Delete all",
+        message: "Are you sure you want to delete all downloaded songs",
+        checkboxLabel: "Delete corresponding file",
+        buttons: ["Cancel", "Proceed"]
+      });
 
-  // show download details window
-  ipcMain.on("show-download-window", () => downloadWindow.init());
+      const response = returnedValue.response;
+      const canDeleteFile = returnedValue.checkboxChecked;
 
-  // request to reload current focused window
-  ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
+      if (response == Response.PROCEED) {
+        const isSuccessful = await database.deleteDownloadData();
+        if (isSuccessful && canDeleteFile) {
+          return await deleteFilesInDirectory(getDownloadsDirectory());
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  });
 
-  // file downloaded, delete downloading data and move to downloaded data
   ipcMain.handle("finish-downloading", async (_event, metadata) => {
     const isEntryDeleted = await database.deleteDownloadData(metadata);
     const filepath = metadata.data.filename;
@@ -61,7 +89,7 @@ module.exports = function (settings, browsers, database) {
           TrackDownloadSize: readableFileSize,
           TrackPlaylistTitle: "-",
           TrackTitle: title,
-          TrackArtists: "No Artists",
+          TrackArtists: "-",
           TrackUri: filepath
         }
       };

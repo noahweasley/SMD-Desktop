@@ -21,15 +21,15 @@
       <!-- window action buttons -->
       <div class="window-action-group non-draggable">
         <div class="window-action window-action-minimize" id="window-action-minimize">
-          <img src="../../../resources/svg/minimize.svg" alt="minimize icon" />
+          <img src="../../../resources/svg/minimize.svg" alt="minimize icon" draggable="false" />
         </div>
 
         <div class="window-action window-action-maximize" id="window-action-maximize">
-          <img src="../../../resources/svg/restore.svg" alt="resize icon" />
+          <img src="../../../resources/svg/restore.svg" alt="resize icon" draggable="false" />
         </div>
 
         <div class="window-action window-action-close" id="window-action-close">
-          <img src="../../../resources/svg/close.svg" alt="close icon" />
+          <img src="../../../resources/svg/close.svg" alt="close icon" draggable="false" />
         </div>
       </div>
     </header>
@@ -221,6 +221,7 @@
 
     <!-- Scripts -->
     <script src="../js/main/setup.js"></script>
+    <script src="../js/main/download-actions.js"></script>
     <script src="../js/main/tabs.js"></script>
     <script src="../js/main/ipc.js"></script>
     <script src="../js/main/constants.js"></script>
