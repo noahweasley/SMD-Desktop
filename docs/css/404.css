@@ -1,0 +1,8 @@
+main {
+  text-align: center;
+  padding: 2em;
+}
+
+.fa-exclamation-circle {
+  color: var(--warning-color);
+}

@@ -124,6 +124,10 @@ const __database = this.database;
 // -                                                                       - //
 // - --------------------------------------------------------------------- - //
 
+function releaseDatabaseConnectionPool() {
+  __database?.destroy();
+}
+
 async function getRWDatabase() {
   await createDatabaseSchema();
   return __database;
@@ -202,6 +206,8 @@ module.exports.getDownloadData = async function (arg) {
   } catch (error) {
     console.error(error);
     return [];
+  } finally {
+    releaseDatabaseConnectionPool();
   }
 };
 
@@ -229,6 +235,8 @@ module.exports.addDownloadData = async function (arg) {
   } catch (err) {
     console.error(err);
     return -1;
+  } finally {
+    releaseDatabaseConnectionPool();
   }
 };
 
@@ -250,6 +258,8 @@ module.exports.updateDownloadData = async function (arg) {
     }
   } catch (err) {
     console.log(err.message);
+  } finally {
+    releaseDatabaseConnectionPool();
   }
 };
 
@@ -263,14 +273,26 @@ module.exports.deleteDownloadData = async function (arg) {
 
   try {
     if (arg.type == Type.DOWNLOADED) {
-      const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
-      return result > 0;
+      if (arg.data) {
+        const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
+        return result > 0;
+      } else {
+        await database.del().from(DOWNLOADED_TABLE);
+        return true;
+      }
     } else if (arg.type == Type.DOWNLOADING) {
-      const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
-      return result > 0;
+      if (arg.data) {
+        const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
+        return result > 0;
+      } else {
+        await database.del().from(DOWNLOADING_TABLE);
+        return true;
+      }
     } else throw new Error(`${arg.type} is not supported`);
   } catch (error) {
     console.error(error);
     return false;
+  } finally {
+    releaseDatabaseConnectionPool();
   }
 };

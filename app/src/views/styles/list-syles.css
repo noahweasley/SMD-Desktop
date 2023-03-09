@@ -1,7 +1,7 @@
 @import url(global-styles.css);
 
 .icon-alert {
-  color: orange;
+  color: var(--warning-color);
 }
 
 .download-window {

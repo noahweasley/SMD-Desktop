@@ -4,6 +4,7 @@ const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
 const { readdir, stat, unlink } = require("fs/promises");
 const { join } = require("path");
+const { getReadableSize } = require("./math");
 
 function __exports() {
   /**
@@ -69,6 +70,12 @@ function __exports() {
     });
   }
 
+  /**
+   * Deletes all the files in a directory
+   *
+   * @param {string} dirPath the directory in which all files within it would be deleted
+   * @returns true if all files were deleted
+   */
   async function deleteFilesInDirectory(dirPath) {
     let files;
     try {
@@ -86,13 +93,23 @@ function __exports() {
     return true;
   }
 
+  /**
+   * @param {string} filepath the path to the file
+   * @returns a human readable representation of file size
+   */
+  async function getReadableFileSize(filepath) {
+    const sizeInBytes = (await stat(filepath)).size;
+    return getReadableSize(sizeInBytes);
+  }
+
   return {
     createAppFilesDirectory,
     getDownloadsDirectory,
     getTempThumbDirectory,
     getThumbnailDirectory,
     watchFileForChanges,
-    deleteFilesInDirectory
+    deleteFilesInDirectory,
+    getReadableFileSize
   };
 }
 

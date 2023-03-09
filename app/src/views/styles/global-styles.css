@@ -25,6 +25,7 @@
   --solid-darker: #000;
   --sand-solid: #ecebe8;
   --button-negative-clr: rgb(199, 28, 28);
+  --warning-color: orange;
   --window-actions-elevation: 2;
   --progress-anim-time: 0.5s;
   --progress-timing-function: linear;

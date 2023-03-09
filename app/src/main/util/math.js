@@ -2,7 +2,7 @@
 
 /**
  * @param {number} bytes the bytes to be converted
- * @returns a human readable representation of file size
+ * @returns a human readable representation of size in bytes
  */
 module.exports.getReadableSize = function (bytes) {
   const _1KB = 1024;

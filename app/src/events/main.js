@@ -3,14 +3,12 @@
 const { getSpotifyURLType } = require("../main/util/sp-util");
 const auth = require("../main/server/authorize");
 const spotifyDl = require("../main/server/spotify-dl");
-const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
-const { join } = require("path");
-const dummy = require("../main/util/dummy");
+const { deleteFilesInDirectory, getDownloadsDirectory, getReadableFileSize } = require("../main/util/files");
 const { Type } = require("../main/database/constants");
-const { stat } = require("fs/promises");
-const { getReadableSize } = require("../main/util/math");
+const dummy = require("../main/util/dummy");
+const { join } = require("path");
 const { unlink } = require("fs/promises");
-const { deleteFilesInDirectory, getDownloadsDirectory } = require("../main/util/files");
+const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
 
 module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
@@ -62,7 +60,7 @@ module.exports = function (settings, browsers, database) {
       const canDeleteFile = returnedValue.checkboxChecked;
 
       if (response == Response.PROCEED) {
-        const isSuccessful = await database.deleteDownloadData();
+        const isSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
         if (isSuccessful && canDeleteFile) {
           return await deleteFilesInDirectory(getDownloadsDirectory());
         } else {
@@ -71,6 +69,8 @@ module.exports = function (settings, browsers, database) {
       } else {
         return false;
       }
+    } else {
+      // TODO: Cancel all download task
     }
   });
 
@@ -80,8 +80,7 @@ module.exports = function (settings, browsers, database) {
     const title = metadata.data.title;
 
     if (isEntryDeleted) {
-      const sizeInBytes = (await stat(filepath)).size;
-      const readableFileSize = getReadableSize(sizeInBytes);
+      const readableFileSize = getReadableFileSize(filepath);
 
       const downloadedData = {
         type: Type.DOWNLOADED,
@@ -102,7 +101,6 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  // application authorization
   ipcMain.handle("authorize-app", async (_event, args) => {
     if (args[1] == "auth-youtube") {
       const states = await settings.setStates({
@@ -116,7 +114,6 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  // clipboard content request
   ipcMain.handle("clipboard-request", () => {
     try {
       return getSpotifyURLType(clipboard.readText());
@@ -150,9 +147,7 @@ module.exports = function (settings, browsers, database) {
     shell.openExternal(linkByType);
   });
 
-  // TODO: fix getDownloadData() retrieving strange data
-  // request to fetch and display list data
-  ipcMain.handle("get-list-data", async (_event, returning) => {
+  ipcMain.handle("get-downloads-list-data", async (_event, returning) => {
     let d1, d2;
 
     try {

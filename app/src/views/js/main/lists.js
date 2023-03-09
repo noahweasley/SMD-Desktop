@@ -15,8 +15,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // retrieve user downloads
-  window.bridgeApis.invoke("get-list-data").then((listData) => {
+  window.bridgeApis.invoke("get-downloads-list-data").then((listData) => {
     const downloadedData = listData[0];
     const downloadingData = listData[1];
     const hasDownloadedData = listData && downloadedData && downloadedData.length > 0;
