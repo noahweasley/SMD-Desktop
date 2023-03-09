@@ -5,7 +5,6 @@ const auth = require("../main/server/authorize");
 const spotifyDl = require("../main/server/spotify-dl");
 const { deleteFilesInDirectory, getDownloadsDirectory, getReadableFileSize } = require("../main/util/files");
 const { Type } = require("../main/database/constants");
-const dummy = require("../main/util/dummy");
 const { join } = require("path");
 const { unlink } = require("fs/promises");
 const { app, shell, ipcMain, clipboard, dialog, BrowserWindow } = require("electron");
@@ -14,8 +13,6 @@ module.exports = function (settings, browsers, database) {
   const { mainWindow, downloadWindow, aboutWindow } = browsers;
   const { getSpotifyLinkData, spotifyApi } = spotifyDl(settings);
   const { authorizeApp } = auth(settings, spotifyApi);
-
-  ipcMain.handle("get-dummy-list-data", () => [dummy.getDummyTrack(10), dummy.getDummyTrack(2)]);
 
   ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
 
@@ -28,6 +25,12 @@ module.exports = function (settings, browsers, database) {
   ipcMain.on("reload-current-window", () => BrowserWindow.getFocusedWindow()?.reload());
 
   ipcMain.on("play-music", (_event, fileUri) => shell.openPath(fileUri));
+
+  ipcMain.on("show-error-unknown-dialog", (_event, error) => {
+    const defaultTitle = "An error occurred";
+    const defaultMessage = "Please try again later";
+    dialog.showErrorBox(error.title || defaultTitle, error.message || defaultMessage);
+  });
 
   ipcMain.handle("delete-file", async (_event, metadata) => {
     // return console.log(metadata);
@@ -52,25 +55,28 @@ module.exports = function (settings, browsers, database) {
         type: "question",
         title: "Delete all",
         message: "Are you sure you want to delete all downloaded songs",
-        checkboxLabel: "Delete corresponding file",
+        checkboxLabel: "Delete all corresponding files",
         buttons: ["Cancel", "Proceed"]
       });
 
       const response = returnedValue.response;
-      const canDeleteFile = returnedValue.checkboxChecked;
+      const shouldDeleteFile = returnedValue.checkboxChecked;
 
       if (response == Response.PROCEED) {
-        const isSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
-        if (isSuccessful && canDeleteFile) {
+        const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
+        if (isDBDeleteSuccessful && shouldDeleteFile) {
           return await deleteFilesInDirectory(getDownloadsDirectory());
+        } else if (isDBDeleteSuccessful && !shouldDeleteFile) {
+          return isDBDeleteSuccessful;
         } else {
-          return false;
+          return false; // both operations failed
         }
       } else {
-        return false;
+        return true;
       }
     } else {
       // TODO: Cancel all download task
+      return false;
     }
   });
 
@@ -80,7 +86,7 @@ module.exports = function (settings, browsers, database) {
     const title = metadata.data.title;
 
     if (isEntryDeleted) {
-      const readableFileSize = getReadableFileSize(filepath);
+      const readableFileSize = await getReadableFileSize(filepath);
 
       const downloadedData = {
         type: Type.DOWNLOADED,
@@ -127,13 +133,6 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  ipcMain.on("show-error-unknown-dialog", (_event, error) => {
-    const defaultTitle = "Uh ohh !! That was a malformed Spotify URL";
-    const defaultMessage = "Re-copy playlist or track url, then click 'Paste URL' again";
-    dialog.showErrorBox(error.title || defaultTitle, error.message || defaultMessage);
-  });
-
-  // link navigate
   ipcMain.on("navigate-link", (_event, arg) => {
     let linkByType;
 
