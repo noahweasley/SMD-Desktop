@@ -113,7 +113,7 @@ a:active {
   z-index: 99;
   font-size: 18px;
   border: none;
-  background-color: var(--solid-green);
+  background-color: var(--primary-color-dark);
   color: white;
   cursor: pointer;
   outline: none;
@@ -203,7 +203,7 @@ ul.topnav li.right {
 
 ul.topnav #donate {
   color: white;
-  background-color: var(--solid-green);
+  background-color: var(--primary-color-dark);
 }
 
 h1 {
@@ -284,7 +284,7 @@ section.product-display > a.download {
   margin: 16px;
   border-radius: 8px;
   padding: calc(0.1vh + 1em) calc(0.1vw + 2em);
-  border: 1px solid var(--solid-green);
+  border: 1px solid var(--primary-color-dark);
 }
 
 section.product-display > a.download {
