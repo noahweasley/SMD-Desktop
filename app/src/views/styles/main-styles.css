@@ -225,8 +225,17 @@ a:active {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.window-action-minimize:active,
+.window-action-maximize:active {
+  background-color: rgba(255, 255, 255, 0.17);
+}
+
 .window-action-close:hover {
   background-color: #e81123ce;
+}
+
+.window-action-close:active {
+  background-color: #e8112394;
 }
 
 .window-content,
@@ -476,7 +485,7 @@ a:active {
   width: var(--progress-width);
 }
 
-.list-group__downloaded  .media-body {
+.list-group__downloaded .media-body {
   position: relative;
   height: 100%;
   /* an hack to force overflow on the media body title; the STRONG element */
