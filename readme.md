@@ -7,29 +7,34 @@
   Spotify Music Downloader
 </h1>
 
-<p align="center">
-  A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API
-</p>
+<p align="center">A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API</p>
 
 <div align="center">
-    <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"><img src="https://img.shields.io/github/license/noahweasley/smd-desktop" alt="License" /></a>  
-    <a href="https://noahweasley.github.io/SMD-Desktop"><img src="https://img.shields.io/badge/docs-website-brightgreen.svg" alt="SMD Product Website" /></a>
-     <a href=" https://github.com/noahweasley/smd-desktop/releases"><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest release" /></a>
-    <a href="https://www.patreon.com/noahweasley"><img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon" /></a>
+  <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"
+    ><img src="https://img.shields.io/github/license/noahweasley/smd-desktop" alt="License"
+  /></a>
+  <a href="https://noahweasley.github.io/SMD-Desktop"
+    ><img src="https://img.shields.io/badge/docs-website-brightgreen.svg" alt="SMD Product Website"
+  /></a>
+  <a href=" https://github.com/noahweasley/smd-desktop/releases"
+    ><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest release"
+  /></a>
+  <a href="https://www.patreon.com/noahweasley"
+    ><img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon"
+  /></a>
 </div>
 
-</br>
+<br />
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
     ><img src="assets/screenshots/Screenshot 1.png" alt="Buy Noah A Coffee" />
   </a>
 
-<a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+  <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
     ><img src="assets/screenshots/Screenshot 2.png" alt="Buy Noah A Coffee" />
-</a>
-
+  </a>
 </p>
-</br>
+<br />
 
 **Please note**: This application is still in development, ping me - [mailto:iebenmelu@gmail.com], I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.
 
