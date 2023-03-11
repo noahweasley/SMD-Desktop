@@ -212,6 +212,7 @@ a:active {
 .window-action-group > * {
   width: calc(138px / 3);
   height: 100%;
+  transition: 0.2s;
 }
 
 .window-action > img {
