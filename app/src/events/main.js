@@ -32,13 +32,38 @@ module.exports = function (settings, browsers, database) {
     dialog.showErrorBox(error.title || defaultTitle, error.message || defaultMessage);
   });
 
-  ipcMain.handle("delete-file", async (_event, metadata) => {
-    // return console.log(metadata);
-    try {
-      await unlink(metadata.data.trackUri);
-      await database.deleteDownloadData(metadata);
-      return true;
-    } catch (error) {
+  ipcMain.handle("delete-single", async (_event, metadata) => {
+    const Response = Object.freeze({ PROCEED: 1, CANCEL: 0 });
+    const track = metadata.data.TrackTitle;
+    const focusedWindow = BrowserWindow.getFocusedWindow();
+
+    const returnedValue = await dialog.showMessageBox(focusedWindow, {
+      noLink: true,
+      type: "question",
+      title: `Delete ${track}`,
+      message: `Are you sure you want to delete "${track}"`,
+      checkboxLabel: "Delete corresponding file",
+      defaultId: Response.CANCEL,
+      buttons: ["Cancel", "Proceed"]
+    });
+
+    const response = returnedValue.response;
+    const shouldDeleteFile = returnedValue.checkboxChecked;
+
+    if (response == Response.PROCEED) {
+      try {
+        const isEntryDeleted = await database.deleteDownloadData(metadata);
+        if (isEntryDeleted && shouldDeleteFile) {
+          return await unlink(metadata.data.TrackUri);
+        } else if (isEntryDeleted && !shouldDeleteFile) {
+          return isEntryDeleted;
+        } else {
+          return false; // both operations failed
+        }
+      } catch (error) {
+        return false;
+      }
+    } else {
       return false;
     }
   });
@@ -63,13 +88,17 @@ module.exports = function (settings, browsers, database) {
       const shouldDeleteFile = returnedValue.checkboxChecked;
 
       if (response == Response.PROCEED) {
-        const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
-        if (isDBDeleteSuccessful && shouldDeleteFile) {
-          return await deleteFilesInDirectory(getDownloadsDirectory());
-        } else if (isDBDeleteSuccessful && !shouldDeleteFile) {
-          return isDBDeleteSuccessful;
-        } else {
-          return false; // both operations failed
+        try {
+          const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
+          if (isDBDeleteSuccessful && shouldDeleteFile) {
+            return await deleteFilesInDirectory(getDownloadsDirectory());
+          } else if (isDBDeleteSuccessful && !shouldDeleteFile) {
+            return isDBDeleteSuccessful;
+          } else {
+            return false; // both operations failed
+          }
+        } catch (error) {
+          return false;
         }
       } else {
         return true;
