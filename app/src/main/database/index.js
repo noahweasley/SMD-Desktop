@@ -143,7 +143,7 @@ function onCreateDatabase() {
   async function createTables() {
     try {
       await __database.schema.createTable(DOWNLOADED_TABLE, (tableBuilder) => {
-        tableBuilder.increments();
+        tableBuilder.string("id").primary();
         tableBuilder.integer("TrackDownloadSize");
         tableBuilder.string("TrackPlaylistTitle");
         tableBuilder.string("TrackTitle");
