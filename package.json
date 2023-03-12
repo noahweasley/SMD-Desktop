@@ -42,7 +42,7 @@
     "prettier:base": "prettier --ignore-path .gitignore",
     "lint:eslint": "npm run eslint:base -- --max-warnings 0 \"**/*.{js,ts,tsx,mdx}\"",
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
-    "format:prettier": "npm run prettier:base -- --write \"**/*.{js,ts,tsx,json,md,mdx}\"",
+    "format:prettier": "npm run prettier:base -- --write \"**/*.{js,ts,tsx,json,md,mdx,css,html}\"",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx,mdx}\"",
     "format": "npm run format:eslint && npm run format:prettier",
     "generate-icons": "electron-icon-maker --input=./app/resources/build/tools/_$app_icon.png --output=./app/resources/build",
