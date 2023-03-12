@@ -34,18 +34,19 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.handle("delete-single", async (_event, metadata) => {
-    const Response = Object.freeze({ PROCEED: 1, CANCEL: 0 });
+    const Response = Object.freeze({ PROCEED: 0, CANCEL: 1 });
     const track = metadata.data.TrackTitle;
     const focusedWindow = BrowserWindow.getFocusedWindow();
 
     const returnedValue = await dialog.showMessageBox(focusedWindow, {
       noLink: true,
-      type: "question",
       title: `Delete ${track}`,
+      type: "question",
       message: `Are you sure you want to delete "${track}"`,
+      checkboxChecked: false,
       checkboxLabel: "Delete corresponding file",
       defaultId: Response.CANCEL,
-      buttons: ["Cancel", "Proceed"]
+      buttons: ["Proceed", "Cancel"]
     });
 
     const response = returnedValue.response;
@@ -55,11 +56,10 @@ module.exports = function (settings, browsers, database) {
       try {
         const isEntryDeleted = await database.deleteDownloadData(metadata);
         if (isEntryDeleted && shouldDeleteFile) {
-          return await unlink(metadata.data.TrackUri);
-        } else if (isEntryDeleted && !shouldDeleteFile) {
-          return isEntryDeleted;
+          await unlink(metadata.data.TrackUri);
+          return true;
         } else {
-          return false; // both operations failed
+          return isEntryDeleted;
         }
       } catch (error) {
         return false;
@@ -70,19 +70,19 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.handle("delete-all", async (_event, activeTab) => {
-    const Response = Object.freeze({ PROCEED: 1, CANCEL: 0 });
+    const Response = Object.freeze({ PROCEED: 0, CANCEL: 1 });
 
     if (activeTab === ".tab-content__downloaded") {
       const focusedWindow = BrowserWindow.getFocusedWindow();
       const returnedValue = await dialog.showMessageBox(focusedWindow, {
         noLink: true,
-        checkboxChecked: false,
-        defaultId: Response.CANCEL,
-        type: "question",
         title: "Delete all",
+        type: "question",
         message: "Are you sure you want to delete all downloaded songs",
+        checkboxChecked: false,
         checkboxLabel: "Delete all corresponding files",
-        buttons: ["Cancel", "Proceed"]
+        defaultId: Response.CANCEL,
+        buttons: ["Proceed", "Cancel"]
       });
 
       const response = returnedValue.response;
@@ -93,10 +93,8 @@ module.exports = function (settings, browsers, database) {
           const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
           if (isDBDeleteSuccessful && shouldDeleteFile) {
             return await deleteFilesInDirectory(getDownloadsDirectory());
-          } else if (isDBDeleteSuccessful && !shouldDeleteFile) {
-            return isDBDeleteSuccessful;
           } else {
-            return false; // both operations failed
+            return isDBDeleteSuccessful;
           }
         } catch (error) {
           return false;
