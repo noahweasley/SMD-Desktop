@@ -8,12 +8,19 @@ window.addEventListener("DOMContentLoaded", () => {
   deleteAllButton.addEventListener("click", () => {
     const currentActiveTab = getCurrentActiveTab();
     window.bridgeApis.invoke("delete-all", currentActiveTab).then((isSuccessful) => {
+      console.log(isSuccessful ? "Deleted all files" : "Failed to delete");
+
       if (isSuccessful) {
         if (currentActiveTab == ".tab-content__downloaded") {
-          downloadedList.innerHTML = null;
+          while (downloadedList.firstChild) {
+            downloadedList.removeChild(downloadedList.firstChild);
+          }
+          downloadedList.classList.add("gone");
           displayInfoPlaceholderById("info_decor__downloaded", true);
         } else {
-          downloadingList.innerHTML = null;
+          while (downloadingList.firstChild) {
+            downloadingList.removeChild(downloadingList.firstChild);
+          }
           displayInfoPlaceholderById("info_decor__downloading", true);
         }
       } else {
