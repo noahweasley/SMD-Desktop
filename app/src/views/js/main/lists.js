@@ -246,8 +246,10 @@ window.addEventListener("DOMContentLoaded", () => {
             const listGroup = listItem.parentElement;
 
             listGroup.removeChild(listItem);
-            if (listGroup.childNodes.length == 0) uLElement.classList.add("gone");
-            displayInfoPlaceholderById("info_decor__downloaded", true);
+            if (listGroup.childNodes.length == 0) {
+              displayInfoPlaceholderById("info_decor__downloaded", true);
+              uLElement.classList.add("gone");
+            }
           }
         });
       });

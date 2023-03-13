@@ -100,7 +100,7 @@ module.exports = function (settings, browsers, database) {
           return false;
         }
       } else {
-        return true;
+        return false;
       }
     } else {
       // TODO: Cancel all download task

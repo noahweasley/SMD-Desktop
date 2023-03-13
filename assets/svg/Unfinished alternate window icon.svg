@@ -30,7 +30,7 @@
        fy="40.0187"
        r="250.16092"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.058246,0,0,1,299.45359,125.45241)" />
+       gradientTransform="matrix(1.058246,0,0,1,99.248983,184.60377)" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient1009-9">
@@ -138,8 +138,8 @@
         <ellipse
            style="fill:url(#radialGradient1013-8);fill-opacity:1;stroke-width:0.408492"
            id="path900-0"
-           cx="-26.445768"
-           cy="165.4711"
+           cx="-226.65038"
+           cy="224.62247"
            rx="264.73178"
            ry="250.16092" />
         <circle
@@ -148,12 +148,12 @@
            cx="-310.57913"
            cy="40.040619"
            r="103.73856"
-           transform="matrix(1.0863468,0,0,1.0265542,308.46,124.38617)" />
+           transform="matrix(1.0863468,0,0,1.0265542,108.25539,183.53753)" />
         <ellipse
            style="fill:#0039ac;fill-opacity:1;stroke-width:0.163912"
            id="circle949-0"
-           cx="-28.936674"
-           cy="165.49002"
+           cx="-229.14128"
+           cy="224.64139"
            rx="106.22664"
            ry="100.37991" />
         <path
@@ -172,7 +172,7 @@
            inkscape:randomized="0"
            inkscape:transform-center-x="-16.467438"
            inkscape:transform-center-y="-0.034585259"
-           transform="matrix(0,-0.26198065,-0.31550234,0,-131.21035,-93.701027)"
+           transform="matrix(0,-0.26198065,-0.31550234,0,-331.41496,-34.549666)"
            d="m -840.04332,-224.16254 -149.33289,4.95531 -149.34429,-4.59829 70.375,-131.80374 78.65439,-127.03681 78.95787,126.84842 z"
            inkscape:export-filename="..\..\..\..\..\Desktop\icon.png"
            inkscape:export-xdpi="59.975899"

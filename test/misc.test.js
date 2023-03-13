@@ -11,7 +11,7 @@ describe("Miscellaneous tests", () => {
     const readableSizeInGigabytes = getReadableSize(2000000000);
     const readableSizeInTerabytes = getReadableSize(2000000000000);
 
-    expect(readableSizeInBytes).toEqual("200 BYTE");
+    expect(readableSizeInBytes).toEqual("200 B");
     expect(readableSizeInKilobytes).toEqual("1.95 KB");
     expect(readableSizeInMegabytes).toEqual("1.91 MB");
     expect(readableSizeInGigabytes).toEqual("1.86 GB");

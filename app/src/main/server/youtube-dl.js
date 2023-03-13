@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { app } = require("electron");
 const { open, readdir, mkdir } = require("fs/promises");
-const { pipeline } = require("stream/promises");
+const { pipeline } = require("stream");
 const { createWriteStream } = require("fs");
 const { getDownloadsDirectory, watchFileForChanges } = require("../util/files");
 const FILE_EXTENSIONS = require("./file-extensions");
@@ -159,11 +159,8 @@ function __exports() {
 
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
 
-        try {
-          await pipeline(downloadStream, createWriteStream(fileToStoreData));
-        } catch (ignored) {
-          // ignored this error for now because the songs are downloaded but stream somehow contains data
-        }
+        pipeline(downloadStream, createWriteStream(fileToStoreData));
+        
       } else {
         console.log("Fatal error occurred, cannot download, cause");
       }
@@ -173,6 +170,7 @@ function __exports() {
       downloadStream?.destroy();
     }
 
+    console.log("Returning stream", downloadStream);
     return downloadStream;
   }
 
@@ -188,7 +186,7 @@ function __exports() {
         event: "download"
       });
     });
-    
+
     downloadStream.on("end", () => {
       target.webContents.send("download-progress-update", {
         id: taskId,

@@ -2,6 +2,7 @@
 
 const { downloadMatchingTrack } = require("../server/youtube-dl");
 const { States } = require("../database/constants");
+const { IllegalStateError } = require("../util/error");
 
 /**
  * A single Download Task
@@ -23,9 +24,9 @@ module.exports = function (configOptions) {
   }
 
   function resume() {
-    // if (state !== States.PENDING || state !== States.PAUSED) {
-    //   throw new Error("Illegal download state, cannot resume a download that wasn't previously running");
-    // }
+    if (state !== States.PENDING || state !== States.PAUSED) {
+      throw new IllegalStateError("Illegal download state, cannot resume a download that wasn't previously running");
+    }
     state = States.ACTIVE;
     downloadStream?.resume();
   }
@@ -37,7 +38,7 @@ module.exports = function (configOptions) {
 
   async function start() {
     if (state == States.ACTIVE) {
-      throw new Error("Download task is already active");
+      throw new IllegalStateError("Download task is already active");
     } else {
       state = States.ACTIVE;
       return await registerDownloadOp();
@@ -46,7 +47,10 @@ module.exports = function (configOptions) {
 
   async function registerDownloadOp() {
     downloadStream = await downloadMatchingTrack(configOptions);
-    downloadStream.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
+    console.log("Using Options", configOptions);
+    console.log("\n\n");
+    console.log("Stream", downloadStream);
+    downloadStream?.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
     return downloadStream;
   }
 

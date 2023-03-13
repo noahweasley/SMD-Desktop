@@ -19,6 +19,6 @@ module.exports.getReadableSize = function (bytes) {
   } else if (bytes >= _1TB) {
     return `${(bytes / _1TB).toFixed(2)} TB`;
   } else {
-    return `${bytes} BYTE`;
+    return `${bytes} B`;
   }
 };

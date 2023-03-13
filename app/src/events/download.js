@@ -93,7 +93,7 @@ module.exports = function (settings, browsers, database) {
         TrackArtists: "-",
         ErrorOccurred: false,
         DownloadState: States.ACTIVE,
-        DownloadProgress: 0,
+        DownloadProgress: -1,
         DownloadedSize: "Unknown",
         TrackDownloadSize: "Unknown",
         Message: "Download in progress..."
@@ -105,10 +105,7 @@ module.exports = function (settings, browsers, database) {
           data: downloadData
         });
 
-        downloadTasks = fileDownloader.enqueueTasks({
-          searchResultIds: insertedDataColumnIds,
-          searchResults: searchQueryResults
-        });
+        fileDownloader.enqueueTasks({ searchResultIds: insertedDataColumnIds, searchResults: searchQueryResults });
 
         if (insertedDataColumnIds) {
           // update download list UI, with current pending download data]
@@ -128,34 +125,33 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.on("initiate-downloads", async () => {
-    // eslint-disable-next-line no-unused-vars
-    const downloadStream = fileDownloader.initiateQueuedDownloads();
-    // clear task queue, downloads are now active
-    fileDownloader.clearTaskQueue();
+    fileDownloader.initiateQueuedDownloads();
   });
 
   // eslint-disable-next-line no-unused-vars
-  ipcMain.handle("pause", async (_event, _args) => {});
+  ipcMain.handle("pause-downloading", async (_event, _args) => {});
 
-  ipcMain.handle("pause-all", async () => {
+  ipcMain.handle("pause-all-downloading", async () => {
     downloadTasks.forEach((task) => task.pause());
   });
 
-  ipcMain.handle("resume", async (_event, args) => {
+  ipcMain.handle("resume-downloading", async (_event, args) => {
+    // eslint-disable-next-line no-unused-vars
     const { listPos } = args;
-    downloadTasks[listPos].resume();
+    // downloadTasks[listPos].resume();
   });
 
-  ipcMain.handle("resume-all", async () => {
-    downloadTasks.forEach((task) => task.resume());
+  ipcMain.handle("resume-all-downloading", async () => {
+    // downloadTasks.forEach((task) => task.resume());
   });
 
-  ipcMain.handle("cancel", async (_event, args) => {
+  ipcMain.handle("cancel-downloading", async (_event, args) => {
+    // eslint-disable-next-line no-unused-vars
     const { listPos } = args;
-    downloadTasks[listPos].cancel();
+    // downloadTasks[listPos].cancel();
   });
 
-  ipcMain.handle("cancel-all", async () => {
-    downloadTasks.forEach((task) => task.cancel());
+  ipcMain.handle("cancel-all-downloading", async () => {
+    // downloadTasks.forEach((task) => task.cancel());
   });
 };

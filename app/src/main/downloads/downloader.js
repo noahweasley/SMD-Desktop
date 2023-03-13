@@ -9,9 +9,14 @@ module.exports = function (config) {
   const locker = lock({ maxLockCount: maxParallelDownloads });
 
   let downloadTaskQueue = [];
-  // tasks => streams[]
+  // tasks => stream[]
   const activeDownloadTasksStream = [];
   const inactiveDownloadTasksStream = [];
+
+  /**
+   * @returns the number of active downloads
+   */
+  const activeTaskStreams = () => activeDownloadTasksStream;
 
   /**
    * Clears the task queue
@@ -23,7 +28,7 @@ module.exports = function (config) {
   /**
    * Enqueue a download task
    *
-   * @param {JSON} request a download request in the format; `{ sourceUrl, destPath }`
+   * @param {JSON} request a download request object
    */
   function enqueueTask(task, request = {}) {
     const task0 = downloadTask({ task, targetWindow, request });
@@ -34,7 +39,7 @@ module.exports = function (config) {
   /**
    * Enqueue a download task
    *
-   * @param {array} request  a download request in the format; `{ sourceUrl, destPath }`
+   * @param {array} request  a download request object
    * @param {array} insertedColumnIds an array of objects with task id as keys
    */
   function enqueueTasks(taskOptions) {
@@ -44,14 +49,13 @@ module.exports = function (config) {
     for (let x = 0; x < requests.length; x++) {
       enqueueTask(insertedColumnIds[x], requests[x]);
     }
-    return downloadTaskQueue;
   }
 
   /**
    * Pause all active downloads
    */
   function pauseAll() {
-    downloadTaskQueue.forEach((task) => task.pause());
+    // downloadTaskQueue.forEach((task) => task.pause());
   }
 
   /**
@@ -83,11 +87,6 @@ module.exports = function (config) {
   }
 
   /**
-   * @returns the number of active downloads
-   */
-  const activeTasks = () => activeDownloadTasksStream;
-
-  /**
    * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
@@ -97,6 +96,7 @@ module.exports = function (config) {
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
         const activeDownloadStream = downloadTask.start();
+        console.log(activeDownloadStream);
         downloadStreams.push(activeDownloadStream);
         activeDownloadTasksStream.push(activeDownloadStream);
       } else {
@@ -106,6 +106,7 @@ module.exports = function (config) {
       }
     });
 
+    clearTaskQueue();
     return downloadStreams;
   }
 
@@ -117,6 +118,6 @@ module.exports = function (config) {
     pauseAll,
     resumeAll,
     cancelAll,
-    activeTasks
+    activeTaskStreams
   };
 };
