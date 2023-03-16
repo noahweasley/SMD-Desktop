@@ -11,8 +11,8 @@
   --normal-scrolbar-clr: #1ed75f18;
   --active-scrolbar-clr: #1ed75f38;
   --grey-solid_10: rgba(160, 159, 159, 0.247);
-  --primary-color: #1ed760;
-  --primary-color-dark: rgb(24, 146, 67);
+  --primary-color: rgb(62, 211, 114);
+  --primary-color-dark: rgb(65, 151, 95);
   --primary-color-dark-alt-2: var(--primary-color-dark);
   --primary-color-dark-alt: var(--primary-color-dark);
   --spotify-green: var(--primary-color);

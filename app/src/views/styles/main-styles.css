@@ -461,7 +461,7 @@ a:active {
 .media-body > .horizontal-progress::after {
   display: block;
   height: 100%;
-  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
+  background: linear-gradient(var(--primary-color-dark), var(--primary-color), var(--primary-color-dark));
   position: absolute;
   left: 0;
   top: 0;
@@ -482,7 +482,7 @@ a:active {
 
 .media-body > .horizontal-progress::after {
   content: "";
-  background: linear-gradient(var(--normal-scrolbar-clr), var(--primary-color-dark), var(--normal-scrolbar-clr));
+  background: linear-gradient(var(--primary-color-dark), var(--primary-color), var(--primary-color-dark));
   width: var(--progress-width);
 }
 
