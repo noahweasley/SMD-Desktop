@@ -107,12 +107,6 @@ module.exports = function (config) {
       }
     });
 
-    try {
-      await Promise.all(downloadPipePromises);
-    } catch (error) {
-      console.log("Caught the bug");
-    }
-
     clearTaskQueue();
     return downloadStreams;
   }
