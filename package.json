@@ -15,6 +15,9 @@
     "type": "patreon",
     "url": "https://www.patreon.com/noahweasley"
   },
+  "engines": {
+    "node": ">= 18.12.1"
+  },
   "keywords": [
     "electron",
     "music",

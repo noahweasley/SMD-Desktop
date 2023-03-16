@@ -30,9 +30,10 @@
     ><img src="assets/screenshots/Screenshot 1.png" alt="Buy Noah A Coffee" />
   </a>
 
-  <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+<a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
     ><img src="assets/screenshots/Screenshot 2.png" alt="Buy Noah A Coffee" />
-  </a>
+</a>
+
 </p>
 <br />
 

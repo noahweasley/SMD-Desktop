@@ -115,6 +115,41 @@ label {
   font-size: 4rem;
 }
 
+.icon-video,
+.icon-megaphone {
+  color: var(--yt-red);
+}
+
+.icon-spotify {
+  color: var(--spotify-green);
+}
+
+.icon.icon-heart {
+  color: rgb(247, 132, 189);
+}
+
+.icon.icon-home,
+.icon.icon-play {
+  color: rgb(104, 194, 104);
+}
+
+.icon.icon-folder {
+  color: rgb(240, 240, 128);
+}
+
+.icon.icon-cog,
+.icon.icon-ccw {
+  color: rgb(130, 130, 240);
+}
+
+.icon.icon-info-circled {
+  color: rgb(111, 204, 173);
+}
+
+.icon.icon-trash,
+.icon.icon-cancel {
+  color: rgb(252, 130, 130);
+}
 a {
   text-decoration: none;
   color: var(--primary-color);

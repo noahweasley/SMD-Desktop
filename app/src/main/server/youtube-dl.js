@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { app } = require("electron");
 const { open, readdir, mkdir } = require("fs/promises");
-const { pipeline } = require("stream");
+const { pipeline } = require("stream/promises");
 const { createWriteStream } = require("fs");
 const { getDownloadsDirectory, watchFileForChanges } = require("../util/files");
 const FILE_EXTENSIONS = require("./file-extensions");
@@ -31,8 +31,8 @@ function __exports() {
    * @returns the full file path to the ytdlp binary file
    */
   function getBinaryFilepath(parentDirectory) {
-    const ytdlpBinaryFileDirectory = parentDirectory || getBinaryFileDirectory();
-    return _getBinaryFilepath(ytdlpBinaryFileDirectory);
+    const binaryFileDirectory = parentDirectory || getBinaryFileDirectory();
+    return _getBinaryFilepath(binaryFileDirectory);
   }
 
   /**
@@ -130,10 +130,10 @@ function __exports() {
    * Downloads track specified by `options`
    *
    * @param {JSON} options an object describing the video. `{ task, request, targetWindow }`
-   * @returns a YTDLP event emitter instance
+   * @returns an object with the download stream and the the download pipe promise that would be fulfilled when the files have been written to disk
    */
   async function downloadMatchingTrack(options) {
-    let downloadStream;
+    let downloadStream, downloadPipePromise;
     const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
@@ -158,20 +158,15 @@ function __exports() {
         const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
 
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
-
-        pipeline(downloadStream, createWriteStream(fileToStoreData));
-        
+        downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
         console.log("Fatal error occurred, cannot download, cause");
       }
     } catch (err) {
       downloadStream?.emit("error", err);
-    } finally {
-      downloadStream?.destroy();
     }
 
-    console.log("Returning stream", downloadStream);
-    return downloadStream;
+    return { downloadStream, downloadPipePromise };
   }
 
   function _registerDownloadEvents(args) {

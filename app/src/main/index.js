@@ -11,11 +11,11 @@ settings.setDefaultPreferenceFilePath(preferenceFilePath);
 require("update-electron-app")();
 if (require("electron-squirrel-startup")) return;
 
-const browsers = require("../browsers")(settings);
+const browsers = require("../main/browsers")(settings);
 const { mainWindow } = browsers;
 const database = require("./database");
 
-require("../events")(settings, browsers, database);
+require("../main/events")(settings, browsers, database);
 
 app.whenReady().then(function () {
   createAppFilesDirectory();

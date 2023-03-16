@@ -20,7 +20,7 @@ module.exports.init = function () {
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
-      preload: join(__dirname, "../preload.js")
+      preload: join(__dirname, "../../common/preload.js")
     }
   });
 

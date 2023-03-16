@@ -90,21 +90,28 @@ module.exports = function (config) {
    * Puts all the download tasks in their active state. If maxParallelDownloads is higher that the
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
-  function initiateQueuedDownloads() {
+  async function initiateQueuedDownloads() {
     const downloadStreams = []; // contains both active and inactive downloads
+    const downloadPipePromises = [];
 
     downloadTaskQueue.forEach((downloadTask) => {
       if (locker.acquireLock()) {
-        const activeDownloadStream = downloadTask.start();
-        console.log(activeDownloadStream);
+        const { downloadStream: activeDownloadStream, downloadPipePromise } = downloadTask.start();
         downloadStreams.push(activeDownloadStream);
         activeDownloadTasksStream.push(activeDownloadStream);
+        downloadPipePromises.push(downloadPipePromise);
       } else {
-        const inactiveDownloadStream = downloadTask.wait();
+        const { downloadStream: inactiveDownloadStream } = downloadTask.wait();
         downloadStreams.push(inactiveDownloadStream);
         inactiveDownloadTasksStream.push(inactiveDownloadStream);
       }
     });
+
+    try {
+      await Promise.all(downloadPipePromises);
+    } catch (error) {
+      console.log("Caught the bug");
+    }
 
     clearTaskQueue();
     return downloadStreams;

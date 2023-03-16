@@ -11,7 +11,7 @@ const { IllegalStateError } = require("../util/error");
  */
 module.exports = function (configOptions) {
   let state = States.INACTIVE;
-  let downloadStream;
+  let stream;
 
   async function wait() {
     state = States.PENDING;
@@ -20,7 +20,7 @@ module.exports = function (configOptions) {
 
   function pause() {
     state = States.PAUSED;
-    downloadStream?.pause();
+    stream?.pause();
   }
 
   function resume() {
@@ -28,12 +28,12 @@ module.exports = function (configOptions) {
       throw new IllegalStateError("Illegal download state, cannot resume a download that wasn't previously running");
     }
     state = States.ACTIVE;
-    downloadStream?.resume();
+    stream?.resume();
   }
 
   function cancel() {
     state = States.INACTIVE;
-    downloadStream?.destroy();
+    stream?.destroy();
   }
 
   async function start() {
@@ -46,12 +46,10 @@ module.exports = function (configOptions) {
   }
 
   async function registerDownloadOp() {
-    downloadStream = await downloadMatchingTrack(configOptions);
-    console.log("Using Options", configOptions);
-    console.log("\n\n");
-    console.log("Stream", downloadStream);
-    downloadStream?.on("error", (error) => console.log(`Fatal error occurred, cannot download, cause: ${error}`));
-    return downloadStream;
+    const { downloadStream, downloadPipePromise } = await downloadMatchingTrack(configOptions);
+    stream = downloadStream;
+    stream.on("error", () => console.info("An silent error was thrown"));
+    return { downloadStream, downloadPipePromise };
   }
 
   return { pause, resume, wait, cancel, start };

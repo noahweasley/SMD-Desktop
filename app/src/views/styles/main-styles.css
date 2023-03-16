@@ -607,7 +607,7 @@ a:active {
 
 .downloads-operation > * + *[disabled="true"] {
   background-color: var(--grey-solid_5_disabled);
-  color: var(--grey-solid-disabled);
+  opacity: 0.7;
   pointer-events: none;
 }
 
@@ -848,19 +848,6 @@ form {
   border: 2px solid var(--spotify-green);
   transform: scaleX(1.3);
   margin-left: 10px;
-}
-
-.icon-video,
-.icon-megaphone {
-  color: var(--yt-red);
-}
-
-.icon-spotify {
-  color: var(--spotify-green);
-}
-
-.icon.icon-heart {
-  color: hotpink;
 }
 
 #auth-youtube {

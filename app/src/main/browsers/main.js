@@ -2,14 +2,12 @@
 
 const { BrowserWindow, Menu, ipcMain } = require("electron");
 const { join } = require("path");
-const menu = require("../main/menu");
+const menu = require("../menu/main");
 
 module.exports = function (settings) {
   let smdWindow;
 
   async function init() {
-    // only 1 window is allowed to be spawned
-
     if (smdWindow) return smdWindow.focus();
 
     let winState = await settings.getState("window-state", {});
@@ -32,7 +30,7 @@ module.exports = function (settings) {
       height: winState.height ? winState.height : 620,
       webPreferences: {
         contextIsolation: true,
-        preload: join(__dirname, "../preload.js")
+        preload: join(__dirname, "../../common/preload.js")
       }
     });
 

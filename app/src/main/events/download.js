@@ -2,10 +2,10 @@
 
 const { v4: uuidv4 } = require("uuid");
 const { ipcMain, dialog } = require("electron");
-const ytdl = require("../main/server/youtube-dl");
-const spotifyDl = require("../main/server/spotify-dl");
-const downloader = require("../main/downloads/downloader");
-const { Type, States } = require("../main/database/constants");
+const ytdl = require("../server/youtube-dl");
+const spotifyDl = require("../server/spotify-dl");
+const downloader = require("../downloads/downloader");
+const { Type, States } = require("../database/constants");
 
 module.exports = function (settings, browsers, database) {
   const { downloadWindow, searchWindow, mainWindow } = browsers;
@@ -14,7 +14,7 @@ module.exports = function (settings, browsers, database) {
   let downloadQuery;
   const DEFAULT_CONCURRENCY = 2;
   const WHITE_SPACE = " ";
-  let downloadTasks = [];
+  const downloadTasks = [];
 
   // TODO: change settings.getStateSync to use promises
   const fileDownloader = downloader({

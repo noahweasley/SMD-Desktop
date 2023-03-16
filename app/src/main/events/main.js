@@ -1,10 +1,10 @@
 "use-strict";
 
-const { getSpotifyURLType } = require("../main/util/sp-util");
-const auth = require("../main/server/authorize");
-const spotifyDl = require("../main/server/spotify-dl");
-const { deleteFilesInDirectory, getDownloadsDirectory, getReadableFileSize } = require("../main/util/files");
-const { Type } = require("../main/database/constants");
+const { getSpotifyURLType } = require("../util/sp-util");
+const auth = require("../server/authorize");
+const spotifyDl = require("../server/spotify-dl");
+const { deleteFilesInDirectory, getDownloadsDirectory, getReadableFileSize } = require("../util/files");
+const { Type } = require("../database/constants");
 const { v4: uuidv4 } = require("uuid");
 const { join } = require("path");
 const { unlink } = require("fs/promises");
