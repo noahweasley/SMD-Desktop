@@ -7,10 +7,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
   deleteAllButton.addEventListener("click", () => {
     const currentActiveTab = getCurrentActiveTab();
-    window.bridgeApis.invoke("delete-all", currentActiveTab).then((isSuccessful) => {
-      console.log(isSuccessful ? "Deleted all files" : "Failed to delete");
+    window.bridgeApis.invoke("delete-all", currentActiveTab).then((result) => {
+      const [errorOccurred, isSuccessful] = result;
 
-      if (isSuccessful) {
+      if (!errorOccurred && !isSuccessful) {
+        return;
+      } else if (errorOccurred || !isSuccessful) {
+        window.bridgeApis.send("show-error-unknown-dialog", {
+          title: "An unknown error occurred",
+          message: "We were unable to complete some operations"
+        });
+      } else {
         if (currentActiveTab == ".tab-content__downloaded") {
           while (downloadedList.firstChild) {
             downloadedList.removeChild(downloadedList.firstChild);
@@ -23,11 +30,6 @@ window.addEventListener("DOMContentLoaded", () => {
           }
           displayInfoPlaceholderById("info_decor__downloading", true);
         }
-      } else {
-        window.bridgeApis.send("show-error-unknown-dialog", {
-          title: "An unknown error occurred",
-          message: "We were unable to complete some operations"
-        });
       }
     });
   });
