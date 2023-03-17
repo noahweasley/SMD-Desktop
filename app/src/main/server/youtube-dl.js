@@ -10,6 +10,8 @@ const ytSearch = require("youtube-search-without-api-key");
 const path = require("path");
 
 function __exports() {
+  const binaryFilename = "yt-dlp";
+
   const Signal = Object.freeze({
     EXISTS_NOT_DOWNLOADED: "SIG_EXISTS_NOT_DOWNLOADED",
     NOT_EXISTS_DOWNLOADED: "SIG_NOT_EXISTS_DOWNLOADED",
@@ -17,14 +19,16 @@ function __exports() {
   });
 
   function _getBinaryFilepath(parentDirectory) {
-    return process.platform == "win32" ? path.join(parentDirectory, "yt-dlp.exe") : path.join(parentDirectory, "yt-dlp");
+    return process.platform == "win32"
+      ? path.join(parentDirectory, `${binaryFilename}.exe`)
+      : path.join(parentDirectory, binaryFilename);
   }
 
   /**
    * @returns the directory where the the ytdlp binary file was downloaded
    */
   function getBinaryFileDirectory() {
-    return process.env.BINARY_LOCATION || path.join(app.getPath("appData"), "ytdlp");
+    return process.env.BINARY_LOCATION || path.join(app.getPath("appData"), binaryFilename);
   }
 
   /**
@@ -81,20 +85,19 @@ function __exports() {
    */
   async function getBinaryFilepathOrThrowError() {
     const binaryFileDirectory = await getOrCreateBinaryFileDirectory();
-    const fileName = "yt-dlp";
 
     try {
       const files = await readdir(binaryFileDirectory);
 
       const filePath = files.find(
-        (file) => path.basename(file, path.extname(file)).toLowerCase() === fileName.toLowerCase()
+        (file) => path.basename(file, path.extname(file)).toLowerCase() === binaryFilename.toLowerCase()
       );
 
       if (filePath) {
         const fullBinaryFilepath = path.join(binaryFileDirectory, filePath);
         return fullBinaryFilepath;
       } else {
-        throw new Error(`File '${fileName}' not found in directory '${binaryFileDirectory}'`);
+        throw new Error(`File '${binaryFilename}' not found in directory '${binaryFileDirectory}'`);
       }
     } catch (err) {
       console.error(err);
