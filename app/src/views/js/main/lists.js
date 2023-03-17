@@ -240,8 +240,17 @@ window.addEventListener("DOMContentLoaded", () => {
       deleteIconContainer.addEventListener("click", () => {
         const args = { data: item, type: Type.DOWNLOADED };
 
-        window.bridgeApis.invoke("delete-single", args).then((isFileDeleted) => {
-          if (isFileDeleted) {
+        window.bridgeApis.invoke("delete-single", args).then((result) => {
+          const [errorOccurred, isFileDeleted] = result;
+
+          if (!errorOccurred && !isFileDeleted) {
+            return;
+          } else if (errorOccurred || !isFileDeleted) {
+            window.bridgeApis.send("show-error-unknown-dialog", {
+              title: "An unknown error occurred",
+              message: "We were unable to complete some operations"
+            });
+          } else {
             const listItem = folderIconContainer.parentElement.parentElement;
             const listGroup = listItem.parentElement;
 

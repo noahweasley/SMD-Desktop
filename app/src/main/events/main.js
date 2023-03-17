@@ -57,15 +57,15 @@ module.exports = function (settings, browsers, database) {
         const isEntryDeleted = await database.deleteDownloadData(metadata);
         if (isEntryDeleted && shouldDeleteFile) {
           await unlink(metadata.data.TrackUri);
-          return true;
+          return [false, true];
         } else {
-          return isEntryDeleted;
+          return [false, isEntryDeleted];
         }
       } catch (error) {
-        return false;
+        return [true, false];
       }
     } else {
-      return false;
+      return [false, false];
     }
   });
 
@@ -92,19 +92,19 @@ module.exports = function (settings, browsers, database) {
         try {
           const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
           if (isDBDeleteSuccessful && shouldDeleteFile) {
-            return await deleteFilesInDirectory(getDownloadsDirectory());
+            return [false, await deleteFilesInDirectory(getDownloadsDirectory())];
           } else {
-            return isDBDeleteSuccessful;
+            return [false, isDBDeleteSuccessful];
           }
         } catch (error) {
-          return false;
+          return [true, false];
         }
       } else {
-        return false;
+        return [false, false];
       }
     } else {
       // TODO: Cancel all download task
-      return false;
+      return [true, false];
     }
   });
 
