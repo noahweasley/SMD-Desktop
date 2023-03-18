@@ -41,15 +41,16 @@ module.exports = function (configOptions) {
       throw new IllegalStateError("Download task is already active");
     } else {
       state = States.ACTIVE;
-      return await registerDownloadOp();
+      const result = await registerDownloadOp();
+      return result;
     }
   }
 
   async function registerDownloadOp() {
-    const { downloadStream, downloadPipePromise } = await downloadMatchingTrack(configOptions);
-    stream = downloadStream;
+    const downloadParams = await downloadMatchingTrack(configOptions);
+    stream = downloadParams.downloadStream;
     stream.on("error", () => console.info("An silent error was thrown"));
-    return { downloadStream, downloadPipePromise };
+    return downloadParams;
   }
 
   return { pause, resume, wait, cancel, start };

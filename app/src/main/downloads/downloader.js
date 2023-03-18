@@ -94,19 +94,31 @@ module.exports = function (config) {
     const downloadStreams = []; // contains both active and inactive downloads
     const downloadPipePromises = [];
 
-    downloadTaskQueue.forEach((downloadTask) => {
-      if (locker.acquireLock()) {
-        const { downloadStream: activeDownloadStream, downloadPipePromise } = downloadTask.start();
-        downloadStreams.push(activeDownloadStream);
-        activeDownloadTasksStream.push(activeDownloadStream);
-        downloadPipePromises.push(downloadPipePromise);
-      } else {
-        const { downloadStream: inactiveDownloadStream } = downloadTask.wait();
-        downloadStreams.push(inactiveDownloadStream);
-        inactiveDownloadTasksStream.push(inactiveDownloadStream);
-      }
-    });
+    await Promise.all(
+      downloadTaskQueue.map(async (downloadTask) => {
+        if (locker.acquireLock()) {
+          const downloadParams = await downloadTask.start();
+          const activeDownloadStream = downloadParams.downloadStream;
+          const downloadPipePromise = downloadParams.downloadPipePromise;
 
+          downloadStreams.push(activeDownloadStream);
+          activeDownloadTasksStream.push(activeDownloadStream);
+          downloadPipePromises.push(downloadPipePromise);
+        } else {
+          const { downloadStream: inactiveDownloadStream } = downloadTask.wait();
+          downloadStreams.push(inactiveDownloadStream);
+          inactiveDownloadTasksStream.push(inactiveDownloadStream);
+        }
+      })
+    );
+
+    try {
+      const results = await Promise.all(downloadPipePromises);
+      console.log(results);
+    } catch (error) {
+      // ignore all errors for now
+    }
+    
     clearTaskQueue();
     return downloadStreams;
   }

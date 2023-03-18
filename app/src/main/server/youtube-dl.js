@@ -100,7 +100,6 @@ function __exports() {
         throw new Error(`File '${binaryFilename}' not found in directory '${binaryFileDirectory}'`);
       }
     } catch (err) {
-      console.error(err);
       return "";
     }
   }

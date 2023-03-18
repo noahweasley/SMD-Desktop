@@ -49,7 +49,6 @@ module.exports = function (settings, browsers, database) {
         searchResults = await ytdl.searchMatchingTracks(downloadQuery.value);
         return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
-        console.error(err);
         return "An Unknown Error Occurred";
       }
     } else if (downloadQuery.type == "track") {
@@ -61,7 +60,6 @@ module.exports = function (settings, browsers, database) {
         const searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
-        console.error(err);
         return "An Unknown Error Occurred";
       }
     } else {
@@ -72,7 +70,6 @@ module.exports = function (settings, browsers, database) {
       try {
         return await Promise.all(queryPromises);
       } catch (err) {
-        console.error(err);
         return "An Unknown Error Occurred";
       }
     }
@@ -118,7 +115,6 @@ module.exports = function (settings, browsers, database) {
           );
         }
       } catch (error) {
-        console.log(error);
         dialog.showErrorBox("Unknown Error Occurred", "That's all we know for now");
       }
     }
