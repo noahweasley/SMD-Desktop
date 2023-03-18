@@ -1,6 +1,6 @@
 <h1 align="center" style="border-bottom: none">
   <div>
-    <a href="https://noahweasley.github.io/SMD-Desktop">
+    <a href="https://noahweasley.github.io/SMD-Desktop/website">
       <img src="docs/assets/app_icon.png" width="80" />
     </a>
   </div>
@@ -26,11 +26,11 @@
 
 <br />
 <p align="center">
-  <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+  <a href="https://noahweasley.github.io/SMD-Desktop/website" target="_blank"
     ><img src="assets/screenshots/SMD screenshot 1.png" alt="Buy Noah A Coffee" />
   </a>
 
-<a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
+<a href="https://noahweasley.github.io/SMD-Desktop/website" target="_blank"
     ><img src="assets/screenshots/SMD screenshot 2.png" alt="Buy Noah A Coffee" />
 </a>
 
@@ -77,7 +77,7 @@ S.M.D is an open source program. Feel free to fork and contribute. Go here to vi
 
 - Most recent packages are available at Releases page: https://github.com/noahweasley/smd-desktop/releases
 
-- Product website is also available for easy download: https://noahweasley.github.io/SMD-Desktop
+- Product website is also available for easy download: https://noahweasley.github.io/SMD-Desktop/website
 
 ## License
 
