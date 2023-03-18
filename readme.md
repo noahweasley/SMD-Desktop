@@ -1,7 +1,7 @@
 <h1 align="center" style="border-bottom: none">
   <div>
     <a href="https://noahweasley.github.io/SMD-Desktop/website">
-      <img src="website/assets/app_icon.png" width="80" />
+      <img src="docs/assets/app_icon.png" width="80" />
     </a>
   </div>
   Spotify Music Downloader
