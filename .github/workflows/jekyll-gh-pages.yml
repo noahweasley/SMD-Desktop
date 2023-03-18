@@ -31,12 +31,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Build with Jekyll
-        run: bundle exec jekyll build
-      - name: Copy 404.html to _site
-        run: cp 404.html _site/
+        uses: actions/jekyll-build-pages@v1
         with:
           source: ./
-          destination: ./website
+          destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
@@ -51,9 +49,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          folder: _site
-          clean: true
-          force: true
