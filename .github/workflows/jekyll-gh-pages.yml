@@ -35,6 +35,8 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Copy 404.html to _site directory
+        run: cp 404.html _site/404.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
@@ -49,3 +51,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: _site
+          clean: true
+          force: true
