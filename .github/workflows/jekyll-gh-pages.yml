@@ -31,12 +31,12 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+        run: bundle exec jekyll build
+      - name: Copy 404.html to _site
+        run: cp 404.html _site/
         with:
           source: ./
-          destination: ./_site
-      - name: Copy 404.html to _site directory
-        run: cp 404.html _site/404.html
+          destination: ./website
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
 
