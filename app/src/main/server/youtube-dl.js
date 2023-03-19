@@ -139,6 +139,7 @@ function __exports() {
     const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
+    const isDownloadPaused = options.paused;
 
     try {
       const binaryFileExists = await checkIfBinaryExists();

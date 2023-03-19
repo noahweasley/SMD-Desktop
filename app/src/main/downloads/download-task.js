@@ -15,10 +15,13 @@ module.exports = function (configOptions) {
 
   async function wait() {
     state = States.PENDING;
-    return await registerDownloadOp();
+    return await startDownloadTask({ paused: true });
   }
 
   function pause() {
+    if (state !== States.PENDING || state !== States.PAUSED) {
+      throw new IllegalStateError("Illegal download state, cannot resume a download that wasn't previously running");
+    }
     state = States.PAUSED;
     stream?.pause();
   }
@@ -41,13 +44,13 @@ module.exports = function (configOptions) {
       throw new IllegalStateError("Download task is already active");
     } else {
       state = States.ACTIVE;
-      const result = await registerDownloadOp();
+      const result = await startDownloadTask({ paused: false });
       return result;
     }
   }
 
-  async function registerDownloadOp() {
-    const downloadParams = await downloadMatchingTrack(configOptions);
+  async function startDownloadTask(options) {
+    const downloadParams = await downloadMatchingTrack({ ...options, ...configOptions });
     stream = downloadParams.downloadStream;
     stream.on("error", () => console.info("An silent error was thrown"));
     return downloadParams;
