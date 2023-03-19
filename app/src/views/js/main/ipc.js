@@ -1,6 +1,13 @@
 "use-strict";
 
 window.addEventListener("DOMContentLoaded", () => {
+  const spcid = document.getElementById("spcid");
+  const spcs = document.getElementById("spcs");
+  const ytak = document.getElementById("ytak");
+  const searchInput = document.getElementById("input-search");
+  const searchButton = document.querySelector(".btn-search");
+  let isSearchInputFocused = false;
+
   // active link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -44,7 +51,6 @@ window.addEventListener("DOMContentLoaded", () => {
         window.bridgeApis.send("show-download-window");
       } else {
         // no-op; some errors were not handled
-        //? next line was commented-out because somehow a bug was fixed and I don't know how
         if (content === "Unknown") {
           window.bridgeApis.send("show-error-unknown-dialog", {
             title: "Unsupported Spotify URL link",
@@ -55,17 +61,13 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const searchInput = document.getElementById("input-search");
-  const searchButton = document.querySelector(".btn-search");
-  let isFocused = false;
-
-  searchInput.addEventListener("focus", () => (isFocused = true));
-  searchInput.addEventListener("blur", () => (isFocused = false));
+  searchInput.addEventListener("focus", () => (isSearchInputFocused = true));
+  searchInput.addEventListener("blur", () => (isSearchInputFocused = false));
 
   // on enter key pressed, perform search
   document.addEventListener(
     "keypress",
-    (event) => isFocused && searchInput.value && event.key == "Enter" && searchButton.click()
+    (event) => isSearchInputFocused && searchInput.value && event.key == "Enter" && searchButton.click()
   );
 
   // search button click
@@ -85,11 +87,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const names = document.querySelectorAll(".name");
     names.forEach((name) => (name.innerText = content[0]));
   });
-
-  // ..
-  const spcid = document.getElementById("spcid");
-  const spcs = document.getElementById("spcs");
-  const ytak = document.getElementById("ytak");
 
   document.querySelectorAll(".btn-form").forEach((auth) => {
     auth.addEventListener("click", () => {

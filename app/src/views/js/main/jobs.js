@@ -1,8 +1,7 @@
 window.addEventListener("DOMContentLoaded", () => {
-  let isOnline;
-  const INTERVAL = 10000;
-
   const onlineStats = document.querySelector(".online-stat");
+  const INTERVAL = 10000;
+  let isOnline;
 
   setInterval(() => {
     let navigatorOnline;

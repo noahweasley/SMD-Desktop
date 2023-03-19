@@ -58,10 +58,8 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       // initialize checkboxes for use after populating data on the list
-
       const headerSelectCheckboxes = document.querySelectorAll(".cbx-select-header");
       const selectCheckboxes = document.querySelectorAll(".cbx-select");
-
       const headerCheckboxArray = Array.from(headerSelectCheckboxes);
 
       headerSelectCheckboxes.forEach((headerCbx) => {
@@ -81,7 +79,6 @@ window.addEventListener("DOMContentLoaded", () => {
           headerSelectCheckbox.checked = saIsChecked;
 
           for (let x = 0; x < selectCheckboxes.length; x++) {
-            // select all the check-boxes in the list if the select-all check-box is checked or not
             selectCheckboxes[x].checked = saIsChecked;
 
             if (saIsChecked) {
@@ -133,9 +130,8 @@ window.addEventListener("DOMContentLoaded", () => {
         for (let x = 1; x < listItemContainer.childElementCount; x++) {
           const listItems = listItemContainerChildNodes[x];
           const inputElement = listItems.lastElementChild.firstElementChild;
-          inputElement.checked = isChecked;
-
           const listIndex = checkboxArray.indexOf(inputElement);
+          inputElement.checked = isChecked;
 
           if (isChecked) {
             selectedListDataMap[`${listIndex}`] = listData[position].searchQueryList[listIndex];
@@ -157,9 +153,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function displayDataOnList(data, list) {
     if (!data) return errorDecoration.style.setProperty("display", "flex");
-
     listData = data;
-
     persistDataOnList(list, data);
 
     function persistDataOnList(list, listData) {
@@ -169,17 +163,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
       function appendListItem(position, list, listData) {
         const listGroupItemContainer = document.createElement("div");
-        listGroupItemContainer.className = "list-group-item-container";
-
         const listGroupItemHeader = document.createElement("div");
-        listGroupItemHeader.className = "list-group-item-header";
-
         const headerText = document.createElement("p");
-
-        headerText.innerHTML = `Results for: &nbsp${listData.searchQuery}`;
-
         const labelElement = document.createElement("label");
         const selectionCheckbox = document.createElement("input");
+
+        listGroupItemContainer.className = "list-group-item-container";
+        listGroupItemHeader.className = "list-group-item-header";
+        headerText.innerHTML = `Results for: &nbsp${listData.searchQuery}`;
+
         labelElement.setAttribute("for", "select");
         selectionCheckbox.setAttribute("type", "checkbox");
         selectionCheckbox.setAttribute("name", "select");
@@ -187,10 +179,8 @@ window.addEventListener("DOMContentLoaded", () => {
         selectionCheckbox.id = `select-header-${position}`;
 
         labelElement.appendChild(selectionCheckbox);
-
         listGroupItemHeader.appendChild(headerText);
         listGroupItemHeader.appendChild(labelElement);
-
         listGroupItemContainer.appendChild(listGroupItemHeader);
 
         for (let x = 0; x < listData.searchQueryList.length; x++) {
@@ -198,30 +188,25 @@ window.addEventListener("DOMContentLoaded", () => {
           const searchQueryTitle = searchQueryList[x].videoTitle;
 
           const listGroupItem = document.createElement("div");
-          listGroupItem.className = "list-group-item";
-
           const thumbnailElement = document.createElement("img");
-          thumbnailElement.className = "media-object pull-left";
-          thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
-
           const mediaBodyElement = document.createElement("div");
-          mediaBodyElement.className = "media-body";
-
           const trackTitleElement = document.createElement("strong");
-          trackTitleElement.innerHTML = `${x + 1}. &nbsp&nbsp&nbsp${searchQueryTitle}`;
-
-          mediaBodyElement.appendChild(trackTitleElement);
-
           const labelElement = document.createElement("label");
           const selectionCheckbox = document.createElement("input");
+          
+          listGroupItem.className = "list-group-item";
+          thumbnailElement.className = "media-object pull-left";
+          thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
+          mediaBodyElement.className = "media-body";
+          trackTitleElement.innerHTML = `${x + 1}. &nbsp&nbsp&nbsp${searchQueryTitle}`;
           labelElement.setAttribute("for", "select");
           selectionCheckbox.setAttribute("type", "checkbox");
           selectionCheckbox.setAttribute("name", "select");
           selectionCheckbox.className = "cbx-select";
           selectionCheckbox.id = `select-${position}`;
-
+          
+          mediaBodyElement.appendChild(trackTitleElement);
           labelElement.appendChild(selectionCheckbox);
-
           listGroupItem.appendChild(thumbnailElement);
           listGroupItem.appendChild(mediaBodyElement);
           listGroupItem.appendChild(labelElement);

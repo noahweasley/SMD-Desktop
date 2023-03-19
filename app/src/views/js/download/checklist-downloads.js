@@ -120,15 +120,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function appendListItem(position, list, listItem) {
       const listElement = document.createElement("li");
-      listElement.className = "list-group-item";
       const thumbnailElement = document.createElement("img");
-      thumbnailElement.classList.add("media-object", "pull-left");
-
-      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
-
       const mediaBodyElement = document.createElement("div");
       const mediaBodyTitle = document.createElement("strong");
       const mediaBodyDescription = document.createElement("p");
+      const labelElement = document.createElement("label");
+      const selectionCheckbox = document.createElement("input");
+
+      listElement.className = "list-group-item";
+      thumbnailElement.classList.add("media-object", "pull-left");
+      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
       mediaBodyElement.className = "media-body";
       mediaBodyDescription.className = "message";
       mediaBodyTitle.innerHTML = `${position + 1}. &nbsp&nbsp&nbsp${listItem[position].songTitle}`;
@@ -138,8 +139,6 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBodyElement.appendChild(mediaBodyTitle);
       mediaBodyElement.appendChild(mediaBodyDescription);
 
-      const labelElement = document.createElement("label");
-      const selectionCheckbox = document.createElement("input");
       labelElement.setAttribute("for", "select");
       selectionCheckbox.setAttribute("type", "checkbox");
       selectionCheckbox.setAttribute("name", "select");
