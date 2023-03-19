@@ -19,6 +19,11 @@ module.exports = function (config) {
   const activeTaskStreams = () => activeDownloadTasksStream;
 
   /**
+   *@returns the number of inactive downloads
+   */
+  const inactiveTaskStreams = () => inactiveDownloadTasksStream;
+
+  /**
    * Clears the task queue
    */
   function clearTaskQueue() {
@@ -80,8 +85,9 @@ module.exports = function (config) {
   async function cancelAll() {
     downloadTaskQueue.forEach((task) => {
       if (locker.releaseLock()) {
-        activeDownloadTasksStream.unshift();
-        task.cancel();
+        task.unshift();
+        const stream = activeDownloadTasksStream.unshift();
+        stream.cancel();
       }
     });
   }
@@ -118,7 +124,7 @@ module.exports = function (config) {
     } catch (error) {
       // ignore all errors for now
     }
-    
+
     clearTaskQueue();
     return downloadStreams;
   }
@@ -131,6 +137,7 @@ module.exports = function (config) {
     pauseAll,
     resumeAll,
     cancelAll,
+    inactiveTaskStreams,
     activeTaskStreams
   };
 };
