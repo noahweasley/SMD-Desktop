@@ -209,7 +209,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // creates a media body element
-    function createMediaBody(position, item) {
+    function createMediaBody(_position, item) {
       const mediaBody = document.createElement("div");
       const trackTitleElement = document.createElement("strong");
       const messageElement = document.createElement("p");
@@ -221,7 +221,9 @@ window.addEventListener("DOMContentLoaded", () => {
       const iconPlay = document.createElement("span");
 
       mediaBody.className = "media-body";
-      trackTitleElement.innerText = `${position + 1}. ${item.TrackTitle}`;
+      // TODO: fix numbering details when list item deleted and add it to the list
+      // ${position + 1}. was removed from track title
+      trackTitleElement.innerText =  `${item.TrackTitle}`;
 
       messageElement.innerText = item.TrackDownloadSize;
       messageElement.classList.add("message");

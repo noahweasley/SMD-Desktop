@@ -66,7 +66,7 @@ window.addEventListener("DOMContentLoaded", () => {
         headerCbx.addEventListener("click", () => {
           const listGroupItemContainer = headerCbx.parentElement.parentElement.parentElement;
           const headerSelectIndex = headerCheckboxArray.indexOf(headerCbx);
-          changeChildElementCheckboxStateOf(listGroupItemContainer, headerCbx, headerSelectIndex);
+          changeCheckboxStateWith(listGroupItemContainer, headerCbx, headerSelectIndex);
         });
       });
 
@@ -122,7 +122,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // looping through all child nodes of this list element and change the states of
       // every checkbox according to isChecked parameter
-      function changeChildElementCheckboxStateOf(listItemContainer, headerCheckBox, position) {
+      function changeCheckboxStateWith(listItemContainer, headerCheckBox, position) {
         const listItemContainerChildNodes = listItemContainer.childNodes;
         const checkboxArray = Array.from(selectCheckboxes);
         const isChecked = headerCheckBox.checked;

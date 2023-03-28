@@ -7,6 +7,7 @@ const success0 = chalk.green;
 const info0 = chalk.blue;
 
 const appExecutableName = "S.M.D_Desktop";
+
 const githubIconUrl =
   "https://raw.githubusercontent.com/noahweasley/SMD-Desktop/master/app/resources/build/icons/win/icon.ico";
 
@@ -44,6 +45,6 @@ const settings32 = {
 
     console.log(success0(`The installers for ${productName} were successfully created !`));
   } catch (error) {
-    console.log(error0(`Installer generation of ${productName} failed: ${error.message}`));
+    console.log(error0(`Installer generation of ${productName} failed \n Message \n ${error.message}`));
   }
 })();

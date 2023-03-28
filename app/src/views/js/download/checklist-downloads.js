@@ -133,7 +133,6 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBodyElement.className = "media-body";
       mediaBodyDescription.className = "message";
       mediaBodyTitle.innerHTML = `${position + 1}. &nbsp&nbsp&nbsp${listItem[position].songTitle}`;
-
       mediaBodyDescription.innerHTML = `<b>Artists</b>: ${listItem[position].artistNames.join(", ").toString()}`;
 
       mediaBodyElement.appendChild(mediaBodyTitle);
@@ -146,7 +145,6 @@ window.addEventListener("DOMContentLoaded", () => {
       selectionCheckbox.id = `select-${position}`;
 
       labelElement.appendChild(selectionCheckbox);
-
       listElement.appendChild(thumbnailElement);
       listElement.appendChild(mediaBodyElement);
       listElement.appendChild(labelElement);

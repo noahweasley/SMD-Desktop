@@ -3,7 +3,7 @@ const express = require("express");
 const server = express();
 const path = require("path");
 
-const publicFilePath = path.resolve(__dirname, "../../public");
+const publicFilePath = path.resolve(__dirname, "../public");
 server.use(express.static(publicFilePath));
 
 module.exports = function (settings, spotifyApi) {
