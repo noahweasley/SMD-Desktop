@@ -1,7 +1,7 @@
 <h1 align="center" style="border-bottom: none">
   <div>
     <a href="https://noahweasley.github.io/SMD-Desktop/website">
-      <img src="website/assets/app_icon.png" width="80" />
+      <img src="website/assets/app_icon.png?raw=true" width="80" />
     </a>
   </div>
   Spotify Music Downloader
@@ -30,11 +30,11 @@
 <br />
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop/website" target="_blank"
-    ><img src="assets/screenshots/SMD screenshot 1.png" alt="Buy Noah A Coffee" />
+    ><img src="assets/screenshots/SMD screenshot 1.png?raw=true" alt="Buy Noah A Coffee" />
   </a>
 
 <a href="https://noahweasley.github.io/SMD-Desktop/website" target="_blank"
-    ><img src="assets/screenshots/SMD screenshot 2.png" alt="Buy Noah A Coffee" />
+    ><img src="assets/screenshots/SMD screenshot 2.png?raw=true" alt="Buy Noah A Coffee" />
 </a>
 
 </p>
