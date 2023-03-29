@@ -1,16 +1,13 @@
 "use-strict";
 
 const SpotifyWebApi = require("spotify-web-api-node");
-const authorize = require("./authorize");
 const { dialog, clipboard } = require("electron");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
 
 module.exports = function (settings) {
+  const MAX_NUMBER_OF_RETRIES = 3;
   const REDIRECT_URL = "http://localhost:8888/callback";
   const spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
-
-  const auth = authorize(settings, spotifyApi);
-  const MAX_NUMBER_OF_RETRIES = 3;
 
   /**
    * starts album metadata query
@@ -29,7 +26,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 
@@ -82,7 +79,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 
@@ -119,7 +116,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await auth.refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessTokenWithErrorHandler();
       }
     }
 
@@ -199,12 +196,57 @@ module.exports = function (settings) {
     return data;
   }
 
+  /**
+   * Refreshes the user's Spotify access token
+   *
+   * @returns true if the access token was refreshed
+   */
+  async function refreshSpotifyAccessToken() {
+    const [clientId, clientSecret, refreshToken] = await settings.getStates([
+      "spotify-user-client-id",
+      "spotify-user-client-secret",
+      "spotify-refresh-token"
+    ]);
+
+    spotifyApi.setClientId(clientId);
+    spotifyApi.setClientSecret(clientSecret);
+    spotifyApi.setRefreshToken(refreshToken);
+
+    let data;
+    try {
+      data = await spotifyApi.refreshAccessToken();
+
+      const states = await settings.setStates({
+        "spotify-access-token": data.body["access_token"],
+        "spotify-token-expiration": data.body["expires_in"]
+      });
+
+      return states.length == 2;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * A simple wrapper to refresh access token and still handle errors
+   */
+  async function refreshSpotifyAccessTokenWithErrorHandler() {
+    try {
+      return await refreshSpotifyAccessToken();
+    } catch (err) {
+      console.error("Access token refresh failed");
+      return false;
+    }
+  }
+
   return {
     spotifyApi,
     searchSpotifyAlbum,
     searchSpotifyArtist,
     searchSpotifyPlaylist,
     searchSpotifyTrack,
-    getSpotifyLinkData
+    getSpotifyLinkData,
+    refreshSpotifyAccessToken,
+    refreshSpotifyAccessTokenWithErrorHandler
   };
 };

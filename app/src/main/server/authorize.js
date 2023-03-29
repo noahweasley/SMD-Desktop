@@ -10,7 +10,7 @@ module.exports = function (settings, spotifyApi) {
   const TIMEOUT = 60000;
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
   let timeout, connection, refreshTimer, authorizationCallback;
-  
+
   const scopes = [
     "user-read-playback-state",
     "user-modify-playback-state",
@@ -120,48 +120,5 @@ module.exports = function (settings, spotifyApi) {
     }
   }
 
-  /**
-   * Refreshes the user's Spotify access token
-   *
-   * @returns true if the access token was refreshed
-   */
-  async function refreshSpotifyAccessToken() {
-    const [clientId, clientSecret, refreshToken] = await settings.getStates([
-      "spotify-user-client-id",
-      "spotify-user-client-secret",
-      "spotify-refresh-token"
-    ]);
-
-    spotifyApi.setClientId(clientId);
-    spotifyApi.setClientSecret(clientSecret);
-    spotifyApi.setRefreshToken(refreshToken);
-
-    let data;
-    try {
-      data = await spotifyApi.refreshAccessToken();
-
-      const states = await settings.setStates({
-        "spotify-access-token": data.body["access_token"],
-        "spotify-token-expiration": data.body["expires_in"]
-      });
-
-      return states.length == 2;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  /**
-   * A simple wrapper to refresh access token and still handle errors
-   */
-  async function refreshSpotifyAccessTokenWithErrorHandler() {
-    try {
-      return await refreshSpotifyAccessToken();
-    } catch (err) {
-      console.error("Access token refresh failed");
-      return false;
-    }
-  }
-
-  return { authorizeApp, refreshSpotifyAccessToken, refreshSpotifyAccessTokenWithErrorHandler };
+  return { authorizeApp };
 };
