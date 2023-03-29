@@ -223,7 +223,7 @@ window.addEventListener("DOMContentLoaded", () => {
       mediaBody.className = "media-body";
       // TODO: fix numbering details when list item deleted and add it to the list
       // ${position + 1}. was removed from track title
-      trackTitleElement.innerText =  `${item.TrackTitle}`;
+      trackTitleElement.innerText = `${item.TrackTitle}`;
 
       messageElement.innerText = item.TrackDownloadSize;
       messageElement.classList.add("message");

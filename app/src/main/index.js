@@ -20,7 +20,7 @@ require("../main/events")(settings, browsers, database);
 app.whenReady().then(function () {
   createAppFilesDirectory();
   mainWindow.init();
-  
+
   app.on("activate", () => BrowserWindow.getAllWindows().length === 0 && mainWindow.init());
 });
 

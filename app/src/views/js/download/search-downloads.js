@@ -193,7 +193,7 @@ window.addEventListener("DOMContentLoaded", () => {
           const trackTitleElement = document.createElement("strong");
           const labelElement = document.createElement("label");
           const selectionCheckbox = document.createElement("input");
-          
+
           listGroupItem.className = "list-group-item";
           thumbnailElement.className = "media-object pull-left";
           thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
@@ -204,7 +204,7 @@ window.addEventListener("DOMContentLoaded", () => {
           selectionCheckbox.setAttribute("name", "select");
           selectionCheckbox.className = "cbx-select";
           selectionCheckbox.id = `select-${position}`;
-          
+
           mediaBodyElement.appendChild(trackTitleElement);
           labelElement.appendChild(selectionCheckbox);
           listGroupItem.appendChild(thumbnailElement);
