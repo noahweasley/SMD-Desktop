@@ -20,12 +20,8 @@ require("../main/events")(settings, browsers, database);
 app.whenReady().then(function () {
   createAppFilesDirectory();
   mainWindow.init();
-
-  app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) mainWindow.init();
-  });
+  
+  app.on("activate", () => BrowserWindow.getAllWindows().length === 0 && mainWindow.init());
 });
 
-app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") app.quit();
-});
+app.on("window-all-closed", () => process.platform !== "darwin" && app.quit());

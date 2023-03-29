@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    width="210mm"
    height="297mm"
    viewBox="0 0 210 297"
    version="1.1"
-   id="svg8"
+   id="svg358"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    sodipodi:docname="SMD icon.svg"
-   inkscape:export-filename="C:\Users\Noah\Desktop\app_icon.png"
-   inkscape:export-xdpi="59.975899"
-   inkscape:export-ydpi="59.975899"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/">
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview360"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     showborder="false"
+     borderlayer="true"
+     inkscape:zoom="0.084252894"
+     inkscape:cx="-1287.7896"
+     inkscape:cy="272.98766"
+     inkscape:window-width="1366"
+     inkscape:window-height="715"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
-     id="defs2">
+     id="defs355">
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1009-9"
@@ -30,7 +48,7 @@
        fy="40.0187"
        r="250.16092"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.058246,0,0,1,299.45359,125.45241)" />
+       gradientTransform="matrix(1.1822277,0,0,1.1171576,110.17089,20.405521)" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient1009-9">
@@ -61,123 +79,54 @@
          id="feGaussianBlur1173-7" />
     </filter>
   </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.040278603"
-     inkscape:cx="1986.1662"
-     inkscape:cy="-99.308311"
-     inkscape:document-units="mm"
-     inkscape:current-layer="g1218"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     showborder="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="715"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:showpageshadow="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <circle
-       style="fill:#ff0000;stroke-width:0.284179"
-       id="circle837"
-       cx="70.119095"
-       cy="146.93495"
-       r="0" />
-    <circle
-       style="fill:#000000;stroke-width:0.284179"
-       id="circle839"
-       cx="70.119095"
-       cy="146.93495"
-       r="0" />
-    <circle
-       style="fill:#000000;stroke-width:0.284179"
-       id="circle841"
-       cx="70.119095"
-       cy="146.93495"
-       r="0" />
-    <circle
-       style="fill:#000000;stroke-width:0.284179"
-       id="circle843"
-       cx="70.119095"
-       cy="146.93495"
-       r="0" />
-    <circle
-       style="fill:#000000;stroke-width:0.284179"
-       id="circle857"
-       cx="97.694031"
-       cy="146.93495"
-       r="0" />
     <g
-       id="g1003"
-       transform="translate(301.00288)">
-      <g
-         id="g1218"
-         transform="matrix(1.4436659,0,0,1.4436659,-21.148784,-273.04439)">
-        <ellipse
-           style="fill:url(#radialGradient1013-8);fill-opacity:1;stroke-width:0.408492"
-           id="path900-0"
-           cx="-26.445768"
-           cy="165.4711"
-           rx="264.73178"
-           ry="250.16092" />
-        <circle
-           style="opacity:0.223947;fill:#000000;fill-opacity:1;stroke-width:0.164669;filter:url(#filter1171-5)"
-           id="circle1017-9"
-           cx="-310.57913"
-           cy="40.040619"
-           r="103.73856"
-           transform="matrix(1.0863468,0,0,1.0265542,308.46,124.38617)" />
-        <ellipse
-           style="fill:#0039ac;fill-opacity:1;stroke-width:0.163912"
-           id="circle949-0"
-           cx="-28.936674"
-           cy="165.49002"
-           rx="106.22664"
-           ry="100.37991" />
-        <path
-           sodipodi:type="star"
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
-           id="path947-1"
-           sodipodi:sides="3"
-           sodipodi:cx="-989.48499"
-           sodipodi:cy="-310.20471"
-           sodipodi:r1="172.44148"
-           sodipodi:r2="90.997551"
-           sodipodi:arg1="0.52240343"
-           sodipodi:arg2="1.569601"
-           inkscape:flatsided="false"
-           inkscape:rounded="0"
-           inkscape:randomized="0"
-           inkscape:transform-center-x="-16.467438"
-           inkscape:transform-center-y="-0.034585259"
-           transform="matrix(0,-0.26198065,-0.31550234,0,-131.21035,-93.701027)"
-           d="m -840.04332,-224.16254 -149.33289,4.95531 -149.34429,-4.59829 70.375,-131.80374 78.65439,-127.03681 78.95787,126.84842 z"
-           inkscape:export-filename="..\..\..\..\..\Desktop\icon.png"
-           inkscape:export-xdpi="59.975899"
-           inkscape:export-ydpi="59.975899" />
-      </g>
+       id="g567">
+      <ellipse
+         style="fill:url(#radialGradient1013-8);fill-opacity:1;stroke-width:0.45635"
+         id="path900-0"
+         cx="-253.91006"
+         cy="65.112724"
+         rx="295.74713"
+         ry="279.46921" />
+      <circle
+         style="opacity:0.223947;fill:#000000;fill-opacity:1;stroke-width:0.164669;filter:url(#filter1171-5)"
+         id="circle1017-9"
+         cx="-310.57913"
+         cy="40.040619"
+         r="103.73856"
+         transform="matrix(1.2136206,0,0,1.1468229,120.23248,19.214364)" />
+      <ellipse
+         style="fill:#0039ac;fill-opacity:1;stroke-width:0.183115"
+         id="circle949-0"
+         cx="-256.69281"
+         cy="65.13385"
+         rx="118.6719"
+         ry="112.14019" />
+      <path
+         sodipodi:type="star"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+         id="path947-1"
+         sodipodi:sides="3"
+         sodipodi:cx="-989.48499"
+         sodipodi:cy="-310.20471"
+         sodipodi:r1="172.44148"
+         sodipodi:r2="90.997551"
+         sodipodi:arg1="0.52240343"
+         sodipodi:arg2="1.569601"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         inkscape:transform-center-x="-12.743063"
+         inkscape:transform-center-y="-0.026768921"
+         transform="matrix(0,-0.29267369,-0.35246586,0,-370.94863,-224.42343)"
+         d="m -840.04332,-224.16254 -149.33289,4.95531 -149.34429,-4.59829 70.375,-131.80374 78.65439,-127.03681 78.95787,126.84842 z"
+         inkscape:export-filename="..\..\..\..\..\Desktop\icon.png"
+         inkscape:export-xdpi="59.975899"
+         inkscape:export-ydpi="59.975899" />
     </g>
   </g>
 </svg>

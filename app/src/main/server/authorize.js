@@ -7,8 +7,10 @@ const publicFilePath = path.resolve(__dirname, "../public");
 server.use(express.static(publicFilePath));
 
 module.exports = function (settings, spotifyApi) {
+  const TIMEOUT = 60000;
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
-
+  let timeout, connection, refreshTimer, authorizationCallback;
+  
   const scopes = [
     "user-read-playback-state",
     "user-modify-playback-state",
@@ -20,9 +22,6 @@ module.exports = function (settings, spotifyApi) {
     "user-top-read",
     "user-read-recently-played"
   ];
-
-  const TIMEOUT = 60000;
-  let timeout, connection, refreshTimer, authorizationCallback;
 
   server.get("/authorize", async (_req, res) => {
     // TODO: fix issue with spotifyApi.getClientId() returning null when it was already set
