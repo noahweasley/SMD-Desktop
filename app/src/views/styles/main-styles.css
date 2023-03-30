@@ -37,7 +37,7 @@ a:active {
   color: var(--primary-color-dark);
 }
 
-.centred {
+.centered {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -816,7 +816,7 @@ form {
   border-radius: 50%;
 }
 
-.online {
+.online-stat.online {
   background-color: green;
 }
 
