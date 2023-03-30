@@ -32,6 +32,9 @@ function __exports() {
   }
 
   /**
+   * Retrieves the binary file path, if `parentDirectory` is undefined,  it finds the binary file directory
+   *
+   * @param {string} parentDirectory the directory in which to append to the binary file path
    * @returns the full file path to the ytdlp binary file
    */
   function getBinaryFilepath(parentDirectory) {
