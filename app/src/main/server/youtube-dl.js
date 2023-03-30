@@ -140,9 +140,10 @@ function __exports() {
     const request = options.request;
     const target = options.targetWindow.getWindow();
     const isDownloadPaused = options.paused;
+    let binaryFileExists;
 
     try {
-      const binaryFileExists = await checkIfBinaryExists();
+      binaryFileExists = await checkIfBinaryExists();
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();
@@ -166,6 +167,8 @@ function __exports() {
         console.log("Fatal error occurred, cannot download, cause");
       }
     } catch (err) {
+      // make sure that progress dialog is closed no matter
+      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
       downloadStream?.emit("error", err);
     }
 
