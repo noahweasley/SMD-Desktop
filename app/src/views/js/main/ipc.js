@@ -131,14 +131,14 @@ window.addEventListener("DOMContentLoaded", () => {
               auth.removeAttribute("disabled");
             }, 30000);
           }
-
-          switchAuthorizationTabs(auth.id);
+          // switchAuthorizationTabs(auth.id);
         });
       }
     });
   });
 });
 
+// eslint-disable-next-line no-unused-vars
 function switchAuthorizationTabs(authId) {
   const authTabContent1 = document.getElementById("tab-content__form__spotify");
   const authTabContent2 = document.getElementById("tab-content__form__youtube");
