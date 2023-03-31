@@ -57,7 +57,7 @@ function __exports() {
    * Watch a file and detect file changes
    *
    * @param {string} filePath
-   * @returns a Promise that resolves when there is a detected file change
+   * @returns {Promise<string>} a Promise that resolves when there is a detected file change
    */
   function watchFileForChanges(filePath) {
     return new Promise((resolve) => {
