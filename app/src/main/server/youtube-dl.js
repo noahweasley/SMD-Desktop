@@ -142,6 +142,7 @@ function __exports() {
     const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
+    // eslint-disable-next-line no-unused-vars
     const isDownloadPaused = options.paused;
     let binaryFileExists;
 
@@ -157,7 +158,7 @@ function __exports() {
       if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
         const ytdlpBinaryFilepath = getBinaryFilepath();
         const dirname = path.dirname(ytdlpBinaryFilepath);
-        const filename = _getBinaryFilepath(dirname);
+        const filename = getBinaryFilepath(dirname);
 
         const ytdlpWrapper = new ytdlp(filename);
         downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
