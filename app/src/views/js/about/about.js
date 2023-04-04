@@ -4,7 +4,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const indeterminateProgress = document.querySelector(".indeterminate-progress");
   const windowContent = document.getElementById("content");
 
-  // deactivate link default actions
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
