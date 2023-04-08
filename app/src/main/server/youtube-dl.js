@@ -19,9 +19,8 @@ function __exports() {
   });
 
   function _getBinaryFilepath(parentDirectory) {
-    return process.platform == "win32"
-      ? path.join(parentDirectory, `${binaryFilename}.exe`)
-      : path.join(parentDirectory, binaryFilename);
+    const filePath = path.join(parentDirectory, binaryFilename);
+    return process.platform == "win32" ? filePath.concat(FILE_EXTENSIONS.EXE) : filePath;
   }
 
   /**
@@ -163,7 +162,7 @@ function __exports() {
         const ytdlpWrapper = new ytdlp(filename);
         downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
 
-        const fileToStoreData = path.join(getDownloadsDirectory(), `${request.videoTitle}.${FILE_EXTENSIONS.M4A}`);
+        const fileToStoreData = path.join(getDownloadsDirectory(), request.videoTitle.concat(FILE_EXTENSIONS.M4A));
 
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
