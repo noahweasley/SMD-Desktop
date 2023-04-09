@@ -167,7 +167,7 @@ function __exports() {
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
-        console.log("Fatal error occurred, cannot download, cause");
+        console.log("Fatal error occurred, cannot download");
       }
     } catch (err) {
       // make sure that progress dialog is closed no matter
