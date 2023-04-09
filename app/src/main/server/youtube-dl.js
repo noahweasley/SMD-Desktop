@@ -113,7 +113,13 @@ function __exports() {
    */
   async function searchMatchingTracks(query) {
     try {
-      const queryResults = await ytSearch.search(query);
+      let queryResults = await ytSearch.search(query);
+      const queryKeywords = query.split(" ");
+      
+      // filters some useless results
+      queryResults = queryResults.filter((queryResult) =>
+        queryKeywords.some((queryKeyword) => queryResult.title.toLowerCase().includes(queryKeyword.toLowerCase()))
+      );
 
       const queryResultsMap = queryResults.map((vob) => ({
         videoId: vob.id.videoId,
