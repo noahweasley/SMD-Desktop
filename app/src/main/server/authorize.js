@@ -9,10 +9,8 @@ server.use(express.static(publicFilePath));
 module.exports = function (settings, spotifyApi) {
   const TIMEOUT = 60000;
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
-  let timeout,
-    connection,
-    refreshTimer,
-    authorizationCallback = null;
+  let timeout, connection, refreshTimer;
+  let authorizationCallback = null;
 
   const scopes = [
     "user-read-playback-state",
