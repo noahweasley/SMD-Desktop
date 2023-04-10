@@ -13,7 +13,7 @@ We use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) to ens
 
 To set up a development environment for this project, follow these steps:
 
-- Install [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) on your system if you haven't already.
+- Install [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/) on your system if you haven't already.
 - Clone the repository to your local machine using `git clone https://github.com/noahweasley/SMD-Desktop.git`.
 - Navigate to the project directory and install dependencies using `npm install`.
 - Run the application using `npm start`.
