@@ -6,9 +6,8 @@ Thank you for considering contributing to SMD! Here are some guidelines to help 
 
 We use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) to ensure consistent code style across the project. Before submitting a pull request, make sure your code follows the style guidelines. To run Prettier and ESLint on your code, run the following commands:
 
-- `$ npm run lint` - To check your code for errors and enforce code formatting
-
-- `$ npm run format` - To automatically format your code according to the Prettier configuration
+- `npm run lint` - To check your code for errors and enforce code formatting
+- `npm run format` - To automatically format your code according to the Prettier configuration
 
 ## Development Environment Setup
 
@@ -17,7 +16,7 @@ To set up a development environment for this project, follow these steps:
 - Install [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) on your system if you haven't already.
 - Clone the repository to your local machine using `git clone https://github.com/noahweasley/SMD-Desktop.git`.
 - Navigate to the project directory and install dependencies using `npm install`.
-- Start the development server by running `npm start`.
+- Run the application using `npm start`.
 
 ### Additional Configurations
 
