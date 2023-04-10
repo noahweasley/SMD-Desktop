@@ -1,4 +1,4 @@
-const { shell, dialog, BrowserWindow } = require("electron");
+const { shell, dialog } = require("electron");
 const express = require("express");
 const server = express();
 const path = require("path");
