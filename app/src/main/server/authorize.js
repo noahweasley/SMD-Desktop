@@ -9,7 +9,10 @@ server.use(express.static(publicFilePath));
 module.exports = function (settings, spotifyApi) {
   const TIMEOUT = 60000;
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
-  let timeout, connection, refreshTimer, authorizationCallback;
+  let timeout,
+    connection,
+    refreshTimer,
+    authorizationCallback = null;
 
   const scopes = [
     "user-read-playback-state",
@@ -77,10 +80,10 @@ module.exports = function (settings, spotifyApi) {
           authorizationCallback = null;
         }
       } else {
-        dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-          title: "Server response incomplete",
-          message: "Some data were not persisted, we might need to send another request and collect the data in the future"
-        });
+        dialog.showErrorBox(
+          "Server response incomplete",
+          "Some data were not persisted, we might need to send another request and collect the data in the future"
+        );
       }
 
       if (connection) connection.close();
