@@ -6,29 +6,31 @@ const error0 = chalk.bold.red;
 const success0 = chalk.green;
 const info0 = chalk.blue;
 
-const appExecutableName = "S.M.D_Desktop";
+const appDisplayName = "S.M.D_Desktop";
+const appExecutableNameX32 = `${appDisplayName}_x32_v${appVersion}`;
+const appExecutableNameX64 = `${appDisplayName}_x64_v${appVersion}`;
 
 const githubIconUrl =
   "https://raw.githubusercontent.com/noahweasley/SMD-Desktop/master/app/resources/build/icons/win/icon.ico";
 
 const settings64 = {
-  name: appExecutableName,
+  name: appDisplayName,
   iconUrl: githubIconUrl,
   loadingGif: "./app/resources/build/tools/smd_installer.gif",
   setupIcon: "./app/resources/build/icons/win/icon.ico",
   appDirectory: "./build/dist/win/SMD-Desktop-win32-x64",
-  setupExe: `${appExecutableName}-setup.exe`,
+  setupExe: `${appExecutableNameX64}-setup.exe`,
   outputDirectory: "./build/installers/win/x64",
   version: appVersion // use the version from package.json
 };
 
 const settings32 = {
-  name: appExecutableName,
+  name: appDisplayName,
   iconUrl: githubIconUrl,
   loadingGif: "./app/resources/build/tools/smd_installer.gif",
   setupIcon: "./app/resources/build/icons/win/icon.ico",
   appDirectory: "./build/dist/win/SMD-Desktop-win32-ia32",
-  setupExe: `${appExecutableName}-setup.exe`,
+  setupExe: `${appExecutableNameX32}-setup.exe`,
   outputDirectory: "./build/installers/win/x32",
   version: appVersion // use the version from package.json
 };
