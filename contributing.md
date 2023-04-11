@@ -48,7 +48,7 @@ Once you've completed these steps, you should be able to start making changes to
 
 We strive to maintain clear and up-to-date documentation for this project. To contribute to the documentation, please follow these guidelines:
 
-- Document all code changes that you make, including new features, bug fixes, and refactoring. Use [JSDoc](https://jsdoc.app/) syntax to clearly describe your changes.
+- Use [JSDoc](https://jsdoc.app/) syntax to clearly describe and document your code.
 - Keep the documentation up-to-date with the latest changes to the project. If you notice that documentation is out of date, please update it or create an issue to let someone know that it needs to be updated.
 - Follow the project's style guide for documentation. This includes using clear and concise language, formatting code examples properly, and providing context for any code snippets.
 - Use appropriate headings, bullet points, and other formatting techniques to make the documentation easy to read and navigate.
@@ -56,7 +56,7 @@ We strive to maintain clear and up-to-date documentation for this project. To co
 
 ## Installing VS Code tools
 
-There are a few VS Code extensions used in the development of S.M.D namely:
+Here are a list of the VS Code extensions used in the development of S.M.D:
 
 ### Recommended
 
