@@ -43,7 +43,7 @@ const settings32 = {
     await electronInstaller.createWindowsInstaller(settings64);
     console.log(info0("Generated x64 bit window installers successfully"));
 
-    console.log(success0(`The installers for ${productName} were successfully created !`));
+    console.log(success0(`The installers for ${productName} were successfully created!!`));
   } catch (error) {
     console.log(error0(`Installer generation of ${productName} failed \n Message \n ${error.message}`));
   }
