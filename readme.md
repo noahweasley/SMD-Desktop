@@ -74,7 +74,7 @@
 
 ## Contributing
 
-S.M.D is an open source program. Feel free to fork and contribute. Go here to view the [full step-by-step guide on how to contribute](https://github.com/noahweasley/SMD-desktop/blob/master/contributing.md)
+S.M.D is an open source program. Feel free to fork and contribute. Also view the [full step-by-step guide on how to contribute](https://github.com/noahweasley/SMD-desktop/blob/master/contributing.md)
 
 ## Download
 
