@@ -21,12 +21,13 @@
   "keywords": [
     "electron",
     "music",
+    "music-player",
     "spotify",
     "youtube",
     "downloader",
     "music-downloader",
     "youtube-downloader",
-    "spotify-downloader"
+    "spotify-downloader",
   ],
   "scripts": {
     "start": "electron .",
