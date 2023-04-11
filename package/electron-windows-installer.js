@@ -6,7 +6,7 @@ const error0 = chalk.bold.red;
 const success0 = chalk.green;
 const info0 = chalk.blue;
 
-const appExecutableName = "S.M.D_Desktop";
+const appExecutableName = `S.M.D_Desktop_v${appVersion}`;
 
 const githubIconUrl =
   "https://raw.githubusercontent.com/noahweasley/SMD-Desktop/master/app/resources/build/icons/win/icon.ico";
