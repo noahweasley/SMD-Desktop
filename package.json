@@ -54,8 +54,10 @@
     "pack:win64": "electron-packager . SMD-Desktop --ignore=./.gitignore --overwrite --prune=true --out=build/dist/win --platform=win32 --arch=x64 --icon=app/resources/build/icons/win/icon.ico",
     "package": "npm run build && npm run start",
     "generate-installers": "node package/electron-windows-installer.js",
-    "build:windows": "npm run generate-icons && npm run pack:win32 && npm run pack:win64 && npm run generate-installers",
-    "build": "npm run build:windows"
+    "build:windows": "npm run pack:win32 && npm run pack:win64 && npm run generate-installers",
+    "rebuild:windows": "npm run generate-icons && npm run pack:win32 && npm run pack:win64 && npm run generate-installers",
+    "build": "npm run build:windows",
+    "rebuild": "npm run rebuild:windows"
   },
   "devDependencies": {
     "chalk": "^4.1.2",
