@@ -54,7 +54,7 @@ We strive to maintain clear and up-to-date documentation for this project. To co
 - Use appropriate headings, bullet points, and other formatting techniques to make the documentation easy to read and navigate.
 - If you're not sure how to document something or you need help with documentation, don't hesitate to ask for guidance from the project maintainers.
 
-## Installing the tools
+## Installing VS Code tools
 
 There are a few VS Code extensions used in the development of S.M.D namely:
 
@@ -66,6 +66,7 @@ There are a few VS Code extensions used in the development of S.M.D namely:
 
 ### Optional
 
+- NPM Script Advanced (daez.npm-scripts-advanced)
 - Community Material Theme Darker High Contrast (Equinusocio.vsc-community-material-theme)
 
 ## Issue Reporting
