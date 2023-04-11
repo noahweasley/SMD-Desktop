@@ -27,7 +27,7 @@
     "downloader",
     "music-downloader",
     "youtube-downloader",
-    "spotify-downloader",
+    "spotify-downloader"
   ],
   "scripts": {
     "start": "electron .",
