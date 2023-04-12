@@ -60,7 +60,7 @@
     "rebuild": "npm run rebuild:windows"
   },
   "devDependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^5.2.0",
     "electron": "^23.1.4",
     "electron-icon-maker": "^0.0.5",
     "electron-packager": "^17.1.1",
