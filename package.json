@@ -79,7 +79,7 @@
     "sqlite3": "^5.1.2",
     "update-electron-app": "^2.0.1",
     "uuid": "^9.0.0",
-    "youtube-search-without-api-key": "^1.0.7",
+    "youtube-search-without-api-key": "^1.1.0",
     "yt-dlp-wrap": "^2.3.11"
   }
 }
