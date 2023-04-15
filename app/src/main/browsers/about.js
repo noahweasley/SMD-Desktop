@@ -1,5 +1,3 @@
-"use-strict";
-
 const { BrowserWindow, app } = require("electron");
 const { join } = require("path");
 

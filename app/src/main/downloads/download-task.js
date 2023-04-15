@@ -1,5 +1,3 @@
-"use-strict";
-
 const { downloadMatchingTrack } = require("../server/youtube-dl");
 const { States } = require("../database/constants");
 const { IllegalStateError } = require("../util/error");

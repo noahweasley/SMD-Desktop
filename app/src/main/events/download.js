@@ -1,5 +1,3 @@
-"use-strict";
-
 const { v4: uuidv4 } = require("uuid");
 const { ipcMain, dialog } = require("electron");
 const ytdl = require("../server/youtube-dl");

@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   const getElementIndex = (element) => Array.from(element.parentNode.children).indexOf(element);
 

@@ -1,5 +1,3 @@
-"use-strict";
-
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
 const { readdir, stat, unlink } = require("fs/promises");

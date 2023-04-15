@@ -1,5 +1,3 @@
-"use-strict";
-
 const { getSpotifyURLType } = require("../util/sp-util");
 const auth = require("../server/authorize");
 const spotifyDl = require("../server/spotify-dl");

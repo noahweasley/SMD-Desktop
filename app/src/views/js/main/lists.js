@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   /* eslint-disable no-undef */
   let WINDOW_CONTENT_STATE = State.MAIN;

@@ -1,5 +1,3 @@
-"use-strict";
-
 /**
  * A locker to track the amount of task that is running
  *

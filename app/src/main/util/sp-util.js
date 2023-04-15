@@ -1,5 +1,3 @@
-"use-strict";
-
 const { clipboard } = require("electron");
 
 //! don't touch SpotifyURLType, I tried to remove it once and there was a bug

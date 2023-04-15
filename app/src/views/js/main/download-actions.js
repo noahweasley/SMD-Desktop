@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   const deleteAllButton = document.querySelector(".downloads-operation .delete");
   const downloadedList = document.querySelector(".list-group__downloaded");

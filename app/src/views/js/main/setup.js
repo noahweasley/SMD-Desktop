@@ -1,5 +1,3 @@
-"use-strict";
-
 function dataReveal() {
   const windowContent = document.querySelector(".window");
   const loader = document.getElementById("window-data-loader");

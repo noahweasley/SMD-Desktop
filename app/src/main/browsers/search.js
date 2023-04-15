@@ -1,4 +1,3 @@
-"use-strict";
 /* eslint-disable no-undef */
 
 const { BrowserWindow } = require("electron");

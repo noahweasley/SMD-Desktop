@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   let listData;
   const selectedListDataMap = {};

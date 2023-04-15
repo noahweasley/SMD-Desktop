@@ -1,5 +1,3 @@
-"use-strict";
-
 /**
  * Delays program
  * @param {number} timeout delay period in milliseconds

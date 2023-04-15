@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("settings-loader");
   const settingsList = document.querySelector(".pane-settings .list-group");

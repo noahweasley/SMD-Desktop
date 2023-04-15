@@ -1,5 +1,3 @@
-"use-strict";
-
 /**
  * @param {number} bytes the bytes to be converted
  * @returns a human readable representation of size in bytes

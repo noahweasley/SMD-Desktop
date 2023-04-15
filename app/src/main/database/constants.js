@@ -1,5 +1,3 @@
-"use-strict";
-
 /**
  * the type of data that can exists in the database
  */

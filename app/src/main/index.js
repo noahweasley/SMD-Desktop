@@ -1,5 +1,3 @@
-"use-strict";
-
 const { join } = require("path");
 const { app, BrowserWindow } = require("electron");
 const { createAppFilesDirectory } = require("./util/files");
@@ -20,7 +18,7 @@ require("../main/events")(settings, browsers, database);
 app.whenReady().then(() => {
   createAppFilesDirectory();
   mainWindow.init();
-  
+
   app.on("activate", () => BrowserWindow.getAllWindows().length === 0 && mainWindow.init());
 });
 

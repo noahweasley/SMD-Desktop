@@ -1,5 +1,3 @@
-"use-strict";
-
 /**
  * Error in arguments
  */

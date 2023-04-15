@@ -1,5 +1,3 @@
-"use-strict";
-
 const downloadTask = require("./download-task");
 const lock = require("./lock");
 

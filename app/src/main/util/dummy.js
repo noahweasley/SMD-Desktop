@@ -1,4 +1,3 @@
-"use-strict";
 const mockData = require("./mock-data");
 
 module.exports.getRandomClipboardText = function () {

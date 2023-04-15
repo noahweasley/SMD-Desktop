@@ -1,5 +1,3 @@
-"use-strict";
-
 const SpotifyWebApi = require("spotify-web-api-node");
 const { dialog, clipboard } = require("electron");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");

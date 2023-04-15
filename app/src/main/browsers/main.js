@@ -1,5 +1,3 @@
-"use-strict";
-
 const { BrowserWindow, Menu, ipcMain } = require("electron");
 const { join } = require("path");
 const menu = require("../menu/main");

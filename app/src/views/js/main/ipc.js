@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   const spcid = document.getElementById("spcid");
   const spcs = document.getElementById("spcs");

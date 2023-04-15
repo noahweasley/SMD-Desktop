@@ -1,5 +1,3 @@
-"use-strict";
-
 window.addEventListener("DOMContentLoaded", () => {
   const errorDecoration = document.querySelector(".error-decor");
   let listData;

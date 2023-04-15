@@ -20,7 +20,7 @@ To set up a development environment for this project, follow these steps:
 
 ### Additional Configurations
 
- Add a `.env` file (optional) at the root of the project with these keys:
+Add a `.env` file (optional) at the root of the project with these keys:
 
 ```dotenv
 BINARY_LOCATION="folder/to/ytdlp/binary"
