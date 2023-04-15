@@ -24,8 +24,8 @@ module.exports = function (settings) {
       frame: false,
       minWidth: 900,
       minHeight: 400,
-      width: winState.width ? winState.width : 1000,
-      height: winState.height ? winState.height : 620,
+      width: winState.width ? winState.width : 970,
+      height: winState.height ? winState.height : 530,
       webPreferences: {
         contextIsolation: true,
         preload: join(__dirname, "../../common/preload.js")
