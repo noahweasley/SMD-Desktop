@@ -27,16 +27,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function resetViewState() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-placeholder");
+    const errorPlaceholder = document.querySelector(".error-placeholder");
 
-    errorDecoration.style.setProperty("display", "none");
+    errorPlaceholder.style.setProperty("display", "none");
     loader.classList.remove("gone");
     actionButtons.forEach((button) => button.setAttribute("disabled", true));
   }
 
   function dataReveal() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-placeholder");
+    const errorPlaceholder = document.querySelector(".error-placeholder");
 
     const listGroup = document.querySelector(".list-group");
     const list = document.querySelector(".list");
@@ -46,11 +46,11 @@ window.addEventListener("DOMContentLoaded", () => {
       if (data instanceof Object) {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
-        errorDecoration.style.setProperty("display", "none");
+        errorPlaceholder.style.setProperty("display", "none");
         actionButtons[0].removeAttribute("disabled");
       } else {
         list.classList.add("gone");
-        errorDecoration.style.setProperty("display", "flex");
+        errorPlaceholder.style.setProperty("display", "flex");
         message.innerText = data;
       }
 

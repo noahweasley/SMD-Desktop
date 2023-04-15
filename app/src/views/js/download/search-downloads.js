@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const errorDecoration = document.querySelector(".error-placeholder");
+  const errorPlaceholder = document.querySelector(".error-placeholder");
   let listData;
   const selectedListDataMap = {};
   // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
@@ -30,9 +30,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function resetViewState() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-placeholder");
+    const errorPlaceholder = document.querySelector(".error-placeholder");
 
-    errorDecoration.style.setProperty("display", "none");
+    errorPlaceholder.style.setProperty("display", "none");
     loader.classList.remove("gone");
     actionButtons.forEach((button) => button.setAttribute("disabled", true));
   }
@@ -47,11 +47,11 @@ window.addEventListener("DOMContentLoaded", () => {
       if (data && data instanceof Array && data.length > 0) {
         displayDataOnList(data, listGroup);
         list.classList.remove("gone");
-        errorDecoration.style.setProperty("display", "none");
+        errorPlaceholder.style.setProperty("display", "none");
         actionButtons[0].removeAttribute("disabled");
       } else {
         list.classList.add("gone");
-        errorDecoration.style.setProperty("display", "flex");
+        errorPlaceholder.style.setProperty("display", "flex");
         message.innerText = data;
       }
 
@@ -150,7 +150,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayDataOnList(data, list) {
-    if (!data) return errorDecoration.style.setProperty("display", "flex");
+    if (!data) return errorPlaceholder.style.setProperty("display", "flex");
     listData = data;
     persistDataOnList(list, data);
 
