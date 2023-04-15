@@ -17,10 +17,10 @@ const database = require("./database");
 
 require("../main/events")(settings, browsers, database);
 
-app.whenReady().then(function () {
+app.whenReady().then(() => {
   createAppFilesDirectory();
   mainWindow.init();
-
+  
   app.on("activate", () => BrowserWindow.getAllWindows().length === 0 && mainWindow.init());
 });
 
