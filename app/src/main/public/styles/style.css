@@ -1,0 +1,61 @@
+:root {
+  color: white;
+  font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  --white-solid: #eeeeee;
+  --grey-solid: #aaaaaa;
+  --grey-solid_5: rgba(160, 159, 159, 0.144);
+  --black_transparent: rgba(0, 0, 0, 0.726);
+  --normal-scrolbar-clr: #1ed75f18;
+  --active-scrolbar-clr: #1ed75f38;
+  --grey-solid_10: rgba(160, 159, 159, 0.247);
+  --primary-color: #1ed760;
+  --primary-color-dark: #1dbb54;
+  --primary-color-dark-alt-2: hsl(144, 82%, 38%);
+  --primary-color-dark-alt: hsl(143, 63%, 10%);
+  --solid-green: #22cc5db2;
+  --hover-button-text-clr: white;
+  --solid-blue: hsl(225, 77%, 33%);
+  --solid-blue-alt: hsl(223, 78%, 12%);
+  --solid-dark: #0c0b0b;
+  --solid-dark-alt: #161313;
+  --solid-darker: #000;
+  --sand-solid: #ecebe8;
+  --warning-color: orange;
+  --window-actions-elevation: 2;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: var(--solid-dark);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+img {
+  width: calc(80px + 2vw);
+  height: calc(70px + 2vw);
+  margin: 2rem;
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin: 1.2rem;
+}
+
+h1 {
+  font-size: calc(1vw + 0.7rem);
+}
+
+h2 {
+  font-size: calc(0.7vw + 0.5rem);
+}

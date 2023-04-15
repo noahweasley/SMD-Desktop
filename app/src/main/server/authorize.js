@@ -46,7 +46,7 @@ module.exports = function (settings, spotifyApi) {
     const code = req.query.code;
 
     if (error) {
-      res.sendFile(path.resolve(__dirname, "../public/failed.html"));
+      res.sendFile(path.resolve(__dirname, "../public/pages/failed.html"));
       connection.close();
       clearTimeout(timeout);
       clearTimeout(refreshTimer);
@@ -63,7 +63,7 @@ module.exports = function (settings, spotifyApi) {
       spotifyApi.setAccessToken(accessToken);
       spotifyApi.setRefreshToken(refreshToken);
 
-      res.sendFile(path.resolve(__dirname, "../public/success.html"));
+      res.sendFile(path.resolve(__dirname, "../public/pages/success.html"));
 
       const states = await settings.setStates({
         "spotify-access-token": accessToken,
