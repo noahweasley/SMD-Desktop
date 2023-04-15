@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function resetViewState() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-decor");
+    const errorDecoration = document.querySelector(".error-placeholder");
 
     errorDecoration.style.setProperty("display", "none");
     loader.classList.remove("gone");
@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function dataReveal() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-decor");
+    const errorDecoration = document.querySelector(".error-placeholder");
 
     const listGroup = document.querySelector(".list-group");
     const list = document.querySelector(".list");

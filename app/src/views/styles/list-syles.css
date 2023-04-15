@@ -21,7 +21,7 @@
   justify-content: center;
 }
 
-.list-container > .error-decor {
+.list-container > .error-placeholder {
   display: none;
   align-items: center;
   justify-content: center;
@@ -30,20 +30,20 @@
   margin-inline: 16px;
 }
 
-.list-container > .error-decor > p {
+.list-container > .error-placeholder > p {
   font-size: 1.2em;
   letter-spacing: 0.2em;
   max-height: 200px;
   overflow: hidden;
 }
 
-.list-container > .error-decor > p > span {
+.list-container > .error-placeholder > p > span {
   max-height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.list-container > .error-decor > input[type="button"] {
+.list-container > .error-placeholder > input[type="button"] {
   background-color: transparent;
   border: 1px solid var(--primary-color-dark);
   border-radius: 4px;
@@ -51,11 +51,11 @@
   cursor: pointer;
 }
 
-.list-container > .error-decor > input[type="button"]:hover {
+.list-container > .error-placeholder > input[type="button"]:hover {
   background-color: var(--primary-color-dark);
 }
 
-.list-container > .error-decor > input[type="button"]:active {
+.list-container > .error-placeholder > input[type="button"]:active {
   background-color: var(--spotify-green);
 }
 

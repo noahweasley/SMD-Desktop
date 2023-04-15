@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const errorDecoration = document.querySelector(".error-decor");
+  const errorDecoration = document.querySelector(".error-placeholder");
   let listData;
   const selectedListDataMap = {};
   // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function resetViewState() {
     const loader = document.querySelector(".loader");
-    const errorDecoration = document.querySelector(".error-decor");
+    const errorDecoration = document.querySelector(".error-placeholder");
 
     errorDecoration.style.setProperty("display", "none");
     loader.classList.remove("gone");
