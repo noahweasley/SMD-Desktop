@@ -3,14 +3,14 @@ const express = require("express");
 const server = express();
 const path = require("path");
 
-const publicFilePath = path.resolve(__dirname, "../public");
-server.use(express.static(publicFilePath));
-
 module.exports = function (settings, spotifyApi) {
   const TIMEOUT = 60000;
   const AUTHORIZE_URL = "http://localhost:8888/authorize";
   let timeout, connection, refreshTimer;
   let authorizationCallback = null;
+
+  const publicFilePath = path.resolve(__dirname, "../public");
+  server.use(express.static(publicFilePath));
 
   const scopes = [
     "user-read-playback-state",
