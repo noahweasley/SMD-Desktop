@@ -40,11 +40,11 @@ const settings32 = {
 (async function () {
   try {
     console.log(info0("Generating window installers, please wait..."));
-    
+
     console.log(info1("Building for Window x32 bit"));
     await electronInstaller.createWindowsInstaller(settings32);
     console.log(info0("Generated x32 bit window installers successfully"));
-    
+
     console.log(info1("Building for Window x64 bit"));
     await electronInstaller.createWindowsInstaller(settings64);
     console.log(info0("Generated x64 bit window installers successfully"));
