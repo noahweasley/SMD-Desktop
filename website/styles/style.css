@@ -211,6 +211,10 @@ h1 {
   font-size: calc(1vw + 0.8em);
 }
 
+h4.description {
+  font-weight: 300;
+}
+
 .download-list {
   width: 100%;
   list-style: none;
