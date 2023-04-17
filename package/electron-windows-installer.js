@@ -6,9 +6,10 @@ const error0 = chalk.bold.red;
 const success0 = chalk.green;
 const info0 = chalk.blue;
 
-const appDisplayName = "S.M.D_Desktop";
-const appExecutableNameX32 = `${appDisplayName}_x32_v${appVersion}`;
-const appExecutableNameX64 = `${appDisplayName}_x64_v${appVersion}`;
+const sep = "-";
+const appDisplayName = `S.M.D${sep}Desktop`;
+const appExecutableNameX32 = `${appDisplayName}${sep}x32${sep}v${appVersion}`;
+const appExecutableNameX64 = `${appDisplayName}${sep}x64${sep}v${appVersion}`;
 
 const githubIconUrl =
   "https://raw.githubusercontent.com/noahweasley/SMD-Desktop/master/app/resources/build/icons/win/icon.ico";
