@@ -39,7 +39,7 @@ This will enable you to test the test and view the contents of files created by 
 - Run `npm run build` to build for all supported platforms and generate installers
 - Run `npm run rebuild` to re-generate icons, build for all supported platforms and also generate installers
 
- **Please note**: re-generating icons are only recommended when there are changes made to the app's icons and shouldn't be used, prefer `npm run build` instead.
+  **Please note**: re-generating icons are only recommended when there are changes made to the app's icons and shouldn't be used, prefer `npm run build` instead.
 
 Once you've completed these steps, you should be able to start making changes to the project and testing them locally.
 

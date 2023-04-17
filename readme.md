@@ -7,7 +7,7 @@
   Spotify Music Downloader
 </h1>
 
-<p align="center">A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API</p>
+<p align="center">A Cross-Platform desktop application that seamlessly integrates with the Spotify API to help users discover, download, and enjoy their favorite songs from a single platform</p>
 
 <div align="center">
   <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"
