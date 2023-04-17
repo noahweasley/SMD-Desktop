@@ -5,6 +5,7 @@ const { version: appVersion, productName } = require("../package.json");
 const error0 = chalk.bold.red;
 const success0 = chalk.green;
 const info0 = chalk.blue;
+const info1 = chalk.yellow;
 
 const sep = "-";
 const appDisplayName = `S.M.D${sep}Desktop`;
@@ -39,10 +40,12 @@ const settings32 = {
 (async function () {
   try {
     console.log(info0("Generating window installers, please wait..."));
-
+    
+    console.log(info1("Building for Window x32 bit"));
     await electronInstaller.createWindowsInstaller(settings32);
     console.log(info0("Generated x32 bit window installers successfully"));
-
+    
+    console.log(info1("Building for Window x64 bit"));
     await electronInstaller.createWindowsInstaller(settings64);
     console.log(info0("Generated x64 bit window installers successfully"));
 
