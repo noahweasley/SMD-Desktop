@@ -8,7 +8,7 @@
 </h1>
 
 <p align="center">
-  This is the product website for S.M.D Spotify Music Downloader
+  This is the product website for S.M.D - Spotify Music Downloader
 </p>
 
 <p align="center">
