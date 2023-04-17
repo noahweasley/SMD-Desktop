@@ -2,33 +2,10 @@
   "name": "smd-desktop",
   "productName": "S.M.D Desktop",
   "version": "0.1.0",
-  "description": "A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API",
+  "description": "S.M.D Desktop is an application that seamlessly integrates with the Spotify API to help you discover, download, and enjoy your favorite songs from a single platform",
   "main": "app/src/main/index.js",
   "author": "Noah Wesley",
   "license": "GPL-3.0",
-  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/noahweasley/SMD-Desktop.git"
-  },
-  "funding": {
-    "type": "patreon",
-    "url": "https://www.patreon.com/noahweasley"
-  },
-  "engines": {
-    "node": ">= 18.12.1"
-  },
-  "keywords": [
-    "electron",
-    "music",
-    "music-player",
-    "spotify",
-    "youtube",
-    "downloader",
-    "music-downloader",
-    "youtube-downloader",
-    "spotify-downloader"
-  ],
   "scripts": {
     "start:debug": "electron . --trace-warnings",
     "start:no-database": "npm run clear:debug-database && npm run start ",
@@ -61,6 +38,29 @@
     "build": "npm run build:windows",
     "build-start": "npm run build && npm run start"
   },
+  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noahweasley/SMD-Desktop.git"
+  },
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/noahweasley"
+  },
+  "engines": {
+    "node": ">= 18.12.1"
+  },
+  "keywords": [
+    "electron",
+    "music",
+    "music-player",
+    "spotify",
+    "youtube",
+    "downloader",
+    "music-downloader",
+    "youtube-downloader",
+    "spotify-downloader"
+  ],
   "devDependencies": {
     "chalk": "^4.1.2",
     "electron": "^23.1.4",
