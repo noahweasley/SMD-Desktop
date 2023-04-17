@@ -4,6 +4,7 @@ const { open, readdir, mkdir } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { createWriteStream } = require("fs");
 const { getDownloadsDirectory, watchFileForChanges } = require("../util/files");
+const { IllegalStateError } = require("../util/error");
 const FILE_EXTENSIONS = require("./file-extensions");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
@@ -173,10 +174,10 @@ function __exports() {
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
-        console.log("Fatal error occurred, cannot download");
+        throw new IllegalStateError("Fatal error occurred, cannot download");
       }
     } catch (err) {
-      // make sure that progress dialog is closed no matter
+      // close progress dialog no matter what happens
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
       downloadStream?.emit("error", err);
     }
@@ -236,7 +237,8 @@ function __exports() {
       try {
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         return Signal.NOT_EXISTS_DOWNLOADED;
-      } catch (err) {
+      } catch (error) {
+        console.err("Binaries could not be downloaded", error);
         return Signal.NOT_EXISTS_NOT_DOWNLOADED;
       }
     }
