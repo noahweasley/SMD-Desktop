@@ -2,7 +2,7 @@
   "name": "smd-desktop",
   "productName": "S.M.D Desktop",
   "version": "0.0.1",
-  "description": "An Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API",
+  "description": "A Cross-Platform desktop application to search and download songs. Also integrates with the Spotify API",
   "main": "app/src/main/index.js",
   "author": "Noah Wesley",
   "license": "GPL-3.0",
