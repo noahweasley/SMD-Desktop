@@ -1,6 +1,8 @@
 {
   "version": "0.2",
-  "ignorePaths": ["app/src/views/styles/photon.css"],
+  "ignorePaths": [
+    "app/src/views/styles/photon.css"
+  ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
@@ -39,6 +41,7 @@
     "picasa",
     "pinterest",
     "proto",
+    "rcedit",
     "rdio",
     "renren",
     "Roadmap",
