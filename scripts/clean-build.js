@@ -7,6 +7,7 @@ const error0 = chalk.bold.red;
 const success0 = chalk.green;
 
 console.log(info0("Deleting build folder"));
+
 rm(join(__dirname, "../build"), { recursive: true, force: true }, (error) => {
   if (error) {
     console.error(error0(error));

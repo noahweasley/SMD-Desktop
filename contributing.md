@@ -27,9 +27,9 @@ BINARY_LOCATION="folder/to/ytdlp/binary"
 DB_FILEPATH="folder/to/sqlite/database"
 ```
 
-This will enable you to test the test and view the contents of files created by the application properly. Set `DB_FILEPATH` to a custom folder of your choice and also edit the path to the database folder in `clear:debug-database` script if you want it to run successfully.
+This will enable you to test the test and view the contents of files created by the application properly. Set `DB_FILEPATH` to a custom folder of your choice and also edit the path to the database folder in `clean:debug-database` script if you want it to run successfully.
 
-**Please Note**: Any changes made to the `clear:debug-database` or `clear:preference` scripts should be changed to the default before opening a pull request.
+**Please Note**: Any changes made to the `clean:debug-database` or `clean:preference` scripts should be changed to the default before opening a pull request.
 
 ### Building the application
 
