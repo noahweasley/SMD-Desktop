@@ -812,12 +812,12 @@ form {
   transition: 1s;
   width: 10px;
   height: 10px;
-  background-color: hsla(0, 100%, 50%, 0.5);
+  background-color: rgba(255, 101, 101, 0.5);
   border-radius: 50%;
 }
 
 .online-stat.online {
-  background-color: green;
+  background-color: rgb(55, 136, 55);
 }
 
 .icon-footer {
