@@ -1,6 +1,6 @@
 const electronInstaller = require("electron-winstaller");
 const chalk = require("chalk");
-const { version: appVersion, productName } = require("../package.json");
+const { version: appVersion, productName } = require("../../package.json");
 
 const error0 = chalk.bold.red;
 const success0 = chalk.green;

@@ -103,7 +103,7 @@ module.exports = function (settings, browsers, database) {
         fileDownloader.enqueueTasks({ searchResultIds: insertedDataColumnIds, searchResults: searchQueryResults });
 
         if (insertedDataColumnIds) {
-          // update download list UI, with current pending download data]
+          // update download list UI, with current pending download data
           mainWindow.getWindow()?.send("download-list-update", downloadData);
         } else {
           // probably some write error to the database
