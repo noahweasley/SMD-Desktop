@@ -106,11 +106,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
     downloadType.classList.remove("gone");
 
-    if (data["type"] == "album") {
+    if (data.type == "album") {
       type.innerText = "Album Title: ";
       option.innerText = data.description.name;
       persistDataOnList(list, data["description"]);
-    } else if (data["type"] == "playlist") {
+    } else if (data.type == "playlist") {
       type.innerText = "Playlist Title: ";
       option.innerText = data.description.name;
       persistDataOnList(list, data["description"]);
