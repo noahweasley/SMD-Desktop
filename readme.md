@@ -16,7 +16,7 @@
   <a href="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml">
     <img src="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml/badge.svg?branch=master" alt="Deploy Jekyll with GitHub Pages dependencies preinstalled">
   </a>
-  <a href="https://noahweasley.github.io/SMD-Desktop"
+  <a href="https://noahweasley.github.io/SMD-Desktop/website"
     ><img src="https://img.shields.io/badge/docs-website-brightgreen.svg" alt="SMD Product Website"
   /></a>
   <a href=" https://github.com/noahweasley/smd-desktop/releases"
