@@ -31,17 +31,17 @@ module.exports = function (settings) {
     if (!dataReceived) return "An error occurred while retrieving album data";
 
     const body = data.body;
-    const tracks = body["tracks"].items;
-    const name = body["name"];
-    const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
+    const tracks = body.tracks.items;
+    const name = body.name;
+    const thumbnails = body.images.map((thumbnail) => thumbnail.url);
 
     const trackCollection = [];
 
     tracks.forEach((track) => {
-      const songTitle = track["name"];
-      const artists = track["artists"];
-      const artistNames = artists.map((artist) => artist["name"]);
-      const thumbnails = track["images"];
+      const songTitle = track.name;
+      const artists = track.artists;
+      const artistNames = artists.map((artist) => artist.name);
+      const thumbnails = track.images;
       trackCollection.push({ thumbnails, songTitle, artistNames });
     });
 
@@ -84,13 +84,13 @@ module.exports = function (settings) {
     if (!dataReceived) return "An error occurred while retrieving playlist data";
 
     const body = data.body;
-    const name = body["name"];
-    const tracks = body["tracks"];
-    const thumbnails = body["images"].map((thumbnail) => thumbnail.url);
+    const name = body.name;
+    const tracks = body.tracks;
+    const thumbnails = body.images.map((thumbnail) => thumbnail.url);
 
-    const trackCollection = tracks["items"]
+    const trackCollection = tracks.items
       .map((i) => i.track)
-      .map((tr) => ({ songTitle: tr["name"], artistNames: tr["artists"].map((artist) => artist.name) }));
+      .map((tr) => ({ songTitle: tr.name, artistNames: tr.artists.map((artist) => artist.name) }));
 
     return {
       type: SpotifyURLType.PLAYLIST,
@@ -121,11 +121,11 @@ module.exports = function (settings) {
     if (!dataReceived) return "An Error occurred while retrieving track data";
 
     const body = data.body;
-    const songTitle = body["name"];
-    const artists = body["artists"];
+    const songTitle = body.name;
+    const artists = body.artists;
     let artistNames = [];
 
-    artistNames = artists.map((artist) => artist["name"]);
+    artistNames = artists.map((artist) => artist.name);
 
     return {
       type: SpotifyURLType.TRACK,
