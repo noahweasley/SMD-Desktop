@@ -37,9 +37,9 @@
 }
 
 @font-face {
-  font-family: Montserrat-SB;
+  font-family: Montserrat;
   src: url(../fonts/Montserrat-SemiBold.ttf);
-  font-weight: normal;
+  font-weight: 300;
 }
 
 body {
@@ -150,6 +150,7 @@ label {
 .icon.icon-cancel {
   color: rgb(252, 130, 130);
 }
+
 a {
   text-decoration: none;
   color: var(--primary-color);
@@ -237,35 +238,27 @@ a:active {
   10% {
     transform: scale(1);
   }
-
   20% {
     transform: scale(1.1);
   }
-
   30% {
     transform: scale(1);
   }
-
   32% {
     transform: scale(1.1);
   }
-
   34% {
     transform: scale(1);
   }
-
   36% {
     transform: scale(1);
   }
-
   38% {
     transform: scale(1.1);
   }
-
   40% {
     transform: scale(1);
   }
-
   90%,
   100% {
     transform: scale(1);
@@ -277,11 +270,9 @@ a:active {
     transform: scaleX(1);
     left: -10%;
   }
-
   50% {
     transform: scaleX(1.5);
   }
-
   100% {
     transform: scaleX(1);
     left: 100%;
@@ -298,7 +289,6 @@ a:active {
   50% {
     transform: translateY(10px);
   }
-
   100% {
     transform: translateY(0px);
   }
@@ -308,7 +298,6 @@ a:active {
   50% {
     transform: translateY(-10px);
   }
-
   100% {
     transform: translateY(0px);
   }
@@ -324,7 +313,6 @@ a:active {
   from {
     transform: translateX(100%);
   }
-
   to {
     transform: -100%;
   }
