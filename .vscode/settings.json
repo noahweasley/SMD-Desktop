@@ -16,5 +16,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "jest.autoRun": {}
+  "jest.autoRun": {},
+  "sqltools.useNodeRuntime": true
 }

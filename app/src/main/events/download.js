@@ -3,7 +3,7 @@ const { ipcMain, dialog } = require("electron");
 const ytdl = require("../server/youtube-dl");
 const spotifyDl = require("../server/spotify-dl");
 const downloader = require("../downloads/downloader");
-const { Type, States } = require("../database/constants");
+const { Type, States } = require("../database/type");
 
 module.exports = function (settings, browsers, database) {
   const { downloadWindow, searchWindow, mainWindow } = browsers;
@@ -116,8 +116,8 @@ module.exports = function (settings, browsers, database) {
     }
   });
 
-  ipcMain.on("initiate-downloads", async () => {
-    fileDownloader.initiateQueuedDownloads();
+  ipcMain.handle("initiate-downloads", async () => {
+    await fileDownloader.initiateQueuedDownloads();
   });
 
   // eslint-disable-next-line no-unused-vars

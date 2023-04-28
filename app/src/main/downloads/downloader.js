@@ -1,10 +1,10 @@
 const downloadTask = require("./download-task");
-const lock = require("./lock");
+const Lock = require("./lock");
 
 module.exports = function (config) {
   const { targetWindow, maxParallelDownloads } = config;
 
-  const locker = lock({ maxLockCount: maxParallelDownloads });
+  const locker = Lock({ maxLockCount: maxParallelDownloads });
 
   let downloadTaskQueue = [];
   // tasks => stream[]

@@ -4,7 +4,7 @@ const path = require("path");
 const { app } = require("electron");
 const fsp = require("fs/promises");
 const { readFile } = require("fs/promises");
-const { Type } = require("./constants");
+const Type = require("./type");
 require("dotenv").config();
 
 const DATABASE_VERSION = "1.0.0";
@@ -174,7 +174,7 @@ function onCreateDatabase() {
 
 /**
  * This callback would be called when the database version has changed.
- * You should alter tables in this function
+ * You should alter or drop unused tables in this function
  *
  * @param oldVersion the old version code of the database
  * @param newVersion the new version code of the database
@@ -273,7 +273,7 @@ module.exports.deleteDownloadData = async function (arg) {
   try {
     if (arg.type == Type.DOWNLOADED) {
       if (arg.data) {
-        const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADED_TABLE);
+        const result = await database.del().from(DOWNLOADED_TABLE).where({ id: arg.data.id });
         return result > 0;
       } else {
         await database.del().from(DOWNLOADED_TABLE);
@@ -281,7 +281,7 @@ module.exports.deleteDownloadData = async function (arg) {
       }
     } else if (arg.type == Type.DOWNLOADING) {
       if (arg.data) {
-        const result = await database.del().where({ id: arg.data.id }).from(DOWNLOADING_TABLE);
+        const result = await database.del().from(DOWNLOADING_TABLE).where({ id: arg.data.id });
         return result > 0;
       } else {
         await database.del().from(DOWNLOADING_TABLE);

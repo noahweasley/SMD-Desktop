@@ -1,5 +1,5 @@
 const { downloadMatchingTrack } = require("../server/youtube-dl");
-const { States } = require("../database/constants");
+const States = require("./states");
 const { IllegalStateError } = require("../util/error");
 
 /**
@@ -51,6 +51,8 @@ module.exports = function (configOptions) {
     const downloadParams = await downloadMatchingTrack({ ...options, ...configOptions });
     stream = downloadParams.downloadStream;
     stream.on("error", () => console.info("An silent error was thrown"));
+    stream.on("end", () => {});
+
     return downloadParams;
   }
 
