@@ -25,11 +25,10 @@ Add a `.env` file (optional) at the root of the project with these keys:
 ```dotenv
 BINARY_LOCATION="folder/to/ytdlp/binary"
 DB_FILEPATH="folder/to/sqlite/database"
+PREF_FILEPATH="file/to/save/preferences.json"
 ```
 
-This will enable you to test the test and view the contents of files created by the application properly. Set `DB_FILEPATH` to a custom folder of your choice and also edit the path to the database folder in `clean:debug-database` script if you want it to run successfully.
-
-**Please Note**: Any changes made to the `clean:debug-database` or `clean:preference` scripts should be changed to the default before opening a pull request.
+This will enable you to test the test and view the contents of files created by the application properly.
 
 ### Building the application
 
