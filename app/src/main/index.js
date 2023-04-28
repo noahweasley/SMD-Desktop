@@ -1,10 +1,12 @@
-const { join } = require("path");
 const { app, BrowserWindow } = require("electron");
+if (!app.isPackaged) require("dotenv").config();
+const { join } = require("path");
 const { createAppFilesDir } = require("./util/files");
 const settings = require("node-user-settings").defaults;
-const preferenceFilePath = join(app.getPath("userData"), "User", "Preferences", "Settings.json");
+
+const preferenceFilePath =
+  process.env.PREF_FILEPATH || join(app.getPath("userData"), "User", "Preferences", "Settings.json");
 settings.setDefaultPreferenceFilePath(preferenceFilePath);
-if (!app.isPackaged) require("dotenv").config();
 
 // startup scripts
 require("update-electron-app")();
