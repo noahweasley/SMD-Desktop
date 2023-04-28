@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
 const { readdir, stat, unlink, open: _open, mkdir: _mkdir } = require("fs/promises");
@@ -8,7 +7,7 @@ const FILE_EXTENSIONS = require("./file-extensions");
 
 function __exports() {
   const binaryFilename = "yt-dlp";
-  const downloadFlagFilename = `flag${FILE_EXTENSIONS.TMP}`;
+  const downloadLockFilename = `lock${FILE_EXTENSIONS.TMP}`;
 
   /**
    * create the download directory
@@ -84,7 +83,7 @@ function __exports() {
    * @returns
    */
   function getBinaryDownloadFlag() {
-    return join(getBinaryFileDirectory(), downloadFlagFilename);
+    return join(getBinaryFileDirectory(), downloadLockFilename);
   }
 
   /**

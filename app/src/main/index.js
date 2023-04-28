@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { join } = require("path");
 const { app, BrowserWindow } = require("electron");
 const { createAppFilesDir } = require("./util/files");

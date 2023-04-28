@@ -5,7 +5,6 @@ const { app } = require("electron");
 const fsp = require("fs/promises");
 const { readFile } = require("fs/promises");
 const Type = require("./type");
-require("dotenv").config();
 
 const DATABASE_VERSION = "1.0.0";
 const DATABASE_NAME = "UserDB.sqlite";
