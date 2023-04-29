@@ -11,6 +11,9 @@
 		"ecmaVersion": "latest"
 	},
 	"rules": {
+		"camelcase": "error",
+		"prefer-const": "warn",
+		"no-unused-vars": "warn",
 		"linebreak-style": [
 			"error",
 			"windows"
@@ -23,9 +26,6 @@
 			"error",
 			"always"
 		],
-		"camelcase": "error",
-		"prefer-const": "warn",
-		"no-unused-vars": "warn",
 		"eqeqeq": [
 			"error",
 			"always"
