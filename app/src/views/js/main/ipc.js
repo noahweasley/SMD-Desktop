@@ -39,13 +39,13 @@ window.addEventListener("DOMContentLoaded", () => {
   // Paste URL button click
   document.querySelector(".paste").addEventListener("click", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
-      if (content == "track") {
+      if (content === "track") {
         // search for tracks to download
         window.bridgeApis.send("show-search-download-window", {
           type: "track",
           description: undefined
         });
-      } else if (content == "playlist" || content == "album" || content == "artist") {
+      } else if (content === "playlist" || content === "album" || content === "artist") {
         window.bridgeApis.send("show-download-window");
       } else {
         // no-op; some errors were not handled
@@ -65,7 +65,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // on enter key pressed, perform search
   document.addEventListener(
     "keypress",
-    (event) => isSearchInputFocused && searchInput.value && event.key == "Enter" && searchButton.click()
+    (event) => isSearchInputFocused && searchInput.value && event.key === "Enter" && searchButton.click()
   );
 
   // search button click
@@ -100,21 +100,21 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       // if text areas are empty, don't try to authorize values
-      if (auth.id == "auth-spotify" && spcid.value == "" && spcs.value == "") {
+      if (auth.id === "auth-spotify" && spcid.value === "" && spcs.value === "") {
         spcid.setAttribute("placeholder", "Client ID can't be empty");
         spcs.setAttribute("placeholder", "Client Secret can't be empty");
         return;
-      } else if (auth.id == "auth-spotify" && spcid.value == "") {
+      } else if (auth.id === "auth-spotify" && spcid.value === "") {
         return spcid.setAttribute("placeholder", "Client ID can't be empty");
-      } else if (auth.id == "auth-spotify" && spcs.value == "") {
+      } else if (auth.id === "auth-spotify" && spcs.value === "") {
         return spcs.setAttribute("placeholder", "Client Secret can't be empty");
-      } else if (auth.id == "auth-youtube" && ytak.value == "") {
+      } else if (auth.id === "auth-youtube" && ytak.value === "") {
         return ytak.setAttribute("placeholder", "API Key can't be empty");
       } else {
         // authorize application with parameters provided by user
         data.push(auth.id);
         window.bridgeApis.invoke("authorize-app", data).then((result) => {
-          if (result && auth.id == "auth-youtube") {
+          if (result && auth.id === "auth-youtube") {
             auth.innerText = "Saved";
             // <span class="icon icon-check"></span>
             const icon = document.createElement("span");
@@ -142,10 +142,10 @@ function switchAuthorizationTabs(authId) {
   const authTabContent2 = document.getElementById("tab-content__form__youtube");
   const authTabItems = document.querySelectorAll(".tab-item__form");
 
-  if (authId == "auth-spotify") {
+  if (authId === "auth-spotify") {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
     window.bridgeApis.invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"]).then((value) => {
-      if (value[0] == "true") {
+      if (value[0] === "true") {
         window.bridgeApis.send("reload-current-window");
       } else {
         authTabContent1.classList.add("invisible");
@@ -157,7 +157,7 @@ function switchAuthorizationTabs(authId) {
   } else {
     // if secrets are received, reload page, if not, switch to spotify authorization tab
     window.bridgeApis.invoke("get-multiple-states", ["spotify-secrets-received", "yt-api-key-received"]).then((value) => {
-      if (value[0] == "true" && value[1] == "true") {
+      if (value[0] === "true" && value[1] === "true") {
         window.bridgeApis.send("reload-current-window");
       } else {
         authTabContent2.classList.add("invisible");

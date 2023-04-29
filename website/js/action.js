@@ -4,7 +4,7 @@ const dateBegin = document.getElementById("begin");
 
 const thisYear = new Date(Date.now()).getFullYear();
 
-if (thisYear == dateBegin.innerText) {
+if (thisYear === dateBegin.innerText) {
   dateBegin.classList.add("gone");
 }
 

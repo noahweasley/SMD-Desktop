@@ -251,7 +251,7 @@ module.exports.getDummyArtists = function (size) {
   if (size > artists.length) {
     let index = 0;
     for (let x = 0; x < size; x++) {
-      artists.push(artists[(index = index++ == artists.length ? (index = 0) : index)]);
+      artists.push(artists[(index = index++ === artists.length ? (index = 0) : index)]);
     }
 
     return artists;
@@ -272,7 +272,7 @@ module.exports.getDummySongTitles = function (size) {
   if (size > songs.length) {
     let index = 0;
     for (let x = 0; x < size; x++) {
-      songs.push(songs[(index = index++ == songs.length ? (index = 0) : index)]);
+      songs.push(songs[(index = index++ === songs.length ? (index = 0) : index)]);
     }
 
     return songs;

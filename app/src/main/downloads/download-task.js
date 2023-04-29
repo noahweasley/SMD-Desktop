@@ -38,7 +38,7 @@ module.exports = function (configOptions) {
   }
 
   async function start() {
-    if (state == States.ACTIVE) {
+    if (state === States.ACTIVE) {
       throw new IllegalStateError("Download task is already active");
     } else {
       state = States.ACTIVE;

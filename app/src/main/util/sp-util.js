@@ -20,10 +20,10 @@ module.exports.getSpotifyURLType = function (url) {
   const clipboardContent = url || clipboard.readText();
 
   if (clipboardContent.includes("https://open.spotify.com")) {
-    if (clipboardContent.search(this.SpotifyURLType.TRACK) != -1) return this.SpotifyURLType.TRACK;
-    else if (clipboardContent.search(this.SpotifyURLType.PLAYLIST) != -1) return this.SpotifyURLType.PLAYLIST;
-    else if (clipboardContent.search(this.SpotifyURLType.ALBUM) != -1) return this.SpotifyURLType.ALBUM;
-    else if (clipboardContent.search(this.SpotifyURLType.ARTIST) != -1) return this.SpotifyURLType.ARTIST;
+    if (clipboardContent.search(this.SpotifyURLType.TRACK) !== -1) return this.SpotifyURLType.TRACK;
+    else if (clipboardContent.search(this.SpotifyURLType.PLAYLIST) !== -1) return this.SpotifyURLType.PLAYLIST;
+    else if (clipboardContent.search(this.SpotifyURLType.ALBUM) !== -1) return this.SpotifyURLType.ALBUM;
+    else if (clipboardContent.search(this.SpotifyURLType.ARTIST) !== -1) return this.SpotifyURLType.ARTIST;
     else return this.SpotifyURLType.UNKNOWN;
   } else {
     throw new Error("Uh ohh !! That wasn't a spotify url");

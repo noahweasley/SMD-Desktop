@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // display any indeterminate progress bar that exists inside main-pain's tab content
     document.querySelectorAll(".tab-content .indeterminate-progress").forEach((loader) => {
-      if (loader.id != "window-data-loader") loader.classList.add("gone");
+      if (loader.id !== "window-data-loader") loader.classList.add("gone");
     });
   });
 
@@ -255,7 +255,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const listGroup = listItem.parentElement;
 
             listGroup.removeChild(listItem);
-            if (listGroup.childNodes.length == 0) {
+            if (listGroup.childNodes.length === 0) {
               displayInfoPlaceholderById("info_decor__downloaded", true);
               uLElement.classList.add("gone");
             }
@@ -291,7 +291,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const filesNavItemIndex = 1;
         const aboutNavItemIndex = navItemChildren.length - 2;
         const settingsNavItemIndex = navItemChildren.length - 3;
-        const isHomeNavItemIndex = navItemChildren.indexOf(navItem) == homeNavItemIndex;
+        const isHomeNavItemIndex = navItemChildren.indexOf(navItem) === homeNavItemIndex;
         const isFilesNavItemIndex = navItemChildren.indexOf(navItem) === filesNavItemIndex;
         const isAboutNavItemIndex = navItemChildren.indexOf(navItem) === aboutNavItemIndex;
         const isSettingsNavItemIndex = navItemChildren.indexOf(navItem) === settingsNavItemIndex;
@@ -300,11 +300,11 @@ window.addEventListener("DOMContentLoaded", () => {
         navItems.forEach((navItem) => navItem.classList.remove("active"));
         navItem.classList.add("active");
 
-        if (WINDOW_CONTENT_STATE != State.MAIN && isHomeNavItemIndex) {
+        if (WINDOW_CONTENT_STATE !== State.MAIN && isHomeNavItemIndex) {
           mainPane.classList.remove("gone");
           settingsPane.classList.add("gone");
           WINDOW_CONTENT_STATE = State.MAIN;
-        } else if (WINDOW_CONTENT_STATE != State.SETTINGS && isSettingsNavItemIndex) {
+        } else if (WINDOW_CONTENT_STATE !== State.SETTINGS && isSettingsNavItemIndex) {
           mainPane.classList.add("gone");
           settingsPane.classList.remove("gone");
           WINDOW_CONTENT_STATE = State.SETTINGS;
@@ -329,10 +329,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const mediaBodyElement = progressBar.parentNode;
     const messageElement = mediaBodyElement.children[1];
 
-    if (downloadEvent == "info") {
+    if (downloadEvent === "info") {
       messageElement.innerText = "Extracting info...";
       return;
-    } else if (downloadEvent == "end") {
+    } else if (downloadEvent === "end") {
       messageElement.innerText = "Download finished";
     } else {
       messageElement.innerText = `${progress}% downloaded`;
@@ -343,7 +343,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // stop loading animation
     progressBar.children[0].classList.add("gone");
 
-    if (downloadEvent == "end") finishDownloading();
+    if (downloadEvent === "end") finishDownloading();
 
     function finishDownloading() {
       const listItem = mediaBodyElement.parentElement;
@@ -361,7 +361,7 @@ window.addEventListener("DOMContentLoaded", () => {
           downloadingListGroup.removeChild(listItem);
           tryAddListItemDownloaded(downloadedItemData);
 
-          if (downloadingListGroup.childNodes.length == 0) {
+          if (downloadingListGroup.childNodes.length === 0) {
             tryAddListItemDownloading(null); // displays placeholder
           }
         } else {

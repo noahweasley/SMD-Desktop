@@ -1,4 +1,4 @@
-const { rm, unlink } = require("fs");
+const { unlink } = require("fs");
 const chalk = require("chalk");
 require("dotenv").config();
 

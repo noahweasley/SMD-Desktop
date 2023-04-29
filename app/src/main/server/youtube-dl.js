@@ -1,4 +1,3 @@
-const { writeFile, unlink } = require("fs/promises");
 const { pipeline } = require("stream/promises");
 const { createWriteStream } = require("fs");
 const ytdlp = require("yt-dlp-wrap").default;
@@ -9,11 +8,13 @@ const { M4A } = require("../util/file-extensions");
 
 const {
   watchFileForChanges,
-  getBinaryDownloadFlag,
+  getBinaryDownloadLockFilename,
   getBinaryFilepath,
   getDownloadsDir,
   checkIfFileExists,
-  getOrCreateBinaryFileDirectory
+  getOrCreateBinaryFileDirectory,
+  clearDownloadLockFile,
+  createDownloadLockFile
 } = require("../util/files");
 
 function __exports() {
@@ -40,23 +41,17 @@ function __exports() {
       const parentDirectory = await getOrCreateBinaryFileDirectory();
       const ytdlpBinaryFilepath = getBinaryFilepath(parentDirectory);
       try {
-        await createDownloadFlag();
+        await createDownloadLockFile(); // hold the lock
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
+        // wait for binary download to properly finish
+        if (process.platform === "win32") await watchFileForChanges(getBinaryFilepath());
         return Signal.NOT_EXISTS_DOWNLOADED;
       } catch (error) {
         console.error("Binaries could not be downloaded", error);
         return Signal.NOT_EXISTS_NOT_DOWNLOADED;
       } finally {
-        clearDownloadFlag();
+        await clearDownloadLockFile(); // release the lock
       }
-    }
-
-    async function createDownloadFlag() {
-      await writeFile(getBinaryDownloadFlag(), "");
-    }
-
-    async function clearDownloadFlag() {
-      await unlink(getBinaryDownloadFlag());
     }
   }
 
@@ -105,32 +100,24 @@ function __exports() {
     let binaryFileExists;
 
     try {
-      const isBinaryDownloading = checkIfFileExists(getBinaryDownloadFlag());
+      const isBinaryDownloading = checkIfFileExists(getBinaryDownloadLockFilename());
       while (isBinaryDownloading()); // stay here until binary downloaded
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
       if (!binaryFileExists && !isBinaryDownloading) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists && !isBinaryDownloading) target.webContents.send("show-binary-download-dialog", false);
-      // wait for binary to finish downloading
-      if (process.platform === "win32" && downloadSignal == Signal.NOT_EXISTS_DOWNLOADED) {
-        await watchFileForChanges(getBinaryFilepath());
-      } else if (downloadSignal === Signal.NOT_EXISTS_NOT_DOWNLOADED) {
-        throw new IllegalStateError("Couldn't prepare download");
-      }
 
-      if (downloadSignal == Signal.NOT_EXISTS_DOWNLOADED || downloadSignal == Signal.EXISTS_NOT_DOWNLOADED) {
-        const ytdlpBinaryFilepath = getBinaryFilepath();
-        const dirname = path.dirname(ytdlpBinaryFilepath);
-        const filename = getBinaryFilepath(dirname);
-
-        const ytdlpWrapper = new ytdlp(filename);
+      if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED || downloadSignal === Signal.EXISTS_NOT_DOWNLOADED) {
+        const ytdlpWrapper = new ytdlp(getBinaryFilepath());
         downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
 
         const fileToStoreData = path.join(getDownloadsDir(), request.videoTitle.concat(M4A));
 
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
+      } else {
+        throw new IllegalStateError("Couldn't prepare download");
       }
     } catch (err) {
       // close progress dialog no matter what happens
@@ -165,7 +152,7 @@ function __exports() {
     });
 
     downloadStream.on("ytDlpEvent", (event) => {
-      if (event === "info" || event == "youtube") {
+      if (event === "info" || event === "youtube") {
         target.webContents.send("download-progress-update", {
           id: taskId,
           filename: fileToStoreData,

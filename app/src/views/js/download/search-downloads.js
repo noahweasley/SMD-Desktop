@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", () => {
   actionButtons.forEach((button) => {
     button.addEventListener("click", () => {
       // change the value of track collections in original list to the selected ones
-      if (button.id == "proceed-download") {
+      if (button.id === "proceed-download") {
         // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
         searchQueryList = Object.values(selectedListDataMap);
       }

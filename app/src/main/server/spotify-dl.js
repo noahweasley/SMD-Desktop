@@ -219,7 +219,7 @@ module.exports = function (settings) {
         "spotify-token-expiration": data.body["expires_in"]
       });
 
-      return states.length == 2;
+      return states.length === 2;
     } catch (error) {
       return false;
     }

@@ -16,7 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
           message: "We were unable to complete some operations"
         });
       } else {
-        if (currentActiveTab == ".tab-content__downloaded") {
+        if (currentActiveTab === ".tab-content__downloaded") {
           while (downloadedList.firstChild) {
             downloadedList.removeChild(downloadedList.firstChild);
           }

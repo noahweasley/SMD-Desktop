@@ -1,6 +1,6 @@
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
-const { readdir, stat, unlink, open: _open, mkdir: _mkdir } = require("fs/promises");
+const { readdir, stat, unlink, open: _open, mkdir: _mkdir, writeFile } = require("fs/promises");
 const { join, extname, basename } = require("path");
 const { getReadableSize } = require("./math");
 const FILE_EXTENSIONS = require("./file-extensions");
@@ -57,7 +57,7 @@ function __exports() {
 
   function _getBinaryFilepath(parentDirectory) {
     const filePath = join(parentDirectory, binaryFilename);
-    return process.platform == "win32" ? filePath.concat(FILE_EXTENSIONS.EXE) : filePath;
+    return process.platform === "win32" ? filePath.concat(FILE_EXTENSIONS.EXE) : filePath;
   }
 
   /**
@@ -79,11 +79,20 @@ function __exports() {
   }
 
   /**
+   * The download flag is an indicator that the ytdlp binary file is being downloaded and no other process or thread should try to download it, at least, not until the download fails or succeeds
    *
-   * @returns
+   * @returns retrieves the download flag file location
    */
-  function getBinaryDownloadFlag() {
+  function getBinaryDownloadLockFilename() {
     return join(getBinaryFileDirectory(), downloadLockFilename);
+  }
+
+  async function createDownloadLockFile() {
+    await writeFile(getBinaryDownloadLockFilename(), "");
+  }
+
+  async function clearDownloadLockFile() {
+    await unlink(getBinaryDownloadLockFilename());
   }
 
   /**
@@ -197,14 +206,16 @@ function __exports() {
     getDownloadsDir,
     getTempThumbDir,
     getThumbnailDir,
-    getBinaryDownloadFlag,
+    getBinaryDownloadLockFilename,
     getBinaryFileDirectory,
     getBinaryFilepath,
     watchFileForChanges,
     deleteFilesInDirectory,
     getReadableFileSize,
     getOrCreateBinaryFileDirectory,
-    getBinaryFilepathOrThrowError
+    getBinaryFilepathOrThrowError,
+    createDownloadLockFile,
+    clearDownloadLockFile
   };
 }
 

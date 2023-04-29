@@ -40,7 +40,7 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("search-tracks", async () => {
     const errorMessage = "Uh-oh!! We couldn't find any tracks";
 
-    if (downloadQuery.type == "search") {
+    if (downloadQuery.type === "search") {
       let searchResults;
       try {
         // Wrap the search results in an array, because the list requires an array as result
@@ -49,7 +49,7 @@ module.exports = function (settings, browsers, database) {
       } catch (err) {
         return "An Unknown Error Occurred";
       }
-    } else if (downloadQuery.type == "track") {
+    } else if (downloadQuery.type === "track") {
       try {
         const spotifyLinkData = await getSpotifyLinkData();
         // description: { songTitle, artistNames: [] }

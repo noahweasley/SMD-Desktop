@@ -192,10 +192,10 @@ module.exports.getDownloadData = async function (arg) {
   const database = await getRWDatabase();
 
   try {
-    if (arg.type == Type.DOWNLOADED) {
+    if (arg.type === Type.DOWNLOADED) {
       const data = await database.select("*").from(DOWNLOADED_TABLE);
       return data.length > 0 ? data : null;
-    } else if (arg.type == Type.DOWNLOADING) {
+    } else if (arg.type === Type.DOWNLOADING) {
       const data = await database.select("*").from(DOWNLOADING_TABLE);
       return data.length > 0 ? data : null;
     } else {
@@ -220,10 +220,10 @@ module.exports.addDownloadData = async function (arg) {
   const database = await getRWDatabase();
 
   try {
-    if (arg.type == Type.DOWNLOADED) {
+    if (arg.type === Type.DOWNLOADED) {
       const result = await database.insert(arg.data).into(DOWNLOADED_TABLE).returning("id");
       return result; // the column ids
-    } else if (arg.type == Type.DOWNLOADING) {
+    } else if (arg.type === Type.DOWNLOADING) {
       // data property is the main db data in the object
       const result = await database.insert(arg.data).into(DOWNLOADING_TABLE).returning("id");
       return result; // the column ids
@@ -247,9 +247,9 @@ module.exports.addDownloadData = async function (arg) {
  */
 module.exports.updateDownloadData = async function (arg) {
   try {
-    if (arg.type == Type.DOWNLOADED) {
+    if (arg.type === Type.DOWNLOADED) {
       throw new Error("Update is not yet supported");
-    } else if (arg.type == Type.DOWNLOADING) {
+    } else if (arg.type === Type.DOWNLOADING) {
       throw new Error("Update is not yet supported");
     } else {
       throw new Error(`${arg.type} is not supported`);
@@ -270,7 +270,7 @@ module.exports.deleteDownloadData = async function (arg) {
   const database = await getRWDatabase();
 
   try {
-    if (arg.type == Type.DOWNLOADED) {
+    if (arg.type === Type.DOWNLOADED) {
       if (arg.data) {
         const result = await database.del().from(DOWNLOADED_TABLE).where({ id: arg.data.id });
         return result > 0;
@@ -278,7 +278,7 @@ module.exports.deleteDownloadData = async function (arg) {
         await database.del().from(DOWNLOADED_TABLE);
         return true;
       }
-    } else if (arg.type == Type.DOWNLOADING) {
+    } else if (arg.type === Type.DOWNLOADING) {
       if (arg.data) {
         const result = await database.del().from(DOWNLOADING_TABLE).where({ id: arg.data.id });
         return result > 0;

@@ -6,6 +6,7 @@ const settings = require("node-user-settings").defaults;
 
 const preferenceFilePath =
   process.env.PREF_FILEPATH || join(app.getPath("userData"), "User", "Preferences", "Settings.json");
+
 settings.setDefaultPreferenceFilePath(preferenceFilePath);
 
 // startup scripts

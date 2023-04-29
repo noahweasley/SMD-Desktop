@@ -50,7 +50,7 @@ module.exports = function (settings, browsers, database) {
     const response = returnedValue.response;
     const shouldDeleteFile = returnedValue.checkboxChecked;
 
-    if (response == Response.PROCEED) {
+    if (response === Response.PROCEED) {
       try {
         const isEntryDeleted = await database.deleteDownloadData(metadata);
         if (isEntryDeleted && shouldDeleteFile) {
@@ -86,7 +86,7 @@ module.exports = function (settings, browsers, database) {
       const response = returnedValue.response;
       const shouldDeleteFile = returnedValue.checkboxChecked;
 
-      if (response == Response.PROCEED) {
+      if (response === Response.PROCEED) {
         try {
           const isDBDeleteSuccessful = await database.deleteDownloadData({ type: Type.DOWNLOADED });
           if (isDBDeleteSuccessful && shouldDeleteFile) {
@@ -135,7 +135,7 @@ module.exports = function (settings, browsers, database) {
   });
 
   ipcMain.handle("authorize-app", async (_event, args) => {
-    if (args[1] == "auth-youtube") {
+    if (args[1] === "auth-youtube") {
       const states = await settings.setStates({
         "yt-api-key-received": true,
         "yt-api-key": args[0]
@@ -163,7 +163,7 @@ module.exports = function (settings, browsers, database) {
   ipcMain.on("navigate-link", (_event, arg) => {
     let linkByType;
 
-    if (arg == "#music") {
+    if (arg === "#music") {
       linkByType = join(`file://${app.getPath("music")}`, app.getName(), "download");
     } else {
       linkByType = arg;
@@ -177,9 +177,9 @@ module.exports = function (settings, browsers, database) {
     let d1, d2;
 
     try {
-      if (returning == Type.DOWNLOADED) {
+      if (returning === Type.DOWNLOADED) {
         d1 = await database.getDownloadData({ type: Type.DOWNLOADED });
-      } else if (returning == Type.DOWNLOADING) {
+      } else if (returning === Type.DOWNLOADING) {
         d2 = await database.getDownloadData({ type: Type.DOWNLOADING });
       } else {
         d1 = await database.getDownloadData({ type: Type.DOWNLOADED });

@@ -73,7 +73,7 @@ module.exports = function (settings, spotifyApi) {
       });
 
       if (states.length === 4) {
-        if (authorizationCallback != null) {
+        if (authorizationCallback !== null) {
           authorizationCallback();
           authorizationCallback = null;
         }
@@ -108,7 +108,7 @@ module.exports = function (settings, spotifyApi) {
   async function authorizeApp(args, callback) {
     authorizationCallback = callback;
     // start a server at port 8888 only if that server isn't alive
-    if (!connection && args[2] == "auth-spotify") {
+    if (!connection && args[2] === "auth-spotify") {
       const inserted = await settings.setStates({
         "spotify-user-client-id": args[0],
         "spotify-user-client-secret": args[1]
