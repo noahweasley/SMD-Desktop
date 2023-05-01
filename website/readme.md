@@ -9,23 +9,18 @@
 
 <p align="center">
   This is the product website for S.M.D - Spotify Music Downloader
-</p>
-
-<p align="center">
-  <a href="https://www.buymeacoffee.com/noahweasley" target="_blank"
-    ><img
-      src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-      alt="Buy Noah A Coffee"
-      style="height: 50px !important; width: 207px !important"
-    />
-  </a>
+	</br>
+	</br>
+	<a href="https://www.patreon.com/noahweasley">
+		<img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon"/>
+	</a>
 </p>
 
 </br>
 
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop" target="_blank"
-    ><img src="screenshots/SMD Product Website homepage.png" alt="Buy Noah A Coffee" />
+    ><img src="assets/screenshots/SMD Product Website homepage.png" alt="Buy Noah A Coffee" />
   </a>
 </p>
 
