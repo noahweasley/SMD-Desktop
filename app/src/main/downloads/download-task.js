@@ -5,7 +5,7 @@ const { IllegalStateError } = require("../util/error");
 /**
  * A single Download Task
  *
- * @param {JSON} configOptions { link, title }
+ * @param {JSON} configOptions parameters used in the downloads `=>` { request, title task, targetWindow }
  */
 module.exports = function (configOptions) {
   let state = States.INACTIVE;
@@ -17,7 +17,7 @@ module.exports = function (configOptions) {
    */
   async function wait() {
     state = States.PENDING;
-    pendingTask = startDownloadTask;
+    pendingTask = downloadMatchingTrack;
   }
 
   function pause() {
@@ -51,18 +51,10 @@ module.exports = function (configOptions) {
         result = pendingTask();
         pendingTask = null;
       } else {
-        result = await startDownloadTask();
+        result = await downloadMatchingTrack({ ...configOptions });
       }
       return result;
     }
-  }
-
-  async function startDownloadTask(options) {
-    const downloadParams = await downloadMatchingTrack({ ...options, ...configOptions });
-    stream = downloadParams.downloadStream;
-    stream.on("error", () => console.info("An silent error was thrown"));
-
-    return downloadParams;
   }
 
   return { pause, resume, wait, cancel, start };
