@@ -9,11 +9,15 @@ const { IllegalStateError } = require("../util/error");
  */
 module.exports = function (configOptions) {
   let state = States.INACTIVE;
+  let pendingTask = null;
   let stream;
 
+  /**
+   * @returns the download that was postponed
+   */
   async function wait() {
     state = States.PENDING;
-    return await startDownloadTask({ paused: true });
+    pendingTask = startDownloadTask;
   }
 
   function pause() {
@@ -42,7 +46,13 @@ module.exports = function (configOptions) {
       throw new IllegalStateError("Download task is already active");
     } else {
       state = States.ACTIVE;
-      const result = await startDownloadTask({ paused: false });
+      let result;
+      if (pendingTask) {
+        result = pendingTask();
+        pendingTask = null;
+      } else {
+        result = await startDownloadTask();
+      }
       return result;
     }
   }
@@ -51,7 +61,6 @@ module.exports = function (configOptions) {
     const downloadParams = await downloadMatchingTrack({ ...options, ...configOptions });
     stream = downloadParams.downloadStream;
     stream.on("error", () => console.info("An silent error was thrown"));
-    stream.on("end", () => {});
 
     return downloadParams;
   }

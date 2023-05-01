@@ -7,19 +7,21 @@ module.exports = function (config) {
   const locker = Lock({ maxLockCount: maxParallelDownloads });
 
   let downloadTaskQueue = [];
-  // tasks => stream[]
-  const activeDownloadTasksStream = [];
-  const inactiveDownloadTasksStream = [];
+  const activeTasks = [];
+  const pendingTasks = [];
+
+  let _activeTaskCount = 0;
+  let _inactiveTaskCount = 0;
 
   /**
    * @returns the number of active downloads
    */
-  const activeTaskStreams = () => activeDownloadTasksStream;
+  const activeTaskCount = () => _activeTaskCount;
 
   /**
    *@returns the number of inactive downloads
    */
-  const inactiveTaskStreams = () => inactiveDownloadTasksStream;
+  const inactiveTaskCount = () => _inactiveTaskCount;
 
   /**
    * Clears the task queue
@@ -66,28 +68,26 @@ module.exports = function (config) {
    * automatically waits till a lock is released
    */
   function resumeAll() {
-    downloadTaskQueue.forEach((downloadTask) => {
-      if (locker.acquireLock()) {
-        const downloadStream1 = downloadTask.resume();
-        activeDownloadTasksStream.push(downloadStream1);
-      } else {
-        const downloadStream2 = downloadTask.wait();
-        inactiveDownloadTasksStream.push(downloadStream2);
-      }
-    });
+    // downloadTaskQueue.forEach((downloadTask) => {
+    //   if (locker.acquireLock()) {
+    //     const downloadStream1 = downloadTask.resume();
+    //   } else {
+    //     const pendingDownload = downloadTask.wait();
+    //   }
+    // });
   }
 
   /**
    * Cancels all active downloads
    */
   async function cancelAll() {
-    downloadTaskQueue.forEach((task) => {
-      if (locker.releaseLock()) {
-        task.unshift();
-        const stream = activeDownloadTasksStream.unshift();
-        stream.cancel();
-      }
-    });
+    // downloadTaskQueue.forEach((task) => {
+    //   if (locker.releaseLock()) {
+    //     task.unshift();
+    //     const stream = activeTasks.unshift();
+    //     stream.cancel();
+    //   }
+    // });
   }
 
   /**
@@ -95,7 +95,6 @@ module.exports = function (config) {
    * number of download task on the download queue, then the remaining tasks enter their pending states
    */
   async function initiateQueuedDownloads() {
-    const downloadStreams = []; // contains both active and inactive downloads
     const downloadPipePromises = [];
 
     await Promise.all(
@@ -105,13 +104,13 @@ module.exports = function (config) {
           const activeDownloadStream = downloadParams.downloadStream;
           const downloadPipePromise = downloadParams.downloadPipePromise;
 
-          downloadStreams.push(activeDownloadStream);
-          activeDownloadTasksStream.push(activeDownloadStream);
+          activeTasks.push(activeDownloadStream);
           downloadPipePromises.push(downloadPipePromise);
+          _activeTaskCount++;
         } else {
-          const { downloadStream: inactiveDownloadStream } = downloadTask.wait();
-          downloadStreams.push(inactiveDownloadStream);
-          inactiveDownloadTasksStream.push(inactiveDownloadStream);
+          const pendingDownload = downloadTask.wait();
+          pendingTasks.push(pendingDownload);
+          _inactiveTaskCount++;
         }
       })
     );
@@ -124,7 +123,7 @@ module.exports = function (config) {
     }
 
     clearTaskQueue();
-    return downloadStreams;
+    // return downloadStreams;
   }
 
   return {
@@ -135,7 +134,7 @@ module.exports = function (config) {
     pauseAll,
     resumeAll,
     cancelAll,
-    inactiveTaskStreams,
-    activeTaskStreams
+    activeTaskCount,
+    inactiveTaskCount
   };
 };

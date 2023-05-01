@@ -3,12 +3,10 @@ const { createWriteStream } = require("fs");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const path = require("path");
-const { IllegalStateError } = require("../util/error");
 const { M4A } = require("../util/file-extensions");
 
 const {
   watchFileForChanges,
-  getBinaryDownloadLockFilename,
   getBinaryFilepath,
   getDownloadsDir,
   checkIfFileExists,
@@ -100,16 +98,20 @@ function __exports() {
     let binaryFileExists;
 
     try {
-      const isBinaryDownloading = checkIfFileExists(getBinaryDownloadLockFilename());
-      while (isBinaryDownloading()); // stay here until binary downloaded
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
-      if (!binaryFileExists && !isBinaryDownloading) target.webContents.send("show-binary-download-dialog", true);
+      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();
-      if (!binaryFileExists && !isBinaryDownloading) target.webContents.send("show-binary-download-dialog", false);
+      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
+      // wait for binary to finish downloading
+      if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED) await watchFileForChanges(getBinaryFilepath());
 
       if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED || downloadSignal === Signal.EXISTS_NOT_DOWNLOADED) {
-        const ytdlpWrapper = new ytdlp(getBinaryFilepath());
+        const ytdlpBinaryFilepath = getBinaryFilepath();
+        const dirname = path.dirname(ytdlpBinaryFilepath);
+        const filename = getBinaryFilepath(dirname);
+
+        const ytdlpWrapper = new ytdlp(filename);
         downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
 
         const fileToStoreData = path.join(getDownloadsDir(), request.videoTitle.concat(M4A));
@@ -117,10 +119,10 @@ function __exports() {
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
-        throw new IllegalStateError("Couldn't prepare download");
+        console.log("Fatal error occurred, cannot download");
       }
     } catch (err) {
-      // close progress dialog no matter what happens
+      // make sure that progress dialog is closed no matter
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
       downloadStream?.emit("error", err);
     }
@@ -164,7 +166,12 @@ function __exports() {
     });
   }
 
-  return { Signal, downloadMatchingTrack, downloadBinaries, searchMatchingTracks };
+  return {
+    Signal,
+    downloadMatchingTrack,
+    downloadBinaries,
+    searchMatchingTracks
+  };
 }
 
 module.exports = __exports();

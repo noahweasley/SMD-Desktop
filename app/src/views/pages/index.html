@@ -39,17 +39,21 @@
         <div class="pane-group">
           <div class="pane-sm sidebar">
             <nav class="nav-group">
-              <span class="nav-group-item active"> <span class="icon icon-home"></span> Home </span>
+              <span class="nav-group-item active" title="Navigate home"> <span class="icon icon-home"></span> Home </span>
 
-              <span class="nav-group-item click" id="files"> <span class="icon icon-folder click click"></span> Files </span>
+              <span class="nav-group-item click" id="files" title="Open download directory">
+                <span class="icon icon-folder click click"></span> Files
+              </span>
 
-              <span class="nav-group-item"> <span class="icon icon-cog icon-x2"></span> Settings </span>
+              <span class="nav-group-item" title="Open settings">
+                <span class="icon icon-cog icon-x2"></span> Settings
+              </span>
 
-              <span class="nav-group-item click" id="about">
+              <span class="nav-group-item click" id="about" title="Open app info">
                 <span class="icon icon-info-circled icon-x2 click"></span> About
               </span>
 
-              <button class="btn btn-large abs-bottom donate bounce">
+              <button class="btn btn-large abs-bottom donate bounce" title="Support">
                 <span class="icon icon-heart"></span> &nbsp Support
               </button>
             </nav>
@@ -57,17 +61,17 @@
 
           <div class="pane pane-main">
             <div class="downloads-operation">
-              <div class="paste not-draggable">Paste URL</div>
+              <div class="paste not-draggable" title="Paste Spotify URL">Paste URL</div>
 
-              <div class="refresh not-draggable" disabled="true">
+              <div class="refresh not-draggable" disabled="true" title="Restart downloads">
                 <span class="icon icon-ccw icon-x2"></span>
               </div>
 
-              <div class="pause not-draggable" disabled="true">
+              <div class="pause not-draggable" disabled="true" title="Pause downloads">
                 <span class="icon icon-pause icon-x2"></span>
               </div>
 
-              <div class="delete not-draggable">
+              <div class="delete not-draggable" title="Delete all downloads">
                 <span class="icon icon-trash icon-x2"></span>
               </div>
 
@@ -77,17 +81,20 @@
                 placeholder="Search track here"
                 id="input-search"
                 spellcheck="false"
+                title="Input track title"
               />
 
-              <div class="btn-search not-draggable">
+              <div class="btn-search not-draggable" title="Search track">
                 <span class="icon icon-search icon-x2"></span>
               </div>
             </div>
 
             <div class="tab-group tab-group__border">
-              <div class="__tab-item __tab-item__rounded" id="__tab-item__downloading">Downloading</div>
+              <div class="__tab-item __tab-item__rounded" id="__tab-item__downloading" title="Downloading">Downloading</div>
 
-              <div class="__tab-item __tab-item__rounded active" id="__tab-item__downloaded">Downloaded</div>
+              <div class="__tab-item __tab-item__rounded active" id="__tab-item__downloaded" title="Downloaded">
+                Downloaded
+              </div>
             </div>
 
             <!--  tab contents -->

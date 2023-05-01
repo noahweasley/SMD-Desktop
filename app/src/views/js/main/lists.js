@@ -42,7 +42,6 @@ window.addEventListener("DOMContentLoaded", () => {
   window.bridgeApis.on("download-list-update", (_event, args) => {
     // append new data into current data
     tryAddListItemDownloading(args, true);
-    registerEventListeners();
     // after changing UI states, start file downloads
     window.bridgeApis.send("initiate-downloads");
   });
@@ -227,9 +226,14 @@ window.addEventListener("DOMContentLoaded", () => {
       messageElement.classList.add("message");
 
       folderIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      folderIconContainer.setAttribute("title", "View in File explorer");
+
       deleteIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
+      deleteIconContainer.setAttribute("title", "Delete");
+
       playIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
-      // ..
+      playIconContainer.setAttribute("title", "Play track");
+
       iconFolder.classList.add("icon", "icon-folder", "icon-x2");
       iconTrash.classList.add("icon", "icon-trash", "icon-x2");
       iconPlay.classList.add("icon", "icon-play", "icon-x2");
