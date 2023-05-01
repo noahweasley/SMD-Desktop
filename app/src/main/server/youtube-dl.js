@@ -14,6 +14,7 @@ const {
   clearDownloadLockFile,
   createDownloadLockFile
 } = require("../util/files");
+const { IllegalStateError } = require("../util/error");
 
 function __exports() {
   /**
@@ -93,8 +94,6 @@ function __exports() {
     const taskId = options.task.id;
     const request = options.request;
     const target = options.targetWindow.getWindow();
-    // eslint-disable-next-line no-unused-vars
-    const isDownloadPaused = options.paused;
     let binaryFileExists;
 
     try {
@@ -103,15 +102,9 @@ function __exports() {
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
-      // wait for binary to finish downloading
-      if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED) await watchFileForChanges(getBinaryFilepath());
 
       if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED || downloadSignal === Signal.EXISTS_NOT_DOWNLOADED) {
-        const ytdlpBinaryFilepath = getBinaryFilepath();
-        const dirname = path.dirname(ytdlpBinaryFilepath);
-        const filename = getBinaryFilepath(dirname);
-
-        const ytdlpWrapper = new ytdlp(filename);
+        const ytdlpWrapper = new ytdlp(getBinaryFilepath());
         downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
 
         const fileToStoreData = path.join(getDownloadsDir(), request.videoTitle.concat(M4A));
@@ -119,12 +112,11 @@ function __exports() {
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
-        console.log("Fatal error occurred, cannot download");
+        throw new IllegalStateError("Fatal error occurred, cannot download");
       }
-    } catch (err) {
+    } finally {
       // make sure that progress dialog is closed no matter
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
-      downloadStream?.emit("error", err);
     }
 
     return { downloadStream, downloadPipePromise };
@@ -159,10 +151,18 @@ function __exports() {
           id: taskId,
           filename: fileToStoreData,
           title: request.videoTitle,
-          progress: 102,
+          progress: -1,
           event: "info"
         });
       }
+    });
+
+    downloadStream.on("error", () => {
+      target.webContents.send("download-progress-update", {
+        id: taskId,
+        progress: 0,
+        event: "error"
+      });
     });
   }
 

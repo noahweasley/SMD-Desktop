@@ -338,14 +338,19 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     } else if (downloadEvent === "end") {
       messageElement.innerText = "Download finished";
+    } else if (downloadEvent === "error") {
+      messageElement.innerText = "Failed to download, please try again";
+      progressBar.classList.add("gone");
     } else {
       messageElement.innerText = `${progress}% downloaded`;
     }
 
-    progressBar.style.setProperty("--progress-anim", "none");
-    progressBar.style.setProperty("--progress-width", `${progress}%`);
-    // stop loading animation
-    progressBar.children[0].classList.add("gone");
+    if (["info", "download", "end"].includes(downloadEvent)) {
+      progressBar.style.setProperty("--progress-anim", "none");
+      progressBar.style.setProperty("--progress-width", `${progress}%`);
+      // stop loading animation
+      progressBar.children[0].classList.add("gone");
+    }
 
     if (downloadEvent === "end") finishDownloading();
 
