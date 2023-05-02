@@ -5,6 +5,11 @@ const { join, extname, basename } = require("path");
 const { getReadableSize } = require("./math");
 const FILE_EXTENSIONS = require("./file-extensions");
 
+/**
+ * A module with all file utilities
+ *
+ * @module files
+ */
 function __exports() {
   const binaryFilename = "yt-dlp";
   const downloadLockFilename = `lock${FILE_EXTENSIONS.TMP}`;
@@ -36,7 +41,8 @@ function __exports() {
   }
 
   /**
-   * Returns the thumbnail directory of the application and appends the `parentDirectory` path if it is present or uses the default download path
+   * Returns the thumbnail directory of the application and appends the `parentDirectory` path if it is present or uses the
+   * default download path
    *
    * @param {string} parentDirectory the music files download directory for the application
    * @returns the thumbnail directory
@@ -46,7 +52,8 @@ function __exports() {
   }
 
   /**
-   * Returns the thumbnail directory of the application and appends the `parentDirectory` path if it is present or uses the default download path
+   * Returns the thumbnail directory of the application and appends the `parentDirectory` path if it is present or uses the
+   * default download path
    *
    * @param {string} parentDirectory the music files download directory for the application
    * @returns the temporary thumbnail directory
@@ -79,7 +86,8 @@ function __exports() {
   }
 
   /**
-   * The download flag is an indicator that the ytdlp binary file is being downloaded and no other process or thread should try to download it, at least, not until the download fails or succeeds
+   * The download flag is an indicator that the ytdlp binary file is being downloaded and no other process or thread should
+   * try to download it, at least, not until the download fails or succeeds
    *
    * @returns retrieves the download flag file location
    */
@@ -87,10 +95,20 @@ function __exports() {
     return join(getBinaryFileDirectory(), downloadLockFilename);
   }
 
+  /**
+   * Creates the download flag
+   *
+   * @see {@link getBinaryDownloadLockFilename|Retrieve the binary lock file location}
+   */
   async function createDownloadLockFile() {
     await writeFile(getBinaryDownloadLockFilename(), "");
   }
 
+  /**
+   * Delete the download flag
+   *
+   * @see {@link getBinaryDownloadLockFilename|Retrieve the binary lock file location}
+   */
   async function clearDownloadLockFile() {
     await unlink(getBinaryDownloadLockFilename());
   }

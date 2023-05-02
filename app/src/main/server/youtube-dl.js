@@ -87,7 +87,8 @@ function __exports() {
    * Downloads track specified by `options`
    *
    * @param {JSON} options an object describing the video. `{ task, request, targetWindow }`
-   * @returns an object with the download stream and the the download pipe promise that would be fulfilled when the files have been written to disk
+   * @returns an object with the download stream and the the download pipe promise that would be fulfilled when the files
+   *          have been written to disk
    */
   async function downloadMatchingTrack(options) {
     let downloadStream, downloadPipePromise;
