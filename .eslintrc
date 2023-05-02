@@ -12,6 +12,7 @@
 	},
 	"rules": {
 		"camelcase": "error",
+		"no-var": "error",
 		"prefer-const": "warn",
 		"no-unused-vars": "warn",
 		"linebreak-style": [
@@ -35,8 +36,6 @@
 			{
 				"code": 125
 			}
-		],
-		"no-debugger": "error",
-		"no-var": "error"
+		]
 	}
 }
