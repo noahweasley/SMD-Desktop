@@ -91,8 +91,10 @@ module.exports = function (settings, spotifyApi) {
       refreshTimer = setInterval(async () => {
         try {
           const data = await spotifyApi.refreshAccessToken();
-          const accessToken = data.body["access_token"];
+          const accessToken = data.body.access_token;
+          const refreshToken = data.body.refresh_token;
           spotifyApi.setAccessToken(accessToken);
+          spotifyApi.setRefreshToken(refreshToken);
         } catch (error) {
           /* empty */
         }

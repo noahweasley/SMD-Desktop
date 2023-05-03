@@ -214,12 +214,20 @@ module.exports = function (settings) {
     try {
       data = await spotifyApi.refreshAccessToken();
 
+      const accessToken = data.body.access_token;
+      const refreshToken = data.body.refresh_token;
+      const expiresIn = data.body.expires_in;
+
+      spotifyApi.setAccessToken(accessToken);
+      spotifyApi.setRefreshToken(refreshToken);
+
       const states = await settings.setStates({
-        "spotify-access-token": data.body.access_token,
-        "spotify-token-expiration": data.body.expires_in
+        "spotify-access-token": accessToken,
+        "spotify-token-expiration": expiresIn,
+        "spotify-refresh-token": refreshToken
       });
 
-      return states.length === 2;
+      return states.length === 3;
     } catch (error) {
       return false;
     }
