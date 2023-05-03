@@ -2,7 +2,12 @@
   "liveServer.settings.port": 5501,
   "git.ignoreLimitWarning": true,
   "explorer.excludeGitIgnore": true,
+  "editor.tabSize": 4,
+  "jest.autoRun": {},
   "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[html]": {
@@ -18,6 +23,5 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "jest.autoRun": {}
+  }
 }
