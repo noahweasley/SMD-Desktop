@@ -2,6 +2,9 @@
   "liveServer.settings.port": 5501,
   "git.ignoreLimitWarning": true,
   "explorer.excludeGitIgnore": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
