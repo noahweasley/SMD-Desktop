@@ -215,8 +215,8 @@ module.exports = function (settings) {
       data = await spotifyApi.refreshAccessToken();
 
       const states = await settings.setStates({
-        "spotify-access-token": data.body["access_token"],
-        "spotify-token-expiration": data.body["expires_in"]
+        "spotify-access-token": data.body.access_token,
+        "spotify-token-expiration": data.body.expires_in
       });
 
       return states.length === 2;
