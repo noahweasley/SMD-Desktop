@@ -79,7 +79,6 @@ S.M.D is an open source program. Feel free to fork and contribute. Also view the
 ## Download
 
 - Most recent packages are available at Releases page: <https://github.com/noahweasley/smd-desktop/releases>
-
 - Product website is also available for easy download: <https://noahweasley.github.io/SMD-Desktop/website>
 
 ## License
