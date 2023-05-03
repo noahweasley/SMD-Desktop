@@ -1,6 +1,6 @@
 root = true
 
-[*] 
+[*]
 charset = utf-8
 files.trimTrailingWhitespace = false
 indent_style = tab
@@ -8,5 +8,5 @@ indent_size = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.md] 
+[*.md]
 trim_trailing_whitespace = false
