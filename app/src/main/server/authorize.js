@@ -94,7 +94,7 @@ module.exports = function (settings, spotifyApi) {
           const accessToken = data.body["access_token"];
           spotifyApi.setAccessToken(accessToken);
         } catch (error) {
-          console.error("Refresh failed", error);
+          /* empty */
         }
       }, (expireIn / 2) * 1000);
     });

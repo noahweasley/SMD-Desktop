@@ -46,7 +46,6 @@ function __exports() {
         if (process.platform === "win32") await watchFileForChanges(getBinaryFilepath());
         return Signal.NOT_EXISTS_DOWNLOADED;
       } catch (error) {
-        console.error("Binaries could not be downloaded", error);
         return Signal.NOT_EXISTS_NOT_DOWNLOADED;
       } finally {
         await clearDownloadLockFile(); // release the lock

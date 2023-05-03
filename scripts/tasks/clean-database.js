@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { rm } = require("fs");
 const chalk = require("chalk");
 const { statSync } = require("fs");

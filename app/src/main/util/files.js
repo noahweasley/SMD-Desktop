@@ -28,7 +28,7 @@ function __exports() {
         else if (err.code === "ENOENT") {
           mkdir(thumbnailDirectory, { recursive: true }, () => {});
           mkdir(tempThumbDirectory, { recursive: true }, () => {});
-        } else console.log(err.code);
+        }
       }
     });
   }

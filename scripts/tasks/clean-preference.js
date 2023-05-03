@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { unlink } = require("fs");
 const chalk = require("chalk");
 require("dotenv").config();

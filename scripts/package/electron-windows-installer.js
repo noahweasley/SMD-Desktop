@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const electronInstaller = require("electron-winstaller");
 const chalk = require("chalk");
 const { version: appVersion, productName } = require("../../package.json");

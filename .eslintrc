@@ -15,6 +15,7 @@
 		"no-var": "error",
 		"prefer-const": "warn",
 		"prefer-template": "error",
+		"no-console": "error",
 		"no-unused-vars": "warn",
 		"linebreak-style": [
 			"error",

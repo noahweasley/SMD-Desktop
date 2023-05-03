@@ -232,7 +232,6 @@ module.exports = function (settings) {
     try {
       return await refreshSpotifyAccessToken();
     } catch (err) {
-      console.error("Access token refresh failed");
       return false;
     }
   }

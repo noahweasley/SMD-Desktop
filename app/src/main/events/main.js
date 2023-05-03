@@ -189,7 +189,6 @@ module.exports = function (settings, browsers, database) {
       return [d1, d2];
     } catch (error) {
       // TODO: add proper visual representation of this database data retrieval error
-      return console.error("Error occurred while fetching list data: ", error.message);
     }
   });
 };

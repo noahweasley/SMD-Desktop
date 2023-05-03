@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { rm } = require("fs");
 const { join } = require("path");
 const chalk = require("chalk");

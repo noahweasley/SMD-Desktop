@@ -56,7 +56,6 @@ async function createDatabaseSchema() {
       try {
         dbVersion = await createVSFile();
       } catch (error) {
-        console.error(error);
         return "1.0.0";
       }
     }
@@ -72,7 +71,7 @@ async function createDatabaseSchema() {
         await createVSFile();
         return await onCreateDatabase();
       } catch (error) {
-        return console.error(error);
+        /* empty */
       }
     }
 
@@ -95,7 +94,6 @@ async function createDatabaseSchema() {
         await createDirectory();
       } else {
         // unknown bug
-        console.error("An unknown error occurred", error.message);
       }
     } finally {
       fileHandle?.close();
@@ -163,7 +161,6 @@ function onCreateDatabase() {
       });
       return true;
     } catch (error) {
-      console.error(error);
       return false;
     }
   }
@@ -179,6 +176,7 @@ function onCreateDatabase() {
  * @param newVersion the new version code of the database
  */
 function onUpgradeDatabase(oldVersion, newVersion) {
+  // eslint-disable-next-line no-console
   console.info(`onUpgradeDatabase() called with; old version: {${oldVersion}, new version: ${newVersion}}`);
 
   return true;
@@ -202,7 +200,6 @@ module.exports.getDownloadData = async function (arg) {
       throw new Error(`${arg.type} is not supported`);
     }
   } catch (error) {
-    console.error(error);
     return [];
   } finally {
     releaseDatabaseConnectionPool();
@@ -231,7 +228,6 @@ module.exports.addDownloadData = async function (arg) {
       throw new Error(`${arg["type"]} is not supported`);
     }
   } catch (err) {
-    console.error(err);
     return -1;
   } finally {
     releaseDatabaseConnectionPool();
@@ -255,7 +251,7 @@ module.exports.updateDownloadData = async function (arg) {
       throw new Error(`${arg.type} is not supported`);
     }
   } catch (err) {
-    console.log(err.message);
+    /* empty */
   } finally {
     releaseDatabaseConnectionPool();
   }
@@ -288,7 +284,6 @@ module.exports.deleteDownloadData = async function (arg) {
       }
     } else throw new Error(`${arg.type} is not supported`);
   } catch (error) {
-    console.error(error);
     return false;
   } finally {
     releaseDatabaseConnectionPool();

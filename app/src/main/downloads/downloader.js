@@ -116,8 +116,8 @@ module.exports = function (config) {
     );
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const results = await Promise.all(downloadPipePromises);
-      console.log(results);
     } catch (error) {
       // ignore all errors for now
     }
