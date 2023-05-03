@@ -1,8 +1,8 @@
 @import url(global-styles.css);
 
-/* 
+/*
  *  Note: overflow on these selectors are only useful for development purpose and is not used in production at all
- *        You are free to override 
+ *        You are free to override
  */
 .window,
 .window-content,
@@ -137,7 +137,7 @@ a:active {
   top: 20%;
   left: 20px;
   width: 23px;
-  /* adjust width if toolbar height changes */
+  /* adjust height if toolbar height changes */
   height: 60%;
 }
 
@@ -636,7 +636,7 @@ a:active {
   display: none;
   align-items: center;
   justify-content: center;
-  background: url(../../../resources/images/kushal-medhi-5v5VKmvNqF8-unsplash.jpg) no-repeat;
+  background: url(../../../resources/images/background-image.jpg) no-repeat;
   background-position: top;
   object-fit: cover;
 }
