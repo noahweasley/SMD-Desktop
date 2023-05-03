@@ -29,7 +29,7 @@
     "format": "npm run format:eslint && npm run format:prettier",
     "generate:icons": "electron-icon-maker --input=./app/resources/build/tools/app_icon.png --output=./app/resources/build",
     "generate:installers": "node scripts/package/electron-windows-installer.js",
-    "package:win-base": "electron-packager . S.M.D --ignore=\"^(/.git|/.github|/.vscode|/task.todo|/.env|/sample-images|/build|/debug|/config.json|/assets|/scripts|/test|/website|/.editorconfig|/.eslintignore|/.eslintrc|/.gitignore|/.prettierignore|/.prettierrc|/contributing.md|/cspell.json|/readme.md)$\" --overwrite --prune=true --out=build/dist/win --platform=win32 --icon=app/resources/build/icons/win/icon.ico",
+    "package:win-base": "electron-packager . S.M.D --ignore=\"^(/.git|/.github|/.vscode|/task.todo|/.env|/sample-images|/build|/debug|/config.json|/assets|/scripts|/test|/website|/.editorconfig|/.eslintignore|/.eslintrc|/.gitignore|/.prettierignore|/.prettierrc|/contributing.md|/cspell.json|/readme.md|/app/resources/build/tools)$\" --overwrite --prune=true --out=build/dist/win --platform=win32 --icon=app/resources/build/icons/win/icon.ico",
     "package:win32": "npm run package:win-base -- --arch=ia32",
     "package:win64": "npm run package:win-base -- --arch=x64",
     "package:windows": "npm run package:win32 && npm run package:win64",
