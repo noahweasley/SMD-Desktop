@@ -1,8 +1,22 @@
 {
   "version": "0.2",
-  "ignorePaths": ["app/src/views/styles/photon.css"],
+  "ignorePaths": [
+    "cspell.json",
+    "node_modules/**",
+    "/app/src/views/styles/photon.css",
+    "/app/resources",
+    "/assets",
+    "/test/mock",
+    "/website/assets",
+    "/website/favicon",
+    "/debug",
+    "/app/src/views/fonts",
+    "/app/src/main/public/favicon",
+    "website/pages/privacy-policy.html"
+  ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
+  "flagWords": ["hte", "hate", "fuck"],
   "words": [
     "behance",
     "browserconfig",
@@ -23,6 +37,7 @@
     "evernote",
     "flickr",
     "gplus",
+    "hte",
     "icns",
     "iefix",
     "Ifechukwu",
