@@ -19,7 +19,7 @@
         <div class="error-placeholder gone">
           <span class="icon icon-alert icon-x4"></span>
           <p class="message text-center">Something went wrong, please try again</p>
-          <input type="button" value="Try again" id="retry" />
+          <input type="button" value="Try again" id="retry" title="Retry" />
         </div>
 
         <div class="list scroll gone">
@@ -41,8 +41,12 @@
       </div>
 
       <div class="list-actions">
-        <button type="button" class="btn btn-negative btn-downloads" id="cancel-download" disabled>Cancel</button>
-        <button type="button" class="btn btn-positive btn-downloads" id="proceed-download" disabled>Download</button>
+        <button type="button" class="btn btn-negative btn-downloads" id="cancel-download" title="Cancel download" disabled>
+          Cancel
+        </button>
+        <button type="button" class="btn btn-positive btn-downloads" id="proceed-download" title="Proceed download" disabled>
+          Download
+        </button>
       </div>
     </div>
 
