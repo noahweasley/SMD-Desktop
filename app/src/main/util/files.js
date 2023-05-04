@@ -12,7 +12,7 @@ const FILE_EXTENSIONS = require("./file-extensions");
  */
 function __exports() {
   const binaryFilename = "yt-dlp";
-  const downloadLockFilename = `lock${FILE_EXTENSIONS.TMP}`;
+  const downloadLockFilename = `${binaryFilename}${FILE_EXTENSIONS.LOCK}`;
 
   /**
    * create the download directory
