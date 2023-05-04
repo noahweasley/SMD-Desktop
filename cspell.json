@@ -2,17 +2,15 @@
   "version": "0.2",
   "ignorePaths": [
     "cspell.json",
-    "node_modules/**",
     "/app/src/views/styles/photon.css",
     "/app/resources",
     "/assets",
     "/test/mock",
     "/website/assets",
     "/website/favicon",
-    "/debug",
     "/app/src/views/fonts",
     "/app/src/main/public/favicon",
-    "website/pages/privacy-policy.html"
+    "/website/pages/privacy-policy.html"
   ],
   "dictionaryDefinitions": [],
   "dictionaries": [],

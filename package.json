@@ -19,7 +19,7 @@
     "eslint:base": "eslint --ignore-path .gitignore",
     "prettier:base": "prettier --ignore-path .gitignore",
     "lint:eslint": "npm run eslint:base -- --max-warnings 0 \"**/*.{js,ts,tsx,mdx}\"",
-    "lint:spellcheck": "cspell . --show-suggestions --no-progress",
+    "lint:spellcheck": "cspell . --gitignore --show-suggestions --no-progress",
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "lint:start": "npm run lint && npm run start",
     "lint:start-no-database": "npm run clean:debug-database && npm run lint:start ",
