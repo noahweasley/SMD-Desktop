@@ -644,11 +644,12 @@ a:active {
   color: white;
   letter-spacing: 0.1em;
   box-shadow: 0 0 16px 16px rgba(0, 0, 0, 0.288);
-  width: 800px;
-  height: 70vh;
+  width: calc(800px + 10vw);
+  max-width: 850px;
+  height: 75vh;
+  max-height: 500px;
   display: flex;
   border-radius: 8px;
-
   border: 1px solid var(--grey-solid_10);
   overflow: hidden;
   background-color: var(--list-item-color-alt);
