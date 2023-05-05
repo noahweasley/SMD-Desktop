@@ -2,6 +2,7 @@
   --toolbar-height: 38px;
   --progress-size: 15px;
   --progress-size-small: 10px;
+  --user-select-color: rgba(30, 215, 95, 0.4);
   --white-solid: #eeeeee;
   --grey-solid: #aaaaaa;
   --grey-solid-disabled: #616161;
@@ -228,7 +229,7 @@ a:active {
 }
 
 *::selection {
-  background-color: rgba(31, 214, 95, 0.4);
+  background-color: var(--user-select-color);
 }
 
 /* ------------------ Animation Key Frames ----------------- */

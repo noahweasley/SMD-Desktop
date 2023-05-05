@@ -2,6 +2,7 @@
   color: white;
   font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 11px;
+  --user-select-color: rgba(30, 215, 95, 0.4);
   --white-solid: #eeeeee;
   --grey-solid: #aaaaaa;
   --grey-solid_5: rgba(160, 159, 159, 0.144);
@@ -23,6 +24,10 @@
   --sand-solid: #ecebe8;
   --warning-color: orange;
   --window-actions-elevation: 2;
+}
+
+*::selection {
+  background-color: var(--user-select-color);
 }
 
 html,
