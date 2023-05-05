@@ -1,11 +1,24 @@
 const SpotifyWebApi = require("spotify-web-api-node");
 const { dialog, clipboard } = require("electron");
+const { getCurrentDateTime } = require("../util/date");
 const { SpotifyURLType, getSpotifyURLType } = require("../../main/util/sp-util");
 
 module.exports = function (settings) {
   const MAX_NUMBER_OF_RETRIES = 3;
   const REDIRECT_URL = "http://localhost:8888/callback";
   const spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
+
+  const spotifyStates = settings.getStatesSync([
+    "spotify-user-client-id",
+    "spotify-user-client-secret",
+    "spotify-access-token",
+    "spotify-refresh-token"
+  ]);
+
+  spotifyApi.setClientId(spotifyStates[0]);
+  spotifyApi.setClientSecret(spotifyStates[1]);
+  spotifyApi.setAccessToken(spotifyStates[2]);
+  spotifyApi.setRefreshToken(spotifyStates[3]);
 
   /**
    * starts album metadata query
@@ -28,7 +41,7 @@ module.exports = function (settings) {
       }
     }
 
-    if (!dataReceived) return "An error occurred while retrieving album data";
+    if (!dataReceived) throw new Error("An error occurred while retrieving album data");
 
     const body = data.body;
     const tracks = body.tracks.items;
@@ -81,7 +94,7 @@ module.exports = function (settings) {
       }
     }
 
-    if (!dataReceived) return "An error occurred while retrieving playlist data";
+    if (!dataReceived) throw new Error("An error occurred while retrieving playlist data");
 
     const body = data.body;
     const name = body.name;
@@ -118,7 +131,7 @@ module.exports = function (settings) {
       }
     }
 
-    if (!dataReceived) return "An Error occurred while retrieving track data";
+    if (!dataReceived) throw new Error("An Error occurred while retrieving track data");
 
     const body = data.body;
     const songTitle = body.name;
@@ -151,20 +164,20 @@ module.exports = function (settings) {
         "Clipboard content has changed, go to Spotify and copy link again, then click 'Paste URL'"
       );
 
-      return error.message;
+      throw error;
     }
 
-    const [spotifyUserClientId, spotifyClientSecret, spotifyAccessToken, spotifyRefreshToken] = await settings.getStates([
+    const spotifyStates = await settings.getStates([
       "spotify-user-client-id",
       "spotify-user-client-secret",
       "spotify-access-token",
       "spotify-refresh-token"
     ]);
 
-    spotifyApi.setClientId(spotifyUserClientId);
-    spotifyApi.setClientSecret(spotifyClientSecret);
-    spotifyApi.setAccessToken(spotifyAccessToken);
-    spotifyApi.setRefreshToken(spotifyRefreshToken);
+    spotifyApi.setClientId(spotifyStates[0]);
+    spotifyApi.setClientSecret(spotifyStates[1]);
+    spotifyApi.setAccessToken(spotifyStates[2]);
+    spotifyApi.setRefreshToken(spotifyStates[3]);
 
     if (clipboardContent.includes("https://open.spotify.com")) {
       switch (spotifyURLType) {
@@ -215,16 +228,14 @@ module.exports = function (settings) {
       data = await spotifyApi.refreshAccessToken();
 
       const accessToken = data.body.access_token;
-      const refreshToken = data.body.refresh_token;
       const expiresIn = data.body.expires_in;
 
       spotifyApi.setAccessToken(accessToken);
-      spotifyApi.setRefreshToken(refreshToken);
 
       const states = await settings.setStates({
         "spotify-access-token": accessToken,
         "spotify-token-expiration": expiresIn,
-        "spotify-refresh-token": refreshToken
+        "spotify-token-refresh-time": getCurrentDateTime()
       });
 
       return states.length === 3;

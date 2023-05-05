@@ -6,8 +6,8 @@ Thank you for considering contributing to S.M.D! Here are some guidelines to hel
 
 We use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) to ensure consistent code style across the project. Before submitting a pull request, make sure your code follows the style guidelines. To run Prettier and ESLint on your code, run the following commands:
 
-- `npm run lint` - To spellcheck and verify your code doesn't contain errors using ESLint and enforce code formatting
-- `npm run format` - To automatically format your code according to the Prettier configuration
+- `npm run lint` - To spellcheck, enforce code formatting and verify your code doesn't contain errors using ESLint and CSpell
+- `npm run format` - To automatically format your code according to the Prettier and ESLint configuration
 
 ## Development Environment Setup
 

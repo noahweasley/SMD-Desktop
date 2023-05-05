@@ -130,6 +130,9 @@ window.addEventListener("DOMContentLoaded", () => {
       pauseIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
       cancelIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
 
+      pauseIconContainer.setAttribute("title", "Pause download");
+      cancelIconContainer.setAttribute("title", "Cancel download");
+
       iconPause.classList.add("icon", "icon-pause", "icon-x2");
       iconCancel.classList.add("icon", "icon-cancel", "icon-x2");
 
@@ -341,6 +344,7 @@ window.addEventListener("DOMContentLoaded", () => {
     } else if (downloadEvent === "error") {
       messageElement.innerText = "Failed to download, please try again";
       progressBar.classList.add("gone");
+      return;
     } else {
       messageElement.innerText = `${progress}% downloaded`;
     }

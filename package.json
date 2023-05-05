@@ -41,7 +41,7 @@
     "build": "npm run build:windows",
     "build-start": "npm run build && npm run start"
   },
-  "homepage": "https://www.noahweasley.github.io/SMD-Desktop",
+  "homepage": "https://www.noahweasley.github.io/SMD-Desktop/website",
   "repository": {
     "type": "git",
     "url": "https://github.com/noahweasley/SMD-Desktop.git"

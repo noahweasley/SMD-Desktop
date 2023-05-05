@@ -22,3 +22,7 @@ a.download:hover {
   display: flex;
   background-color: black;
 }
+
+.preview {
+  border: 1px solid var(--grey-solid_10);
+}

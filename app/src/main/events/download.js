@@ -13,6 +13,7 @@ module.exports = function (settings, browsers, database) {
   let downloadQuery;
   const DEFAULT_CONCURRENCY = 2;
   const WHITE_SPACE = " ";
+  // eslint-disable-next-line no-unused-vars
   const downloadTasks = [];
 
   // TODO: change settings.getStateSync to use promises
@@ -59,7 +60,7 @@ module.exports = function (settings, browsers, database) {
         const searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : errorMessage;
       } catch (err) {
-        return "An Unknown Error Occurred";
+        return err.message;
       }
     } else {
       const tracks = downloadQuery.description.trackCollection;
@@ -69,7 +70,7 @@ module.exports = function (settings, browsers, database) {
       try {
         return await Promise.all(queryPromises);
       } catch (err) {
-        return "An Unknown Error Occurred";
+        return err.message;
       }
     }
   });
@@ -125,7 +126,7 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("pause-downloading", async (_event, _args) => {});
 
   ipcMain.handle("pause-all-downloading", async () => {
-    downloadTasks.forEach((task) => task.pause());
+    // downloadTasks.forEach((task) => task.pause());
   });
 
   ipcMain.handle("resume-downloading", async (_event, args) => {

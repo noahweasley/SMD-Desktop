@@ -15,6 +15,11 @@ function __exports() {
   const downloadLockFilename = `${binaryFilename}${FILE_EXTENSIONS.LOCK}`;
 
   /**
+   * The ytdlp binary file name
+   */
+  const getBinaryFilename = () => binaryFilename;
+
+  /**
    * create the download directory
    */
   function createAppFilesDir() {
@@ -233,7 +238,8 @@ function __exports() {
     getOrCreateBinaryFileDirectory,
     getBinaryFilepathOrThrowError,
     createDownloadLockFile,
-    clearDownloadLockFile
+    clearDownloadLockFile,
+    getBinaryFilename
   };
 }
 
