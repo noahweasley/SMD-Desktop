@@ -194,7 +194,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
           listGroupItem.className = "list-group-item";
           thumbnailElement.className = "media-object pull-left";
-          thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
+          thumbnailElement.setAttribute("src", "app/../../../../resources/images/thumbnail.png");
           mediaBodyElement.className = "media-body";
           trackTitleElement.innerHTML = `${x + 1}. &nbsp&nbsp&nbsp${searchQueryTitle}`;
           labelElement.setAttribute("for", "select");

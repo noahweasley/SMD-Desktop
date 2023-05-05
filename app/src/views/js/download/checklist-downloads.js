@@ -127,7 +127,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       listElement.className = "list-group-item";
       thumbnailElement.classList.add("media-object", "pull-left");
-      thumbnailElement.setAttribute("src", "app/../../../../resources/images/musical_2.png");
+      thumbnailElement.setAttribute("src", "app/../../../../resources/images/thumbnail.png");
       mediaBodyElement.className = "media-body";
       mediaBodyDescription.className = "message";
       mediaBodyTitle.innerHTML = `${position + 1}. &nbsp&nbsp&nbsp${listItem[position].songTitle}`;
