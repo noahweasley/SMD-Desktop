@@ -71,7 +71,7 @@ module.exports = function (settings) {
    * @throws error if error occurred while fetching data, this can be caused by network
    */
   async function searchSpotifyArtist() {
-    return "Artist URL support coming soon, try again later";
+    throw new Error("Artist URL support coming soon, try again later");
   }
 
   /**
@@ -182,16 +182,16 @@ module.exports = function (settings) {
     if (clipboardContent.includes("https://open.spotify.com")) {
       switch (spotifyURLType) {
         case SpotifyURLType.TRACK:
-          data = searchSpotifyTrack(clipboardContent);
+          data = await searchSpotifyTrack(clipboardContent);
           break;
         case SpotifyURLType.ALBUM:
-          data = searchSpotifyAlbum(clipboardContent);
+          data = await searchSpotifyAlbum(clipboardContent);
           break;
         case SpotifyURLType.ARTIST:
-          data = searchSpotifyArtist(clipboardContent);
+          data = await searchSpotifyArtist(clipboardContent);
           break;
         case SpotifyURLType.PLAYLIST:
-          data = searchSpotifyPlaylist(clipboardContent);
+          data = await searchSpotifyPlaylist(clipboardContent);
           break;
         default:
           throw new Error(`${spotifyURLType} link is either incomplete or is not supported yet`);

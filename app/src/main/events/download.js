@@ -48,8 +48,8 @@ module.exports = function (settings, browsers, database) {
         // Wrap the search results in an array, because the list requires an array as result
         searchResults = await ytdl.searchMatchingTracks(downloadQuery.value);
         return searchResults ? Array.of(searchResults) : errorMessage;
-      } catch (err) {
-        return "An Unknown Error Occurred";
+      } catch (error) {
+        return error.message;
       }
     } else if (downloadQuery.type === "track") {
       try {
@@ -59,18 +59,18 @@ module.exports = function (settings, browsers, database) {
         const searchQuery = `${trackDescription.songTitle} ${trackDescription.artistNames.join(WHITE_SPACE)}`;
         const searchResults = await ytdl.searchMatchingTracks(searchQuery);
         return searchResults ? Array.of(searchResults) : errorMessage;
-      } catch (err) {
-        return err.message;
+      } catch (error) {
+        return error.message;
       }
     } else {
-      const tracks = downloadQuery.description.trackCollection;
-      const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(WHITE_SPACE)}`);
-      const queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
-
       try {
+        const tracks = downloadQuery.description.trackCollection;
+        const getSearchQuery = () => tracks.map((track) => `${track.songTitle} ${track.artistNames.join(WHITE_SPACE)}`);
+        const queryPromises = getSearchQuery().map((searchQuery) => ytdl.searchMatchingTracks(searchQuery));
+
         return await Promise.all(queryPromises);
-      } catch (err) {
-        return err.message;
+      } catch (error) {
+        return error.message;
       }
     }
   });

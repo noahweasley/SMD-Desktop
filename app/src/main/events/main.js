@@ -15,7 +15,13 @@ module.exports = function (settings, browsers, database) {
 
   ipcMain.handle("app-details", () => [app.getName(), app.getVersion()]);
 
-  ipcMain.handle("download-data", () => getSpotifyLinkData());
+  ipcMain.handle("download-data", async () => {
+    try {
+      return await getSpotifyLinkData();
+    } catch (error) {
+      return error.message;
+    }
+  });
 
   ipcMain.on("show-app-info", () => aboutWindow.init());
 
