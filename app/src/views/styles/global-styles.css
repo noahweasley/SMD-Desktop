@@ -13,9 +13,7 @@
   --active-scrolbar-clr: #1ed75f38;
   --grey-solid_10: rgba(160, 159, 159, 0.247);
   --primary-color: rgb(62, 211, 114);
-  --primary-color-dark: rgb(39, 122, 68);
-  --primary-color-dark-alt-2: var(--primary-color-dark);
-  --primary-color-dark-alt: var(--primary-color-dark);
+  --primary-color-dark: #1dbb54;
   --spotify-green: var(--primary-color);
   --yt-red: red;
   --btn-disabled: #6fc48db2;
