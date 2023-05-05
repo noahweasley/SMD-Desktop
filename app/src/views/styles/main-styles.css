@@ -86,7 +86,6 @@ a:active {
 
 .pane-settings .list-group-item button.action {
   background-color: transparent;
-  color: white;
   border-radius: 16px;
   border: 1px solid var(--spotify-green);
   padding: 8px 24px;
@@ -649,6 +648,8 @@ a:active {
   height: 70vh;
   display: flex;
   border-radius: 8px;
+
+  border: 1px solid var(--grey-solid_10);
   overflow: hidden;
   background-color: var(--list-item-color-alt);
   top: calc(10% + 5vh);
