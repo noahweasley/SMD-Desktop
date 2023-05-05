@@ -662,14 +662,16 @@ a:active {
   position: relative;
 }
 
+.split-pane {
+  background-color: black;
+}
+
 .split-pane.split-pane__left {
   width: 40%;
-  background-color: black;
   border-right: 5px solid var(--spotify-green);
 }
 
 .split-pane.split-pane__right {
-  background-color: black;
   padding: 16px;
 }
 
