@@ -41,18 +41,15 @@ window.addEventListener("DOMContentLoaded", () => {
     window.bridgeApis.invoke("clipboard-request").then((content) => {
       if (content === "track") {
         // search for tracks to download
-        window.bridgeApis.send("show-search-download-window", {
-          type: "track",
-          description: undefined
-        });
-      } else if (content === "playlist" || content === "album" || content === "artist") {
+        window.bridgeApis.send("show-search-download-window", { type: "track" });
+      } else if (["playlist", "artist", "album"].includes(content)) {
         window.bridgeApis.send("show-download-window");
       } else {
         // no-op; some errors were not handled
         if (content === "Unknown") {
           window.bridgeApis.send("show-error-unknown-dialog", {
             title: "Unsupported Spotify URL link",
-            message: "Please be patient, we will implement this in the future"
+            message: "This link is either incomplete or is not supported yet"
           });
         }
       }
@@ -72,15 +69,13 @@ window.addEventListener("DOMContentLoaded", () => {
   searchButton.addEventListener("click", () => {
     if (!searchInput.value) return searchInput.setAttribute("placeholder", "Field can't be empty");
 
-    // Wrap searchQuery in object array, to be compatible with the other kind of search query
     window.bridgeApis.send("show-search-download-window", {
       type: "search",
       value: searchInput.value
     });
   });
 
-  // request app details; but use only the first content in the array returned,
-  // which returns the app name
+  // request app details; but use only the first content in the array returned, which returns the app name
   window.bridgeApis.invoke("app-details").then((content) => {
     const names = document.querySelectorAll(".name");
     names.forEach((name) => (name.innerText = content[0]));
@@ -120,10 +115,13 @@ window.addEventListener("DOMContentLoaded", () => {
             const icon = document.createElement("span");
             icon.classList.add("icon", "icon-check");
             auth.appendChild(icon);
+
+            setTimeout(() => (auth.innerHTML = "Save"), 3000);
           } else {
             // disable button and enable it only when the server timeout has reached
             auth.setAttribute("disabled", "true");
             auth.innerText = "Authorizing, please wait...";
+
             setTimeout(() => {
               auth.innerText = "Authorize";
               auth.removeAttribute("disabled");
