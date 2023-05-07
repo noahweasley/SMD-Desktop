@@ -20,7 +20,7 @@
 
 <p align="center">
   <a href="https://noahweasley.github.io/SMD-Desktop/website" target="_blank"
-    ><img src="assets/screenshots/SMD Product Website homepage.png" alt="Screenshot of website" />
+    ><img src="assets/screenshots/Website Preview.png" alt="Screenshot of website" />
   </a>
 </p>
 
