@@ -40,8 +40,8 @@ module.exports = function (settings, browsers, database) {
   ipcMain.handle("delete-single", async (_event, metadata) => {
     const Response = Object.freeze({ PROCEED: 0, CANCEL: 1 });
     const track = metadata.data.TrackTitle;
-    const focusedWindow = BrowserWindow.getFocusedWindow();
 
+    const focusedWindow = mainWindow.getWindow();
     const returnedValue = await dialog.showMessageBox(focusedWindow, {
       noLink: true,
       title: `Delete ${track}`,
@@ -77,7 +77,7 @@ module.exports = function (settings, browsers, database) {
     const Response = Object.freeze({ PROCEED: 0, CANCEL: 1 });
 
     if (activeTab === ".tab-content__downloaded") {
-      const focusedWindow = BrowserWindow.getFocusedWindow();
+      const focusedWindow = mainWindow.getWindow();
       const returnedValue = await dialog.showMessageBox(focusedWindow, {
         noLink: true,
         title: "Delete all",

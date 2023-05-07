@@ -45,11 +45,8 @@ module.exports = function (settings) {
       event.preventDefault();
       const [x, y] = smdWindow.getPosition();
       const [width, height] = smdWindow.getSize();
-      const isCompleted = await settings.setState(
-        "window-state",
-        JSON.stringify({ x, y, width, height, isMaximized: smdWindow.isMaximized() })
-      );
-      if (isCompleted) smdWindow.destroy();
+      await settings.setState("window-state", JSON.stringify({ x, y, width, height, isMaximized: smdWindow.isMaximized() }));
+      smdWindow?.destroy();
       smdWindow = null;
     });
 
