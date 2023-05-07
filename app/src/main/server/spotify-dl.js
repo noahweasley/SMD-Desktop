@@ -37,7 +37,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessToken();
       }
     }
 
@@ -90,7 +90,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessToken();
       }
     }
 
@@ -127,7 +127,7 @@ module.exports = function (settings) {
         dataReceived = true;
         break;
       } catch (err) {
-        await refreshSpotifyAccessTokenWithErrorHandler();
+        await refreshSpotifyAccessToken();
       }
     }
 
@@ -213,20 +213,18 @@ module.exports = function (settings) {
    * @returns true if the access token was refreshed
    */
   async function refreshSpotifyAccessToken() {
-    const [clientId, clientSecret, refreshToken] = await settings.getStates([
-      "spotify-user-client-id",
-      "spotify-user-client-secret",
-      "spotify-refresh-token"
-    ]);
-
-    spotifyApi.setClientId(clientId);
-    spotifyApi.setClientSecret(clientSecret);
-    spotifyApi.setRefreshToken(refreshToken);
-
-    let data;
     try {
-      data = await spotifyApi.refreshAccessToken();
+      const [clientId, clientSecret, refreshToken] = await settings.getStates([
+        "spotify-user-client-id",
+        "spotify-user-client-secret",
+        "spotify-refresh-token"
+      ]);
 
+      spotifyApi.setClientId(clientId);
+      spotifyApi.setClientSecret(clientSecret);
+      spotifyApi.setRefreshToken(refreshToken);
+
+      const data = await spotifyApi.refreshAccessToken();
       const accessToken = data.body.access_token;
       const expiresIn = data.body.expires_in;
 
@@ -244,17 +242,6 @@ module.exports = function (settings) {
     }
   }
 
-  /**
-   * A simple wrapper to refresh access token and still handle errors
-   */
-  async function refreshSpotifyAccessTokenWithErrorHandler() {
-    try {
-      return await refreshSpotifyAccessToken();
-    } catch (err) {
-      return false;
-    }
-  }
-
   return {
     spotifyApi,
     searchSpotifyAlbum,
@@ -262,7 +249,6 @@ module.exports = function (settings) {
     searchSpotifyPlaylist,
     searchSpotifyTrack,
     getSpotifyLinkData,
-    refreshSpotifyAccessToken,
-    refreshSpotifyAccessTokenWithErrorHandler
+    refreshSpotifyAccessToken
   };
 };
