@@ -230,10 +230,13 @@ module.exports = function (settings) {
 
       spotifyApi.setAccessToken(accessToken);
 
+      const dateTime = getCurrentDateTime();
+      const formattedDate = `${dateTime.date}@${dateTime.time}`;
+
       const states = await settings.setStates({
         "spotify-access-token": accessToken,
         "spotify-token-expiration": expiresIn,
-        "spotify-token-refresh-time": getCurrentDateTime()
+        "spotify-token-refresh-time": formattedDate
       });
 
       return states.length === 3;

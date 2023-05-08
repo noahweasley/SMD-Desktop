@@ -12,7 +12,10 @@ function __exports() {
     const minute = now.getMinutes();
     const second = now.getSeconds();
 
-    return `${day}/${month}/${year}@${hour}:${minute}:${second}`;
+    const date = `${day}/${month}/${year}`;
+    const time = `${hour}:${minute}:${second}`;
+
+    return { date, time };
   }
   return { getCurrentDateTime };
 }
