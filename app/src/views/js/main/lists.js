@@ -321,9 +321,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // fallback image on thumbnail load error
     document.querySelectorAll(".media-object").forEach((image) => {
-      image.addEventListener("error", () => {
-        image.setAttribute("src", "app/../../../../resources/images/thumbnail.png");
-      });
+      image.addEventListener("error", () => image.setAttribute("src", "app/../../../../resources/images/thumbnail.png"));
     });
   }
 
