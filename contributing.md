@@ -28,7 +28,7 @@ DB_FILEPATH="folder/to/sqlite/database"
 PREF_FILEPATH="file/to/save/preferences.json"
 ```
 
-This will enable you to test the test and view the contents of files created by the application properly.
+This will enable you to test and view the contents of files created by the application properly.
 
 ### Building the application
 
@@ -72,7 +72,6 @@ Here are a list of the VS Code extensions used in the development of S.M.D:
 ### Optional
 
 - NPM Script Advanced (daez.npm-scripts-advanced)
-- Community Material Theme Darker High Contrast (Equinusocio.vsc-community-material-theme)
 
 ## Issue Reporting
 
