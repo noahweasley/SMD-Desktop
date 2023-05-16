@@ -11,6 +11,7 @@ const {
   getDownloadsDir,
   checkIfFileExists,
   getOrCreateBinaryFileDirectory,
+  isBinaryDownloadLocked,
   clearDownloadLockFile,
   createDownloadLockFile
 } = require("../util/files");
@@ -98,6 +99,7 @@ function __exports() {
 
     try {
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
+      while (await isBinaryDownloadLocked());
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();
@@ -115,7 +117,7 @@ function __exports() {
         throw new IllegalStateError("Fatal error occurred, cannot download");
       }
     } finally {
-      // make sure that progress dialog is closed no matter
+      // make sure that progress dialog is closed no matter what happens
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
     }
 
@@ -160,7 +162,6 @@ function __exports() {
     downloadStream.on("error", () => {
       target.webContents.send("download-progress-update", {
         id: taskId,
-        progress: 0,
         event: "error"
       });
     });

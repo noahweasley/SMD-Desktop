@@ -10,18 +10,15 @@ module.exports = function (config) {
   const activeTasks = [];
   const pendingTasks = [];
 
-  let _activeTaskCount = 0;
-  let _inactiveTaskCount = 0;
-
   /**
    * @returns the number of active downloads
    */
-  const activeTaskCount = () => _activeTaskCount;
+  const activeTaskCount = () => activeTasks.length;
 
   /**
    *@returns the number of inactive downloads
    */
-  const inactiveTaskCount = () => _inactiveTaskCount;
+  const inactiveTaskCount = () => pendingTasks.length;
 
   /**
    * Clears the task queue
@@ -97,33 +94,28 @@ module.exports = function (config) {
   async function initiateQueuedDownloads() {
     const downloadPipePromises = [];
 
-    await Promise.all(
-      downloadTaskQueue.map(async (downloadTask) => {
-        if (locker.acquireLock()) {
-          const downloadParams = await downloadTask.start();
-          const activeDownloadStream = downloadParams.downloadStream;
-          const downloadPipePromise = downloadParams.downloadPipePromise;
+    async function download(downloadTask) {
+      if (locker.acquireLock()) {
+        const downloadParams = await downloadTask.start();
+        const activeDownloadStream = downloadParams.downloadStream;
+        const downloadPipePromise = downloadParams.downloadPipePromise;
 
-          activeTasks.push(activeDownloadStream);
-          downloadPipePromises.push(downloadPipePromise);
-          _activeTaskCount++;
-        } else {
-          const pendingDownload = downloadTask.wait();
-          pendingTasks.push(pendingDownload);
-          _inactiveTaskCount++;
-        }
-      })
-    );
-
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const results = await Promise.all(downloadPipePromises);
-    } catch (error) {
-      // ignore all errors for now
+        activeTasks.push(activeDownloadStream);
+        downloadPipePromises.push(downloadPipePromise);
+      } else {
+        const pendingDownload = downloadTask.wait();
+        pendingTasks.push(pendingDownload);
+      }
     }
 
-    clearTaskQueue();
-    // return downloadStreams;
+    try {
+      await Promise.all(downloadTaskQueue.map(download));
+      clearTaskQueue();
+      await Promise.all(downloadPipePromises);
+    } catch (error) {
+      // stop all downloads
+      downloadPipePromises.forEach((eventEmitter) => eventEmitter.emit("error"));
+    }
   }
 
   return {

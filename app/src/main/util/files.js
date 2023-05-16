@@ -121,10 +121,11 @@ function __exports() {
   /**
    * Checks if binary download is locked. This function just simply checks for the existence of a lock file
    *
+	 * @returns a flag indicating if the binary download lock file exists or not
    * @see {@link getBinaryDownloadLockFilename Retrieve the download flag file location}
    */
   async function isBinaryDownloadLocked() {
-    return checkIfFileExists(getBinaryDownloadLockFilename());
+    return await checkIfFileExists(getBinaryDownloadLockFilename());
   }
 
   /**
