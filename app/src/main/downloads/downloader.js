@@ -41,8 +41,7 @@ module.exports = function (config) {
   /**
    * Enqueue a download task
    *
-   * @param {array} request  a download request object
-   * @param {array} insertedColumnIds an array of objects with task id as keys
+   * @param {JSON} taskOptions an array of objects with task id as keys
    */
   function enqueueTasks(taskOptions) {
     const insertedColumnIds = taskOptions.searchResultIds;
@@ -114,7 +113,7 @@ module.exports = function (config) {
       await Promise.all(downloadPipePromises);
     } catch (error) {
       // stop all downloads
-      downloadPipePromises.forEach((eventEmitter) => eventEmitter.emit("error"));
+      activeTasks.forEach((activeTask) => activeTask.emit("error"));
     }
   }
 
