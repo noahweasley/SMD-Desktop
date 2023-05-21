@@ -11,9 +11,9 @@ const {
   getDownloadsDir,
   checkIfFileExists,
   getOrCreateBinaryFileDirectory,
-  isBinaryDownloadLocked,
   clearDownloadLockFile,
-  createDownloadLockFile
+  createDownloadLockFile,
+  isBinaryDownloadLocked
 } = require("../util/files");
 const { IllegalStateError } = require("../util/error");
 
@@ -162,6 +162,7 @@ function __exports() {
     downloadStream.on("error", () => {
       target.webContents.send("download-progress-update", {
         id: taskId,
+        progress: 0,
         event: "error"
       });
     });
