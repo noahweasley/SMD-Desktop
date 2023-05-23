@@ -229,7 +229,7 @@ window.addEventListener("DOMContentLoaded", () => {
       messageElement.classList.add("message");
 
       folderIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
-      folderIconContainer.setAttribute("title", "View in File explorer");
+      folderIconContainer.setAttribute("title", "Browse folder");
 
       deleteIconContainer.classList.add("op-icon", "not-draggable", "pull-right");
       deleteIconContainer.setAttribute("title", "Delete");
