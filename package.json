@@ -67,7 +67,7 @@
   "devDependencies": {
     "chalk": "^4.1.2",
     "cspell": "^6.31.1",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.1.1",
     "electron": "^23.1.4",
     "electron-icon-maker": "^0.0.5",
     "electron-packager": "^17.1.1",
