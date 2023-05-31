@@ -1,5 +1,6 @@
 const { BrowserWindow } = require("electron");
 const { join } = require("path");
+const { isWindowDebugEnabled } = require("../util/debug");
 
 let downloadWindow;
 
@@ -13,7 +14,7 @@ module.exports.init = function () {
     modal: true,
     width: 700,
     height: 500,
-    resizable: false,
+    resizable: isWindowDebugEnabled(),
     backgroundColor: "#0c0b0b",
     webPreferences: {
       contextIsolation: true,
@@ -21,7 +22,7 @@ module.exports.init = function () {
     }
   });
 
-  downloadWindow.setMenu(null);
+  downloadWindow.setMenu(isWindowDebugEnabled() ? require("../menu/main") : null);
   downloadWindow.loadFile(join("app", "src", "views", "pages", "downloads.html"));
   downloadWindow.once("ready-to-show", downloadWindow.show);
   // listening for close event on download window helped to solve quick window flash issue.

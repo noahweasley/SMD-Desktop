@@ -26,9 +26,10 @@ Add a `.env` file (optional) at the root of the project with these keys:
 BINARY_LOCATION="folder/to/ytdlp/binary"
 DB_FILEPATH="folder/to/sqlite/database"
 PREF_FILEPATH="file/to/save/preferences.json"
+WINDOW_DEBUG_ENABLED="true|false"
 ```
 
-This will enable you to test and view the contents of files created by the application properly.
+This will enable you to test and view the contents of files created by the application properly. WINDOW_DEBUG_ENABLED would enable you to access chrome dev tools in some windows that restrict it in production
 
 ### Building the application
 
