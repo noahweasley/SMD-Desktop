@@ -71,7 +71,7 @@ function __exports() {
    * @returns the directory where the the ytdlp binary file was downloaded
    */
   function getBinaryFileDirectory() {
-    return process.env.BINARY_LOCATION || join(app.getPath("appData"), binaryFilename);
+    return process.env.BINARY_LOCATION || join(app.getPath("userData"), "Binaries", binaryFilename);
   }
 
   function _getBinaryFilepath(parentDirectory) {
