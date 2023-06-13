@@ -98,8 +98,8 @@ function __exports() {
     let binaryFileExists;
 
     try {
-      binaryFileExists = await checkIfFileExists(getBinaryFilepath());
       while (await isBinaryDownloadLocked());
+      binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
       const downloadSignal = await downloadBinaries();

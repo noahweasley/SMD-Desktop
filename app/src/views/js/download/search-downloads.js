@@ -144,6 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
               headerCheckBox.checked = false;
             }
           }
+          console.table(selectedListDataMap);
         }
       }
     });

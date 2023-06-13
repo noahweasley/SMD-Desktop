@@ -53,7 +53,6 @@ window.addEventListener("DOMContentLoaded", () => {
         errorPlaceholder.style.setProperty("display", "flex");
         message.innerText = data;
       }
-
       selectAll.addEventListener("click", () => {
         const collection = listData.description.trackCollection;
         const saIsChecked = selectAll.checked;

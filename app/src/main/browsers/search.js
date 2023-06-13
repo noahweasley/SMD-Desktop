@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 const { BrowserWindow } = require("electron");
 const { join } = require("path");
 const { isWindowDebugEnabled } = require("../util/debug");
