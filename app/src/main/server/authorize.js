@@ -9,7 +9,7 @@ module.exports = function (settings, spotifyApi) {
   let timeout, connection, refreshTimer;
   let authorizationCallback = null;
 
-  const publicFilePath = path.resolve(__dirname, "../public");
+  const publicFilePath = path.resolve(__dirname, "public");
   server.use(express.static(publicFilePath));
 
   const scopes = [
