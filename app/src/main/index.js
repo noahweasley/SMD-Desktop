@@ -3,6 +3,7 @@ if (!app.isPackaged) require("dotenv").config();
 const { join } = require("path");
 const { createAppFilesDir, getDownloadsDir } = require("./util/files");
 const settings = require("node-user-settings").defaults;
+const { canSweepEmptyFiles } = require("./util/debug");
 
 const preferenceFilePath =
   process.env.PREF_FILEPATH || join(app.getPath("userData"), "User", "Preferences", "Settings.json");
@@ -10,7 +11,14 @@ const preferenceFilePath =
 settings.setDefaultPreferenceFilePath(preferenceFilePath);
 
 // delete any empty files
-if (!app.isPackaged && process.env.CAN_SWEEP_EMPTY_FILES) require("clean-sweep").sweep(getDownloadsDir());
+if (!app.isPackaged && canSweepEmptyFiles()) {
+  try {
+    require("clean-sweep").sweep(getDownloadsDir());
+  } catch (ignored) {
+    /* empty */
+  }
+}
+
 // check for app updates
 require("update-electron-app")();
 // handle squirrel events on Windows
