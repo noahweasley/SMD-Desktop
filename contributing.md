@@ -27,9 +27,13 @@ BINARY_LOCATION="folder/to/ytdlp/binary"
 DB_FILEPATH="folder/to/sqlite/database"
 PREF_FILEPATH="file/to/save/preferences.json"
 WINDOW_DEBUG_ENABLED="true|false"
+CAN_SWEEP_EMPTY_FILES="true|false"
 ```
 
-This will enable you to test and view the contents of files created by the application properly. WINDOW_DEBUG_ENABLED would enable you to access chrome dev tools in some windows that restrict it in production
+_This will enable you to test and view the contents of files created by the application properly_
+
+- WINDOW_DEBUG_ENABLED would enable you to access chrome dev tools in some windows that restrict it in production
+- CAN_SWEEP_EMPTY_FILES would enable you clear empty music files on app startup
 
 ### Building the application
 
