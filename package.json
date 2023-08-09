@@ -66,7 +66,7 @@
   ],
   "devDependencies": {
     "chalk": "^4.1.2",
-    "clean-sweep": "^0.0.3",
+    "clean-sweep": "^0.0.4",
     "cspell": "^6.31.1",
     "dotenv": "^16.0.3",
     "electron": "^23.1.4",
