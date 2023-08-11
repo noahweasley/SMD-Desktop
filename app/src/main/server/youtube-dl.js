@@ -6,7 +6,7 @@ const path = require("path");
 const { M4A } = require("../util/file-extensions");
 
 const {
-  watchFileForChanges,
+  watchFileForChangeEvent,
   getBinaryFilepath,
   getDownloadsDir,
   checkIfFileExists,
@@ -44,7 +44,7 @@ function __exports() {
         await createDownloadLockFile(); // hold the lock
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         // wait for binary download to properly finish
-        if (process.platform === "win32") await watchFileForChanges(getBinaryFilepath());
+        if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());
         return Signal.NOT_EXISTS_DOWNLOADED;
       } catch (error) {
         return Signal.NOT_EXISTS_NOT_DOWNLOADED;

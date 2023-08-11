@@ -134,7 +134,7 @@ function __exports() {
    * @param {string} filePath
    * @returns {Promise<string>} a Promise that resolves when there is a detected file change
    */
-  function watchFileForChanges(filePath) {
+  function watchFileForChangeEvent(filePath) {
     return new Promise((resolve) => {
       const watcher = watch(filePath, (eventType, filename) => {
         if (filename && eventType === "change") {
@@ -242,7 +242,7 @@ function __exports() {
     getBinaryDownloadLockFilename,
     getBinaryFileDirectory,
     getBinaryFilepath,
-    watchFileForChanges,
+    watchFileForChangeEvent,
     deleteFilesInDirectory,
     getReadableFileSize,
     getOrCreateBinaryFileDirectory,

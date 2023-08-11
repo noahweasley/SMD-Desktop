@@ -113,7 +113,7 @@ module.exports = function (config) {
       await Promise.all(downloadPipePromises);
     } catch (error) {
       // stop all downloads
-       activeTasks.forEach((activeTask) => activeTask.emit("error"));
+      activeTasks.forEach((activeTask) => activeTask.emit("error"));
     }
   }
 

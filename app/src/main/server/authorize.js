@@ -24,6 +24,13 @@ module.exports = function (settings, spotifyApi) {
     "user-read-recently-played"
   ];
 
+  function clearAllTimedOperations() {
+    clearTimeout(timeout);
+    clearTimeout(refreshTimer);
+    refreshTimer = null;
+    timeout = null;
+  }
+
   server.get("/authorize", async (_req, res) => {
     // TODO: fix issue with spotifyApi.getClientId() returning null when it was already set
     if (!spotifyApi.getClientId() || !spotifyApi.getClientSecret()) {
@@ -48,10 +55,7 @@ module.exports = function (settings, spotifyApi) {
     if (error) {
       res.sendFile(path.resolve(__dirname, "../public/pages/failed.html"));
       connection.close();
-      clearTimeout(timeout);
-      clearTimeout(refreshTimer);
-      refreshTimer = null;
-      timeout = null;
+      clearAllTimedOperations();
       return;
     }
 
@@ -85,8 +89,7 @@ module.exports = function (settings, spotifyApi) {
       }
 
       if (connection) connection.close();
-      connection = null;
-      refreshTimer = null;
+      clearAllTimedOperations();
 
       refreshTimer = setInterval(async () => {
         try {

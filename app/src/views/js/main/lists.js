@@ -340,7 +340,7 @@ window.addEventListener("DOMContentLoaded", () => {
     } else if (downloadEvent === "end") {
       messageElement.innerText = "Download finished";
     } else if (downloadEvent === "error") {
-			// TODO: Add error indicator
+      // TODO: Add error indicator
       // messageElement.innerText = "Failed to download, please try again";
       // progressBar.classList.add("gone");
       return;

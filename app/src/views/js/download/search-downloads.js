@@ -144,6 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
               headerCheckBox.checked = false;
             }
           }
+          // eslint-disable-next-line no-console
           console.table(selectedListDataMap);
         }
       }

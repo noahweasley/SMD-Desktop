@@ -5,7 +5,7 @@
  */
 module.exports = function (config) {
   const maxLockCount = config.maxLockCount;
-  let concurrency = maxLockCount || 2;
+  let concurrency = maxLockCount || 1;
 
   /**
    * @returns {number} the maximum lock count
