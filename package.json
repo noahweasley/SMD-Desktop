@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "S.M.D is an application that seamlessly integrates with the Spotify API to help you discover, download, and enjoy your favorite songs from a single platform",
   "main": "app/src/main/index.js",
-  "author": "Noah Wesley",
+  "author": "Noah Weasley",
   "license": "GPL-3.0",
   "scripts": {
     "start:debug": "electron . --trace-warnings",
