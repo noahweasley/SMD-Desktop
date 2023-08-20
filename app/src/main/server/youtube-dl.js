@@ -4,6 +4,7 @@ const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
 const path = require("path");
 const { M4A } = require("../util/file-extensions");
+const { IllegalStateError } = require("../util/error");
 
 const {
   watchFileForChangeEvent,
@@ -15,7 +16,6 @@ const {
   createDownloadLockFile,
   isBinaryDownloadLocked
 } = require("../util/files");
-const { IllegalStateError } = require("../util/error");
 
 function __exports() {
   /**
