@@ -22,6 +22,11 @@ window.addEventListener("DOMContentLoaded", () => {
         searchQueryList = Object.values(selectedListDataMap);
       }
 
+      // eslint-disable-next-line no-console
+      console.log("\n\n Sending data \n\n");
+      // eslint-disable-next-line no-console
+      return console.table(searchQueryList);
+      // eslint-disable-next-line no-unreachable
       window.bridgeApis.send("download-click-event", [button.id, searchQueryList]);
     });
   });
@@ -100,10 +105,15 @@ window.addEventListener("DOMContentLoaded", () => {
         sCbx.addEventListener("click", () => {
           if (sCbx.checked) {
             // add track at selected index to object map
-            selectedListDataMap[`${index}`] = listData[0].searchQueryList[index];
+            const listGroupItemContainer = sCbx.parentElement.parentElement.parentElement;
+            const listGroup = listGroupItemContainer.parentElement;
+            const i = Array.from(listGroup.children).indexOf(listGroupItemContainer) - 1; /* excluding the header */
+
+            console.log(listData[i].searchQueryList[`${index}`]);
+            selectedListDataMap[`${index}`] = listData[i].searchQueryList[`${index}`];
             actionButtons[1].removeAttribute("disabled");
           } else {
-            // remove / delete track at selected index to object map
+            // remove OR delete track at selected index to object map
             delete selectedListDataMap[`${index}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               // very crazy, but I had to search for the header checkbox :)
@@ -144,8 +154,6 @@ window.addEventListener("DOMContentLoaded", () => {
               headerCheckBox.checked = false;
             }
           }
-          // eslint-disable-next-line no-console
-          console.table(selectedListDataMap);
         }
       }
     });
