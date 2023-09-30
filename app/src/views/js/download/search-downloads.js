@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 window.addEventListener("DOMContentLoaded", () => {
   const errorPlaceholder = document.querySelector(".error-placeholder");
   let listData;
@@ -21,11 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
         // TODO: searchQueryList shouldn't exist as a separate array, it should be inside listData
         searchQueryList = Object.values(selectedListDataMap);
       }
-
-      // eslint-disable-next-line no-console
-      console.log("\n\n Sending data \n\n");
-      // eslint-disable-next-line no-console
-      return console.table(searchQueryList);
+      return;
       // eslint-disable-next-line no-unreachable
       window.bridgeApis.send("download-click-event", [button.id, searchQueryList]);
     });
@@ -102,24 +99,25 @@ window.addEventListener("DOMContentLoaded", () => {
       for (let index = 0; index < cbxList.length; index++) {
         const sCbx = cbxList[index];
         // register click events for all check boxes on the list
+        const listGroupItem = sCbx.parentElement.parentElement;
+        const listGroupItemContainer = listGroupItem.parentElement;
+        const listGroup = listGroupItemContainer.parentElement;
+        // get positions excluding the headers (hence the -1)
+        const i = Array.from(listGroup.children).indexOf(listGroupItemContainer) - 1;
+        const cbxPosInList = Array.from(listGroupItemContainer.children).indexOf(listGroupItem) - 1;
+
         sCbx.addEventListener("click", () => {
           if (sCbx.checked) {
             // add track at selected index to object map
-            const listGroupItemContainer = sCbx.parentElement.parentElement.parentElement;
-            const listGroup = listGroupItemContainer.parentElement;
-            const i = Array.from(listGroup.children).indexOf(listGroupItemContainer) - 1; /* excluding the header */
-
-            console.log(listData[i].searchQueryList[`${index}`]);
-            selectedListDataMap[`${index}`] = listData[i].searchQueryList[`${index}`];
+            selectedListDataMap[`${index}`] = listData[i].searchQueryList[`${cbxPosInList}`];
             actionButtons[1].removeAttribute("disabled");
+            console.table(selectedListDataMap);
           } else {
             // remove OR delete track at selected index to object map
             delete selectedListDataMap[`${index}`];
             if (Object.keys(selectedListDataMap).length === 0) {
               // very crazy, but I had to search for the header checkbox :)
-              const parentHeaderCheckbox =
-                sCbx.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.firstElementChild;
-
+              const parentHeaderCheckbox = listGroupItemContainer.firstElementChild.lastElementChild.firstElementChild;
               parentHeaderCheckbox.checked = false;
               actionButtons[1].setAttribute("disabled", true);
             }
