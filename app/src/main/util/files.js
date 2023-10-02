@@ -138,8 +138,6 @@ function __exports() {
   function watchFileForChangeEvent(filePath, timeout = 5000) {
     return new Promise((resolve, reject) => {
       const watcher = watch(filePath, (eventType, filename) => {
-        // eslint-disable-next-line no-console
-        console.log(eventType);
         if (filename && eventType === "change") {
           watcher.close();
           resolve(filename);
