@@ -106,9 +106,7 @@ function __exports() {
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 
       if (downloadSignal === Signal.NOT_EXISTS_DOWNLOADED || downloadSignal === Signal.EXISTS_NOT_DOWNLOADED) {
-        const ytdlpWrapper = new ytdlp(getBinaryFilepath());
-        downloadStream = ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
-
+        const downloadStream = await tryDownload(request);
         const fileToStoreData = path.join(getDownloadsDir(), request.videoTitle.concat(M4A));
 
         _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
@@ -122,6 +120,16 @@ function __exports() {
     }
 
     return { downloadStream, downloadPipePromise };
+  }
+
+  async function tryDownload(request) {
+    try {
+      const ytdlpWrapper = new ytdlp(getBinaryFilepath());
+      return ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
+    } catch (err) {
+      if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());
+      return tryDownload(request);
+    }
   }
 
   function _registerDownloadEvents(args) {

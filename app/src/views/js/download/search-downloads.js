@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 window.addEventListener("DOMContentLoaded", () => {
   const errorPlaceholder = document.querySelector(".error-placeholder");
   let listData;

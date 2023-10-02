@@ -132,15 +132,28 @@ function __exports() {
    * Watch a file and detect file changes
    *
    * @param {string} filePath
+   * @param (number) timeout
    * @returns {Promise<string>} a Promise that resolves when there is a detected file change
    */
-  function watchFileForChangeEvent(filePath) {
-    return new Promise((resolve) => {
+  function watchFileForChangeEvent(filePath, timeout = 5000) {
+    return new Promise((resolve, reject) => {
       const watcher = watch(filePath, (eventType, filename) => {
+        // eslint-disable-next-line no-console
+        console.log(eventType);
         if (filename && eventType === "change") {
           watcher.close();
           resolve(filename);
         }
+      });
+
+      const timeoutId = setTimeout(() => {
+        watcher.close();
+        resolve();
+      }, timeout);
+
+      watcher.on("error", (error) => {
+        clearTimeout(timeoutId);
+        reject(error);
       });
     });
   }

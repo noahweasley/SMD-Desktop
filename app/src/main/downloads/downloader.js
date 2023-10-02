@@ -1,10 +1,8 @@
+const async = require("async");
 const downloadTask = require("./download-task");
-const Lock = require("./lock");
 
 module.exports = function (config) {
   const { targetWindow, maxParallelDownloads } = config;
-
-  const locker = Lock({ maxLockCount: maxParallelDownloads });
 
   let downloadTaskQueue = [];
   const activeTasks = [];
@@ -94,21 +92,22 @@ module.exports = function (config) {
     const downloadPipePromises = [];
 
     async function download(downloadTask) {
-      if (locker.acquireLock()) {
-        const downloadParams = await downloadTask.start();
-        const activeDownloadStream = downloadParams.downloadStream;
-        const downloadPipePromise = downloadParams.downloadPipePromise;
+      const downloadParams = await downloadTask.start();
+      const activeDownloadStream = downloadParams.downloadStream;
+      const downloadPipePromise = downloadParams.downloadPipePromise;
 
-        activeTasks.push(activeDownloadStream);
-        downloadPipePromises.push(downloadPipePromise);
-      } else {
-        const pendingDownload = downloadTask.wait();
-        pendingTasks.push(pendingDownload);
-      }
+      activeTasks.push(activeDownloadStream);
+      downloadPipePromises.push(downloadPipePromise);
     }
 
     try {
-      await Promise.all(downloadTaskQueue.map(download));
+      async.eachLimit(downloadTaskQueue, maxParallelDownloads, download, (err) => {
+        if (err) {
+          // show error to user
+        } else {
+         // notify user maybe with a sound or something in the future
+        }
+      });
       clearTaskQueue();
       await Promise.all(downloadPipePromises);
     } catch (error) {
