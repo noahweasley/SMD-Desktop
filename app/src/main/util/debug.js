@@ -4,10 +4,10 @@ const { getDownloadsDir } = require("./files");
 /**
  * Sweep empty downloaded tracks in debug mode
  */
-module.exports.sweepEmptyFiles = async () => {
+module.exports.sweepEmptyFiles = async (verbose = true) => {
   if (!app.isPackaged && this.canSweepEmptyFiles()) {
     try {
-      require("clean-sweep").promises.sweep(getDownloadsDir(), { verbose: true });
+      await require("clean-sweep").promises.sweep(getDownloadsDir(), { verbose });
     } catch (ignored) {
       /* empty */
     }
