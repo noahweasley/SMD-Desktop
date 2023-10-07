@@ -1,4 +1,4 @@
-## Version 0.1.0 (Initial release)
+## Version 0.0.1 (Initial release)
 
 **Features**
 
@@ -10,9 +10,15 @@
 **Known Issues**
 
 - Slow loading on window startup. It was used to fix some bugs
+- Cannot pause, cancel or delete pending downloads
+- Cannot pause or delete all pending downloads
+- On first-time download, downloading more than one track is impossible
+- Cannot download more than 2 tracks at once
+- Pending downloads remain in pending state, even after exiting the application
 
 **Future Updates**
 
+- Fix known bugs and issues
 - Customize user settings and theme
 - File conversions; export in different file format
 - Customize download settings like audio quality and download location

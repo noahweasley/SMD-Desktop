@@ -21,7 +21,7 @@ const database = require("./database");
 require("../main/events")(settings, browsers, database);
 
 app.whenReady().then(async () => {
-  await sweepEmptyFiles();
+  await sweepEmptyFiles(false);
   createAppFilesDir();
   mainWindow.init();
 

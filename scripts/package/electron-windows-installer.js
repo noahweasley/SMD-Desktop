@@ -9,8 +9,8 @@ const info0 = chalk.blue;
 const info1 = chalk.yellow;
 
 const sep = "-";
-const appExecutableNameX32 = `${productName}${sep}x32${sep}v${appVersion}${sep}setup.exe`;
-const appExecutableNameX64 = `${productName}${sep}x64${sep}v${appVersion}${sep}setup.exe`;
+const appExecutableNameX32 = `${productName}${sep}x32${sep}v${appVersion}${sep}Setup.exe`;
+const appExecutableNameX64 = `${productName}${sep}x64${sep}v${appVersion}${sep}Setup.exe`;
 
 const githubIconUrl =
   "https://raw.githubusercontent.com/noahweasley/SMD-Desktop/master/app/resources/build/icons/win/icon.ico";

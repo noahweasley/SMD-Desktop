@@ -102,10 +102,10 @@ function __exports() {
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
-      if (await lockfile.check(getBinaryFilepath(), lockOptions)) {
-        await setTimeout(2000);
-        downloadMatchingTrack(options);
-      }
+      // if (await lockfile.check(getBinaryFilepath(), lockOptions)) {
+      //   await setTimeout(2000);
+      //   downloadMatchingTrack(options);
+      // }
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 
@@ -120,7 +120,7 @@ function __exports() {
       }
     } finally {
       // make sure that progress dialog is closed no matter what happens
-      if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
+      target.webContents.send("show-binary-download-dialog", false);
     }
 
     return { downloadStream, downloadPipePromise };
@@ -130,7 +130,6 @@ function __exports() {
     if (retries > 0) {
       try {
         const ytdlpWrapper = new ytdlp(getBinaryFilepath());
-        lockfile.lock(getBinaryFilepath(), lockOptions);
         return ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
       } catch (err) {
         if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());

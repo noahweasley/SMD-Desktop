@@ -120,6 +120,258 @@
             <i class="fa-brands fa-sistrix">search</i> icon
           </p>
         </div>
+
+        <button class="accordion">Known Bugs and Workarounds <i class="fa fa-plus"></i></button>
+
+        <div class="panel">
+          <p>
+            Because S.M.D is still in it's development phase, we are providing a first look on what to expect in the
+            application. Before S.M.D reaches a stable release, we will continue to test the software and build the thing you
+            love. For now, there are some bugs we know of and we are currently fixing, for now, you'll have to bear with us
+            and use the available workarounds`. Below are a list of Known Bugs and Workarounds:
+          </p>
+
+          <div class="bug">
+            <h1>Bug #1: Cannot pause, cancel or delete pending downloads</h1>
+
+            <h2>Detailed Description</h2>
+
+            <p>Users are unable to pause, cancel or delete pending downloads in the "Downloading" section.</p>
+
+            <h2>Steps to Reproduce:</h2>
+
+            <ul>
+              <li><span></span>Finish authentication with Spotify</li>
+              <li><span></span>Navigate to the main screen</li>
+              <li><span></span>Perform download using any of the normal methods; Search and Paste URL</li>
+              <li><span></span>Navigate to the "Downloading tab"</li>
+              <li><span></span>Click on the pause, cancel or delete icons</li>
+            </ul>
+
+            <h2>Expected Behavior</h2>
+            <p>Cancel, Pause or Delete pending download.</p>
+
+            <h2>Actual Behavior</h2>
+            <p>No action performed or no response to button click.</p>
+
+            <h2>Workaround</h2>
+            <p>No workaround to this bug.</p>
+
+            <h2>Status: <span>In progress.</span></h2>
+            <!--
+
+          <h2>Visuals</h2>
+         Insert screenshots or video links if applicable.
+
+          <h2>Tags</h2>
+          <p>High Priority, Login, Password Reset</p>
+
+          <h2>Context</h2>
+          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
+
+        -->
+          </div>
+
+          <div class="bug">
+            <h1>Bug #2: Cannot pause or delete all pending downloads</h1>
+
+            <h2>Detailed Description</h2>
+
+            <p>Users are unable to pause or delete all pending downloads in the "Downloading" section</p>
+
+            <h2>Steps to Reproduce:</h2>
+
+            <ul>
+              <li><span></span>Finish authentication with Spotify</li>
+              <li><span></span>Navigate to the main screen</li>
+              <li>
+                <span></span>Perform download using any of the normal methods; Search and Paste URL and select multiple
+                tracks to download
+              </li>
+              <li><span></span>Navigate to the "Downloading tab"</li>
+              <li>
+                <span></span>Click on the pause or delete all icon at the top of the window, above the "Downloading" or
+                "Downloaded" tabs
+              </li>
+            </ul>
+
+            <h2>Expected Behavior</h2>
+            <p>Cancel or Pause all pending download</p>
+
+            <h2>Actual Behavior</h2>
+            <p>No action or shows an error dialog</p>
+
+            <h2>Workaround</h2>
+            <p>No workaround</p>
+
+            <h2>Status: <span>In progress</span></h2>
+            <!--
+
+          <h2>Visuals</h2>
+         Insert screenshots or video links if applicable.
+
+          <h2>Tags</h2>
+          <p>High Priority, Login, Password Reset</p>
+
+          <h2>Context</h2>
+          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
+
+        -->
+          </div>
+
+          <div class="bug">
+            <h1>Bug #3: On first time download, downloading more than one track is impossible</h1>
+
+            <h2>Detailed Description</h2>
+
+            <p>
+              Users are unable to download more than one track at once on first time downloads. On first time download, a
+              dialog is displayed, indicating that some binaries are downloading in the background.
+            </p>
+
+            <h2>Steps to Reproduce:</h2>
+
+            <ul>
+              <li><span></span>Finish authentication with Spotify</li>
+              <li><span></span>Navigate to the main screen</li>
+              <li>
+                <span></span>Immediately after, perform download using any of the normal methods; Search and Paste URL, and
+                select multiple tracks to download
+              </li>
+            </ul>
+
+            <h2>Expected Behavior</h2>
+            <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
+
+            <h2>Actual Behavior</h2>
+            <p>
+              One tracks gets downloaded and the rest never gets downloaded. Sometimes, two downloads, leaving the rest
+              behind
+            </p>
+
+            <h2>Workaround</h2>
+            <p>
+              User should download only one track immediately after installing the application, to process downloading
+              binaries correctly, before then proceeding to download multiple tracks.
+            </p>
+
+            <h2>Status: <span>In progress</span></h2>
+            <!--
+
+          <h2>Visuals</h2>
+         Insert screenshots or video links if applicable.
+
+          <h2>Tags</h2>
+          <p>High Priority, Login, Password Reset</p>
+
+          <h2>Context</h2>
+          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
+
+        -->
+          </div>
+
+          <div class="bug">
+            <h1>Bug #4: Cannot download more than 2 tracks at once</h1>
+
+            <h2>Detailed Description</h2>
+
+            <p>
+              Users are unable to download more than 2 tracks simultaneously after binaries have been downloaded. Users
+              should consider downloading not more than 2 tracks at once.
+            </p>
+
+            <h2>Steps to Reproduce:</h2>
+
+            <ul>
+              <li><span></span>Finish authentication with Spotify</li>
+              <li><span></span>Navigate to the main screen</li>
+              <li>
+                <span></span>Perform download using any of the normal methods; Search and Paste URL, and select more than 2
+                tracks to download
+              </li>
+            </ul>
+
+            <h2>Expected Behavior</h2>
+            <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
+
+            <h2>Actual Behavior</h2>
+            <p>
+              Multiple unexpected behaviors occur. In one scenario, only two tracks are downloaded and the rest are left
+              behind.
+            </p>
+
+            <h2>Workaround</h2>
+            <p>
+              User should download only one track immediately after installing the application, to process downloading
+              binaries correctly, before then proceeding to download at most w tracks only, simultaneously.
+            </p>
+
+            <h2>Status: <span>In progress</span></h2>
+            <!--
+
+          <h2>Visuals</h2>
+         Insert screenshots or video links if applicable.
+
+          <h2>Tags</h2>
+          <p>High Priority, Login, Password Reset</p>
+
+          <h2>Context</h2>
+          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
+
+        -->
+          </div>
+
+          <div class="bug">
+            <h1>Bug #5: Pending downloads remains in pending state, even after exiting application</h1>
+
+            <h2>Detailed Description</h2>
+
+            <p>
+              When user exits the application, the pending downloads are never cleared, because that scenario has not been
+              handled yet. So when user returns to the app, the downloads are still in pending state.
+            </p>
+
+            <h2>Steps to Reproduce:</h2>
+
+            <ul>
+              <li><span></span>Finish authentication with Spotify</li>
+              <li><span></span>Navigate to the main screen</li>
+              <li><span></span>Perform download using any of the normal methods; Search and Paste URL.</li>
+              <li><span></span>Exit application while downloads are pending and return to the application.</li>
+            </ul>
+
+            <h2>Expected Behavior</h2>
+            <p>
+              Confirm if user wants to exit application and remove all pending downloads and maybe provide a way to still
+              download that same track again without searching for that same track.
+            </p>
+
+            <h2>Actual Behavior</h2>
+            <p>Pending downloads remain in an indeterminate state.</p>
+
+            <h2>Workaround</h2>
+            <p>Wait for all pending downloads to complete.</p>
+
+            <h2>Status: <span>In progress</span></h2>
+            <!--
+
+          <h2>Visuals</h2>
+         Insert screenshots or video links if applicable.
+
+          <h2>Tags</h2>
+          <p>High Priority, Login, Password Reset</p>
+
+          <h2>Context</h2>
+          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
+
+        -->
+          </div>
+
+          <p>
+            <strong>Note:</strong> We recommend using the provided workaround until this issue is resolved in an upcoming
+            release.
+          </p>
+        </div>
       </div>
     </main>
 

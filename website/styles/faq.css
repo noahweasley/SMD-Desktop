@@ -73,3 +73,52 @@ a:active {
   display: none;
   overflow: hidden;
 }
+
+.panel .bug > *:not(h1, h2, h3) {
+  margin-top: 1em;
+}
+
+.panel .bug {
+  margin-top: 24px;
+  border: 1px solid var(--grey-solid_5);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/*  Start Known Bugs and Workarounds section  */
+.panel .bug h1 {
+  font-size: 1em;
+}
+
+.panel .bug h2 {
+  margin-top: 3em;
+  font-size: 0.9em;
+}
+
+.panel .bug h2 span {
+  margin-left: 1em;
+  font-weight: normal;
+}
+
+.panel .bug h3 {
+  margin-top: 3em;
+  font-size: 0.8em;
+}
+
+.panel .bug h4 {
+  font-size: 0.7em;
+}
+
+.panel .bug h5 {
+  font-size: 0.6em;
+}
+
+.panel .bug ul > li {
+  line-height: 2em;
+}
+
+/* .panel .bug ul > li > span {
+  padding-left: 2em;
+} */
+
+/*  End Known Bugs and Workarounds section  */
