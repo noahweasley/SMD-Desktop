@@ -108,7 +108,6 @@ window.addEventListener("DOMContentLoaded", () => {
             // add track at selected index to object map
             selectedListDataMap[`${index}`] = listData[i].searchQueryList[`${cbxPosInList}`];
             actionButtons[1].removeAttribute("disabled");
-            console.table(selectedListDataMap);
           } else {
             // remove OR delete track at selected index to object map
             delete selectedListDataMap[`${index}`];

@@ -100,19 +100,20 @@ module.exports = function (config) {
       downloadPipePromises.push(downloadPipePromise);
     }
 
+    async.eachLimit(downloadTaskQueue, maxParallelDownloads, download, (err) => {
+      if (err) {
+        // show error to user
+      } else {
+        // notify user maybe with a sound or something in the future
+      }
+    });
+
+    clearTaskQueue();
     try {
-      async.eachLimit(downloadTaskQueue, maxParallelDownloads, download, (err) => {
-        if (err) {
-          // show error to user
-        } else {
-         // notify user maybe with a sound or something in the future
-        }
-      });
-      clearTaskQueue();
       await Promise.all(downloadPipePromises);
     } catch (error) {
       // stop all downloads
-      activeTasks.forEach((activeTask) => activeTask.emit("error"));
+      // activeTasks.forEach((activeTask) => activeTask.emit("error"));
     }
   }
 

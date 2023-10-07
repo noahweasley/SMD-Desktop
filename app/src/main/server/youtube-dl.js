@@ -1,7 +1,9 @@
 const { pipeline } = require("stream/promises");
 const { createWriteStream } = require("fs");
+const lockfile = require("proper-lockfile");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
+const { setTimeout } = require("timers/promises");
 const path = require("path");
 const { M4A } = require("../util/file-extensions");
 const { IllegalStateError } = require("../util/error");
@@ -11,13 +13,12 @@ const {
   getBinaryFilepath,
   getDownloadsDir,
   checkIfFileExists,
-  getOrCreateBinaryFileDirectory,
-  clearDownloadLockFile,
-  createDownloadLockFile,
-  isBinaryDownloadLocked
+  getOrCreateBinaryFileDirectory
 } = require("../util/files");
 
 function __exports() {
+  const lockOptions = { realpath: false };
+
   /**
    * Binary download signal
    */
@@ -38,10 +39,10 @@ function __exports() {
     if (binaryFileExists) {
       return Signal.EXISTS_NOT_DOWNLOADED;
     } else {
-      const parentDirectory = await getOrCreateBinaryFileDirectory();
-      const ytdlpBinaryFilepath = getBinaryFilepath(parentDirectory);
       try {
-        await createDownloadLockFile(); // hold the lock
+        await lockfile.lock(getBinaryFilepath(), lockOptions);
+        const parentDirectory = await getOrCreateBinaryFileDirectory();
+        const ytdlpBinaryFilepath = getBinaryFilepath(parentDirectory);
         await ytdlp.downloadFromGithub(ytdlpBinaryFilepath);
         // wait for binary download to properly finish
         if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());
@@ -49,7 +50,7 @@ function __exports() {
       } catch (error) {
         return Signal.NOT_EXISTS_NOT_DOWNLOADED;
       } finally {
-        await clearDownloadLockFile(); // release the lock
+        await lockfile.unlock(getBinaryFilepath(), lockOptions);
       }
     }
   }
@@ -98,10 +99,13 @@ function __exports() {
     let binaryFileExists;
 
     try {
-      while (await isBinaryDownloadLocked());
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
+      if (await lockfile.check(getBinaryFilepath(), lockOptions)) {
+        await setTimeout(2000);
+        downloadMatchingTrack(options);
+      }
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 
@@ -109,7 +113,7 @@ function __exports() {
         const downloadStream = await tryDownload(request);
         const fileToStoreData = path.join(getDownloadsDir(), request.videoTitle.concat(M4A));
 
-        _registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
+        registerDownloadEvents({ downloadStream, fileToStoreData, taskId, target, request });
         downloadPipePromise = pipeline(downloadStream, createWriteStream(fileToStoreData));
       } else {
         throw new IllegalStateError("Fatal error occurred, cannot download");
@@ -122,17 +126,22 @@ function __exports() {
     return { downloadStream, downloadPipePromise };
   }
 
-  async function tryDownload(request) {
-    try {
-      const ytdlpWrapper = new ytdlp(getBinaryFilepath());
-      return ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
-    } catch (err) {
-      if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());
-      return tryDownload(request);
+  async function tryDownload(request, retries = 20) {
+    if (retries > 0) {
+      try {
+        const ytdlpWrapper = new ytdlp(getBinaryFilepath());
+        lockfile.lock(getBinaryFilepath(), lockOptions);
+        return ytdlpWrapper.execStream(["-f", "140", request.videoUrl]);
+      } catch (err) {
+        if (process.platform === "win32") await watchFileForChangeEvent(getBinaryFilepath());
+        return tryDownload(request, retries - 1);
+      }
+    } else {
+      throw Error("Download Retry Timeout");
     }
   }
 
-  function _registerDownloadEvents(args) {
+  function registerDownloadEvents(args) {
     const { downloadStream, fileToStoreData, taskId, target, request } = args;
 
     downloadStream.on("progress", (progress) => {

@@ -1,6 +1,6 @@
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
-const { readdir, stat, unlink, open: _open, mkdir: _mkdir, writeFile } = require("fs/promises");
+const { readdir, stat, unlink, open: _open, mkdir: _mkdir} = require("fs/promises");
 const { join, extname, basename } = require("path");
 const { getReadableSize } = require("./math");
 const FILE_EXTENSIONS = require("./file-extensions");
@@ -12,8 +12,6 @@ const FILE_EXTENSIONS = require("./file-extensions");
  */
 function __exports() {
   const binaryFilename = "yt-dlp";
-  const downloadLockFilename = `${binaryFilename}${FILE_EXTENSIONS.LOCK}`;
-
   /**
    * The ytdlp binary file name
    */
@@ -71,7 +69,7 @@ function __exports() {
    * @returns the directory where the the ytdlp binary file was downloaded
    */
   function getBinaryFileDirectory() {
-    return process.env.BINARY_LOCATION || join(app.getPath("userData"), "Binaries", binaryFilename);
+    return process.env.BINARY_LOCATION || join(app.getPath("userData"), "bin", binaryFilename);
   }
 
   function _getBinaryFilepath(parentDirectory) {
@@ -88,44 +86,6 @@ function __exports() {
   function getBinaryFilepath(parentDirectory) {
     const binaryFileDirectory = parentDirectory || getBinaryFileDirectory();
     return _getBinaryFilepath(binaryFileDirectory);
-  }
-
-  /**
-   * The download flag is an indicator that the ytdlp binary file is being downloaded and no other process or thread should
-   * try to download it, at least, not until the download fails or succeeds
-   *
-   * @returns the download flag file location
-   */
-  function getBinaryDownloadLockFilename() {
-    return join(getBinaryFileDirectory(), downloadLockFilename);
-  }
-
-  /**
-   * Creates the download flag
-   *
-   * @see {@link getBinaryDownloadLockFilename Retrieve the binary lock file location}
-   */
-  async function createDownloadLockFile() {
-    await writeFile(getBinaryDownloadLockFilename(), "");
-  }
-
-  /**
-   * Delete the download flag
-   *
-   * @see {@link getBinaryDownloadLockFilename Retrieve the binary lock file location}
-   */
-  async function clearDownloadLockFile() {
-    await unlink(getBinaryDownloadLockFilename());
-  }
-
-  /**
-   * Checks if binary download is locked. This function just simply checks for the existence of a lock file
-   *
-   * @returns a flag indicating if the binary download lock file exists or not
-   * @see {@link getBinaryDownloadLockFilename Retrieve the download flag file location}
-   */
-  async function isBinaryDownloadLocked() {
-    return await checkIfFileExists(getBinaryDownloadLockFilename());
   }
 
   /**
@@ -250,7 +210,6 @@ function __exports() {
     getDownloadsDir,
     getTempThumbDir,
     getThumbnailDir,
-    getBinaryDownloadLockFilename,
     getBinaryFileDirectory,
     getBinaryFilepath,
     watchFileForChangeEvent,
@@ -258,9 +217,6 @@ function __exports() {
     getReadableFileSize,
     getOrCreateBinaryFileDirectory,
     getBinaryFilepathOrThrowError,
-    isBinaryDownloadLocked,
-    createDownloadLockFile,
-    clearDownloadLockFile,
     getBinaryFilename
   };
 }
