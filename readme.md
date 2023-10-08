@@ -13,15 +13,19 @@
   <a href="https://github.com/noahweasley/SMD-desktop/blob/master/LICENSE"
     ><img src="https://img.shields.io/github/license/noahweasley/smd-desktop" alt="License"
   /></a>
-  <a href="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml">
-    <img src="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml/badge.svg?branch=master" alt="Deploy Product Website">
-  </a>
   <a href=" https://github.com/noahweasley/smd-desktop/releases"
     ><img src="https://img.shields.io/github/v/release/noahweasley/smd-desktop?label=latest%20release" alt="Latest release"
   /></a>
-  <a href="https://www.patreon.com/noahweasley"
+  <a href="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml">
+    <img src="https://github.com/noahweasley/SMD-Desktop/actions/workflows/jekyll-gh-pages.yml/badge.svg?branch=master" alt="Deploy Product Website">
+  </a>
+   <a href=" https://github.com/noahweasley/smd-desktop/releases">
+  <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/noahweasley/SMD-Desktop/total?color=lightgrey">
+  </a>
+<a href="https://www.patreon.com/noahweasley"
     ><img src="https://img.shields.io/badge/sponsor-patreon-blue" alt="Patreon"
   /></a>
+
 </div>
 
 <br />
