@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, shell } = require("electron");
+const { app, BrowserWindow } = require("electron");
 if (!app.isPackaged) require("dotenv").config();
 const { join } = require("path");
 const { createAppFilesDir } = require("./util/files");

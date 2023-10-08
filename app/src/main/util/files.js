@@ -1,6 +1,6 @@
 const { app } = require("electron");
 const { mkdir, open, watch } = require("fs");
-const { readdir, stat, unlink, open: _open, mkdir: _mkdir} = require("fs/promises");
+const { readdir, stat, unlink, open: _open, mkdir: _mkdir } = require("fs/promises");
 const { join, extname, basename } = require("path");
 const { getReadableSize } = require("./math");
 const FILE_EXTENSIONS = require("./file-extensions");
