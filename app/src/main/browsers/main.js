@@ -1,6 +1,7 @@
-const { BrowserWindow, Menu, ipcMain } = require("electron");
+const { BrowserWindow, Menu, ipcMain, dialog, app, shell } = require("electron");
 const { join } = require("path");
 const menu = require("../menu/main");
+const { checkForUpdates } = require("../util/auto-update");
 
 module.exports = function (settings) {
   let smdWindow;
@@ -35,10 +36,36 @@ module.exports = function (settings) {
     Menu.setApplicationMenu(menu);
     smdWindow.loadFile(join("app", "src", "views", "pages", "index.html"));
 
-    smdWindow.once("ready-to-show", () => {
+    smdWindow.once("ready-to-show", async () => {
       smdWindow.show();
       // to prevent glitch on window maximize, after displaying the window, then maximize it
       if (winState.isMaximized) smdWindow.maximize();
+
+      const updateInfo = await checkForUpdates();
+      if (updateInfo !== null) {
+        const returnedValue = await dialog.showMessageBox(getWindow(), {
+          noLink: true,
+          title: "Update available",
+          type: "info",
+          message: `Upgrade ${app.getName()} from v${app.getVersion()} to the latest version; ${updateInfo.tag_name}?`,
+          defaultId: 0,
+          buttons: ["Proceed", "Not now"]
+        });
+
+        if (returnedValue.response === 0) {
+          let downloadLink;
+
+          if (process.platform === "win32") {
+            downloadLink = "https://noahweasley.github.io/SMD-Desktop/website/pages/downloads/windows.html";
+          } else if (process.platform === "darwin") {
+            downloadLink = "https://noahweasley.github.io/SMD-Desktop/website/pages/downloads/mac-os.html";
+          } else {
+            downloadLink = "https://noahweasley.github.io/SMD-Desktop/website/pages/downloads/linux.html";
+          }
+
+          shell.openExternal(downloadLink);
+        }
+      }
     });
 
     smdWindow.on("close", async (event) => {

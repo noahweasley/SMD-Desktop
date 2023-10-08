@@ -1,18 +1,17 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog, shell } = require("electron");
 if (!app.isPackaged) require("dotenv").config();
 const { join } = require("path");
 const { createAppFilesDir } = require("./util/files");
 const settings = require("node-user-settings").defaults;
 const { sweepEmptyFiles } = require("./util/debug");
 
+// handle squirrel events on Windows
+if (require("electron-squirrel-startup")) return;
+
 const preferenceFilePath =
   process.env.PREF_FILEPATH || join(app.getPath("userData"), "User", "Preferences", "Settings.json");
 
 settings.setDefaultPreferenceFilePath(preferenceFilePath);
-// handle squirrel events on Windows
-if (require("electron-squirrel-startup")) return;
-// check for app updates
-require("update-electron-app")();
 
 const browsers = require("../main/browsers")(settings);
 const { mainWindow } = browsers;

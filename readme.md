@@ -37,7 +37,7 @@
 </p>
 <br />
 
-**Please note**: This application is still in development, ping me - [mailto:iebenmelu@gmail.com], I will tell you when I have released the first version and also send you a link to download it. You could also watch the project.
+**Please note**: This application is still in development and there is no stable release for this application yet, hence a lot of bugs will be found in the application. Visit the [Frequently Asked Questions Page](https://noahweasley.github.io/SMD-Desktop/website/pages/faq.html) to get more info on the known bugs and issues.
 
 ## About S.M.D
 

@@ -9,6 +9,8 @@ const info0 = chalk.blue;
 const info1 = chalk.yellow;
 
 const sep = "-";
+// const certificateFile = "./";
+// const certificatePassword = "S.M.D";
 const appExecutableNameX32 = `${productName}${sep}x32${sep}v${appVersion}${sep}Setup.exe`;
 const appExecutableNameX64 = `${productName}${sep}x64${sep}v${appVersion}${sep}Setup.exe`;
 
@@ -19,6 +21,8 @@ const settings64 = {
   noMsi: true,
   name: productName,
   iconUrl: githubIconUrl,
+  // certificateFile,
+  // certificatePassword,
   loadingGif: "./app/resources/build/tools/smd_installer.gif",
   setupIcon: "./app/resources/build/icons/win/icon.ico",
   appDirectory: `./build/dist/win/${productName}-win32-x64`,
@@ -31,6 +35,8 @@ const settings32 = {
   noMsi: true,
   name: productName,
   iconUrl: githubIconUrl,
+  // certificateFile,
+  // certificatePassword,
   loadingGif: "./app/resources/build/tools/smd_installer.gif",
   setupIcon: "./app/resources/build/icons/win/icon.ico",
   appDirectory: `./build/dist/win/${productName}-win32-ia32`,

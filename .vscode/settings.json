@@ -1,7 +1,7 @@
 {
   "liveServer.settings.port": 5501,
   "git.ignoreLimitWarning": true,
-  "explorer.excludeGitIgnore": true,
+  "explorer.excludeGitIgnore": false,
   "editor.tabSize": 4,
   "jest.autoRun": {},
   "[json]": {

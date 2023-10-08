@@ -42,10 +42,7 @@
     "build-start": "npm run build && npm run start"
   },
   "homepage": "https://www.noahweasley.github.io/SMD-Desktop/website",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/noahweasley/SMD-Desktop.git"
-  },
+  "repository": "https://github.com/noahweasley/SMD-Desktop",
   "funding": {
     "type": "patreon",
     "url": "https://www.patreon.com/noahweasley"
@@ -86,7 +83,7 @@
     "proper-lockfile": "^4.1.2",
     "spotify-web-api-node": "^5.0.2",
     "sqlite3": "^5.1.2",
-    "update-electron-app": "^2.0.1",
+    "superagent": "^8.1.2",
     "uuid": "^9.0.0",
     "youtube-search-without-api-key": "^1.0.7",
     "yt-dlp-wrap": "^2.3.12"
