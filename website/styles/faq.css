@@ -22,103 +22,114 @@
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  position: initial;
+  /* position: relative; */
+  background: #0c0b0b !important;
 }
 
-a {
-  text-decoration: none;
-  color: white;
-  cursor: pointer;
+nav {
+  /* position: absolute; */
+  width: 100%;
+  height: 80px;
 }
 
-a:hover {
-  color: var(--primary-color);
-  text-decoration: underline;
+main {
+  font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  /* min-height: 90vh; */
 }
 
-a:active {
-  color: var(--primary-color-dark);
+.faq-header {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--sand-solid);
+  margin-bottom: 3rem;
 }
 
 .accordion {
-  background-color: var(--solid-dark-alt);
-  color: var(--white-solid);
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 1.1em;
-  font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  transition: 0.4s;
-  display: flex;
-  justify-content: space-between;
-  margin-block: 8px;
+  width: 70%;
 }
 
-.accordion > i {
-  margin-inline: 1em;
+.accordion-item {
+  background: #0c0b0b !important;
+  border: 0 !important;
+  margin-bottom: .5rem;
 }
 
-.acc-active,
-.accordion:hover {
-  background-color: var(--grey-solid_5);
+.accordion-button {
+  background: #161313 !important;
+  color: var(--white-solid) !important;
 }
 
-.panel {
-  padding: 0 18px;
-  display: none;
-  overflow: hidden;
+.accordion-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.panel .bug > *:not(h1, h2, h3) {
-  margin-top: 1em;
+.accordion-button::after {
+  background-image: url(../assets/chevron-up.svg) !important;
 }
 
-.panel .bug {
-  margin-top: 24px;
-  border: 1px solid var(--grey-solid_5);
-  border-radius: 8px;
-  padding: 16px;
+.accordion-button:not(.collapsed)::after {
+  background-image: url(../assets/chevron-up.svg) !important;
 }
 
-/*  Start Known Bugs and Workarounds section  */
-.panel .bug h1 {
-  font-size: 1em;
+.accordion-body {
+  color: var(--sand-solid);
 }
 
-.panel .bug h2 {
-  margin-top: 3em;
-  font-size: 0.9em;
+.bug {
+  border: var(--grey-solid_10) solid 1px;
+  padding: 1rem;
+  border-radius: .5rem;
+  margin-bottom: 2rem;
 }
 
-.panel .bug h2 span {
-  margin-left: 1em;
-  font-weight: normal;
+.bug-title {
+  font-size: 1.7rem !important;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
-.panel .bug h3 {
-  margin-top: 3em;
-  font-size: 0.8em;
+.bug h2 {
+  font-size: 1.4rem;
 }
 
-.panel .bug h4 {
-  font-size: 0.7em;
+@media (max-width: 768px) {
+  .faq-header {
+    text-align: center;
+    font-weight: normal;
+    width: 80%;
+  }
+  .accordion {
+    width: 80%;
+  }
 }
 
-.panel .bug h5 {
-  font-size: 0.6em;
+@media (max-width: 576px) {
+  .faq-header {
+    text-align: center;
+    font-weight: normal;
+    width: 90%;
+  }
+  .accordion {
+    width: 90%;
+  }
 }
 
-.panel .bug ul > li {
-  line-height: 2em;
+@media (max-width: 380px) {
+  .faq-header {
+    text-align: center;
+    font-weight: normal;
+    font-size: 2rem;
+    width: 90%;
+    margin: 0 auto;
+  }
+  .accordion {
+    width: 95%;
+  }
 }
-
-/* .panel .bug ul > li > span {
-  padding-left: 2em;
-} */
 
 /*  End Known Bugs and Workarounds section  */

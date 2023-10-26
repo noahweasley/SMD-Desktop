@@ -19,6 +19,7 @@
     <meta name="msapplication-TileColor" content="#00a300" />
     <meta name="msapplication-config" content="../favicon/browserconfig.xml" />
     <meta name="theme-color" content="#ffffff" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   </head>
 
   <body>
@@ -45,344 +46,299 @@
       </ul>
     </nav>
 
-    <main style="padding: calc(1vw + 8px)">
-      <h1>Frequently asked questions</h1>
-
-      <div class="container">
-        <button class="accordion">
-          How do I create a Spotify app (Client ID and Client Secret) to start using S.M.D
-          <i class="fa fa-plus"></i>
-        </button>
-
-        <div class="panel">
-          <p>
-            You can learn how to create a Spotify app from this
-            <a
-              target="_blank"
-              href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard"
-              >link</a
-            >
-          </p>
-          <p>
-            Please also replace
-            <b>Redirect URL with http://localhost:8888/callback for the authorization to work with S.M.D</b>
-          </p>
-          Click on the video below to learn more on how to create a Spotify App (<b>i.e A Client Id and A Client Secret</b>)
-          <br />
-
-          <p>
-            <a
-              target="_blank"
-              href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard?wvideo=q9l6635y5f"
-              ><img
-                src="https://embed-ssl.wistia.com/deliveries/30c2fdecae919d48dd0e62ee1f2032a959781a99.jpg?image_play_button_size=2x&amp;image_crop_resized=960x540&amp;image_play_button=1&amp;image_play_button_color=c475dee0"
-                style="width: 400px; height: 225px"
-                width="400"
-                height="225"
-              />
-            </a>
-          </p>
-          <b>Please Note</b>: The Spotify app created on your dashboard is private to you, we have no access to it
-          <br />
+    <main>
+      <h2 class="faq-header">Frequently Asked Questions</h2>
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              How do I create a Spotify app (Client ID and Client Secret) to start using S.M.D
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="panel accordion-body">
+              <p>
+                You can learn how to create a Spotify app from this
+                <a
+                  target="_blank"
+                  href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard"
+                  >link</a
+                >
+              </p>
+              <p>
+                Please also replace
+                <b>Redirect URL with http://localhost:8888/callback for the authorization to work with S.M.D</b>
+              </p>
+              Click on the video below to learn more on how to create a Spotify App (<b>i.e A Client Id and A Client Secret</b>)
+              <br />
+              <br>
+      
+              <p>
+                <a
+                  target="_blank"
+                  href="https://www.newline.co/courses/build-a-spotify-connected-app/getting-started-with-the-spotify-developer-dashboard?wvideo=q9l6635y5f"
+                  ><img
+                    src="https://embed-ssl.wistia.com/deliveries/30c2fdecae919d48dd0e62ee1f2032a959781a99.jpg?image_play_button_size=2x&amp;image_crop_resized=960x540&amp;image_play_button=1&amp;image_play_button_color=c475dee0"
+                    style="width: 400px; height: 225px"
+                    width="400"
+                    height="225"
+                  />
+                </a>
+              </p>
+              <b>Please Note</b>: The Spotify app created on your dashboard is private to you, we have no access to it
+              <br />
+            </div>
+          </div>
         </div>
 
-        <button class="accordion">
-          Why do I need a Client ID and Secret from Spotify
-          <i class="fa fa-plus"></i>
-        </button>
-        <div class="panel">
-          <p>
-            S.M.D fetches data from spotify, hence the need to register a Spotify app in which S.M.D would use. S.M.D is an
-            open-source application, so you actually need to create your own keys. <br />
-            You can register an app <a target="_blank" href="https://developer.spotify.com/dashboard/login">here</a>
-          </p>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Why do I need a Client ID and Secret from Spotify
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="panel accordion-body">
+              <p>
+                S.M.D fetches data from spotify, hence the need to register a Spotify app in which S.M.D would use. S.M.D is an
+                open-source application, so you actually need to create your own keys. <br />
+                You can register an app <a target="_blank" href="https://developer.spotify.com/dashboard/login">here</a>
+              </p>
+            </div>
+          </div>
         </div>
-
-        <button class="accordion">
-          Is the YouTube API-Key even required
-          <i class="fa fa-plus"></i>
-        </button>
-        <div class="panel">
-          <p>
-            No, it's not, at least for now! It was added there in-case something changes and breaks the app, hence needing an
-            API-Key
-          </p>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Is the YouTube API-Key even required
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div class="panel accordion-body">
+              <p>
+                No, it's not, at least for now! It was added there in-case something changes and breaks the app, hence needing an
+                API-Key
+              </p>
+            </div>
+          </div>
         </div>
-
-        <button class="accordion">
-          How do I search for a single track
-          <i class="fa fa-plus"></i>
-        </button>
-        <div class="panel">
-          <p>
-            After providing the extra data required after installing the S.M.D, it reloads and displays the main page. Close
-            to the top-right corner, you'll find a search input, input the search parameter and then click the
-            <i class="fa-brands fa-sistrix">search</i> icon
-          </p>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              How do I search for a single track
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+            <div class="panel accordion-body">
+              <p>
+                After providing the extra data required after installing the S.M.D, it reloads and displays the main page. Close
+                to the top-right corner, you'll find a search input, input the search parameter and then click the
+                <i class="fa-brands fa-sistrix">search</i> icon
+              </p>
+            </div>
+          </div>
         </div>
-
-        <button class="accordion">Known Bugs and Workarounds <i class="fa fa-plus"></i></button>
-
-        <div class="panel">
-          <p>
-            Because S.M.D is still in it's development phase, we are providing a first look on what to expect in the
-            application. Before S.M.D reaches a stable release, we will continue to test the software and build the thing you
-            love. For now, there are some bugs we know of and we are currently fixing, for now, you'll have to bear with us
-            and use the available workarounds`. Below are a list of Known Bugs and Workarounds:
-          </p>
-
-          <div class="bug">
-            <h1>Bug #1: Cannot pause, cancel or delete pending downloads</h1>
-
-            <h2>Detailed Description</h2>
-
-            <p>Users are unable to pause, cancel or delete pending downloads in the "Downloading" section.</p>
-
-            <h2>Steps to Reproduce:</h2>
-
-            <ul>
-              <li><span></span>Finish authentication with Spotify</li>
-              <li><span></span>Navigate to the main screen</li>
-              <li><span></span>Perform download using any of the normal methods; Search and Paste URL</li>
-              <li><span></span>Navigate to the "Downloading tab"</li>
-              <li><span></span>Click on the pause, cancel or delete icons</li>
-            </ul>
-
-            <h2>Expected Behavior</h2>
-            <p>Cancel, Pause or Delete pending download.</p>
-
-            <h2>Actual Behavior</h2>
-            <p>No action performed or no response to button click.</p>
-
-            <h2>Workaround</h2>
-            <p>No workaround to this bug.</p>
-
-            <h2>Status: <span>In progress.</span></h2>
-            <!--
-
-          <h2>Visuals</h2>
-         Insert screenshots or video links if applicable.
-
-          <h2>Tags</h2>
-          <p>High Priority, Login, Password Reset</p>
-
-          <h2>Context</h2>
-          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
-
-        -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFive">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+              Known Bugs and Workarounds
+            </button>
+          </h2>
+          <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+            <div class="panel accordion-body">
+              <p>
+                Because S.M.D is still in it's development phase, we are providing a first look on what to expect in the
+                application. Before S.M.D reaches a stable release, we will continue to test the software and build the thing you
+                love. For now, there are some bugs we know of and we are currently fixing, for now, you'll have to bear with us
+                and use the available workarounds`. Below are a list of Known Bugs and Workarounds:
+              </p>
+      
+              <div class="bug">
+                <h1 class="bug-title">Bug #1: Cannot pause, cancel or delete pending downloads</h1>
+      
+                <h2>Detailed Description</h2>
+      
+                <p>Users are unable to pause, cancel or delete pending downloads in the "Downloading" section.</p>
+      
+                <h2>Steps to Reproduce:</h2>
+      
+                <ul>
+                  <li><span></span>Finish authentication with Spotify</li>
+                  <li><span></span>Navigate to the main screen</li>
+                  <li><span></span>Perform download using any of the normal methods; Search and Paste URL</li>
+                  <li><span></span>Navigate to the "Downloading tab"</li>
+                  <li><span></span>Click on the pause, cancel or delete icons</li>
+                </ul>
+      
+                <h2>Expected Behavior</h2>
+                <p>Cancel, Pause or Delete pending download.</p>
+      
+                <h2>Actual Behavior</h2>
+                <p>No action performed or no response to button click.</p>
+      
+                <h2>Workaround</h2>
+                <p>No workaround to this bug.</p>
+      
+                <h2>Status: <span>In progress.</span></h2>
+              </div>
+      
+              <div class="bug">
+                <h1 class="bug-title">Bug #2: Cannot pause or delete all pending downloads</h1>
+      
+                <h2>Detailed Description</h2>
+      
+                <p>Users are unable to pause or delete all pending downloads in the "Downloading" section</p>
+      
+                <h2>Steps to Reproduce:</h2>
+      
+                <ul>
+                  <li><span></span>Finish authentication with Spotify</li>
+                  <li><span></span>Navigate to the main screen</li>
+                  <li>
+                    <span></span>Perform download using any of the normal methods; Search and Paste URL and select multiple
+                    tracks to download
+                  </li>
+                  <li><span></span>Navigate to the "Downloading tab"</li>
+                  <li>
+                    <span></span>Click on the pause or delete all icon at the top of the window, above the "Downloading" or
+                    "Downloaded" tabs
+                  </li>
+                </ul>
+      
+                <h2>Expected Behavior</h2>
+                <p>Cancel or Pause all pending download</p>
+      
+                <h2>Actual Behavior</h2>
+                <p>No action or shows an error dialog</p>
+      
+                <h2>Workaround</h2>
+                <p>No workaround</p>
+      
+                <h2>Status: <span>In progress</span></h2>
+              </div>
+      
+              <div class="bug">
+                <h1 class="bug-title">Bug #3: On first time download, downloading more than one track is impossible</h1>
+      
+                <h2>Detailed Description</h2>
+      
+                <p>
+                  Users are unable to download more than one track at once on first time downloads. On first time download, a
+                  dialog is displayed, indicating that some binaries are downloading in the background.
+                </p>
+      
+                <h2>Steps to Reproduce:</h2>
+      
+                <ul>
+                  <li><span></span>Finish authentication with Spotify</li>
+                  <li><span></span>Navigate to the main screen</li>
+                  <li>
+                    <span></span>Immediately after, perform download using any of the normal methods; Search and Paste URL, and
+                    select multiple tracks to download
+                  </li>
+                </ul>
+      
+                <h2>Expected Behavior</h2>
+                <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
+      
+                <h2>Actual Behavior</h2>
+                <p>
+                  One tracks gets downloaded and the rest never gets downloaded. Sometimes, two downloads, leaving the rest
+                  behind
+                </p>
+      
+                <h2>Workaround</h2>
+                <p>
+                  User should download only one track immediately after installing the application, to process downloading
+                  binaries correctly, before then proceeding to download multiple tracks.
+                </p>
+      
+                <h2>Status: <span>In progress</span></h2>
+              </div>
+      
+              <div class="bug">
+                <h1 class="bug-title">Bug #4: Cannot download more than 2 tracks at once</h1>
+      
+                <h2>Detailed Description</h2>
+      
+                <p>
+                  Users are unable to download more than 2 tracks simultaneously after binaries have been downloaded. Users
+                  should consider downloading not more than 2 tracks at once.
+                </p>
+      
+                <h2>Steps to Reproduce:</h2>
+      
+                <ul>
+                  <li><span></span>Finish authentication with Spotify</li>
+                  <li><span></span>Navigate to the main screen</li>
+                  <li>
+                    <span></span>Perform download using any of the normal methods; Search and Paste URL, and select more than 2
+                    tracks to download
+                  </li>
+                </ul>
+      
+                <h2>Expected Behavior</h2>
+                <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
+      
+                <h2>Actual Behavior</h2>
+                <p>
+                  Multiple unexpected behaviors occur. In one scenario, only two tracks are downloaded and the rest are left
+                  behind.
+                </p>
+      
+                <h2>Workaround</h2>
+                <p>
+                  User should download only one track immediately after installing the application, to process downloading
+                  binaries correctly, before then proceeding to download at most w tracks only, simultaneously.
+                </p>
+      
+                <h2>Status: <span>In progress</span></h2>
+              </div>
+      
+              <div class="bug">
+                <h1 class="bug-title">Bug #5: Pending downloads remains in pending state, even after exiting application</h1>
+      
+                <h2>Detailed Description</h2>
+      
+                <p>
+                  When user exits the application, the pending downloads are never cleared, because that scenario has not been
+                  handled yet. So when user returns to the app, the downloads are still in pending state.
+                </p>
+      
+                <h2>Steps to Reproduce:</h2>
+      
+                <ul>
+                  <li><span></span>Finish authentication with Spotify</li>
+                  <li><span></span>Navigate to the main screen</li>
+                  <li><span></span>Perform download using any of the normal methods; Search and Paste URL.</li>
+                  <li><span></span>Exit application while downloads are pending and return to the application.</li>
+                </ul>
+      
+                <h2>Expected Behavior</h2>
+                <p>
+                  Confirm if user wants to exit application and remove all pending downloads and maybe provide a way to still
+                  download that same track again without searching for that same track.
+                </p>
+      
+                <h2>Actual Behavior</h2>
+                <p>Pending downloads remain in an indeterminate state.</p>
+      
+                <h2>Workaround</h2>
+                <p>Wait for all pending downloads to complete.</p>
+      
+                <h2>Status: <span>In progress</span></h2>
+              </div>
+      
+              <p>
+                <strong>Note:</strong> We recommend using the provided workaround until this issue is resolved in an upcoming
+                release.
+              </p>
+            </div>
           </div>
-
-          <div class="bug">
-            <h1>Bug #2: Cannot pause or delete all pending downloads</h1>
-
-            <h2>Detailed Description</h2>
-
-            <p>Users are unable to pause or delete all pending downloads in the "Downloading" section</p>
-
-            <h2>Steps to Reproduce:</h2>
-
-            <ul>
-              <li><span></span>Finish authentication with Spotify</li>
-              <li><span></span>Navigate to the main screen</li>
-              <li>
-                <span></span>Perform download using any of the normal methods; Search and Paste URL and select multiple
-                tracks to download
-              </li>
-              <li><span></span>Navigate to the "Downloading tab"</li>
-              <li>
-                <span></span>Click on the pause or delete all icon at the top of the window, above the "Downloading" or
-                "Downloaded" tabs
-              </li>
-            </ul>
-
-            <h2>Expected Behavior</h2>
-            <p>Cancel or Pause all pending download</p>
-
-            <h2>Actual Behavior</h2>
-            <p>No action or shows an error dialog</p>
-
-            <h2>Workaround</h2>
-            <p>No workaround</p>
-
-            <h2>Status: <span>In progress</span></h2>
-            <!--
-
-          <h2>Visuals</h2>
-         Insert screenshots or video links if applicable.
-
-          <h2>Tags</h2>
-          <p>High Priority, Login, Password Reset</p>
-
-          <h2>Context</h2>
-          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
-
-        -->
-          </div>
-
-          <div class="bug">
-            <h1>Bug #3: On first time download, downloading more than one track is impossible</h1>
-
-            <h2>Detailed Description</h2>
-
-            <p>
-              Users are unable to download more than one track at once on first time downloads. On first time download, a
-              dialog is displayed, indicating that some binaries are downloading in the background.
-            </p>
-
-            <h2>Steps to Reproduce:</h2>
-
-            <ul>
-              <li><span></span>Finish authentication with Spotify</li>
-              <li><span></span>Navigate to the main screen</li>
-              <li>
-                <span></span>Immediately after, perform download using any of the normal methods; Search and Paste URL, and
-                select multiple tracks to download
-              </li>
-            </ul>
-
-            <h2>Expected Behavior</h2>
-            <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
-
-            <h2>Actual Behavior</h2>
-            <p>
-              One tracks gets downloaded and the rest never gets downloaded. Sometimes, two downloads, leaving the rest
-              behind
-            </p>
-
-            <h2>Workaround</h2>
-            <p>
-              User should download only one track immediately after installing the application, to process downloading
-              binaries correctly, before then proceeding to download multiple tracks.
-            </p>
-
-            <h2>Status: <span>In progress</span></h2>
-            <!--
-
-          <h2>Visuals</h2>
-         Insert screenshots or video links if applicable.
-
-          <h2>Tags</h2>
-          <p>High Priority, Login, Password Reset</p>
-
-          <h2>Context</h2>
-          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
-
-        -->
-          </div>
-
-          <div class="bug">
-            <h1>Bug #4: Cannot download more than 2 tracks at once</h1>
-
-            <h2>Detailed Description</h2>
-
-            <p>
-              Users are unable to download more than 2 tracks simultaneously after binaries have been downloaded. Users
-              should consider downloading not more than 2 tracks at once.
-            </p>
-
-            <h2>Steps to Reproduce:</h2>
-
-            <ul>
-              <li><span></span>Finish authentication with Spotify</li>
-              <li><span></span>Navigate to the main screen</li>
-              <li>
-                <span></span>Perform download using any of the normal methods; Search and Paste URL, and select more than 2
-                tracks to download
-              </li>
-            </ul>
-
-            <h2>Expected Behavior</h2>
-            <p>After downloading the binaries, download only two tracks at a time, re-scheduling the rest for later.</p>
-
-            <h2>Actual Behavior</h2>
-            <p>
-              Multiple unexpected behaviors occur. In one scenario, only two tracks are downloaded and the rest are left
-              behind.
-            </p>
-
-            <h2>Workaround</h2>
-            <p>
-              User should download only one track immediately after installing the application, to process downloading
-              binaries correctly, before then proceeding to download at most w tracks only, simultaneously.
-            </p>
-
-            <h2>Status: <span>In progress</span></h2>
-            <!--
-
-          <h2>Visuals</h2>
-         Insert screenshots or video links if applicable.
-
-          <h2>Tags</h2>
-          <p>High Priority, Login, Password Reset</p>
-
-          <h2>Context</h2>
-          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
-
-        -->
-          </div>
-
-          <div class="bug">
-            <h1>Bug #5: Pending downloads remains in pending state, even after exiting application</h1>
-
-            <h2>Detailed Description</h2>
-
-            <p>
-              When user exits the application, the pending downloads are never cleared, because that scenario has not been
-              handled yet. So when user returns to the app, the downloads are still in pending state.
-            </p>
-
-            <h2>Steps to Reproduce:</h2>
-
-            <ul>
-              <li><span></span>Finish authentication with Spotify</li>
-              <li><span></span>Navigate to the main screen</li>
-              <li><span></span>Perform download using any of the normal methods; Search and Paste URL.</li>
-              <li><span></span>Exit application while downloads are pending and return to the application.</li>
-            </ul>
-
-            <h2>Expected Behavior</h2>
-            <p>
-              Confirm if user wants to exit application and remove all pending downloads and maybe provide a way to still
-              download that same track again without searching for that same track.
-            </p>
-
-            <h2>Actual Behavior</h2>
-            <p>Pending downloads remain in an indeterminate state.</p>
-
-            <h2>Workaround</h2>
-            <p>Wait for all pending downloads to complete.</p>
-
-            <h2>Status: <span>In progress</span></h2>
-            <!--
-
-          <h2>Visuals</h2>
-         Insert screenshots or video links if applicable.
-
-          <h2>Tags</h2>
-          <p>High Priority, Login, Password Reset</p>
-
-          <h2>Context</h2>
-          <p>This bug affects a significant number of users and can result in frustration and login difficulties.</p>
-
-        -->
-          </div>
-
-          <p>
-            <strong>Note:</strong> We recommend using the provided workaround until this issue is resolved in an upcoming
-            release.
-          </p>
         </div>
       </div>
     </main>
 
-    <script src="../js/faq.js"></script>
-
-    <script>
-      /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-      function toggleNav() {
-        const nav = document.getElementById("top-nav");
-        nav.classList.toggle("responsive");
-      }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   </body>
 </html>
