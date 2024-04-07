@@ -3,9 +3,10 @@ const { createWriteStream } = require("fs");
 const lockfile = require("proper-lockfile");
 const ytdlp = require("yt-dlp-wrap").default;
 const ytSearch = require("youtube-search-without-api-key");
-const path = require("path");
-const { M4A } = require("../util/file-extensions");
 const { IllegalStateError } = require("../util/error");
+const path = require("path");
+const { setTimeout } = require("timers/promises");
+const { M4A } = require("../util/file-extensions");
 
 const {
   watchFileForChangeEvent,
@@ -101,10 +102,10 @@ function __exports() {
       binaryFileExists = await checkIfFileExists(getBinaryFilepath());
 
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", true);
-      // if (await lockfile.check(getBinaryFilepath(), lockOptions)) {
-      //   await setTimeout(2000);
-      //   downloadMatchingTrack(options);
-      // }
+      if (await lockfile.check(getBinaryFilepath(), lockOptions)) {
+        await setTimeout(2000);
+        downloadMatchingTrack(options);
+      }
       const downloadSignal = await downloadBinaries();
       if (!binaryFileExists) target.webContents.send("show-binary-download-dialog", false);
 

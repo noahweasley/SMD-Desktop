@@ -8,17 +8,17 @@ module.exports = function (settings) {
   const REDIRECT_URL = "http://localhost:8888/callback";
   const spotifyApi = new SpotifyWebApi({ redirectUri: REDIRECT_URL });
 
-  const spotifyStates = settings.getStatesSync([
+  const [clientId, clientSecret, accessToken, refreshToken] = settings.getStatesSync([
     "spotify-user-client-id",
     "spotify-user-client-secret",
     "spotify-access-token",
     "spotify-refresh-token"
   ]);
 
-  spotifyApi.setClientId(spotifyStates[0]);
-  spotifyApi.setClientSecret(spotifyStates[1]);
-  spotifyApi.setAccessToken(spotifyStates[2]);
-  spotifyApi.setRefreshToken(spotifyStates[3]);
+  spotifyApi.setClientId(clientId);
+  spotifyApi.setClientSecret(clientSecret);
+  spotifyApi.setAccessToken(accessToken);
+  spotifyApi.setRefreshToken(refreshToken);
 
   /**
    * starts album metadata query
