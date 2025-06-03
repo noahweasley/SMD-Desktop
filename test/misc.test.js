@@ -4,7 +4,7 @@ const { getReadableFileSize } = require("../app/src/main/util/files");
 const { join } = require("path");
 
 describe("Miscellaneous tests", () => {
-  test("Converts bytes into human readable format", () => {
+ test("Converts bytes into human readable format", () => {
     const readableSizeInBytes = getReadableSize(200);
     const readableSizeInKilobytes = getReadableSize(2000);
     const readableSizeInMegabytes = getReadableSize(2000000);
